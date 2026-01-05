@@ -13,7 +13,7 @@ export async function register(prevState: any, formData: FormData) {
 
   if (!email || !password) return { error: "入力されていない項目があります" };
 
-  const existingUser = await (prisma as any).user.findUnique({
+  const existingUser = await prisma.user.findUnique({
     where: { email },
   });
 
@@ -21,7 +21,7 @@ export async function register(prevState: any, formData: FormData) {
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  await (prisma as any).user.create({
+  await prisma.user.create({
     data: {
       name,
       email,
@@ -29,27 +29,27 @@ export async function register(prevState: any, formData: FormData) {
     },
   });
 
-
-
   redirect("/login");
 }
 
 export async function login(prevState: any, formData: FormData) {
-    try {
-        await signIn("credentials", formData);
-    } catch (error: any) {
-        if (error.type === "CredentialsSignin" || error.message?.includes("CredentialsSignin")) {
-            return { error: "メールアドレスまたはパスワードが正しくありません" };
-        }
-        // Redirecting is expected behavior in Auth.js, so throw it if it's a redirect error
-        if (error.message === 'NEXT_REDIRECT') throw error;
-        throw error;
+  try {
+    await signIn("credentials", formData);
+  } catch (error: any) {
+    if (
+      error.type === "CredentialsSignin" ||
+      error.message?.includes("CredentialsSignin")
+    ) {
+      return { error: "メールアドレスまたはパスワードが正しくありません" };
     }
+    // Redirecting is expected behavior in Auth.js, so throw it if it's a redirect error
+    if (error.message === "NEXT_REDIRECT") throw error;
+    throw error;
+  }
 }
 
-
 export async function logout() {
-    await signOut({ redirectTo: "/" });
+  await signOut({ redirectTo: "/" });
 }
 
 export async function getTasks() {
@@ -86,42 +86,42 @@ export async function createTask(formData: FormData) {
 }
 
 export async function updateTaskStatus(taskId: string, newStatus: string) {
-    const session = await auth();
-    if (!session?.user?.id) return;
+  const session = await auth();
+  if (!session?.user?.id) return;
 
-    await prisma.task.update({
-        where: { id: taskId, userId: session.user.id },
-        data: { status: newStatus }
-    });
-    revalidatePath("/dashboard/tasks");
+  await prisma.task.update({
+    where: { id: taskId, userId: session.user.id },
+    data: { status: newStatus },
+  });
+  revalidatePath("/dashboard/tasks");
 }
 
 export async function deleteTask(taskId: string) {
-    const session = await auth();
-    if (!session?.user?.id) return;
+  const session = await auth();
+  if (!session?.user?.id) return;
 
-    await prisma.task.delete({
-        where: { id: taskId, userId: session.user.id }
-    });
-    revalidatePath("/dashboard/tasks");
+  await prisma.task.delete({
+    where: { id: taskId, userId: session.user.id },
+  });
+  revalidatePath("/dashboard/tasks");
 }
 
 export async function updateProfile(formData: FormData) {
-    const session = await auth();
-    if (!session?.user?.id) return { error: "認証が必要です" };
+  const session = await auth();
+  if (!session?.user?.id) return { error: "認証が必要です" };
 
-    const name = formData.get("name") as string;
-    if (!name) return { error: "名前を入力してください" };
+  const name = formData.get("name") as string;
+  if (!name) return { error: "名前を入力してください" };
 
-    try {
-        await (prisma as any).user.update({
-            where: { id: session.user.id },
-            data: { name },
-        });
+  try {
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: { name },
+    });
 
-        revalidatePath("/dashboard/settings");
-        return { success: "プロフィールを更新しました" };
-    } catch (error) {
-        return { error: "更新に失敗しました" };
-    }
+    revalidatePath("/dashboard/settings");
+    return { success: "プロフィールを更新しました" };
+  } catch (error) {
+    return { error: "更新に失敗しました" };
+  }
 }

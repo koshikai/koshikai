@@ -1,33 +1,44 @@
 # syntax=docker/dockerfile:1
-####################
-# builder stage
-####################
-FROM node:20-alpine AS builder
+FROM oven/bun:1 AS base
+
+# 1. Install dependencies only when needed
+FROM base AS deps
 WORKDIR /app
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
 
-# 依存を先にコピーしてキャッシュを効かせる
-COPY package*.json ./
-RUN npm ci
-
-# ソースをコピーしてビルド
+# 2. Rebuild the source code only when needed
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npm run build
 
-####################
-# production image
-####################
-FROM node:20-alpine AS runner
+# Prisma client generation
+RUN bunx prisma generate
+
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN bun run build
+
+# 3. Production image, copy all the files and run next
+FROM base AS runner
 WORKDIR /app
+
 ENV NODE_ENV=production
-ENV PORT=3000
+ENV NEXT_TELEMETRY_DISABLED=1
 
-# Nextのビルド成果物と公開用ファイルをコピー
-COPY --from=builder /app/.next ./.next
+# Copy standalone build and public files
+# Note: standalone output includes a server.js that doesn't require bun/node specifically, 
+# but we run it with bun for consistency.
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/package*.json ./
+COPY --from=builder --chown=bun:shared /app/.next/standalone ./
+COPY --from=builder --chown=bun:shared /app/.next/static ./.next/static
 
-# 本番依存だけインストール（軽量化）
-RUN npm ci --omit=dev
+# Use the pre-existing 'bun' user instead of creating a new one
+USER bun
 
 EXPOSE 3000
-CMD ["sh", "-c", "HOST=0.0.0.0 PORT=${PORT} npm run start"]
+
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+CMD ["bun", "server.js"]

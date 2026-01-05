@@ -50,7 +50,7 @@ export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
                 type="text"
                 name="title"
                 required
-                className="mt-1 block w-full rounded-xl border border-white/10 bg-slate-950/60 px-3 py-2 text-white placeholder:text-slate-500 focus:border-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-400/30 sm:text-sm"
+                className="mt-1 block w-full rounded-xl border border-white/10 bg-slate-950/60 px-3 py-2 text-base text-white placeholder:text-slate-500 focus:border-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-400/30"
                 placeholder="何をすべきですか？"
               />
             </div>
@@ -61,7 +61,7 @@ export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
               <textarea
                 name="description"
                 rows={2}
-                className="mt-1 block w-full rounded-xl border border-white/10 bg-slate-950/60 px-3 py-2 text-white placeholder:text-slate-500 focus:border-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-400/30 sm:text-sm"
+                className="mt-1 block w-full rounded-xl border border-white/10 bg-slate-950/60 px-3 py-2 text-base text-white placeholder:text-slate-500 focus:border-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-400/30"
                 placeholder="詳細..."
               />
             </div>
@@ -71,7 +71,7 @@ export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
               </label>
               <select
                 name="priority"
-                className="mt-1 block w-full rounded-xl border border-white/10 bg-slate-950/60 px-3 py-2 text-white focus:border-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-400/30 sm:text-sm"
+                className="mt-1 block w-full rounded-xl border border-white/10 bg-slate-950/60 px-3 py-2 text-base text-white focus:border-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-400/30"
               >
                 <option value="LOW">低</option>
                 <option value="MEDIUM">中</option>
