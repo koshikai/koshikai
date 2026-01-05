@@ -1,21 +1,22 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Manrope, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import ScrollReveal from "@/components/ScrollReveal";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio | Next.js",
-  description: "Personal portfolio built with Next.js and Tailwind CSS",
+  title: "Koshikai.PMX",
+  description: "Proxmox Task Manager",
 };
 
 export default function RootLayout({
@@ -24,10 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased relative`}>
-        {/* Global scroll-reveal effects */}
-        <ScrollReveal />
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${manrope.variable} ${jetbrainsMono.variable} antialiased bg-gray-950 text-white`}>
         {children}
       </body>
     </html>
