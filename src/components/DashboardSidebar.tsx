@@ -7,19 +7,21 @@ import { clsx } from "clsx";
 import { logout } from "@/app/actions";
 
 const navigation = [
-  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { name: "My Tasks", href: "/dashboard/tasks", icon: CheckSquare },
-  { name: "Settings", href: "/dashboard/settings", icon: Settings },
+  { name: "ダッシュボード", href: "/dashboard", icon: LayoutDashboard },
+  { name: "マイタスク", href: "/dashboard/tasks", icon: CheckSquare },
+  { name: "設定", href: "/dashboard/settings", icon: Settings },
 ];
 
 export function DashboardSidebar({ user }: { user: any }) {
   const pathname = usePathname();
 
   return (
-    <div className="flex h-full w-64 flex-col bg-gray-900 border-r border-gray-800">
-      <div className="flex h-16 shrink-0 items-center px-6 border-b border-gray-800">
-        <Server className="h-6 w-6 text-blue-500 mr-2" />
-        <span className="text-lg font-bold text-white tracking-tight">Koshikai<span className="text-blue-500">.PMX</span></span>
+    <div className="flex h-full w-64 flex-col border-r border-white/10 bg-slate-950/80 backdrop-blur">
+      <div className="flex h-16 shrink-0 items-center px-6 border-b border-white/10">
+        <Server className="mr-2 h-6 w-6 text-cyan-300" />
+        <span className="text-lg font-semibold text-white tracking-tight">
+          Koshikai<span className="text-cyan-300">.PMX</span>
+        </span>
       </div>
       <nav className="flex flex-1 flex-col px-4 py-4 gap-1">
         {navigation.map((item) => {
@@ -31,14 +33,14 @@ export function DashboardSidebar({ user }: { user: any }) {
               className={clsx(
                 "group flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors",
                 isActive
-                  ? "bg-blue-600/10 text-blue-400"
-                  : "text-gray-400 hover:bg-gray-800 hover:text-white"
+                  ? "bg-cyan-500/10 text-cyan-200"
+                  : "text-slate-400 hover:bg-white/5 hover:text-white"
               )}
             >
               <item.icon
                 className={clsx(
                   "mr-3 h-5 w-5 flex-shrink-0 transition-colors",
-                  isActive ? "text-blue-400" : "text-gray-500 group-hover:text-gray-300"
+                  isActive ? "text-cyan-200" : "text-slate-500 group-hover:text-slate-300"
                 )}
                 aria-hidden="true"
               />
@@ -47,20 +49,20 @@ export function DashboardSidebar({ user }: { user: any }) {
           );
         })}
       </nav>
-      <div className="border-t border-gray-800 p-4">
+      <div className="border-t border-white/10 p-4">
         <div className="flex items-center gap-3 px-2 py-2 mb-2">
-            <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-purple-500 to-blue-500 flex items-center justify-center text-xs font-bold text-white">
+            <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-cyan-400 to-amber-400 flex items-center justify-center text-xs font-bold text-slate-950">
                 {user?.name?.[0] || user?.email?.[0] || "U"}
             </div>
             <div className="flex flex-col overflow-hidden">
-                <span className="text-sm font-medium text-white truncate">{user?.name || "User"}</span>
-                <span className="text-xs text-gray-500 truncate">{user?.email || "Proxmox Host"}</span>
+                <span className="text-sm font-medium text-white truncate">{user?.name || "ユーザー"}</span>
+                <span className="text-xs text-slate-400 truncate">{user?.email || "Proxmox ホスト"}</span>
             </div>
         </div>
         <form action={logout}>
-            <button className="w-full flex items-center rounded-md px-3 py-2 text-sm font-medium text-red-400 hover:bg-red-400/10 hover:text-red-300 transition-colors">
+            <button className="w-full flex items-center rounded-md px-3 py-2 text-sm font-medium text-rose-300 hover:bg-rose-500/10 hover:text-rose-200 transition-colors">
                 <LogOut className="mr-3 h-5 w-5" />
-                Sign out
+                ログアウト
             </button>
         </form>
       </div>

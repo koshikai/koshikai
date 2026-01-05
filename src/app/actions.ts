@@ -11,13 +11,13 @@ export async function register(prevState: any, formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
 
-  if (!email || !password) return { error: "Missing fields" };
+  if (!email || !password) return { error: "入力されていない項目があります" };
 
   const existingUser = await (prisma as any).user.findUnique({
     where: { email },
   });
 
-  if (existingUser) return { error: "User already exists" };
+  if (existingUser) return { error: "ユーザーは既に存在します" };
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -39,7 +39,7 @@ export async function login(prevState: any, formData: FormData) {
         await signIn("credentials", formData);
     } catch (error: any) {
         if (error.type === "CredentialsSignin" || error.message?.includes("CredentialsSignin")) {
-            return { error: "Invalid credentials" };
+            return { error: "メールアドレスまたはパスワードが正しくありません" };
         }
         // Redirecting is expected behavior in Auth.js, so throw it if it's a redirect error
         if (error.message === 'NEXT_REDIRECT') throw error;
@@ -104,4 +104,24 @@ export async function deleteTask(taskId: string) {
         where: { id: taskId, userId: session.user.id }
     });
     revalidatePath("/dashboard/tasks");
+}
+
+export async function updateProfile(formData: FormData) {
+    const session = await auth();
+    if (!session?.user?.id) return { error: "認証が必要です" };
+
+    const name = formData.get("name") as string;
+    if (!name) return { error: "名前を入力してください" };
+
+    try {
+        await (prisma as any).user.update({
+            where: { id: session.user.id },
+            data: { name },
+        });
+
+        revalidatePath("/dashboard/settings");
+        return { success: "プロフィールを更新しました" };
+    } catch (error) {
+        return { error: "更新に失敗しました" };
+    }
 }

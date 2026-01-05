@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${manrope.variable} ${jetbrainsMono.variable} antialiased bg-gray-950 text-white`}>
+      <body className={`${manrope.variable} ${jetbrainsMono.variable} antialiased`}>
         {children}
       </body>
     </html>

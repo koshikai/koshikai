@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { createTask, updateTaskStatus, deleteTask } from "@/app/actions";
-import { Plus, Trash2, CheckCircle2, Circle, AlertCircle } from "lucide-react";
+import { Plus, Trash2, CheckCircle2, Circle } from "lucide-react";
 import { clsx } from "clsx";
 
 type Task = {
@@ -25,58 +25,73 @@ export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-white">My Tasks</h2>
+        <h2 className="text-xl font-semibold text-white">マイタスク</h2>
         <button
           onClick={() => setIsAdding(!isAdding)}
-          className="flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500 transition-colors"
+          className="flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 to-amber-400 px-4 py-2 text-sm font-semibold text-slate-950 shadow-sm transition hover:brightness-110"
         >
           <Plus className="h-4 w-4" />
-          Add Task
+          タスクを追加
         </button>
       </div>
 
       {isAdding && (
-        <form action={createTask} onSubmit={() => setIsAdding(false)} className="rounded-lg border border-gray-700 bg-gray-800 p-4 transition-all">
+        <form
+          action={createTask}
+          onSubmit={() => setIsAdding(false)}
+          className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur transition-all"
+        >
           <div className="grid gap-4">
             <div>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-300">
-                Title
+              <label htmlFor="title" className="block text-sm font-medium text-slate-300">
+                タイトル
               </label>
               <input
                 type="text"
                 name="title"
                 required
-                className="mt-1 block w-full rounded-md border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                placeholder="What needs to be done?"
+                className="mt-1 block w-full rounded-xl border border-white/10 bg-slate-950/60 px-3 py-2 text-white placeholder:text-slate-500 focus:border-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-400/30 sm:text-sm"
+                placeholder="何をすべきですか？"
               />
             </div>
             <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-300">
-                Description
+              <label htmlFor="description" className="block text-sm font-medium text-slate-300">
+                説明
               </label>
               <textarea
                 name="description"
                 rows={2}
-                className="mt-1 block w-full rounded-md border-gray-600 bg-gray-700 px-3 py-2 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                placeholder="Details..."
+                className="mt-1 block w-full rounded-xl border border-white/10 bg-slate-950/60 px-3 py-2 text-white placeholder:text-slate-500 focus:border-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-400/30 sm:text-sm"
+                placeholder="詳細..."
               />
             </div>
              <div>
-              <label htmlFor="priority" className="block text-sm font-medium text-gray-300">
-                Priority
+              <label htmlFor="priority" className="block text-sm font-medium text-slate-300">
+                優先度
               </label>
               <select
                 name="priority"
-                className="mt-1 block w-full rounded-md border-gray-600 bg-gray-700 px-3 py-2 text-white focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                className="mt-1 block w-full rounded-xl border border-white/10 bg-slate-950/60 px-3 py-2 text-white focus:border-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-400/30 sm:text-sm"
               >
-                <option value="LOW">Low</option>
-                <option value="MEDIUM">Medium</option>
-                <option value="HIGH">High</option>
+                <option value="LOW">低</option>
+                <option value="MEDIUM">中</option>
+                <option value="HIGH">高</option>
               </select>
             </div>
             <div className="flex justify-end gap-2">
-                <button type="button" onClick={() => setIsAdding(false)} className="px-3 py-2 text-sm text-gray-400 hover:text-white">Cancel</button>
-                <button type="submit" className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500">Save</button>
+                <button
+                  type="button"
+                  onClick={() => setIsAdding(false)}
+                  className="px-3 py-2 text-sm text-slate-400 hover:text-white"
+                >
+                  キャンセル
+                </button>
+                <button
+                  type="submit"
+                  className="rounded-full bg-gradient-to-r from-cyan-400 to-amber-400 px-4 py-2 text-sm font-semibold text-slate-950 shadow-sm hover:brightness-110"
+                >
+                  保存
+                </button>
             </div>
           </div>
         </form>
@@ -84,43 +99,43 @@ export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
 
       <div className="space-y-3">
         {initialTasks.length === 0 ? (
-          <div className="text-center py-10 text-gray-500">No tasks yet. Create one above!</div>
+          <div className="py-10 text-center text-slate-500">タスクがまだありません。上のボタンから作成してください！</div>
         ) : (
           initialTasks.map((task) => (
             <div
               key={task.id}
-              className="group flex items-center justify-between rounded-lg border border-gray-800 bg-gray-900/50 p-4 transition-all hover:bg-gray-800/50"
+              className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-4 transition-all hover:bg-white/10"
             >
               <div className="flex items-start gap-3">
                 <button
                     onClick={() => updateTaskStatus(task.id, task.status === "DONE" ? "TODO" : "DONE")}
-                    className={clsx("mt-1 h-5 w-5 flex-shrink-0 transition-colors", 
-                        task.status === "DONE" ? "text-green-500" : "text-gray-500 hover:text-gray-300"
+                    className={clsx("mt-1 h-5 w-5 flex-shrink-0 transition-colors",
+                        task.status === "DONE" ? "text-emerald-400" : "text-slate-500 hover:text-slate-300"
                     )}
                 >
                     {task.status === "DONE" ? <CheckCircle2 /> : <Circle />}
                 </button>
                 <div>
-                  <h3 className={clsx("font-medium text-white", task.status === "DONE" && "line-through text-gray-500")}>
+                  <h3 className={clsx("font-medium text-white", task.status === "DONE" && "line-through text-slate-500")}>
                     {task.title}
                   </h3>
                   {task.description && (
-                    <p className="text-sm text-gray-400">{task.description}</p>
+                    <p className="text-sm text-slate-400">{task.description}</p>
                   )}
                   <div className="mt-2 flex items-center gap-2">
                     <span className={clsx("text-xs px-2 py-0.5 rounded-full font-medium",
-                        task.priority === "HIGH" ? "bg-red-500/10 text-red-400" :
-                        task.priority === "MEDIUM" ? "bg-yellow-500/10 text-yellow-400" :
-                        "bg-blue-500/10 text-blue-400"
+                        task.priority === "HIGH" ? "bg-rose-500/15 text-rose-200" :
+                        task.priority === "MEDIUM" ? "bg-amber-500/15 text-amber-200" :
+                        "bg-cyan-500/15 text-cyan-200"
                     )}>
-                        {task.priority}
+                        {task.priority === "HIGH" ? "高" : task.priority === "MEDIUM" ? "中" : "低"}
                     </span>
                   </div>
                 </div>
               </div>
               <button 
                 onClick={() => deleteTask(task.id)}
-                className="opacity-0 group-hover:opacity-100 text-gray-500 hover:text-red-400 transition-opacity p-2"
+                className="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-rose-300 transition-opacity p-2"
               >
                 <Trash2 className="h-4 w-4" />
               </button>
@@ -129,5 +144,6 @@ export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
         )}
       </div>
     </div>
+
   );
 }

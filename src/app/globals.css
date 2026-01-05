@@ -6,13 +6,60 @@
 }
 
 :root {
-  --background: #030712; /* gray-950 */
-  --foreground: #f9fafb; /* gray-50 */
+  --background: #0b0f1a;
+  --foreground: #e2e8f0;
+  --accent: #22d3ee;
+  --accent-strong: #f59e0b;
+  --panel: #0f172a;
+  --panel-border: #1e293b;
 }
 
 @layer base {
   body {
     background-color: var(--background);
     color: var(--foreground);
+    font-family: var(--font-manrope), "Manrope", "Segoe UI", system-ui, -apple-system, sans-serif;
+    min-height: 100%;
   }
+
+  .font-mono {
+    font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+      "Liberation Mono", "Courier New", monospace;
+  }
+}
+
+@keyframes floatSlow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmerSoft {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.65;
+  }
+}
+
+::selection {
+  background: rgba(34, 211, 238, 0.25);
+  color: #e2e8f0;
 }
