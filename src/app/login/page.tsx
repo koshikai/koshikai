@@ -9,14 +9,14 @@ export default function LoginPage() {
   const [state, action, isPending] = useActionState(login, undefined);
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative min-h-[100dvh] overflow-hidden">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-24 right-[-10%] h-64 w-64 rounded-full bg-cyan-500/20 blur-3xl motion-safe:animate-[floatSlow_18s_ease-in-out_infinite]" />
         <div className="absolute bottom-[-15%] left-[-10%] h-72 w-72 rounded-full bg-amber-500/20 blur-3xl motion-safe:animate-[floatSlow_20s_ease-in-out_infinite]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.16),transparent_60%)]" />
       </div>
 
-      <div className="relative mx-auto flex min-h-screen max-w-5xl items-center justify-center px-6 py-16">
+      <div className="relative mx-auto flex min-h-[100dvh] items-center justify-center px-6 py-16">
         <div className="w-full max-w-md">
           <div className="rounded-3xl border border-white/10 bg-white/5 p-8 shadow-[0_35px_80px_-55px_rgba(15,23,42,0.9)] backdrop-blur motion-safe:animate-[fadeUp_0.8s_ease-out]">
             <div className="flex items-center justify-between">
@@ -41,7 +41,7 @@ export default function LoginPage() {
                     type="email"
                     autoComplete="email"
                     required
-                    className="block w-full rounded-xl border border-white/10 bg-slate-950/60 py-2.5 pl-11 pr-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-400/30"
+                    className="block w-full rounded-xl border border-white/10 bg-slate-950/60 py-2.5 pl-11 pr-3 text-base text-white placeholder:text-slate-500 focus:border-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-400/30"
                     placeholder="メールアドレス"
                   />
                 </div>
@@ -53,7 +53,7 @@ export default function LoginPage() {
                     type="password"
                     autoComplete="current-password"
                     required
-                    className="block w-full rounded-xl border border-white/10 bg-slate-950/60 py-2.5 pl-11 pr-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-400/30"
+                    className="block w-full rounded-xl border border-white/10 bg-slate-950/60 py-2.5 pl-11 pr-3 text-base text-white placeholder:text-slate-500 focus:border-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-400/30"
                     placeholder="パスワード"
                   />
                 </div>

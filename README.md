@@ -14,13 +14,13 @@ A simple personal portfolio website built with Next.js 16, TypeScript, and Tailw
 First, install dependencies:
 
 ```bash
-npm install
+ni
 ```
 
 Then, run the development server:
 
 ```bash
-npm run dev
+nr dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -38,7 +38,7 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-## Dockerへのプッシュ
+## Docker へのプッシュ
 
 $ docker build -t koshikai/next-ssr:1.0.0 .
 

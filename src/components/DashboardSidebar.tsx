@@ -17,7 +17,7 @@ export function DashboardSidebar({ user }: { user: any }) {
 
   return (
     <div className="flex h-full w-64 flex-col border-r border-white/10 bg-slate-950/80 backdrop-blur">
-      <div className="flex h-16 shrink-0 items-center px-6 border-b border-white/10">
+      <div className="flex h-16 shrink-0 items-center px-6 border-b border-white/10 safe-top">
         <Server className="mr-2 h-6 w-6 text-cyan-300" />
         <span className="text-lg font-semibold text-white tracking-tight">
           Koshikai<span className="text-cyan-300">.PMX</span>
