@@ -32,11 +32,12 @@ ENV DOCKER_BUILD=true
 RUN bun run build
 
 # Production image, copy all the files and run next
-FROM node:22-alpine AS runner
+FROM base AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
 
+# Bun images usually use a 'bun' user, but we can stick to our nextjs user pattern or use default
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
@@ -47,7 +48,6 @@ RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
 # Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
@@ -59,4 +59,4 @@ ENV PORT=3000
 # set hostname to 0.0.0.0 for accessibility inside container
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["node", "server.js"]
+CMD ["bun", "server.js"]
