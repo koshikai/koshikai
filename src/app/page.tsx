@@ -1,164 +1,112 @@
-import Link from "next/link";
-import { auth } from "@/auth";
-import { Activity, ArrowUpRight, Cpu, ShieldCheck, Sparkles } from "lucide-react";
+import { Cigarette, Heart } from "lucide-react";
+import { ProjectCard } from "@/components/ProjectCard";
+import { Footer } from "@/components/Footer";
 
-const features = [
-  {
-    title: "ノード認識ワークフロー",
-    description: "タスクをクラスタ、ホスト、またはサービスに関連付け、すべての実行を整理して管理します。",
-    icon: Cpu,
-  },
-  {
-    title: "ローカルファーストのセキュリティ",
-    description: "資格情報はハードウェア内に留まり、変更履歴は監査可能な形で追跡されます。",
-    icon: ShieldCheck,
-  },
-  {
-    title: "オートメーションフック",
-    description: "タスクの完了に合わせて、スクリプト、WebHook、および後続のプレイブックをトリガーします。",
-    icon: Sparkles,
-  },
-];
-
-export default async function Home() {
-  const session = await auth();
-
+export default function Home() {
   return (
-    <div className="relative isolate min-h-screen overflow-hidden">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-32 right-[-5%] h-72 w-72 rounded-full bg-cyan-500/20 blur-3xl motion-safe:animate-[floatSlow_16s_ease-in-out_infinite]" />
-        <div className="absolute bottom-[-10%] left-[-10%] h-80 w-80 rounded-full bg-amber-500/20 blur-3xl motion-safe:animate-[floatSlow_18s_ease-in-out_infinite]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.18),transparent_55%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(15,23,42,0.6),transparent_70%)]" />
+    <div className="flex min-h-screen flex-col overflow-hidden relative">
+      {/* Background Blobs */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-pink-200/40 rounded-full blur-3xl mix-blend-multiply filter opacity-70 animate-blob dark:bg-pink-900/20 dark:mix-blend-normal"></div>
+        <div className="absolute top-[20%] left-[-10%] w-[400px] h-[400px] bg-blue-200/40 rounded-full blur-3xl mix-blend-multiply filter opacity-70 animate-blob animation-delay-2000 dark:bg-blue-900/20 dark:mix-blend-normal"></div>
+        <div className="absolute bottom-[-10%] right-[20%] w-[600px] h-[600px] bg-yellow-200/40 rounded-full blur-3xl mix-blend-multiply filter opacity-70 animate-blob animation-delay-4000 dark:bg-yellow-900/20 dark:mix-blend-normal"></div>
       </div>
 
-      <main className="relative mx-auto flex min-h-screen max-w-6xl flex-col justify-center px-6 py-20 lg:py-28">
-        <div className="grid items-center gap-12 lg:grid-cols-[1.2fr_0.8fr]">
-          <div className="space-y-7 motion-safe:animate-[fadeUp_0.9s_ease-out]">
-            <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.3em] text-slate-300/80">
-              <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1">
-                セルフホスト
+      <main className="flex-1">
+        {/* Hero Section */}
+        <section className="mx-auto max-w-4xl px-6 pt-32 pb-20 sm:pt-40 sm:pb-32 relative">
+          <div className="flex flex-col gap-8 items-center text-center sm:items-start sm:text-left">
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/50 backdrop-blur-sm border border-zinc-200 dark:bg-zinc-800/50 dark:border-zinc-700 shadow-sm animate-fade-in-up">
+              <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-pink-400 to-purple-400 flex items-center justify-center text-white font-bold text-lg shadow-inner">
+                K
+              </div>
+              <span className="text-sm font-bold text-zinc-600 dark:text-zinc-300 tracking-wide">
+                koshikai.dev
               </span>
-              <span className="text-slate-400">Proxmox オペレーター向けに構築</span>
             </div>
 
-            <h1 className="text-4xl font-semibold leading-tight text-slate-100 sm:text-6xl">
-              ホームラボのタスクを
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-emerald-300 to-amber-300">
-                Koshikai<span className="text-slate-100">.PMX</span>
+            <h1 className="text-5xl font-extrabold tracking-tight text-zinc-800 dark:text-zinc-50 sm:text-7xl drop-shadow-sm leading-[1.1]">
+              Building apps that <br />
+              <span className="relative whitespace-nowrap">
+                <span className="relative z-10 bg-gradient-to-r from-pink-400 to-violet-500 bg-clip-text text-transparent transform hover:scale-105 transition-transform inline-block cursor-default">
+                  make life better
+                </span>
+                <span className="absolute bottom-2 left-0 w-full h-3 bg-yellow-200/60 -rotate-2 rounded-full -z-10 dark:bg-yellow-900/40"></span>
               </span>
-              でオーケストレート。
             </h1>
 
-            <p className="max-w-xl text-base text-slate-300 sm:text-lg">
-              Proxmoxクラスタのためのセキュアなコマンドセンター。メンテナンスの追跡、ルーチンの自動化、クラウドに依存しないホームラボの信頼性維持をサポートします。
+            <p className="max-w-2xl text-xl leading-relaxed text-zinc-600 dark:text-zinc-300 font-medium">
+              個人開発者として、日常をより良くするアプリケーションを作っています。
+              禁煙支援から大切な人との繋がりまで、テクノロジーで<span className="text-pink-500 dark:text-pink-400 font-bold">ワクワク</span>する解決策を。
             </p>
-
-            <div className="flex flex-wrap items-center gap-4">
-              {session ? (
-                <Link
-                  href="/dashboard"
-                  className="inline-flex h-12 items-center justify-center rounded-full bg-gradient-to-r from-cyan-400 to-amber-400 px-8 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/20 transition hover:brightness-110"
-                >
-                  ダッシュボードへ移動
-                </Link>
-              ) : (
-                <>
-                  <Link
-                    href="/login"
-                    className="inline-flex h-12 items-center justify-center rounded-full bg-gradient-to-r from-cyan-400 to-amber-400 px-8 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/20 transition hover:brightness-110"
-                  >
-                    ログイン
-                  </Link>
-                  <Link
-                    href="/register"
-                    className="inline-flex h-12 items-center justify-center rounded-full border border-white/20 bg-white/5 px-8 text-sm font-semibold text-white/90 transition hover:bg-white/10"
-                  >
-                    新規登録
-                  </Link>
-                </>
-              )}
-            </div>
-
-            <div className="flex flex-wrap items-center gap-6 text-sm text-slate-300">
-              <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                ローカルストレージのみ
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-cyan-400" />
-                自動化対応済み
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-amber-400" />
-                監査証跡を同梱
-              </div>
-            </div>
           </div>
-
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-[0_35px_80px_-55px_rgba(15,23,42,0.9)] backdrop-blur motion-safe:animate-[fadeUp_1.1s_ease-out]">
-            <div className="flex items-center justify-between">
-              <span className="text-xs uppercase tracking-[0.3em] text-slate-400">クラスタ・パルス</span>
-              <span className="inline-flex items-center gap-2 text-xs text-emerald-300">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                オンライン
-              </span>
-            </div>
-            <div className="mt-6 space-y-4">
-              <div className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-4">
-                <div className="flex items-center justify-between text-sm text-slate-300">
-                  <span>ノード稼働状況</span>
-                  <span className="text-lg font-semibold text-white">3/3</span>
-                </div>
-                <div className="mt-2 flex items-center gap-2 text-xs text-emerald-300">
-                  <Activity className="h-3 w-3" />
-                  すべてのサービスが健全
-                </div>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-4">
-                <div className="flex items-center justify-between text-sm text-slate-300">
-                  <span>キュー内のタスク</span>
-                  <span className="text-lg font-semibold text-white">12</span>
-                </div>
-                <div className="mt-2 flex items-center gap-2 text-xs text-cyan-300">
-                  <ArrowUpRight className="h-3 w-3" />
-                  夜間に4件の予定
-                </div>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-4">
-                <div className="flex items-center justify-between text-sm text-slate-300">
-                  <span>レイテンシ</span>
-                  <span className="text-lg font-semibold text-white">14ms</span>
-                </div>
-                <div className="mt-2 text-xs text-slate-400">エッジゲートウェイ、有線</div>
-              </div>
-            </div>
-            <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-xs text-slate-300">
-              <span className="font-mono text-cyan-200">pve-node-01</span> - スナップショットウィンドウ 02:00 開始
-            </div>
-          </div>
-        </div>
-
-        <section id="features" className="mt-16 grid gap-6 md:grid-cols-3">
-          {features.map((feature) => {
-            const Icon = feature.icon;
-            return (
-              <div
-                key={feature.title}
-                className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur"
-              >
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400/20 to-amber-400/20 text-cyan-200">
-                  <Icon className="h-5 w-5" />
-                </div>
-                <h3 className="mt-5 text-lg font-semibold text-white">{feature.title}</h3>
-                <p className="mt-2 text-sm text-slate-300">{feature.description}</p>
-                <div className="mt-6 h-px w-full bg-gradient-to-r from-cyan-400/40 via-amber-400/10 to-transparent" />
-              </div>
-            );
-          })}
         </section>
 
+        {/* Projects Section */}
+        <section className="mx-auto max-w-4xl px-6 py-12">
+          <div className="flex items-center gap-4 mb-10">
+            <h2 className="text-3xl font-bold text-zinc-800 dark:text-zinc-100">
+              Projects
+            </h2>
+            <div className="h-1 flex-1 bg-zinc-200 rounded-full dark:bg-zinc-800"></div>
+          </div>
+
+          <div className="grid gap-8 sm:grid-cols-2">
+            <ProjectCard
+              title="no"
+              subtitle="nosmoke.koshikai.dev"
+              description="喫煙習慣の記録と管理を支援する PWA。自分のペースで喫煙量を追跡し、禁煙に挑戦できます。AI コーチによるサポート付き。"
+              features={["PWA", "AI Coach", "Push通知", "バッジシステム"]}
+              href="https://nosmoke.koshikai.dev"
+              accentColor="green"
+              icon={<Cigarette className="h-7 w-7" />}
+            />
+
+            <ProjectCard
+              title="Knot"
+              subtitle="knot.koshikai.dev"
+              description="遠距離恋愛中のカップル向けプライベート・プラットフォーム。再会カウントダウンや思い出のタイムラインで繋がりを深めます。"
+              features={["カウントダウン", "タイムライン", "ウィッシュリスト", "招待制"]}
+              href="https://knot.koshikai.dev"
+              accentColor="pink"
+              icon={<Heart className="h-7 w-7 fill-current" />}
+            />
+          </div>
+        </section>
+
+        {/* Tech Stack Section */}
+        <section className="mx-auto max-w-4xl px-6 py-12 pb-32">
+          <div className="flex items-center gap-4 mb-10">
+            <h2 className="text-3xl font-bold text-zinc-800 dark:text-zinc-100">
+              Tech Stack
+            </h2>
+            <div className="h-1 flex-1 bg-zinc-200 rounded-full dark:bg-zinc-800"></div>
+          </div>
+
+          <div className="flex flex-wrap gap-4">
+            {[
+              { name: "Next.js", color: "bg-black text-white dark:bg-white dark:text-black border-transparent" },
+              { name: "TypeScript", color: "bg-blue-50 text-blue-600 border-blue-100 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800" },
+              { name: "Tailwind CSS", color: "bg-cyan-50 text-cyan-600 border-cyan-100 dark:bg-cyan-900/30 dark:text-cyan-300 dark:border-cyan-800" },
+              { name: "Prisma", color: "bg-slate-50 text-slate-600 border-slate-100 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700" },
+              { name: "PostgreSQL", color: "bg-indigo-50 text-indigo-600 border-indigo-100 dark:bg-indigo-900/30 dark:text-indigo-300 dark:border-indigo-800" },
+              { name: "Auth.js", color: "bg-violet-50 text-violet-600 border-violet-100 dark:bg-violet-900/30 dark:text-violet-300 dark:border-violet-800" },
+              { name: "OpenAI API", color: "bg-green-50 text-green-600 border-green-100 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800" },
+              { name: "Bun", color: "bg-orange-50 text-orange-600 border-orange-100 dark:bg-orange-900/30 dark:text-orange-300 dark:border-orange-800" },
+              { name: "Docker", color: "bg-sky-50 text-sky-600 border-sky-100 dark:bg-sky-900/30 dark:text-sky-300 dark:border-sky-800" },
+            ].map((tech) => (
+              <span
+                key={tech.name}
+                className={`rounded-2xl border-2 px-5 py-2 text-sm font-bold shadow-sm transition-all hover:-translate-y-1 hover:rotate-2 hover:shadow-md cursor-default ${tech.color}`}
+              >
+                {tech.name}
+              </span>
+            ))}
+          </div>
+        </section>
       </main>
+
+      <Footer />
     </div>
   );
 }

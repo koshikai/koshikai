@@ -1,0 +1,9 @@
+services:
+  app:
+    image: ghcr.io/koshikai/koshikai:latest
+    container_name: koshikai-app
+    restart: always
+    ports:
+      - "3002:3000"
+    environment:
+      - NODE_ENV=production

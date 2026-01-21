@@ -1,9 +1,0 @@
-node_modules
-.next
-out
-dist
-.git
-.gitignore
-.vscode
-Dockerfile
-docker-compose.yml
