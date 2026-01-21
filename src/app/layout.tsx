@@ -1,46 +1,16 @@
-import type { Metadata, Viewport } from "next";
-import { Manrope, JetBrains_Mono } from "next/font/google";
+import type { Metadata } from "next";
+import { M_PLUS_Rounded_1c } from "next/font/google";
 import "./globals.css";
-import SwRegister from "./SwRegister";
 
-const manrope = Manrope({
-  variable: "--font-manrope",
+const mPlusRounded1c = M_PLUS_Rounded_1c({
+  weight: ["400", "500", "700", "800"],
   subsets: ["latin"],
-  display: "swap",
+  variable: "--font-m-plus-rounded",
 });
-
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-export const viewport: Viewport = {
-  themeColor: "#0b0f1a",
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
-  viewportFit: "cover",
-};
 
 export const metadata: Metadata = {
-  title: "Koshikai.PMX",
-  description: "Proxmox Task Manager",
-  manifest: "/manifest.json",
-  icons: {
-    icon: "/icon-192.png",
-    shortcut: "/icon-192.png",
-    apple: "/apple-touch-icon.png",
-  },
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "black-translucent",
-    title: "Koshikai.PMX",
-  },
-  formatDetection: {
-    telephone: false,
-  },
+  title: "koshikai.dev | Building apps that make life better",
+  description: "Portfolio of koshikai - Personal Developer & Creator",
 };
 
 export default function RootLayout({
@@ -49,9 +19,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ja" suppressHydrationWarning>
-      <body className={`${manrope.variable} ${jetbrainsMono.variable} antialiased`}>
-        <SwRegister />
+    <html lang="ja">
+      <body className={`${mPlusRounded1c.className} antialiased`}>
         {children}
       </body>
     </html>
