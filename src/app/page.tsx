@@ -1,5 +1,6 @@
 import { Cigarette, Heart } from "lucide-react";
 import { ProjectCard } from "@/components/ProjectCard";
+import { ResearchSection } from "@/components/ResearchSection";
 import { Footer } from "@/components/Footer";
 
 export default function Home() {
@@ -7,17 +8,17 @@ export default function Home() {
     <div className="flex min-h-screen flex-col overflow-hidden relative">
       {/* Background Blobs */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-pink-200/40 rounded-full blur-3xl mix-blend-multiply filter opacity-70 animate-blob dark:bg-pink-900/20 dark:mix-blend-normal"></div>
-        <div className="absolute top-[20%] left-[-10%] w-[400px] h-[400px] bg-blue-200/40 rounded-full blur-3xl mix-blend-multiply filter opacity-70 animate-blob animation-delay-2000 dark:bg-blue-900/20 dark:mix-blend-normal"></div>
-        <div className="absolute bottom-[-10%] right-[20%] w-[600px] h-[600px] bg-yellow-200/40 rounded-full blur-3xl mix-blend-multiply filter opacity-70 animate-blob animation-delay-4000 dark:bg-yellow-900/20 dark:mix-blend-normal"></div>
+        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-pink-200/40 rounded-full blur-3xl mix-blend-multiply filter opacity-70 animate-blob motion-reduce:animate-none dark:bg-pink-900/20 dark:mix-blend-normal"></div>
+        <div className="absolute top-[20%] left-[-10%] w-[400px] h-[400px] bg-blue-200/40 rounded-full blur-3xl mix-blend-multiply filter opacity-70 animate-blob motion-reduce:animate-none animation-delay-2000 dark:bg-blue-900/20 dark:mix-blend-normal"></div>
+        <div className="absolute bottom-[-10%] right-[20%] w-[600px] h-[600px] bg-yellow-200/40 rounded-full blur-3xl mix-blend-multiply filter opacity-70 animate-blob motion-reduce:animate-none animation-delay-4000 dark:bg-yellow-900/20 dark:mix-blend-normal"></div>
       </div>
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         {/* Hero Section */}
         <section className="mx-auto max-w-4xl px-6 pt-32 pb-20 sm:pt-40 sm:pb-32 relative">
           <div className="flex flex-col gap-8 items-center text-center sm:items-start sm:text-left">
-            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/50 backdrop-blur-sm border border-zinc-200 dark:bg-zinc-800/50 dark:border-zinc-700 shadow-sm animate-fade-in-up">
-              <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-pink-400 to-purple-400 flex items-center justify-center text-white font-bold text-lg shadow-inner">
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/50 backdrop-blur-sm border border-zinc-200 dark:bg-zinc-800/50 dark:border-zinc-700 shadow-sm animate-fade-in-up motion-reduce:animate-none">
+              <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-sky-400 to-blue-500 flex items-center justify-center text-white font-bold text-lg shadow-inner">
                 K
               </div>
               <span className="text-sm font-bold text-zinc-600 dark:text-zinc-300 tracking-wide">
@@ -25,10 +26,10 @@ export default function Home() {
               </span>
             </div>
 
-            <h1 className="text-5xl font-extrabold tracking-tight text-zinc-800 dark:text-zinc-50 sm:text-7xl drop-shadow-sm leading-[1.1]">
+            <h1 className="text-5xl font-extrabold tracking-tight text-zinc-800 dark:text-zinc-50 sm:text-7xl drop-shadow-sm leading-[1.1] text-balance">
               Building apps that <br />
               <span className="relative whitespace-nowrap">
-                <span className="relative z-10 bg-gradient-to-r from-pink-400 to-violet-500 bg-clip-text text-transparent transform hover:scale-105 transition-transform inline-block cursor-default">
+                <span className="relative z-10 bg-gradient-to-r from-sky-400 to-emerald-400 bg-clip-text text-transparent inline-block cursor-default motion-safe:transition-transform motion-safe:hover:scale-105">
                   make life better
                 </span>
                 <span className="absolute bottom-2 left-0 w-full h-3 bg-yellow-200/60 -rotate-2 rounded-full -z-10 dark:bg-yellow-900/40"></span>
@@ -37,7 +38,7 @@ export default function Home() {
 
             <p className="max-w-2xl text-xl leading-relaxed text-zinc-600 dark:text-zinc-300 font-medium">
               個人開発者として、日常をより良くするアプリケーションを作っています。
-              禁煙支援から大切な人との繋がりまで、テクノロジーで<span className="text-pink-500 dark:text-pink-400 font-bold">ワクワク</span>する解決策を。
+              禁煙支援から大切な人との繋がりまで、テクノロジーで<span className="text-orange-500 dark:text-orange-400 font-bold">ワクワク</span>する解決策を。
             </p>
           </div>
         </section>
@@ -45,7 +46,7 @@ export default function Home() {
         {/* Projects Section */}
         <section className="mx-auto max-w-4xl px-6 py-12">
           <div className="flex items-center gap-4 mb-10">
-            <h2 className="text-3xl font-bold text-zinc-800 dark:text-zinc-100">
+            <h2 className="text-3xl font-bold text-zinc-800 dark:text-zinc-100 text-balance">
               Projects
             </h2>
             <div className="h-1 flex-1 bg-zinc-200 rounded-full dark:bg-zinc-800"></div>
@@ -74,10 +75,12 @@ export default function Home() {
           </div>
         </section>
 
+        <ResearchSection />
+
         {/* Tech Stack Section */}
         <section className="mx-auto max-w-4xl px-6 py-12 pb-32">
           <div className="flex items-center gap-4 mb-10">
-            <h2 className="text-3xl font-bold text-zinc-800 dark:text-zinc-100">
+            <h2 className="text-3xl font-bold text-zinc-800 dark:text-zinc-100 text-balance">
               Tech Stack
             </h2>
             <div className="h-1 flex-1 bg-zinc-200 rounded-full dark:bg-zinc-800"></div>
@@ -97,7 +100,7 @@ export default function Home() {
             ].map((tech) => (
               <span
                 key={tech.name}
-                className={`rounded-2xl border-2 px-5 py-2 text-sm font-bold shadow-sm transition-all hover:-translate-y-1 hover:rotate-2 hover:shadow-md cursor-default ${tech.color}`}
+                className={`rounded-2xl border-2 px-5 py-2 text-sm font-bold shadow-sm cursor-default ${tech.color} hover:shadow-md motion-safe:transition-[transform,box-shadow] motion-safe:duration-300 motion-safe:hover:-translate-y-1 motion-safe:hover:rotate-2`}
               >
                 {tech.name}
               </span>

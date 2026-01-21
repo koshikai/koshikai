@@ -1,6 +1,6 @@
 export function Footer() {
     return (
-        <footer className="w-full mt-12 py-12 bg-[#fffbf0] dark:bg-[#1a1625] border-t-4 border-dashed border-zinc-200 dark:border-zinc-800">
+        <footer className="w-full mt-12 py-12 bg-[#fffbf0] dark:bg-[#1a1625] border-t-4 border-dashed border-zinc-200 dark:border-zinc-800 motion-safe:transition-[background-color,border-color] motion-safe:duration-300">
             <div className="mx-auto max-w-4xl px-6 flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
 
                 <div className="flex flex-col items-center sm:items-start">
@@ -17,7 +17,8 @@ export function Footer() {
                         href="https://github.com/koshikai"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center justify-center p-3 rounded-full bg-zinc-100 hover:bg-pink-100 text-zinc-600 hover:text-pink-500 transition-all duration-300 dark:bg-zinc-800 dark:hover:bg-pink-900/50 dark:text-zinc-300 dark:hover:text-pink-300 hover:scale-110 hover:rotate-6"
+                        aria-label="GitHub"
+                        className="flex items-center justify-center p-3 rounded-full bg-zinc-100 hover:bg-sky-100 text-zinc-600 hover:text-sky-500 dark:bg-zinc-800 dark:hover:bg-sky-900/50 dark:text-zinc-300 dark:hover:text-sky-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-400 dark:focus-visible:outline-zinc-600 motion-safe:transition-[transform,background-color,color] motion-safe:duration-300 motion-safe:hover:scale-110 motion-safe:hover:rotate-6"
                     >
                         <svg
                             className="h-6 w-6"
