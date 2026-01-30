@@ -1,4 +1,4 @@
-import { Cigarette, Heart } from "lucide-react";
+import { Cigarette, Heart, Images } from "lucide-react";
 import { ProjectCard } from "@/components/ProjectCard";
 import { ResearchSection } from "@/components/ResearchSection";
 import { Footer } from "@/components/Footer";
@@ -18,7 +18,7 @@ export default function Home() {
         <section className="mx-auto max-w-4xl px-6 pt-32 pb-20 sm:pt-40 sm:pb-32 relative">
           <div className="flex flex-col gap-8 items-center text-center sm:items-start sm:text-left">
             <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/50 backdrop-blur-sm border border-zinc-200 dark:bg-zinc-800/50 dark:border-zinc-700 shadow-sm animate-fade-in-up motion-reduce:animate-none">
-              <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-sky-400 to-blue-500 flex items-center justify-center text-white font-bold text-lg shadow-inner">
+              <div className="h-8 w-8 rounded-full bg-linear-to-tr from-sky-400 to-blue-500 flex items-center justify-center text-white font-bold text-lg shadow-inner">
                 K
               </div>
               <span className="text-sm font-bold text-zinc-600 dark:text-zinc-300 tracking-wide">
@@ -29,7 +29,7 @@ export default function Home() {
             <h1 className="text-5xl font-extrabold tracking-tight text-zinc-800 dark:text-zinc-50 sm:text-7xl drop-shadow-sm leading-[1.1] text-balance">
               Building apps that <br />
               <span className="relative whitespace-nowrap">
-                <span className="relative z-10 bg-gradient-to-r from-sky-400 to-emerald-400 bg-clip-text text-transparent inline-block cursor-default motion-safe:transition-transform motion-safe:hover:scale-105">
+                <span className="relative z-10 bg-linear-to-r from-sky-400 to-emerald-400 bg-clip-text text-transparent inline-block cursor-default motion-safe:transition-transform motion-safe:hover:scale-105">
                   make life better
                 </span>
                 <span className="absolute bottom-2 left-0 w-full h-3 bg-yellow-200/60 -rotate-2 rounded-full -z-10 dark:bg-yellow-900/40"></span>
@@ -72,6 +72,17 @@ export default function Home() {
               accentColor="pink"
               icon={<Heart className="h-7 w-7 fill-current" />}
             />
+
+            <ProjectCard
+              title="KariGallery"
+              subtitle="gallery.koshikai.dev"
+              description="創作活動のためのイラスト・アートワーク管理プラットフォーム。作品のアーカイブやタグ付け、スムーズな閲覧体験を提供します。"
+              features={["作品管理", "タグシステム", "レスポンシブビューワ", "Prisma"]}
+              href="https://gallery.koshikai.dev"
+              accentColor="purple"
+              icon={<Images className="h-7 w-7" />}
+            />
+
           </div>
         </section>
 

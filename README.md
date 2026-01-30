@@ -33,4 +33,16 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
+## Production Services
+
+現在デプロイされ、稼働中のアプリケーション一覧です。
+
+| アプリ名 | URL | 概要 |
+| :--- | :--- | :--- |
+| **no** | [nosmoke.koshikai.dev](https://nosmoke.koshikai.dev) | 喫煙管理 PWA |
+| **Knot** | [knot.koshikai.dev](https://knot.koshikai.dev) | カップル共有プラットフォーム |
+| **koshikai** | [koshikai.dev](https://koshikai.dev) | ポートフォリオサイト |
+| **KariGallery** | [gallery.koshikai.dev](https://gallery.koshikai.dev) | イラスト管理ギャラリー |
+
+---
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
