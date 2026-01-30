@@ -6,7 +6,7 @@ interface ProjectCardProps {
   description: string;
   features: string[];
   href: string;
-  accentColor: "green" | "pink";
+  accentColor: "green" | "pink" | "purple" | "blue" | "orange";
   icon: React.ReactNode;
 }
 
@@ -31,6 +31,36 @@ const colorClasses = {
     shadow:
       "shadow-[6px_6px_0px_0px_rgba(244,114,182,0.4)] hover:shadow-[8px_8px_0px_0px_rgba(244,114,182,0.6)]",
   },
+  purple: {
+    border: "border-purple-200 dark:border-purple-800",
+    bg: "bg-white dark:bg-zinc-800",
+    hover: "hover:bg-purple-50 dark:hover:bg-purple-900/30",
+    text: "text-purple-600 dark:text-purple-300",
+    badge: "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300",
+    iconBg: "bg-purple-200 dark:bg-purple-700",
+    shadow:
+      "shadow-[6px_6px_0px_0px_rgba(168,85,247,0.4)] hover:shadow-[8px_8px_0px_0px_rgba(168,85,247,0.6)]",
+  },
+  blue: {
+    border: "border-blue-200 dark:border-blue-800",
+    bg: "bg-white dark:bg-zinc-800",
+    hover: "hover:bg-blue-50 dark:hover:bg-blue-900/30",
+    text: "text-blue-600 dark:text-blue-300",
+    badge: "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
+    iconBg: "bg-blue-200 dark:bg-blue-700",
+    shadow:
+      "shadow-[6px_6px_0px_0px_rgba(59,130,246,0.4)] hover:shadow-[8px_8px_0px_0px_rgba(59,130,246,0.6)]",
+  },
+  orange: {
+    border: "border-orange-200 dark:border-orange-800",
+    bg: "bg-white dark:bg-zinc-800",
+    hover: "hover:bg-orange-50 dark:hover:bg-orange-900/30",
+    text: "text-orange-600 dark:text-orange-300",
+    badge: "bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300",
+    iconBg: "bg-orange-200 dark:bg-orange-700",
+    shadow:
+      "shadow-[6px_6px_0px_0px_rgba(249,115,22,0.4)] hover:shadow-[8px_8px_0px_0px_rgba(249,115,22,0.6)]",
+  },
 } as const;
 
 export function ProjectCard({
@@ -49,7 +79,7 @@ export function ProjectCard({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`group relative flex flex-col gap-4 rounded-3xl border-2 p-6 ${colors.border} ${colors.bg} ${colors.hover} ${colors.shadow} focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-400 dark:focus-visible:outline-zinc-600 motion-safe:transition-[transform,background-color,box-shadow] motion-safe:duration-300 motion-safe:hover:-translate-y-1 motion-safe:hover:scale-[1.02]`}
+      className={`group relative flex flex-col gap-4 rounded-3xl border-2 p-6 ${colors.border} ${colors.bg} ${colors.hover} ${colors.shadow} focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-400 dark:focus-visible:outline-zinc-600 motion-safe:transition-[transform,background-color,box-shadow] motion-safe:duration-300 motion-safe:hover:-translate-y-1 motion-safe:hover:scale-[1.02]`}
     >
       <div className="flex items-start justify-between">
         <div
