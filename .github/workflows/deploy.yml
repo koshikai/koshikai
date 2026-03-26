@@ -91,7 +91,9 @@ jobs:
           mkdir -p "$DEPLOY_DIR"
           cp docker-compose.prod.yaml "$DEPLOY_DIR/docker-compose.prod.yaml"
           cp docker-compose.internal.yaml "$DEPLOY_DIR/docker-compose.internal.yaml"
-          cp .env.mathkb.example "$DEPLOY_DIR/.env.mathkb.example"
+          if [ -f .env.mathkb.example ]; then
+            cp .env.mathkb.example "$DEPLOY_DIR/.env.mathkb.example"
+          fi
 
           if [ -f /opt/home/.env.prod ] && [ ! -e "$DEPLOY_DIR/.env.prod" ]; then
             ln -s /opt/home/.env.prod "$DEPLOY_DIR/.env.prod"
