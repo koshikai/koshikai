@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { M_PLUS_Rounded_1c } from "next/font/google";
 import "./globals.css";
+import { getSiteConfig } from "@/lib/site-config";
 
 const mPlusRounded1c = M_PLUS_Rounded_1c({
   weight: ["400", "500", "700", "800"],
@@ -8,83 +9,106 @@ const mPlusRounded1c = M_PLUS_Rounded_1c({
   variable: "--font-m-plus-rounded",
 });
 
-const baseUrl = "https://koshikai.dev";
+export async function generateMetadata(): Promise<Metadata> {
+  const site = getSiteConfig();
+  const isMathKb = site.variant === "mathkb";
 
-export const metadata: Metadata = {
-  metadataBase: new URL(baseUrl),
-  title: {
-    default: "koshikai.dev | Building apps that make life better",
-    template: "%s | koshikai.dev",
-  },
-  description: "個人開発者 koshikai のポートフォリオ。禁煙支援アプリ 'no' や、カップル向けアプリ 'Knot' など、「日常をより良くする」プロダクトを開発しています。",
-  keywords: ["koshikai", "個人開発", "エンジニア", "ポートフォリオ", "Next.js", "React", "TypeScript", "AIエージェント"],
-  authors: [{ name: "koshikai", url: baseUrl }],
-  creator: "koshikai",
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  alternates: {
-    canonical: "/",
-  },
-  openGraph: {
-    title: "koshikai.dev | Building apps that make life better",
-    description: "個人開発者 koshikai のポートフォリオ。日常をより良くするプロダクトを開発中。",
-    url: baseUrl,
-    siteName: "koshikai.dev",
-    locale: "ja_JP",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "koshikai.dev | Building apps that make life better",
-    description: "個人開発者 koshikai のポートフォリオ。日常をより良くするプロダクトを開発中。",
-    creator: "@koshikai",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
+  return {
+    metadataBase: new URL(site.baseUrl),
+    title: {
+      default: site.title,
+      template: isMathKb ? "%s | Private Math Knowledge Base" : "%s | koshikai.dev",
     },
-  },
-  icons: {
-    icon: "/icon.svg",
-    apple: "/icon.svg",
-  },
-};
-
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: "koshikai",
-  url: baseUrl,
-  jobTitle: "Software Developer",
-  description: "Personal Developer & Creator building apps that make life better.",
-  sameAs: [
-    "https://github.com/koshikai",
-    // Add other social links here
-  ],
-  knowsAbout: [
-    "Next.js",
-    "React",
-    "TypeScript",
-    "Python",
-    "AI Agents",
-    "LLMs"
-  ]
-};
+    description: site.description,
+    keywords: site.keywords,
+    authors: [{ name: "koshikai", url: site.baseUrl }],
+    creator: "koshikai",
+    formatDetection: {
+      email: false,
+      address: false,
+      telephone: false,
+    },
+    alternates: {
+      canonical: "/",
+    },
+    openGraph: {
+      title: site.title,
+      description: site.description,
+      url: site.baseUrl,
+      siteName: site.name,
+      locale: site.locale,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: site.twitterTitle,
+      description: site.description,
+      creator: "@koshikai",
+    },
+    robots: isMathKb
+      ? {
+          index: false,
+          follow: false,
+          nocache: true,
+          googleBot: {
+            index: false,
+            follow: false,
+            noimageindex: true,
+          },
+        }
+      : {
+          index: true,
+          follow: true,
+          googleBot: {
+            index: true,
+            follow: true,
+            "max-video-preview": -1,
+            "max-image-preview": "large",
+            "max-snippet": -1,
+          },
+        },
+    icons: {
+      icon: "/icon.svg",
+      apple: "/icon.svg",
+    },
+  };
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const site = getSiteConfig();
+  const jsonLd =
+    site.variant === "mathkb"
+      ? {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: site.name,
+          url: site.baseUrl,
+          description: site.description,
+          inLanguage: "ja-JP",
+        }
+      : {
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: "koshikai",
+          url: site.baseUrl,
+          jobTitle: "Software Developer",
+          description:
+            "Personal Developer & Creator building apps that make life better.",
+          sameAs: ["https://github.com/koshikai"],
+          knowsAbout: [
+            "Next.js",
+            "React",
+            "TypeScript",
+            "Python",
+            "AI Agents",
+            "LLMs",
+          ],
+        };
+
   return (
     <html lang="ja" suppressHydrationWarning>
       <body className={`${mPlusRounded1c.className} antialiased`}>

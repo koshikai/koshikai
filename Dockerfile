@@ -8,7 +8,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
-COPY package.json bun.lockb* ./
+COPY package.json bun.lock ./
 # Use production flag if possible, but we need devDeps for build
 RUN bun install --frozen-lockfile --ignore-scripts
 

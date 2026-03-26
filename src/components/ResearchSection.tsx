@@ -2,6 +2,17 @@ import { Cpu, Terminal, Zap, Layers } from "lucide-react";
 
 const researchItems = [
   {
+    title: "Private Math KB + MCP",
+    description:
+      "研究ノートを内部向けに構造化して蓄積し、AI からは読み取り専用 MCP で参照できる基盤を構築中。公開サイトには詳細を出さず、内部運用を前提に設計しています。",
+    icon: Cpu,
+    color: "bg-emerald-400",
+    accent: "text-emerald-600 dark:text-emerald-400",
+    bg: "bg-emerald-50 dark:bg-emerald-900/20",
+    border: "border-emerald-200 dark:border-emerald-800",
+    features: ["PostgreSQL Search", "Read-only MCP", "Internal First"],
+  },
+  {
     title: "Modular Agent Skills",
     description:
       "Anthropic の設計思想に基づき、SKILL.md とディレクトリ構造でパッケージ化された能力。独自のメタデータ定義と Progressive Disclosure により、効率的な機能拡張を実現しています。",
@@ -22,17 +33,6 @@ const researchItems = [
     bg: "bg-amber-50 dark:bg-amber-900/20",
     border: "border-amber-200 dark:border-amber-800",
     features: ["Real-time Analysis", "DAG-based Exec", "Python Ecosystem"],
-  },
-  {
-    title: "MCP-Powered Tooling",
-    description:
-      "Model Context Protocol (MCP) を通じ、エージェントが研究用リソースにセキュアにアクセス。標準化されたインターフェースにより、スキルの移植性と安全性を確保しています。",
-    icon: Cpu,
-    color: "bg-emerald-400",
-    accent: "text-emerald-600 dark:text-emerald-400",
-    bg: "bg-emerald-50 dark:bg-emerald-900/20",
-    border: "border-emerald-200 dark:border-emerald-800",
-    features: ["Standard Protocol", "Secure Tools", "Resource Mapping"],
   },
   {
     title: "Unified Python Tooling",
@@ -66,7 +66,7 @@ export function ResearchSection() {
       <div className="mb-8">
         <p className="text-lg text-zinc-600 dark:text-zinc-300 font-medium leading-relaxed">
           大学では <span className="text-violet-500 font-bold underline decoration-wavy decoration-violet-300">AIエージェントを活用した研究の高度化</span> をテーマに活動しています。
-          単なる自動化を超え、エージェントが「思考」し、「スキル」を選択して研究を推進するエコシステムを構築中です。
+          単なる自動化を超え、エージェントが「思考」し、「スキル」を選択し、必要な知識基盤を参照しながら研究を推進するエコシステムを構築中です。
         </p>
       </div>
 

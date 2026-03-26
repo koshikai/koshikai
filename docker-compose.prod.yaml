@@ -9,3 +9,5 @@ services:
       - .env.prod
     environment:
       - NODE_ENV=production
+      - SITE_VARIANT=portfolio
+      - SITE_URL=https://koshikai.dev

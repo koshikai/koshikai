@@ -1,0 +1,61 @@
+services:
+  mathkb-app:
+    image: ghcr.io/koshikai/koshikai:latest
+    container_name: mathkb-app
+    restart: always
+    ports:
+      - "3003:3000"
+    env_file:
+      - .env.mathkb
+    environment:
+      - NODE_ENV=production
+      - SITE_VARIANT=mathkb
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3000/healthz >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+  mathkb-mcp:
+    image: ghcr.io/koshikai/koshikai-mcp:latest
+    container_name: mathkb-mcp
+    restart: always
+    ports:
+      - "3004:3004"
+    env_file:
+      - .env.mathkb
+    environment:
+      - NODE_ENV=production
+      - MCP_BIND_HOST=0.0.0.0
+      - MCP_PORT=3004
+      - MCP_PATH=/mcp
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3004/healthz >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  mathkb-nocodb:
+    image: nocodb/nocodb:latest
+    container_name: mathkb-nocodb
+    restart: always
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env.mathkb
+    environment:
+      - NC_DISABLE_TELE=true
+      - NC_MIN=true
+    volumes:
+      - nocodb-data:/usr/app/data
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/ >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  nocodb-data:

@@ -5,19 +5,22 @@ on:
     branches: [main]
   workflow_dispatch:
 
+concurrency:
+  group: deploy-main
+  cancel-in-progress: true
+
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  APP_IMAGE_NAME: ${{ github.repository }}
+  MCP_IMAGE_NAME: ${{ github.repository }}-mcp
 
 jobs:
   build:
-    name: Build and Push Image
+    name: Build and Push Images
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-    outputs:
-      image_tag: ${{ steps.meta.outputs.tags }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -29,28 +32,52 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata
-        id: meta
+      - name: Extract app metadata
+        id: app_meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ env.APP_IMAGE_NAME }}
           tags: |
             type=sha,prefix=
             type=raw,value=latest
 
-      - name: Build and push
+      - name: Build and push app image
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.app_meta.outputs.tags }}
+          labels: ${{ steps.app_meta.outputs.labels }}
+
+      - name: Extract MCP metadata
+        id: mcp_meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.MCP_IMAGE_NAME }}
+          tags: |
+            type=sha,prefix=
+            type=raw,value=latest
+
+      - name: Build and push MCP image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile.mcp
+          push: true
+          tags: ${{ steps.mcp_meta.outputs.tags }}
+          labels: ${{ steps.mcp_meta.outputs.labels }}
 
   deploy:
     name: Deploy to Proxmox
     needs: build
     runs-on: self-hosted
+    permissions:
+      contents: read
+      packages: read
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
@@ -58,11 +85,28 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Pull and restart containers
+      - name: Sync deployment manifests
+        run: |
+          mkdir -p /opt/home
+          cp docker-compose.prod.yaml /opt/home/docker-compose.prod.yaml
+          cp docker-compose.internal.yaml /opt/home/docker-compose.internal.yaml
+          cp .env.mathkb.example /opt/home/.env.mathkb.example
+
+      - name: Pull and restart public portfolio
         run: |
           cd /opt/home
           docker compose -f docker-compose.prod.yaml pull
           docker compose -f docker-compose.prod.yaml up -d
-          
+
+      - name: Pull and restart internal mathkb stack
+        run: |
+          cd /opt/home
+          if [ -f .env.mathkb ]; then
+            docker compose -f docker-compose.internal.yaml pull
+            docker compose -f docker-compose.internal.yaml up -d
+          else
+            echo "Skipping internal mathkb deploy because /opt/home/.env.mathkb is missing."
+          fi
+
       - name: Cleanup old images
         run: docker image prune -f
