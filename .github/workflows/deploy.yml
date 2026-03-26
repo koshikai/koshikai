@@ -112,15 +112,33 @@ jobs:
             echo "Missing .env.prod. Place it in /opt/home/.env.prod or $DEPLOY_DIR/.env.prod before deploying."
             exit 1
           fi
-          docker compose -f docker-compose.prod.yaml pull
-          docker compose -f docker-compose.prod.yaml up -d
+          PROJECT_NAME="koshikai_public"
+          if docker inspect koshikai-app >/dev/null 2>&1; then
+            CURRENT_PROJECT="$(docker inspect -f '{{ index .Config.Labels "com.docker.compose.project" }}' koshikai-app 2>/dev/null || true)"
+            if [ "$CURRENT_PROJECT" != "$PROJECT_NAME" ]; then
+              echo "Removing legacy koshikai-app container from compose project '$CURRENT_PROJECT'."
+              docker rm -f koshikai-app
+            fi
+          fi
+          docker compose -p "$PROJECT_NAME" -f docker-compose.prod.yaml pull
+          docker compose -p "$PROJECT_NAME" -f docker-compose.prod.yaml up -d --remove-orphans
 
       - name: Pull and restart internal mathkb stack
         run: |
           cd "$DEPLOY_DIR"
           if [ -f .env.mathkb ]; then
-            docker compose -f docker-compose.internal.yaml pull
-            docker compose -f docker-compose.internal.yaml up -d
+            PROJECT_NAME="koshikai_mathkb"
+            for container_name in mathkb-app mathkb-mcp mathkb-nocodb; do
+              if docker inspect "$container_name" >/dev/null 2>&1; then
+                CURRENT_PROJECT="$(docker inspect -f '{{ index .Config.Labels "com.docker.compose.project" }}' "$container_name" 2>/dev/null || true)"
+                if [ "$CURRENT_PROJECT" != "$PROJECT_NAME" ]; then
+                  echo "Removing legacy $container_name container from compose project '$CURRENT_PROJECT'."
+                  docker rm -f "$container_name"
+                fi
+              fi
+            done
+            docker compose -p "$PROJECT_NAME" -f docker-compose.internal.yaml pull
+            docker compose -p "$PROJECT_NAME" -f docker-compose.internal.yaml up -d --remove-orphans
           else
             echo "Skipping internal mathkb deploy because .env.mathkb is missing."
           fi
