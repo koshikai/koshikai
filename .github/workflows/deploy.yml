@@ -87,25 +87,40 @@ jobs:
 
       - name: Sync deployment manifests
         run: |
-          mkdir -p /opt/home
-          cp docker-compose.prod.yaml /opt/home/docker-compose.prod.yaml
-          cp docker-compose.internal.yaml /opt/home/docker-compose.internal.yaml
-          cp .env.notes.example /opt/home/.env.notes.example
+          DEPLOY_DIR="${HOME}/deploy/koshikai"
+          mkdir -p "$DEPLOY_DIR"
+          cp docker-compose.prod.yaml "$DEPLOY_DIR/docker-compose.prod.yaml"
+          cp docker-compose.internal.yaml "$DEPLOY_DIR/docker-compose.internal.yaml"
+          cp .env.notes.example "$DEPLOY_DIR/.env.notes.example"
+
+          if [ -f /opt/home/.env.prod ] && [ ! -e "$DEPLOY_DIR/.env.prod" ]; then
+            ln -s /opt/home/.env.prod "$DEPLOY_DIR/.env.prod"
+          fi
+
+          if [ -f /opt/home/.env.notes ] && [ ! -e "$DEPLOY_DIR/.env.notes" ]; then
+            ln -s /opt/home/.env.notes "$DEPLOY_DIR/.env.notes"
+          fi
+
+          echo "DEPLOY_DIR=$DEPLOY_DIR" >> "$GITHUB_ENV"
 
       - name: Pull and restart public portfolio
         run: |
-          cd /opt/home
+          cd "$DEPLOY_DIR"
+          if [ ! -f .env.prod ]; then
+            echo "Missing .env.prod. Place it in /opt/home/.env.prod or $DEPLOY_DIR/.env.prod before deploying."
+            exit 1
+          fi
           docker compose -f docker-compose.prod.yaml pull
           docker compose -f docker-compose.prod.yaml up -d
 
       - name: Pull and restart internal notes stack
         run: |
-          cd /opt/home
+          cd "$DEPLOY_DIR"
           if [ -f .env.notes ]; then
             docker compose -f docker-compose.internal.yaml pull
             docker compose -f docker-compose.internal.yaml up -d
           else
-            echo "Skipping internal notes deploy because /opt/home/.env.notes is missing."
+            echo "Skipping internal notes deploy because .env.notes is missing."
           fi
 
       - name: Cleanup old images
