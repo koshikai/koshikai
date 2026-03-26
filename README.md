@@ -115,10 +115,10 @@ v1 は `notes`, `tags`, `note_tags` のみです。`concepts` 系は未実装で
 
 - `ghcr.io/koshikai/koshikai:latest` を build / push
 - `ghcr.io/koshikai/koshikai-mcp:latest` を build / push
-- Proxmox 上の self-hosted runner で `/opt/home/docker-compose.prod.yaml` を同期して公開ポートフォリオを再起動
-- `/opt/home/.env.mathkb` が存在する場合のみ、`docker-compose.internal.yaml` を同期して内部KB / MCP / NocoDB も再起動
+- Proxmox 上の self-hosted runner で `$HOME/deploy/koshikai` に compose を同期して公開ポートフォリオを再起動
+- `/opt/home/.env.mathkb` または `$HOME/deploy/koshikai/.env.mathkb` が存在する場合のみ、内部KB / MCP / NocoDB も再起動
 
-つまり、内部スタックを自動デプロイしたい場合は、先に `/opt/home/.env.mathkb` を置いておく必要があります。
+公開側は `/opt/home/.env.prod`、内部側は `/opt/home/.env.mathkb` を置いておけば、そのまま symlink されて使われます。必要なら直接 `$HOME/deploy/koshikai` 側に置いても構いません。
 
 ## MCP Tools
 
