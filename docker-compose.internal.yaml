@@ -3,6 +3,12 @@ services:
     image: ghcr.io/koshikai/koshikai:latest
     container_name: mathkb-app
     restart: always
+    command:
+      [
+        "/bin/sh",
+        "-c",
+        "export MATHKB_DATABASE_URL=\"$${MATHKB_APP_DATABASE_URL:-$${MATHKB_DATABASE_URL:-}}\"; exec bun server.js",
+      ]
     ports:
       - "3003:3000"
     env_file:
@@ -21,6 +27,12 @@ services:
     image: ghcr.io/koshikai/koshikai-mcp:latest
     container_name: mathkb-mcp
     restart: always
+    command:
+      [
+        "/bin/sh",
+        "-c",
+        "export MATHKB_DATABASE_URL=\"$${MCP_DATABASE_URL:-$${MATHKB_DATABASE_URL:-}}\"; exec bun run mcp:http",
+      ]
     ports:
       - "3004:3004"
     env_file:
