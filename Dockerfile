@@ -36,9 +36,9 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-# Bun images usually use a 'bun' user, but we can stick to our nextjs user pattern or use default
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+# Debian 系の Bun image では groupadd/useradd を使う
+RUN groupadd --system --gid 1001 nodejs
+RUN useradd --system --uid 1001 --gid nodejs nextjs
 
 COPY --from=builder /app/public ./public
 
