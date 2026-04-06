@@ -34,7 +34,7 @@ services:
         "export MATHKB_DATABASE_URL=\"$${MCP_DATABASE_URL:-$${MATHKB_DATABASE_URL:-}}\"; exec bun run mcp:http",
       ]
     ports:
-      - "3004:3004"
+      - "3104:3004"
     env_file:
       - .env.mathkb
     environment:
