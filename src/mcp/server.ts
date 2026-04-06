@@ -276,10 +276,16 @@ async function startStdioServer() {
 }
 
 async function startHttpServer() {
-  const app = createMcpExpressApp();
   const host = process.env.MCP_BIND_HOST ?? "0.0.0.0";
   const port = Number(process.env.MCP_PORT ?? "3004");
   const path = process.env.MCP_PATH ?? "/mcp";
+  const allowedHosts = process.env.MCP_ALLOWED_HOSTS?.split(",")
+    .map((value) => value.trim())
+    .filter(Boolean);
+  const app = createMcpExpressApp({
+    host,
+    ...(allowedHosts && allowedHosts.length > 0 ? { allowedHosts } : {}),
+  });
 
   app.get("/healthz", (_req: Request, res: Response) => {
     res.json({ ok: true });

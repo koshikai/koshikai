@@ -23,9 +23,10 @@ MATHKB_DATABASE_SSL=disable (default) | require
 MCP_BIND_HOST=0.0.0.0
 MCP_PORT=3004
 MCP_PATH=/mcp
+MCP_ALLOWED_HOSTS=comma-separated optional host allowlist
 ```
 
-`SITE_URL` は `portfolio` では `https://koshikai.dev`、`mathkb` では `http://127.0.0.1:3003` など内部URLを設定します。DB 接続は `MATHKB_DATABASE_URL` を共通値として使えますが、Docker デプロイでは `MATHKB_APP_DATABASE_URL` と `MCP_DATABASE_URL` を分けると、内部UIを `mathkb_app`、MCP を `mcp_reader` で動かせます。`MATHKB_DATABASE_URL` が未設定なら、内部UI / MCP は `DATABASE_URL` にもフォールバックします。
+`SITE_URL` は `portfolio` では `https://koshikai.dev`、`mathkb` では `http://127.0.0.1:3103` など内部URLを設定します。DB 接続は `MATHKB_DATABASE_URL` を共通値として使えますが、Docker デプロイでは `MATHKB_APP_DATABASE_URL` と `MCP_DATABASE_URL` を分けると、内部UIを `mathkb_app`、MCP を `mcp_reader` で動かせます。`MATHKB_DATABASE_URL` が未設定なら、内部UI / MCP は `DATABASE_URL` にもフォールバックします。`MCP_ALLOWED_HOSTS` を設定すると、MCP の `Host` ヘッダーを LAN 内の特定ホスト名 / IP に制限できます。
 
 内部KB用の例は [`.env.mathkb.example`](./.env.mathkb.example) を参照してください。
 
@@ -113,7 +114,7 @@ v1 は `notes`, `tags`, `note_tags` のみです。`concepts` 系は未実装で
 想定ポート:
 
 - `3002`: 公開ポートフォリオ
-- `3003`: 内部KB UI
+- `3103`: 内部KB UI (host -> container `3000`)
 - `3104`: MCP HTTP (host -> container `3004`)
 - `8080`: NocoDB
 
@@ -126,13 +127,13 @@ v1 は `notes`, `tags`, `note_tags` のみです。`concepts` 系は未実装で
 
 内部KB UI / MCP / NocoDB は、インターネット公開を前提にしていません。`mathkb` 系のスタックは LAN 内またはホストローカルでのみ到達できるように運用してください。
 
-- `3003`, `3104`, `8080` はルータでポート開放しない
+- `3103`, `3104`, `8080` はルータでポート開放しない
 - Proxmox ホストまたはゲストOSの firewall で、許可元を `192.168.0.0/16`, `10.0.0.0/8`, `172.16.0.0/12` など必要な内部セグメントに限定する
 - 外部から使いたい場合も、公開 ingress ではなく VPN を使う
 - MCP は書き込みツールを追加せず、DB ロールも `mcp_reader` の read-only を維持する
 - `SITE_URL` は `mathkb` 用に内部URLを設定する
 
-`docker-compose.internal.yaml` の `ports` はそのままでも動きますが、安全側に倒すなら `127.0.0.1:3003:3000` のように loopback bind へ変更し、必要なものだけ reverse proxy や SSH port forward で中継してください。
+`docker-compose.internal.yaml` の `ports` はそのままでも動きますが、安全側に倒すなら `127.0.0.1:3103:3000` のように loopback bind へ変更し、必要なものだけ reverse proxy や SSH port forward で中継してください。
 
 ## GitHub Actions Deploy
 

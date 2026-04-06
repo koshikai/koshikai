@@ -10,7 +10,7 @@ services:
         "export MATHKB_DATABASE_URL=\"$${MATHKB_APP_DATABASE_URL:-$${MATHKB_DATABASE_URL:-}}\"; exec bun server.js",
       ]
     ports:
-      - "3003:3000"
+      - "3103:3000"
     env_file:
       - .env.mathkb
     environment:
