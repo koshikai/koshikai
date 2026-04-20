@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { M_PLUS_Rounded_1c } from "next/font/google";
 import "./globals.css";
 import { getSiteConfig } from "@/lib/site-config";
+import { serializeJsonLd } from "@/lib/utils";
 
 const mPlusRounded1c = M_PLUS_Rounded_1c({
   weight: ["400", "500", "700", "800"],
@@ -114,7 +115,7 @@ export default function RootLayout({
       <body className={`${mPlusRounded1c.className} antialiased`}>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
         />
         <a
           href="#main-content"
