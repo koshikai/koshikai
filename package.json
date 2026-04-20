@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "bun test",
     "mcp:http": "bun src/mcp/server.ts http",
     "mcp:stdio": "bun src/mcp/server.ts stdio"
   },
