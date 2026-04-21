@@ -58,7 +58,10 @@ export default async function CaseDetailPage({ params }: CaseDetailPageProps) {
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(125,211,252,0.2),transparent_35%),linear-gradient(180deg,#f8fafc_0%,#eef2ff_55%,#f8fafc_100%)] dark:bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.18),transparent_28%),linear-gradient(180deg,#09090b_0%,#111827_60%,#09090b_100%)]">
-      <main id="main-content" className="mx-auto w-full max-w-4xl px-6 py-10 sm:px-8 sm:py-14">
+      <main
+        id="main-content"
+        className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-14"
+      >
         <Link
           href="/cases"
           className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white/80 px-4 py-2 text-sm font-bold text-zinc-700 transition-colors hover:border-sky-300 hover:text-sky-700 dark:border-zinc-700 dark:bg-zinc-900/70 dark:text-zinc-200 dark:hover:border-sky-700 dark:hover:text-sky-200"
@@ -67,14 +70,14 @@ export default async function CaseDetailPage({ params }: CaseDetailPageProps) {
           Back to cases
         </Link>
 
-        <article className="mt-6 rounded-4xl border border-white/70 bg-white/80 p-8 shadow-[0_30px_80px_-48px_rgba(15,23,42,0.45)] backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/70">
+        <article className="case-article-shell mt-5 sm:mt-6">
           <p className="text-xs font-semibold tracking-wide text-zinc-500 uppercase dark:text-zinc-400">
             {item.publishedAt}
           </p>
-          <h1 className="mt-3 text-balance text-4xl font-black tracking-tight text-zinc-900 sm:text-5xl dark:text-zinc-50">
+          <h1 className="mt-3 text-balance text-3xl font-black tracking-tight text-zinc-900 sm:text-4xl lg:text-5xl dark:text-zinc-50">
             {item.title}
           </h1>
-          <p className="mt-4 text-base leading-8 text-zinc-600 dark:text-zinc-300">
+          <p className="mt-4 text-sm leading-7 text-zinc-600 sm:text-base sm:leading-8 dark:text-zinc-300">
             {item.summary}
           </p>
           <div className="mt-5 flex flex-wrap gap-2">
@@ -87,7 +90,7 @@ export default async function CaseDetailPage({ params }: CaseDetailPageProps) {
               </span>
             ))}
           </div>
-          <div className="mt-10">
+          <div className="case-article-content mt-8 sm:mt-10">
             <Content />
           </div>
         </article>
