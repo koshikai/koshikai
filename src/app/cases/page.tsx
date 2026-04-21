@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function CasesPage() {
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(125,211,252,0.2),_transparent_35%),linear-gradient(180deg,_#f8fafc_0%,_#eef2ff_55%,_#f8fafc_100%)] dark:bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.18),_transparent_28%),linear-gradient(180deg,_#09090b_0%,_#111827_60%,_#09090b_100%)]">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(125,211,252,0.2),transparent_35%),linear-gradient(180deg,#f8fafc_0%,#eef2ff_55%,#f8fafc_100%)] dark:bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.18),transparent_28%),linear-gradient(180deg,#09090b_0%,#111827_60%,#09090b_100%)]">
       <main id="main-content" className="mx-auto w-full max-w-5xl px-6 py-10 sm:px-8 sm:py-14">
         <div className="mb-8">
           <Link
@@ -22,7 +22,7 @@ export default function CasesPage() {
           </Link>
         </div>
 
-        <section className="rounded-[2rem] border border-white/70 bg-white/80 p-8 shadow-[0_30px_80px_-48px_rgba(15,23,42,0.45)] backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/70">
+        <section className="rounded-4xl border border-white/70 bg-white/80 p-8 shadow-[0_30px_80px_-48px_rgba(15,23,42,0.45)] backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/70">
           <h1 className="text-balance text-4xl font-black tracking-tight text-zinc-900 sm:text-5xl dark:text-zinc-50">
             Case Studies
           </h1>
