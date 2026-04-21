@@ -10,6 +10,14 @@ export interface CaseItem {
 
 export const caseItems: CaseItem[] = [
   {
+    slug: "immich-distributed",
+    title: "Immich 分散アーキテクチャの構築",
+    summary:
+      "Proxmox と Windows GPU をネットワーク越しに連携させ、機械学習タスクを効率的に分散処理する写真管理基盤の構築。",
+    tags: ["Immich", "Distributed", "GPU Offloading", "Docker", "Proxmox"],
+    publishedAt: "2026-04-21",
+  },
+  {
     slug: "infrastructure",
     title: "高度な分散インフラ・AI自動化基盤",
     summary:
@@ -71,6 +79,7 @@ const caseMdxModules: Record<
   string,
   () => Promise<{ default: ComponentType }>
 > = {
+  "immich-distributed": () => import("@/content/cases/immich-distributed.mdx"),
   infrastructure: () => import("@/content/cases/infrastructure.mdx"),
   nosmoke: () => import("@/content/cases/nosmoke.mdx"),
   karigallery: () => import("@/content/cases/karigallery.mdx"),

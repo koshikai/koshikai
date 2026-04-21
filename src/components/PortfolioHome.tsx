@@ -1,4 +1,5 @@
 import {
+  ArrowRight,
   Cigarette,
   Database,
   Images,
@@ -33,6 +34,14 @@ const solveAreas = [
 ] as const;
 
 const caseStudies = [
+  {
+    slug: "immich-distributed",
+    title: "Immich 分散アーキテクチャ",
+    challenge: "低消費電力なサーバーでは重すぎる機械学習（顔認識）の高速化。",
+    action: "Proxmox と Windows GPU を連携させ、ML タスクのみを遠隔オフロード。",
+    result: "数万枚の画像スキャンが数日→数時間に短縮。分散構成の実用性を証明。",
+    learning: "マイクロサービス構成を活かし、物理的なマシンの境界を越えた最適化。",
+  },
   {
     slug: "infrastructure",
     title: "高度な分散インフラ・AI自動化",
@@ -301,6 +310,13 @@ export function PortfolioHome() {
                 生活課題を起点に、バックアップ、自動化、障害対応までを一体で設計し、
                 技術を実用へつなげる運用を続けています。
               </p>
+              <Link
+                href="/cases/immich-distributed"
+                className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-emerald-700 hover:text-emerald-600 dark:text-emerald-300 dark:hover:text-emerald-200"
+              >
+                詳細: Immich 分散アーキテクチャの構築
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
             <ul role="list" className="space-y-3 text-sm text-zinc-600 dark:text-zinc-300">
               {operationHighlights.map((item) => (
