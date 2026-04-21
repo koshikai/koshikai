@@ -89,8 +89,8 @@ export function PortfolioHome() {
 
       <main id="main-content" className="flex-1">
         <section className="relative mx-auto max-w-6xl px-6 pt-32 pb-20 sm:pt-40 sm:pb-32">
-          <div className="grid md:grid-cols-[1.2fr_0.8fr] items-center gap-12 justify-items-center md:justify-items-stretch">
-            <div className="flex w-full flex-col items-center gap-8 text-center sm:items-start sm:text-left">
+          <div className="grid md:grid-cols-[1.2fr_0.8fr] items-center gap-12">
+            <div className="flex w-full flex-col items-center gap-8 text-center md:items-start md:text-left">
               <div className="animate-fade-in-up inline-flex items-center gap-3 rounded-full border border-zinc-200 bg-white/50 px-4 py-2 shadow-sm backdrop-blur-sm motion-reduce:animate-none dark:border-zinc-700 dark:bg-zinc-800/50">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-tr from-sky-400 to-blue-500 text-lg font-bold text-white shadow-inner">
                   K
@@ -102,7 +102,7 @@ export function PortfolioHome() {
 
               <h1 className="text-balance text-5xl leading-[1.1] font-extrabold tracking-tight text-zinc-800 drop-shadow-sm sm:text-7xl dark:text-zinc-50">
                 Building apps that <br />
-                <span className="relative whitespace-nowrap">
+                <span className="relative whitespace-normal sm:whitespace-nowrap">
                   <span className="relative z-10 inline-block cursor-default bg-linear-to-r from-sky-400 to-emerald-400 bg-clip-text text-transparent motion-safe:transition-transform motion-safe:hover:scale-105">
                     make life better
                   </span>
@@ -188,7 +188,7 @@ export function PortfolioHome() {
             <div className="h-[2px] flex-1 bg-linear-to-r from-zinc-200 via-zinc-400/30 to-transparent dark:from-zinc-800 dark:via-zinc-600/30 dark:to-transparent rounded-full"></div>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-3">
             {solveAreas.map((area) => {
               const Icon = area.icon;
               return (
@@ -219,7 +219,7 @@ export function PortfolioHome() {
             <div className="h-[2px] flex-1 bg-linear-to-r from-zinc-200 via-zinc-400/30 to-transparent dark:from-zinc-800 dark:via-zinc-600/30 dark:to-transparent rounded-full"></div>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-3">
             {caseStudies.map((study) => (
               <article
                 key={study.title}
