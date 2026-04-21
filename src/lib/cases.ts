@@ -10,6 +10,38 @@ export interface CaseItem {
 
 export const caseItems: CaseItem[] = [
   {
+    slug: "infrastructure",
+    title: "高度な分散インフラ・AI自動化基盤",
+    summary:
+      "Proxmox VE と GPU オフロードによる分散構成、および AI エージェント用 MCP サーバーの自動同期スクリプト群の開発。",
+    tags: ["Proxmox", "LXC", "GPU Pass-through", "IaC", "MCP"],
+    publishedAt: "2026-04-21",
+  },
+  {
+    slug: "nosmoke",
+    title: "NoSmoke: 洗練された PWA 支援アプリ",
+    summary:
+      "Next.js 16.2 と Optimistic UI による、ネイティブ級の操作感を持つ禁煙支援 PWA の開発。",
+    tags: ["Next.js", "PWA", "Prisma", "Framer Motion", "Recharts"],
+    publishedAt: "2026-04-21",
+  },
+  {
+    slug: "karigallery",
+    title: "KariGallery: 決済・認証統合ギャラリー",
+    summary:
+      "Auth.js と Stripe API を統合し、ブラウザ画像圧縮や最新の Prisma v7.7 を活用した商用レベルの SaaS 基盤。",
+    tags: ["Auth.js", "Stripe", "Prisma v7.7", "Image Processing"],
+    publishedAt: "2026-04-21",
+  },
+  {
+    slug: "shuukatsu",
+    title: "就職活動・自己史分析プロジェクト",
+    summary:
+      "React 19, Tailwind CSS v4, Bun 等の最新スタックを用いた、自己史インポートとエピソード管理ツール。",
+    tags: ["React 19", "Tailwind CSS v4", "Bun", "PostgreSQL"],
+    publishedAt: "2026-04-21",
+  },
+  {
     slug: "home-backup",
     title: "自宅バックアップ基盤の構築",
     summary:
@@ -39,6 +71,10 @@ const caseMdxModules: Record<
   string,
   () => Promise<{ default: ComponentType }>
 > = {
+  infrastructure: () => import("@/content/cases/infrastructure.mdx"),
+  nosmoke: () => import("@/content/cases/nosmoke.mdx"),
+  karigallery: () => import("@/content/cases/karigallery.mdx"),
+  shuukatsu: () => import("@/content/cases/shuukatsu.mdx"),
   "home-backup": () => import("@/content/cases/home-backup.mdx"),
   "deploy-automation": () => import("@/content/cases/deploy-automation.mdx"),
   "research-workflow": () => import("@/content/cases/research-workflow.mdx"),
