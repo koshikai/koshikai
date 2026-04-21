@@ -34,6 +34,43 @@ const solveAreas = [
 
 const caseStudies = [
   {
+    slug: "infrastructure",
+    title: "高度な分散インフラ・AI自動化",
+    challenge: "多様なサービス運用と、単一ノードでは不足する計算リソースの両立。",
+    action:
+      "Proxmox と Windows GPU を連携させた分散構成、および運用自動化スクリプトの構築。",
+    result:
+      "GPU オフロードにより低消費電力と高出力を両立し、AI 運用の自律性を向上。",
+    learning: "リソースを場所で縛らず、機能単位で最適配置する分散設計の有用性。",
+  },
+  {
+    slug: "nosmoke",
+    title: "NoSmoke: 洗練された PWA 支援",
+    challenge: "Web アプリの枠を超えた、ネイティブ級のモバイル体験と信頼性の提供。",
+    action:
+      "Next.js 16.2 と Optimistic UI を採用し、オフライン動作と即時反応を追求。",
+    result:
+      "通信環境に左右されない安定した操作感を実現し、継続的な利用を支援。",
+    learning: "楽観的 UI は、単なる速さではなくユーザーの心理的負荷を劇的に下げる。",
+  },
+  {
+    slug: "karigallery",
+    title: "KariGallery: 決済・認証統合 SaaS",
+    challenge: "認証、決済、大容量画像処理を統合した商用レベルの基盤構築。",
+    action:
+      "Auth.js, Stripe, Prisma v7.7 を統合し、ブラウザ側での画像圧縮処理を実装。",
+    result: "フルスタックな機能をセキュアに提供し、イラスト管理の全フローをカバー。",
+    learning: "外部 API を前提とした堅牢なデータモデル設計と型安全の重要性。",
+  },
+  {
+    slug: "shuukatsu",
+    title: "就活・自己史分析プロジェクト",
+    challenge: "最新技術を早期にキャッチアップし、実戦環境での有効性を検証したい。",
+    action: "React 19, Tailwind v4, Bun を採用し、自己史のデータ化と分析ツールを構築。",
+    result: "極めて高速な開発・動作環境を実現し、多角的な自己分析を可能にした。",
+    learning: "リリース直後の技術を即座にワークフローへ組み込む技術的適応力。",
+  },
+  {
     slug: "home-backup",
     title: "自宅バックアップ基盤の構築",
     challenge: "スマホ故障をきっかけに、写真・動画のデータ保全を強化したい。",
@@ -43,31 +80,12 @@ const caseStudies = [
       "サブスク依存を下げつつ、データ管理を自分でコントロールできる運用へ移行。",
     learning: "利便性だけでなく、継続運用しやすさとコストを同時に設計する重要性。",
   },
-  {
-    slug: "deploy-automation",
-    title: "デプロイ作業の自動化",
-    challenge: "手動デプロイの手間と設定差分によるミスを減らしたい。",
-    action:
-      "GitHub Actions と self-hosted runner を連携し、CI/CD パイプラインを構築。",
-    result:
-      "反復作業を削減し、更新の再現性を高めた。運用ドキュメントも合わせて整備。",
-    learning: "自動化はスピードだけでなく、チームや将来の自分の認知負荷を下げる。",
-  },
-  {
-    slug: "research-workflow",
-    title: "研究ワークフローの実装",
-    challenge: "数理研究の検証結果を安定して再現し、比較しやすくしたい。",
-    action:
-      "制約付き制御の実験フローを整理し、条件を固定して結果を記録・検証。",
-    result: "Cortical Development で 32/32、Wnt5a で 96/96 の成功率を確認。",
-    learning: "探索速度より、検証条件の明確化と再現性の担保が信頼性に直結する。",
-  },
 ] as const;
 
 const operationHighlights = [
-  "大学時代から継続して自宅サーバーを運用",
-  "広告ブロック、写真・動画バックアップ、検証環境を自己管理",
-  "障害対応・バックアップ・復旧手順をドキュメント化",
+  "Proxmox VE (Ryzen 7) と LXC による10以上のマイクロサービス運用",
+  "Windows GPU への分散オフロードによる Immich 機械学習処理の高速化",
+  "PowerShell と MCP を活用した AI エージェント用運用エコシステム構築",
   "運用方針: 日次/週次バックアップと定期レビューで改善を継続",
 ] as const;
 
@@ -309,8 +327,8 @@ export function PortfolioHome() {
             <ProjectCard
               title="no"
               subtitle="nosmoke.koshikai.dev"
-              description="喫煙習慣の記録と管理を支援する PWA。自分のペースで喫煙量を追跡し、禁煙に挑戦できます。AI コーチによるサポート付き。"
-              features={["PWA", "AI Coach", "Push通知", "バッジシステム"]}
+              description="Next.js 16.2 採用の高度な PWA。Optimistic UI や Glassmorphism によるネイティブ級の体験。Jest による網羅的なテストと Recharts での可視化を統合。"
+              features={["Next.js 16.2", "PWA", "Optimistic UI", "Jest/RTL"]}
               href="https://nosmoke.koshikai.dev"
               accentColor="green"
               icon={<Cigarette className="h-7 w-7" />}
@@ -319,8 +337,8 @@ export function PortfolioHome() {
             <ProjectCard
               title="KariGallery"
               subtitle="gallery.koshikai.dev"
-              description="創作活動のためのイラスト・アートワーク管理プラットフォーム。作品のアーカイブやタグ付け、スムーズな閲覧体験を提供します。"
-              features={["作品管理", "タグシステム", "レスポンシブビューワ", "Prisma"]}
+              description="Prisma v7.7 と Auth.js を軸にしたイラスト管理 SaaS。Stripe 決済やブラウザ画像圧縮、Framer Motion による滑らかな UI を備えたフルスタック構成。"
+              features={["Prisma v7.7", "Auth.js", "Stripe API", "Image Compression"]}
               href="https://gallery.koshikai.dev"
               accentColor="purple"
               icon={<Images className="h-7 w-7" />}
