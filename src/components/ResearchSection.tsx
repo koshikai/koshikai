@@ -58,15 +58,16 @@ export function ResearchSection() {
           id="research-heading"
           className="text-3xl font-bold text-zinc-800 dark:text-zinc-100 italic text-balance"
         >
-          Research
+          Research Notes
         </h2>
         <div className="h-1 flex-1 bg-zinc-200 rounded-full dark:bg-zinc-800"></div>
       </div>
 
       <div className="mb-8">
         <p className="text-lg text-zinc-600 dark:text-zinc-300 font-medium leading-relaxed">
-          大学では <span className="text-violet-500 font-bold underline decoration-wavy decoration-violet-300">AIエージェントを活用した研究の高度化</span> をテーマに活動しています。
-          単なる自動化を超え、エージェントが「思考」し、「スキル」を選択し、必要な知識基盤を参照しながら研究を推進するエコシステムを構築中です。
+          研究では、検証条件を明確にしたうえで再現可能なフローを重視しています。
+          AIエージェントや知識基盤を活用しながら、
+          実験結果を比較しやすい形に整理するための基盤を継続的に整備しています。
         </p>
       </div>
 
