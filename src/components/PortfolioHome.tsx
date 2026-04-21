@@ -1,7 +1,78 @@
-import { Cigarette, Heart, Images } from "lucide-react";
+import {
+  Cigarette,
+  Database,
+  Images,
+  Server,
+  ShieldCheck,
+  Wrench,
+} from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { ProjectCard } from "@/components/ProjectCard";
 import { ResearchSection } from "@/components/ResearchSection";
+
+const solveAreas = [
+  {
+    title: "生活の不便を仕組みに置き換える",
+    description:
+      "日常で繰り返す手間を見つけ、継続して使える仕組みとして設計・実装します。",
+    icon: Wrench,
+  },
+  {
+    title: "運用まで含めて安定化する",
+    description:
+      "作って終わりにせず、監視・復旧・バックアップまで含めて改善サイクルを回します。",
+    icon: ShieldCheck,
+  },
+  {
+    title: "複数ツールをつなぎ価値に変える",
+    description:
+      "用途に応じて技術を組み合わせ、コスト・利便性・自律性のバランスを取ります。",
+    icon: Database,
+  },
+] as const;
+
+const caseStudies = [
+  {
+    title: "自宅バックアップ基盤の構築",
+    challenge: "スマホ故障をきっかけに、写真・動画のデータ保全を強化したい。",
+    action:
+      "Proxmox 上で自宅サーバーを運用し、自動バックアップと復旧手順を整備。",
+    result:
+      "サブスク依存を下げつつ、データ管理を自分でコントロールできる運用へ移行。",
+    learning: "利便性だけでなく、継続運用しやすさとコストを同時に設計する重要性。",
+  },
+  {
+    title: "デプロイ作業の自動化",
+    challenge: "手動デプロイの手間と設定差分によるミスを減らしたい。",
+    action:
+      "GitHub Actions と self-hosted runner を連携し、CI/CD パイプラインを構築。",
+    result:
+      "反復作業を削減し、更新の再現性を高めた。運用ドキュメントも合わせて整備。",
+    learning: "自動化はスピードだけでなく、チームや将来の自分の認知負荷を下げる。",
+  },
+  {
+    title: "研究ワークフローの実装",
+    challenge: "数理研究の検証結果を安定して再現し、比較しやすくしたい。",
+    action:
+      "制約付き制御の実験フローを整理し、条件を固定して結果を記録・検証。",
+    result: "Cortical Development で 32/32、Wnt5a で 96/96 の成功率を確認。",
+    learning: "探索速度より、検証条件の明確化と再現性の担保が信頼性に直結する。",
+  },
+] as const;
+
+const operationHighlights = [
+  "大学時代から継続して自宅サーバーを運用",
+  "広告ブロック、写真・動画バックアップ、検証環境を自己管理",
+  "障害対応・バックアップ・復旧手順をドキュメント化",
+  "運用方針: 日次/週次バックアップと定期レビューで改善を継続",
+] as const;
+
+const toolboxByUse = [
+  { use: "アプリ実装", tools: "Next.js / React / TypeScript / Tailwind CSS" },
+  { use: "データ管理", tools: "PostgreSQL / Prisma / NocoDB" },
+  { use: "運用・自動化", tools: "Docker / GitHub Actions / Proxmox / Bun" },
+  { use: "品質確保", tools: "Playwright / Jest / Static Analysis" },
+] as const;
 
 export function PortfolioHome() {
   return (
@@ -35,12 +106,12 @@ export function PortfolioHome() {
             </h1>
 
             <p className="max-w-2xl text-xl leading-relaxed font-medium text-zinc-600 dark:text-zinc-300">
-              個人開発者として、日常をより良くするアプリケーションを作っています。
-              禁煙支援から大切な人との繋がりまで、テクノロジーで
+              生活や運用の課題を見つけて、実装し、改善を続けることを大切にしています。
+              特定の職種に寄せるより、必要なツールを組み合わせて
               <span className="font-bold text-orange-500 dark:text-orange-400">
-                ワクワク
+                問題を前に進める
               </span>
-              する解決策を。
+              ことに取り組んでいます。
             </p>
           </div>
         </section>
@@ -48,7 +119,118 @@ export function PortfolioHome() {
         <section className="mx-auto max-w-4xl px-6 py-12">
           <div className="mb-10 flex items-center gap-4">
             <h2 className="text-balance text-3xl font-bold text-zinc-800 dark:text-zinc-100">
-              Projects
+              What I Solve
+            </h2>
+            <div className="h-1 flex-1 rounded-full bg-zinc-200 dark:bg-zinc-800"></div>
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-3">
+            {solveAreas.map((area) => {
+              const Icon = area.icon;
+              return (
+                <article
+                  key={area.title}
+                  className="rounded-3xl border-2 border-zinc-200 bg-white/80 p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.05)] dark:border-zinc-700 dark:bg-zinc-900/50"
+                >
+                  <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-100 text-sky-600 dark:bg-sky-900/40 dark:text-sky-300">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <h3 className="mb-2 text-lg font-bold text-zinc-800 dark:text-zinc-100">
+                    {area.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
+                    {area.description}
+                  </p>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-4xl px-6 py-12">
+          <div className="mb-10 flex items-center gap-4">
+            <h2 className="text-balance text-3xl font-bold text-zinc-800 dark:text-zinc-100">
+              Case Studies
+            </h2>
+            <div className="h-1 flex-1 rounded-full bg-zinc-200 dark:bg-zinc-800"></div>
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-3">
+            {caseStudies.map((study) => (
+              <article
+                key={study.title}
+                className="rounded-3xl border-2 border-zinc-200 bg-white/80 p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.05)] dark:border-zinc-700 dark:bg-zinc-900/50"
+              >
+                <h3 className="mb-4 text-xl font-bold text-zinc-800 dark:text-zinc-100">
+                  {study.title}
+                </h3>
+                <div className="space-y-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
+                  <p>
+                    <span className="font-semibold text-zinc-800 dark:text-zinc-100">
+                      課題:
+                    </span>{" "}
+                    {study.challenge}
+                  </p>
+                  <p>
+                    <span className="font-semibold text-zinc-800 dark:text-zinc-100">
+                      対応:
+                    </span>{" "}
+                    {study.action}
+                  </p>
+                  <p>
+                    <span className="font-semibold text-zinc-800 dark:text-zinc-100">
+                      結果:
+                    </span>{" "}
+                    {study.result}
+                  </p>
+                  <p>
+                    <span className="font-semibold text-zinc-800 dark:text-zinc-100">
+                      学び:
+                    </span>{" "}
+                    {study.learning}
+                  </p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-4xl px-6 py-12">
+          <div className="mb-10 flex items-center gap-4">
+            <h2 className="text-balance text-3xl font-bold text-zinc-800 dark:text-zinc-100">
+              Home Server & Operations
+            </h2>
+            <div className="h-1 flex-1 rounded-full bg-zinc-200 dark:bg-zinc-800"></div>
+          </div>
+
+          <div className="grid gap-8 rounded-3xl border-2 border-zinc-200 bg-white/80 p-8 dark:border-zinc-700 dark:bg-zinc-900/50 md:grid-cols-[1.2fr_1fr]">
+            <div>
+              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-300">
+                <Server className="h-6 w-6" />
+              </div>
+              <p className="text-base leading-relaxed text-zinc-600 dark:text-zinc-300">
+                Proxmox を基盤に、自宅サーバーを大学時代から継続運用しています。
+                生活課題を起点に、バックアップ、自動化、障害対応までを一体で設計し、
+                技術を実用へつなげる運用を続けています。
+              </p>
+            </div>
+            <ul role="list" className="space-y-3 text-sm text-zinc-600 dark:text-zinc-300">
+              {operationHighlights.map((item) => (
+                <li
+                  key={item}
+                  className="rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 dark:border-zinc-700 dark:bg-zinc-800/60"
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-4xl px-6 py-12">
+          <div className="mb-10 flex items-center gap-4">
+            <h2 className="text-balance text-3xl font-bold text-zinc-800 dark:text-zinc-100">
+              Existing Projects
             </h2>
             <div className="h-1 flex-1 rounded-full bg-zinc-200 dark:bg-zinc-800"></div>
           </div>
@@ -62,16 +244,6 @@ export function PortfolioHome() {
               href="https://nosmoke.koshikai.dev"
               accentColor="green"
               icon={<Cigarette className="h-7 w-7" />}
-            />
-
-            <ProjectCard
-              title="Knot"
-              subtitle="knot.koshikai.dev"
-              description="遠距離恋愛中のカップル向けプライベート・プラットフォーム。再会カウントダウンや思い出のタイムラインで繋がりを深めます。"
-              features={["カウントダウン", "タイムライン", "ウィッシュリスト", "招待制"]}
-              href="https://knot.koshikai.dev"
-              accentColor="pink"
-              icon={<Heart className="h-7 w-7 fill-current" />}
             />
 
             <ProjectCard
@@ -91,65 +263,24 @@ export function PortfolioHome() {
         <section className="mx-auto max-w-4xl px-6 py-12 pb-32">
           <div className="mb-10 flex items-center gap-4">
             <h2 className="text-balance text-3xl font-bold text-zinc-800 dark:text-zinc-100">
-              Tech Stack
+              Toolbox by Use
             </h2>
             <div className="h-1 flex-1 rounded-full bg-zinc-200 dark:bg-zinc-800"></div>
           </div>
 
-          <div className="flex flex-wrap gap-4">
-            {[
-              {
-                name: "Next.js",
-                color:
-                  "bg-black text-white dark:bg-white dark:text-black border-transparent",
-              },
-              {
-                name: "TypeScript",
-                color:
-                  "bg-blue-50 text-blue-600 border-blue-100 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800",
-              },
-              {
-                name: "Tailwind CSS",
-                color:
-                  "bg-cyan-50 text-cyan-600 border-cyan-100 dark:bg-cyan-900/30 dark:text-cyan-300 dark:border-cyan-800",
-              },
-              {
-                name: "Prisma",
-                color:
-                  "bg-slate-50 text-slate-600 border-slate-100 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700",
-              },
-              {
-                name: "PostgreSQL",
-                color:
-                  "bg-indigo-50 text-indigo-600 border-indigo-100 dark:bg-indigo-900/30 dark:text-indigo-300 dark:border-indigo-800",
-              },
-              {
-                name: "Auth.js",
-                color:
-                  "bg-violet-50 text-violet-600 border-violet-100 dark:bg-violet-900/30 dark:text-violet-300 dark:border-violet-800",
-              },
-              {
-                name: "OpenAI API",
-                color:
-                  "bg-green-50 text-green-600 border-green-100 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800",
-              },
-              {
-                name: "Bun",
-                color:
-                  "bg-orange-50 text-orange-600 border-orange-100 dark:bg-orange-900/30 dark:text-orange-300 dark:border-orange-800",
-              },
-              {
-                name: "Docker",
-                color:
-                  "bg-sky-50 text-sky-600 border-sky-100 dark:bg-sky-900/30 dark:text-sky-300 dark:border-sky-800",
-              },
-            ].map((tech) => (
-              <span
-                key={tech.name}
-                className={`cursor-default rounded-2xl border-2 px-5 py-2 text-sm font-bold shadow-sm motion-safe:transition-[transform,box-shadow] motion-safe:duration-300 motion-safe:hover:-translate-y-1 motion-safe:hover:rotate-2 hover:shadow-md ${tech.color}`}
+          <div className="grid gap-4 sm:grid-cols-2">
+            {toolboxByUse.map((group) => (
+              <article
+                key={group.use}
+                className="rounded-2xl border-2 border-zinc-200 bg-white/80 px-5 py-4 dark:border-zinc-700 dark:bg-zinc-900/50"
               >
-                {tech.name}
-              </span>
+                <p className="mb-1 text-sm font-bold text-zinc-800 dark:text-zinc-100">
+                  {group.use}
+                </p>
+                <p className="text-sm text-zinc-600 dark:text-zinc-300">
+                  {group.tools}
+                </p>
+              </article>
             ))}
           </div>
         </section>
