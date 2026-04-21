@@ -6,6 +6,7 @@ import {
   ShieldCheck,
   Wrench,
 } from "lucide-react";
+import Link from "next/link";
 import { Footer } from "@/components/Footer";
 import { ProjectCard } from "@/components/ProjectCard";
 import { ResearchSection } from "@/components/ResearchSection";
@@ -33,6 +34,7 @@ const solveAreas = [
 
 const caseStudies = [
   {
+    slug: "home-backup",
     title: "自宅バックアップ基盤の構築",
     challenge: "スマホ故障をきっかけに、写真・動画のデータ保全を強化したい。",
     action:
@@ -42,6 +44,7 @@ const caseStudies = [
     learning: "利便性だけでなく、継続運用しやすさとコストを同時に設計する重要性。",
   },
   {
+    slug: "deploy-automation",
     title: "デプロイ作業の自動化",
     challenge: "手動デプロイの手間と設定差分によるミスを減らしたい。",
     action:
@@ -51,6 +54,7 @@ const caseStudies = [
     learning: "自動化はスピードだけでなく、チームや将来の自分の認知負荷を下げる。",
   },
   {
+    slug: "research-workflow",
     title: "研究ワークフローの実装",
     challenge: "数理研究の検証結果を安定して再現し、比較しやすくしたい。",
     action:
@@ -190,6 +194,12 @@ export function PortfolioHome() {
                     {study.learning}
                   </p>
                 </div>
+                <Link
+                  href={`/cases/${study.slug}`}
+                  className="mt-4 inline-flex text-sm font-bold text-sky-700 hover:text-sky-600 dark:text-sky-300 dark:hover:text-sky-200"
+                >
+                  詳しく見る
+                </Link>
               </article>
             ))}
           </div>
