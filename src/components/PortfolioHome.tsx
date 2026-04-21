@@ -88,44 +88,104 @@ export function PortfolioHome() {
       </div>
 
       <main id="main-content" className="flex-1">
-        <section className="relative mx-auto max-w-4xl px-6 pt-32 pb-20 sm:pt-40 sm:pb-32">
-          <div className="flex flex-col items-center gap-8 text-center sm:items-start sm:text-left">
-            <div className="animate-fade-in-up inline-flex items-center gap-3 rounded-full border border-zinc-200 bg-white/50 px-4 py-2 shadow-sm backdrop-blur-sm motion-reduce:animate-none dark:border-zinc-700 dark:bg-zinc-800/50">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-tr from-sky-400 to-blue-500 text-lg font-bold text-white shadow-inner">
-                K
+        <section className="relative mx-auto max-w-6xl px-6 pt-32 pb-20 sm:pt-40 sm:pb-32">
+          <div className="grid md:grid-cols-[1.2fr_0.8fr] items-center gap-12">
+            <div className="flex flex-col items-center gap-8 text-center sm:items-start sm:text-left">
+              <div className="animate-fade-in-up inline-flex items-center gap-3 rounded-full border border-zinc-200 bg-white/50 px-4 py-2 shadow-sm backdrop-blur-sm motion-reduce:animate-none dark:border-zinc-700 dark:bg-zinc-800/50">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-tr from-sky-400 to-blue-500 text-lg font-bold text-white shadow-inner">
+                  K
+                </div>
+                <span className="text-sm font-bold tracking-wide text-zinc-600 dark:text-zinc-300">
+                  koshikai.dev
+                </span>
               </div>
-              <span className="text-sm font-bold tracking-wide text-zinc-600 dark:text-zinc-300">
-                koshikai.dev
-              </span>
+
+              <h1 className="text-balance text-5xl leading-[1.1] font-extrabold tracking-tight text-zinc-800 drop-shadow-sm sm:text-7xl dark:text-zinc-50">
+                Building apps that <br />
+                <span className="relative whitespace-nowrap">
+                  <span className="relative z-10 inline-block cursor-default bg-linear-to-r from-sky-400 to-emerald-400 bg-clip-text text-transparent motion-safe:transition-transform motion-safe:hover:scale-105">
+                    make life better
+                  </span>
+                  <span className="absolute bottom-2 left-0 -z-10 h-3 w-full rounded-full bg-yellow-200/60 -rotate-2 dark:bg-yellow-900/40"></span>
+                </span>
+              </h1>
+
+              <p className="max-w-2xl text-xl leading-relaxed font-medium text-zinc-600 dark:text-zinc-300">
+                生活や運用の課題を見つけて、実装し、改善を続けることを大切にしています。
+                特定の職種に寄せるより、必要なツールを組み合わせて
+                <span className="font-bold text-orange-500 dark:text-orange-400">
+                  問題を前に進める
+                </span>
+                ことに取り組んでいます。
+              </p>
             </div>
 
-            <h1 className="text-balance text-5xl leading-[1.1] font-extrabold tracking-tight text-zinc-800 drop-shadow-sm sm:text-7xl dark:text-zinc-50">
-              Building apps that <br />
-              <span className="relative whitespace-nowrap">
-                <span className="relative z-10 inline-block cursor-default bg-linear-to-r from-sky-400 to-emerald-400 bg-clip-text text-transparent motion-safe:transition-transform motion-safe:hover:scale-105">
-                  make life better
-                </span>
-                <span className="absolute bottom-2 left-0 -z-10 h-3 w-full rounded-full bg-yellow-200/60 -rotate-2 dark:bg-yellow-900/40"></span>
-              </span>
-            </h1>
+            <div className="hidden md:flex justify-center items-center relative h-[450px] w-full" style={{ perspective: '1000px' }}>
+              {/* Ambient Background Glow */}
+              <div className="absolute h-[300px] w-[300px] rounded-full bg-linear-to-r from-sky-400/20 to-emerald-400/20 blur-[80px] dark:from-sky-900/30 dark:to-emerald-900/30 animate-pulse"></div>
 
-            <p className="max-w-2xl text-xl leading-relaxed font-medium text-zinc-600 dark:text-zinc-300">
-              生活や運用の課題を見つけて、実装し、改善を続けることを大切にしています。
-              特定の職種に寄せるより、必要なツールを組み合わせて
-              <span className="font-bold text-orange-500 dark:text-orange-400">
-                問題を前に進める
-              </span>
-              ことに取り組んでいます。
-            </p>
+              {/* 3D Rotating Orbits Group */}
+              <div className="absolute inset-0 flex items-center justify-center animate-[spin_40s_linear_infinite]" style={{ transformStyle: 'preserve-3d' }}>
+                {/* Inner Orbit */}
+                <div className="absolute h-64 w-64 rounded-full border-2 border-dashed border-sky-400/30 dark:border-sky-500/20" style={{ transform: 'rotateX(60deg) rotateY(20deg)' }}>
+                  {/* Orbiting Satellite */}
+                  <div className="absolute top-0 left-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.8)]"></div>
+                </div>
+                
+                {/* Middle Orbit */}
+                <div className="absolute h-80 w-80 rounded-full border border-emerald-400/30 dark:border-emerald-500/20" style={{ transform: 'rotateX(70deg) rotateY(-30deg)' }}>
+                  <div className="absolute bottom-0 left-1/4 h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.8)]"></div>
+                </div>
+
+                {/* Outer Orbit */}
+                <div className="absolute h-96 w-96 rounded-full border border-purple-400/20 dark:border-purple-500/10 animate-[spin_60s_linear_infinite_reverse]" style={{ transform: 'rotateX(50deg) rotateY(40deg)' }}></div>
+              </div>
+
+              {/* Central Abstract Structure */}
+              <div className="relative z-10 flex h-64 w-64 items-center justify-center animate-float overflow-visible" style={{ transformStyle: 'preserve-3d' }}>
+                {/* Central Power Core */}
+                <div className="absolute z-0 h-20 w-20 rounded-full bg-white/60 backdrop-blur-3xl shadow-[0_0_40px_rgba(255,255,255,1)] dark:bg-zinc-800/80 dark:shadow-[0_0_40px_rgba(56,189,248,0.3)] animate-pulse"></div>
+
+                {/* Isometric Layer 1 (Back Depth) */}
+                <div className="absolute inset-4 rounded-[2rem] border border-white/20 bg-linear-to-br from-white/10 to-transparent backdrop-blur-md shadow-2xl dark:border-zinc-700/30 dark:from-zinc-700/20" style={{ transform: 'rotateX(20deg) rotateY(-20deg) translateZ(-50px)' }}></div>
+
+                {/* Isometric Layer 2 (Middle) */}
+                <div className="absolute inset-0 rounded-[2.5rem] border border-white/40 bg-linear-to-tr from-white/20 to-transparent backdrop-blur-xl shadow-2xl dark:border-zinc-600/40 dark:from-zinc-600/30" style={{ transform: 'rotateX(20deg) rotateY(-20deg) translateZ(0px)' }}></div>
+
+                {/* Isometric Layer 3 (Floating Front Nodes) */}
+                <div className="absolute inset-0" style={{ transformStyle: 'preserve-3d', transform: 'rotateX(20deg) rotateY(-20deg) translateZ(60px)' }}>
+                   {/* Top Left Node */}
+                   <div className="absolute top-2 left-2 flex h-20 w-20 items-center justify-center rounded-2xl border border-sky-300/50 bg-white/40 backdrop-blur-2xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-transform duration-500 hover:scale-110 hover:-translate-y-2 dark:border-sky-600/50 dark:bg-zinc-800/60 dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
+                     <Server className="h-8 w-8 text-sky-600 dark:text-sky-400" />
+                   </div>
+                   {/* Bottom Right Node */}
+                   <div className="absolute bottom-2 right-2 flex h-20 w-20 items-center justify-center rounded-2xl border border-emerald-300/50 bg-white/40 backdrop-blur-2xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-transform duration-500 hover:scale-110 hover:-translate-y-2 dark:border-emerald-600/50 dark:bg-zinc-800/60 dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
+                     <Database className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
+                   </div>
+                   {/* Top Right Node (Small) */}
+                   <div className="absolute top-6 right-6 flex h-14 w-14 items-center justify-center rounded-xl border border-purple-300/50 bg-white/40 backdrop-blur-2xl shadow-lg transition-transform duration-500 hover:scale-110 hover:-translate-y-1 dark:border-purple-600/50 dark:bg-zinc-800/60">
+                     <ShieldCheck className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                   </div>
+                   {/* Bottom Left Node (Small) */}
+                   <div className="absolute bottom-6 left-6 flex h-14 w-14 items-center justify-center rounded-xl border border-orange-300/50 bg-white/40 backdrop-blur-2xl shadow-lg transition-transform duration-500 hover:scale-110 hover:-translate-y-1 dark:border-orange-600/50 dark:bg-zinc-800/60">
+                     <Wrench className="h-6 w-6 text-orange-600 dark:text-orange-400" />
+                   </div>
+                </div>
+
+                {/* Dynamic Data Particles (representing flow) */}
+                <div className="absolute top-1/4 -right-12 h-2 w-2 rounded-full bg-sky-400 shadow-[0_0_10px_rgba(56,189,248,1)] animate-bounce" style={{ animationDuration: '2.5s' }}></div>
+                <div className="absolute bottom-1/4 -left-12 h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,1)] animate-bounce" style={{ animationDuration: '3.2s' }}></div>
+              </div>
+            </div>
           </div>
         </section>
 
         <section className="mx-auto max-w-4xl px-6 py-12">
           <div className="mb-10 flex items-center gap-4">
-            <h2 className="text-balance text-3xl font-bold text-zinc-800 dark:text-zinc-100">
-              What I Solve
+            <h2 className="text-balance text-3xl font-black italic tracking-tight text-zinc-800 dark:text-zinc-100 uppercase">
+              Core Principles
             </h2>
-            <div className="h-1 flex-1 rounded-full bg-zinc-200 dark:bg-zinc-800"></div>
+            <div className="h-[2px] flex-1 bg-linear-to-r from-zinc-200 via-zinc-400/30 to-transparent dark:from-zinc-800 dark:via-zinc-600/30 dark:to-transparent rounded-full"></div>
           </div>
 
           <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-3">
@@ -153,10 +213,10 @@ export function PortfolioHome() {
 
         <section className="mx-auto max-w-4xl px-6 py-12">
           <div className="mb-10 flex items-center gap-4">
-            <h2 className="text-balance text-3xl font-bold text-zinc-800 dark:text-zinc-100">
+            <h2 className="text-balance text-3xl font-black italic tracking-tight text-zinc-800 dark:text-zinc-100 uppercase">
               Case Studies
             </h2>
-            <div className="h-1 flex-1 rounded-full bg-zinc-200 dark:bg-zinc-800"></div>
+            <div className="h-[2px] flex-1 bg-linear-to-r from-zinc-200 via-zinc-400/30 to-transparent dark:from-zinc-800 dark:via-zinc-600/30 dark:to-transparent rounded-full"></div>
           </div>
 
           <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-3">
@@ -207,10 +267,10 @@ export function PortfolioHome() {
 
         <section className="mx-auto max-w-4xl px-6 py-12">
           <div className="mb-10 flex items-center gap-4">
-            <h2 className="text-balance text-3xl font-bold text-zinc-800 dark:text-zinc-100">
-              Home Server & Operations
+            <h2 className="text-balance text-3xl font-black italic tracking-tight text-zinc-800 dark:text-zinc-100 uppercase">
+              Infrastructure
             </h2>
-            <div className="h-1 flex-1 rounded-full bg-zinc-200 dark:bg-zinc-800"></div>
+            <div className="h-[2px] flex-1 bg-linear-to-r from-zinc-200 via-zinc-400/30 to-transparent dark:from-zinc-800 dark:via-zinc-600/30 dark:to-transparent rounded-full"></div>
           </div>
 
           <div className="grid gap-8 rounded-3xl border-2 border-zinc-200 bg-white/80 p-8 dark:border-zinc-700 dark:bg-zinc-900/50 md:grid-cols-[1.2fr_1fr]">
@@ -239,10 +299,10 @@ export function PortfolioHome() {
 
         <section className="mx-auto max-w-4xl px-6 py-12">
           <div className="mb-10 flex items-center gap-4">
-            <h2 className="text-balance text-3xl font-bold text-zinc-800 dark:text-zinc-100">
+            <h2 className="text-balance text-3xl font-black italic tracking-tight text-zinc-800 dark:text-zinc-100 uppercase">
               Existing Projects
             </h2>
-            <div className="h-1 flex-1 rounded-full bg-zinc-200 dark:bg-zinc-800"></div>
+            <div className="h-[2px] flex-1 bg-linear-to-r from-zinc-200 via-zinc-400/30 to-transparent dark:from-zinc-800 dark:via-zinc-600/30 dark:to-transparent rounded-full"></div>
           </div>
 
           <div className="grid gap-8 sm:grid-cols-2">
@@ -272,10 +332,10 @@ export function PortfolioHome() {
 
         <section className="mx-auto max-w-4xl px-6 py-12 pb-32">
           <div className="mb-10 flex items-center gap-4">
-            <h2 className="text-balance text-3xl font-bold text-zinc-800 dark:text-zinc-100">
-              Toolbox by Use
+            <h2 className="text-balance text-3xl font-black italic tracking-tight text-zinc-800 dark:text-zinc-100 uppercase">
+              Toolbox & Stacks
             </h2>
-            <div className="h-1 flex-1 rounded-full bg-zinc-200 dark:bg-zinc-800"></div>
+            <div className="h-[2px] flex-1 bg-linear-to-r from-zinc-200 via-zinc-400/30 to-transparent dark:from-zinc-800 dark:via-zinc-600/30 dark:to-transparent rounded-full"></div>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
