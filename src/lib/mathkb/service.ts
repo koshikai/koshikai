@@ -18,8 +18,12 @@ function pickFirst(
 }
 
 function clampLimit(value: string | string[] | undefined, fallback: number) {
-  const parsed = Number(pickFirst(value));
+  const first = pickFirst(value);
+  if (!first) {
+    return fallback;
+  }
 
+  const parsed = Number(first);
   if (!Number.isFinite(parsed)) {
     return fallback;
   }
@@ -42,11 +46,13 @@ function toSetupMessage(error: unknown) {
 export function parseMathKbFilters(
   rawSearchParams: Record<string, string | string[] | undefined>,
 ): MathKbSearchFilters {
+  const view = pickFirst(rawSearchParams.view);
   return {
     query: pickFirst(rawSearchParams.q).trim(),
     field: pickFirst(rawSearchParams.field).trim(),
     tag: pickFirst(rawSearchParams.tag).trim(),
     limit: clampLimit(rawSearchParams.limit, 24),
+    view: view === "list" ? "list" : "card",
   };
 }
 

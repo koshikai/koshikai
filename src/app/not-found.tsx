@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { ArrowLeft, Compass } from "lucide-react";
-import { getSiteVariant } from "@/lib/site-config";
+import { getEffectiveVariant } from "@/lib/site-config";
 
-export default function NotFound() {
-  const isMathKb = getSiteVariant() === "mathkb";
+export default async function NotFound() {
+  const variant = await getEffectiveVariant();
+  const isMathKb = variant === "mathkb";
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,_rgba(125,211,252,0.18),_transparent_32%),linear-gradient(180deg,_#f8fafc_0%,_#eef2ff_55%,_#f8fafc_100%)] px-6 py-12 dark:bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.18),_transparent_28%),linear-gradient(180deg,_#09090b_0%,_#111827_60%,_#09090b_100%)]">

@@ -30,6 +30,7 @@ export interface MathKbSearchFilters {
   limit: number;
   query: string;
   tag: string;
+  view?: "card" | "list";
 }
 
 export interface MathKbHomeData {

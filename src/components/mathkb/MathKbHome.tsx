@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BookOpenText, Layers3, Search, Tags } from "lucide-react";
+import { Footer } from "@/components/Footer";
 import { SetupNotice } from "@/components/mathkb/SetupNotice";
 import type { MathKbHomeState, MathKbSearchFilters, MathKbTag } from "@/lib/mathkb/types";
 
@@ -24,6 +25,10 @@ function buildFilterHref(
 
   if (nextFilters.tag) {
     params.set("tag", nextFilters.tag);
+  }
+
+  if (nextFilters.view && nextFilters.view !== "card") {
+    params.set("view", nextFilters.view);
   }
 
   const queryString = params.toString();
@@ -58,37 +63,33 @@ export function MathKbHome({ state }: MathKbHomeProps) {
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(125,211,252,0.2),_transparent_35%),linear-gradient(180deg,_#f8fafc_0%,_#eef2ff_55%,_#f8fafc_100%)] dark:bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.18),_transparent_28%),linear-gradient(180deg,_#09090b_0%,_#111827_60%,_#09090b_100%)]">
       <main id="main-content" className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 py-10 sm:px-8 sm:py-14">
-        <section className="rounded-[2rem] border border-white/70 bg-white/70 p-8 shadow-[0_30px_80px_-48px_rgba(15,23,42,0.45)] backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/70">
-          <p className="text-sm font-bold tracking-[0.3em] text-sky-700 uppercase dark:text-sky-300">
-            Internal Research Infrastructure
-          </p>
-          <div className="mt-4 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-3xl">
-              <h1 className="text-balance text-4xl font-black tracking-tight text-zinc-900 sm:text-5xl dark:text-zinc-50">
-                Private Math Knowledge Base
-              </h1>
-              <p className="mt-4 max-w-2xl text-base leading-8 text-zinc-600 dark:text-zinc-300">
-                研究ノートを PostgreSQL に集約し、内部UIでは一覧・詳細・検索を、
-                MCP では読み取り専用の参照を提供するための最小構成です。
+        <section className="rounded-3xl border border-white/70 bg-white/70 p-6 shadow-sm backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/70">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p className="text-[10px] font-black tracking-[0.4em] text-sky-700 uppercase dark:text-sky-300">
+                Internal Research Infrastructure
               </p>
+              <h1 className="mt-1 text-balance text-3xl font-black tracking-tight text-zinc-900 dark:text-zinc-50">
+                Math Knowledge Base
+              </h1>
             </div>
 
-            <div className="grid gap-3 text-sm sm:grid-cols-3">
-              <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-950/60">
-                <p className="text-zinc-500 dark:text-zinc-400">Notes</p>
-                <p className="mt-1 text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+            <div className="flex gap-4">
+              <div className="flex flex-col items-center px-4 border-r border-zinc-200 dark:border-zinc-800">
+                <p className="text-[10px] font-bold text-zinc-500 uppercase">Notes</p>
+                <p className="text-xl font-black text-zinc-900 dark:text-zinc-50">
                   {state.status === "ready" ? state.data.totalNotes : "--"}
                 </p>
               </div>
-              <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-950/60">
-                <p className="text-zinc-500 dark:text-zinc-400">Fields</p>
-                <p className="mt-1 text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+              <div className="flex flex-col items-center px-4 border-r border-zinc-200 dark:border-zinc-800">
+                <p className="text-[10px] font-bold text-zinc-500 uppercase">Fields</p>
+                <p className="text-xl font-black text-zinc-900 dark:text-zinc-50">
                   {state.status === "ready" ? state.data.fields.length : "--"}
                 </p>
               </div>
-              <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-950/60">
-                <p className="text-zinc-500 dark:text-zinc-400">Tags</p>
-                <p className="mt-1 text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+              <div className="flex flex-col items-center px-4">
+                <p className="text-[10px] font-bold text-zinc-500 uppercase">Tags</p>
+                <p className="text-xl font-black text-zinc-900 dark:text-zinc-50">
                   {state.status === "ready" ? state.data.tags.length : "--"}
                 </p>
               </div>
@@ -194,11 +195,36 @@ export function MathKbHome({ state }: MathKbHomeProps) {
 
             <section className="grid gap-6 xl:grid-cols-[1.4fr_20rem]">
               <div className="rounded-[2rem] border border-zinc-200/80 bg-white/90 p-6 shadow-[0_24px_80px_-48px_rgba(15,23,42,0.45)] dark:border-zinc-800 dark:bg-zinc-900/80">
-                <div className="mb-6 flex items-center gap-3">
-                  <BookOpenText className="h-5 w-5 text-emerald-600 dark:text-emerald-300" />
-                  <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
-                    Notes
-                  </h2>
+                <div className="mb-6 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <BookOpenText className="h-5 w-5 text-emerald-600 dark:text-emerald-300" aria-hidden="true" />
+                    <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
+                      Notes
+                    </h2>
+                  </div>
+
+                  <div className="flex items-center gap-1 rounded-xl bg-zinc-100 p-1 dark:bg-zinc-800">
+                    <Link
+                      href={buildFilterHref(state.data.filters, { view: "card" })}
+                      className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
+                        state.data.filters.view === "card"
+                          ? "bg-white text-sky-600 shadow-sm dark:bg-zinc-700 dark:text-sky-300"
+                          : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+                      }`}
+                    >
+                      Cards
+                    </Link>
+                    <Link
+                      href={buildFilterHref(state.data.filters, { view: "list" })}
+                      className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
+                        state.data.filters.view === "list"
+                          ? "bg-white text-sky-600 shadow-sm dark:bg-zinc-700 dark:text-sky-300"
+                          : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+                      }`}
+                    >
+                      List
+                    </Link>
+                  </div>
                 </div>
 
                 {state.data.notes.length === 0 ? (
@@ -211,55 +237,78 @@ export function MathKbHome({ state }: MathKbHomeProps) {
                     </p>
                   </div>
                 ) : (
-                  <div className="grid gap-4">
-                    {state.data.notes.map((note) => (
-                      <article
-                        key={note.slug}
-                        className="rounded-3xl border border-zinc-200/80 bg-zinc-50/80 p-5 transition-colors hover:border-sky-300 hover:bg-white dark:border-zinc-800 dark:bg-zinc-950/50 dark:hover:border-sky-800 dark:hover:bg-zinc-950"
-                      >
-                        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                          <div className="max-w-3xl">
-                            <div className="mb-2 flex flex-wrap items-center gap-2">
-                              <span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-bold tracking-wide text-sky-700 uppercase dark:bg-sky-950/50 dark:text-sky-300">
+                  <div className={state.data.filters.view === "list" ? "space-y-1" : "grid gap-4"}>
+                    {state.data.notes.map((note) => {
+                      if (state.data.filters.view === "list") {
+                        return (
+                          <article
+                            key={note.slug}
+                            className="group flex items-center justify-between rounded-xl border border-transparent px-4 py-2 transition-colors hover:border-zinc-200 hover:bg-zinc-50 dark:hover:border-zinc-800 dark:hover:bg-zinc-950/50"
+                          >
+                            <div className="flex items-center gap-4 overflow-hidden">
+                              <span className="shrink-0 rounded-md bg-sky-50 px-2 py-0.5 text-[10px] font-bold text-sky-700 uppercase dark:bg-sky-950/40 dark:text-sky-300">
                                 {note.field}
                               </span>
-                              <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                                Updated {new Date(note.updatedAt).toLocaleDateString("ja-JP")}
-                              </span>
+                              <h3 className="truncate text-sm font-bold text-zinc-800 group-hover:text-sky-600 dark:text-zinc-200 dark:group-hover:text-sky-400">
+                                <Link href={`/notes/${note.slug}`}>{note.title}</Link>
+                              </h3>
+                            </div>
+                            <span className="shrink-0 text-[10px] font-medium text-zinc-400 dark:text-zinc-500">
+                              {new Date(note.updatedAt).toLocaleDateString("ja-JP")}
+                            </span>
+                          </article>
+                        );
+                      }
+
+                      return (
+                        <article
+                          key={note.slug}
+                          className="rounded-3xl border border-zinc-200/80 bg-zinc-50/80 p-5 transition-colors hover:border-sky-300 hover:bg-white dark:border-zinc-800 dark:bg-zinc-950/50 dark:hover:border-sky-800 dark:hover:bg-zinc-950"
+                        >
+                          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                            <div className="max-w-3xl">
+                              <div className="mb-2 flex flex-wrap items-center gap-2">
+                                <span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-bold tracking-wide text-sky-700 uppercase dark:bg-sky-950/50 dark:text-sky-300">
+                                  {note.field}
+                                </span>
+                                <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                                  Updated {new Date(note.updatedAt).toLocaleDateString("ja-JP")}
+                                </span>
+                              </div>
+
+                              <h3 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+                                <Link href={`/notes/${note.slug}`} className="hover:text-sky-600 dark:hover:text-sky-300">
+                                  {note.title}
+                                </Link>
+                              </h3>
+
+                              <p className="mt-3 line-clamp-2 text-sm leading-7 text-zinc-600 dark:text-zinc-300">
+                                {note.summary}
+                              </p>
                             </div>
 
-                            <h3 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-                              <Link href={`/notes/${note.slug}`} className="hover:text-sky-600 dark:hover:text-sky-300">
-                                {note.title}
-                              </Link>
-                            </h3>
-
-                            <p className="mt-3 text-sm leading-7 text-zinc-600 dark:text-zinc-300">
-                              {note.summary}
-                            </p>
+                            <Link
+                              href={`/notes/${note.slug}`}
+                              className="rounded-full border border-zinc-200 px-4 py-2 text-sm font-bold text-zinc-600 transition-colors hover:border-sky-300 hover:text-sky-700 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-sky-700 dark:hover:text-sky-200"
+                            >
+                              Open
+                            </Link>
                           </div>
 
-                          <Link
-                            href={`/notes/${note.slug}`}
-                            className="rounded-full border border-zinc-200 px-4 py-2 text-sm font-bold text-zinc-600 transition-colors hover:border-sky-300 hover:text-sky-700 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-sky-700 dark:hover:text-sky-200"
-                          >
-                            Open note
-                          </Link>
-                        </div>
-
-                        {note.tags.length > 0 ? (
-                          <div className="mt-4 flex flex-wrap gap-2">
-                            {note.tags.map((tag) => (
-                              <TagPill
-                                key={`${note.slug}-${tag.slug}`}
-                                filters={state.data.filters}
-                                tag={tag}
-                              />
-                            ))}
-                          </div>
-                        ) : null}
-                      </article>
-                    ))}
+                          {note.tags.length > 0 ? (
+                            <div className="mt-4 flex flex-wrap gap-2">
+                              {note.tags.map((tag) => (
+                                <TagPill
+                                  key={`${note.slug}-${tag.slug}`}
+                                  filters={state.data.filters}
+                                  tag={tag}
+                                />
+                              ))}
+                            </div>
+                          ) : null}
+                        </article>
+                      );
+                    })}
                   </div>
                 )}
               </div>

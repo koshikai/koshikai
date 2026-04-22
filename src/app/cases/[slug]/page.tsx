@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { getCaseBySlug, getCaseContentComponent, caseItems } from "@/lib/cases";
-import { getSiteConfig, getSiteVariant } from "@/lib/site-config";
+import { getSiteConfig, getEffectiveVariant } from "@/lib/site-config";
 
 interface CaseDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -16,7 +16,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: CaseDetailPageProps): Promise<Metadata> {
-  if (getSiteVariant() !== "portfolio") {
+  const variant = await getEffectiveVariant();
+  if (variant !== "portfolio") {
     return {};
   }
 

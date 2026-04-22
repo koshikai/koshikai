@@ -16,7 +16,8 @@ interface NotePageProps {
 export async function generateMetadata({
   params,
 }: NotePageProps): Promise<Metadata> {
-  if (getSiteVariant() !== "mathkb") {
+  const variant = await getEffectiveVariant();
+  if (variant !== "mathkb") {
     return {};
   }
 
@@ -57,7 +58,8 @@ export async function generateMetadata({
 }
 
 export default async function NotePage({ params }: NotePageProps) {
-  if (getSiteVariant() !== "mathkb") {
+  const variant = await getEffectiveVariant();
+  if (variant !== "mathkb") {
     notFound();
   }
 

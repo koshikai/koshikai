@@ -1,3 +1,5 @@
+import { cookies } from "next/headers";
+
 export type SiteVariant = "portfolio" | "mathkb";
 
 export interface SiteConfig {
@@ -23,9 +25,29 @@ export function getSiteVariant(): SiteVariant {
   return process.env.SITE_VARIANT === "mathkb" ? "mathkb" : "portfolio";
 }
 
-export function getSiteConfig(): SiteConfig {
-  const variant = getSiteVariant();
+export async function getEffectiveVariant(): Promise<SiteVariant> {
+  try {
+    const cookieStore = await cookies();
+    const override = cookieStore.get("site-variant")?.value;
+    if (override === "mathkb" || override === "portfolio") {
+      return override as SiteVariant;
+    }
+  } catch {
+    // cookies() might fail in some contexts, fallback to env
+  }
+  return getSiteVariant();
+}
 
+export function getSiteConfig(): SiteConfig {
+  return getSiteConfigByVariant(getSiteVariant());
+}
+
+export async function getEffectiveSiteConfig(): Promise<SiteConfig> {
+  const variant = await getEffectiveVariant();
+  return getSiteConfigByVariant(variant);
+}
+
+export function getSiteConfigByVariant(variant: SiteVariant): SiteConfig {
   if (variant === "mathkb") {
     return {
       variant,
