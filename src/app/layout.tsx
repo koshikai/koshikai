@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import { M_PLUS_Rounded_1c } from "next/font/google";
 import "./globals.css";
 import { getSiteConfig } from "@/lib/site-config";
+import { DevOverlay } from "@/components/DevOverlay";
 
 const mPlusRounded1c = M_PLUS_Rounded_1c({
   weight: ["400", "500", "700", "800"],
-  subsets: ["latin"],
+  preload: false,
   variable: "--font-m-plus-rounded",
 });
 
@@ -74,6 +75,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -106,12 +108,13 @@ export default function RootLayout({
             "Python",
             "AI Agents",
             "LLMs",
+            "MCP",
           ],
         };
 
   return (
     <html lang="ja" suppressHydrationWarning>
-      <body className={`${mPlusRounded1c.className} antialiased`}>
+      <body className={`${mPlusRounded1c.className} ${mPlusRounded1c.variable} antialiased`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -123,6 +126,7 @@ export default function RootLayout({
           Skip to main content
         </a>
         {children}
+        <DevOverlay />
       </body>
     </html>
   );

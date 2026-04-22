@@ -47,10 +47,17 @@ const researchItems = [
   },
 ] as const;
 
-export function ResearchSection() {
+export function ResearchSection({
+  id,
+  className,
+}: {
+  id?: string;
+  className?: string;
+}) {
   return (
     <section
-      className="mx-auto max-w-4xl px-6 py-12 animate-fade-in-up"
+      id={id}
+      className={`mx-auto max-w-4xl px-6 py-12 animate-fade-in-up ${className || ""}`}
       aria-labelledby="research-heading"
     >
       <div className="flex items-center gap-4 mb-10">
