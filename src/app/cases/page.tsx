@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function CasesPage() {
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(125,211,252,0.2),transparent_35%),linear-gradient(180deg,#f8fafc_0%,#eef2ff_55%,#f8fafc_100%)] dark:bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.18),transparent_28%),linear-gradient(180deg,#09090b_0%,#111827_60%,#09090b_100%)]">
+    <div className="min-h-screen bg-page-gradient">
       <main
         id="main-content"
         className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-14"
