@@ -12,22 +12,18 @@ COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile --ignore-scripts
 
 # Rebuild the source code only when needed
-FROM base AS builder
+# Bun 1.3.x may crash with SIGILL during Next.js build on some CPUs,
+# so we use Node.js for the build stage while keeping Bun for runtime.
+FROM node:22-slim AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
 ENV NEXT_TELEMETRY_DISABLED=1
-
-# Set memory limit for build to prevent crashes
 ENV NODE_OPTIONS="--max-old-space-size=2048"
-
-# Enable standalone output for Docker
 ENV DOCKER_BUILD=true
 
-RUN bun run build
+RUN npm run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
