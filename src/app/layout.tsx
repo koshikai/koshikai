@@ -117,7 +117,7 @@ export default function RootLayout({
       <body className={`${mPlusRounded1c.className} ${mPlusRounded1c.variable} antialiased`}>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
         />
         <a
           href="#main-content"

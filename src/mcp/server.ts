@@ -291,8 +291,11 @@ async function startHttpServer() {
     res.json({ ok: true });
   });
 
+  // Reuse a single McpServer instance across requests to avoid
+  // leaking DB pool connections and other resources.
+  const mathKbServer = createMathKbServer();
+
   app.post(path, async (req: Request, res: Response) => {
-    const server = createMathKbServer();
     const transport = new StreamableHTTPServerTransport({
       sessionIdGenerator: undefined,
     });
@@ -300,10 +303,9 @@ async function startHttpServer() {
     try {
       res.on("close", () => {
         void transport.close();
-        void server.close();
       });
 
-      await server.connect(transport);
+      await mathKbServer.connect(transport);
       await transport.handleRequest(req, res, req.body);
     } catch (error) {
       log("failed to handle MCP request", error);

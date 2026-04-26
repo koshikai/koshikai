@@ -2,6 +2,9 @@
   "name": "koshikai",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "bun": ">=1.0.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

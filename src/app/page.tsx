@@ -3,8 +3,6 @@ import { PortfolioHome } from "@/components/PortfolioHome";
 import { getMathKbHomeState } from "@/lib/mathkb/service";
 import { getEffectiveVariant } from "@/lib/site-config";
 
-export const dynamic = "force-dynamic";
-
 interface HomePageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }

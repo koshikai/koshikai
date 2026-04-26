@@ -17,7 +17,8 @@ export function DevOverlay() {
   useEffect(() => {
     // NODE_ENV が development の場合のみマウントを許可
     if (process.env.NODE_ENV === "development") {
-      setMounted(true);
+      const id = requestAnimationFrame(() => setMounted(true));
+      return () => cancelAnimationFrame(id);
     }
   }, []);
 

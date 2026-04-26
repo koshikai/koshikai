@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { BookOpenText, Layers3, Search, Tags } from "lucide-react";
-import { Footer } from "@/components/Footer";
+
 import { SetupNotice } from "@/components/mathkb/SetupNotice";
 import type { MathKbHomeState, MathKbSearchFilters, MathKbTag } from "@/lib/mathkb/types";
 

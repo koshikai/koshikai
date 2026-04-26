@@ -96,6 +96,6 @@ export function getCaseBySlug(slug: string) {
 export async function getCaseContentComponent(slug: string) {
   const loader = caseMdxModules[slug];
   if (!loader) return null;
-  const module = await loader();
-  return module.default;
+  const mdxModule = await loader();
+  return mdxModule.default;
 }

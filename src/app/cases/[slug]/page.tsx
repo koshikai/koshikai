@@ -45,7 +45,8 @@ export async function generateMetadata({
 }
 
 export default async function CaseDetailPage({ params }: CaseDetailPageProps) {
-  if (getSiteVariant() !== "portfolio") {
+  const variant = await getEffectiveVariant();
+  if (variant !== "portfolio") {
     notFound();
   }
 

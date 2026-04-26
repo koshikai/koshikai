@@ -12,7 +12,10 @@ function getSslConfig() {
   const sslMode = process.env.MATHKB_DATABASE_SSL ?? "disable";
 
   if (sslMode === "require") {
-    return { rejectUnauthorized: false } as const;
+    // In production, prefer proper CA verification. Disabling
+    // verification is only acceptable for self-signed certs on
+    // an internal LAN and should be avoided on public networks.
+    return { rejectUnauthorized: process.env.NODE_ENV === "production" } as const;
   }
 
   return undefined;
@@ -34,7 +37,7 @@ export function getMathKbPool() {
   if (!globalThis.mathKbPool) {
     globalThis.mathKbPool = new Pool({
       connectionString,
-      max: 10,
+      max: Number(process.env.MATHKB_POOL_MAX ?? 10),
       ssl: getSslConfig(),
     });
   }

@@ -144,4 +144,4 @@ jobs:
           fi
 
       - name: Cleanup old images
-        run: docker image prune -f
+        run: docker image prune --filter "until=24h" -f

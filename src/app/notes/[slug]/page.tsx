@@ -5,7 +5,7 @@ import { ArrowLeft, Hash, LibraryBig } from "lucide-react";
 import { MarkdownArticle } from "@/components/mathkb/MarkdownArticle";
 import { SetupNotice } from "@/components/mathkb/SetupNotice";
 import { getMathKbNoteState } from "@/lib/mathkb/service";
-import { getSiteConfig, getSiteVariant } from "@/lib/site-config";
+import { getSiteConfig, getEffectiveVariant } from "@/lib/site-config";
 
 export const dynamic = "force-dynamic";
 
