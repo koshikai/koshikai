@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
-import { M_PLUS_Rounded_1c } from "next/font/google";
+import "@fontsource/m-plus-rounded-1c/japanese-400.css";
+import "@fontsource/m-plus-rounded-1c/japanese-500.css";
+import "@fontsource/m-plus-rounded-1c/japanese-700.css";
+import "@fontsource/m-plus-rounded-1c/japanese-800.css";
 import "./globals.css";
 import { getSiteConfig } from "@/lib/site-config";
 import { DevOverlay } from "@/components/DevOverlay";
-
-const mPlusRounded1c = M_PLUS_Rounded_1c({
-  weight: ["400", "500", "700", "800"],
-  preload: false,
-  variable: "--font-m-plus-rounded",
-});
 
 export async function generateMetadata(): Promise<Metadata> {
   const site = getSiteConfig();
@@ -114,7 +111,7 @@ export default function RootLayout({
 
   return (
     <html lang="ja" suppressHydrationWarning>
-      <body className={`${mPlusRounded1c.className} ${mPlusRounded1c.variable} antialiased`}>
+      <body className="antialiased">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}

@@ -16,6 +16,7 @@
     "mcp:stdio": "bun src/mcp/server.ts stdio"
   },
   "dependencies": {
+    "@fontsource/m-plus-rounded-1c": "^5.2.10",
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@modelcontextprotocol/sdk": "^1.28.0",
