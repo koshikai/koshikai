@@ -54,14 +54,14 @@ function TagPill({
       }`}
     >
       #{tag.name}
-      {typeof tag.noteCount === "number" ? ` · ${tag.noteCount}` : ""}
+      {` · ${tag.noteCount}`}
     </Link>
   );
 }
 
 export function MathKbHome({ state }: MathKbHomeProps) {
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(125,211,252,0.2),_transparent_35%),linear-gradient(180deg,_#f8fafc_0%,_#eef2ff_55%,_#f8fafc_100%)] dark:bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.18),_transparent_28%),linear-gradient(180deg,_#09090b_0%,_#111827_60%,_#09090b_100%)]">
+    <div className="min-h-screen bg-page-gradient">
       <main id="main-content" className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 py-10 sm:px-8 sm:py-14">
         <section className="rounded-3xl border border-white/70 bg-white/70 p-6 shadow-sm backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/70">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">

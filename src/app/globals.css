@@ -49,12 +49,22 @@ body {
 }
 
 @layer components {
+  .bg-page-gradient {
+    background-image: radial-gradient(circle at top, rgba(125,211,252,0.2), transparent 35%), linear-gradient(180deg, #f8fafc 0%, #eef2ff 55%, #f8fafc 100%);
+  }
+
   .case-article-shell {
     @apply rounded-3xl border border-white/70 bg-white/85 p-5 shadow-[0_30px_80px_-48px_rgba(15,23,42,0.45)] backdrop-blur sm:rounded-4xl sm:p-8 dark:border-zinc-800 dark:bg-zinc-900/75;
   }
 
   .case-article-content {
     @apply mx-auto max-w-[68ch];
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .bg-page-gradient {
+    background-image: radial-gradient(circle at top, rgba(56,189,248,0.18), transparent 28%), linear-gradient(180deg, #09090b 0%, #111827 60%, #09090b 100%);
   }
 }
 

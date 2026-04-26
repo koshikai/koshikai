@@ -74,7 +74,7 @@ const caseStudies = [
   },
   {
     title: "禁煙支援 PWA の開発",
-    slug: "no-pwa",
+    slug: "nosmoke",
     challenge: "既存の禁煙アプリが複雑すぎたり、オフライン時の挙動が不安定だったりした。",
     action: "Next.js と PWA を組み合わせ、オフライン優先の UI を構築。グラフによる可視化を統合。",
     result: "自身の禁煙継続に成功し、軽量かつ信頼性の高いツールとしての実用性を証明。",
@@ -82,7 +82,7 @@ const caseStudies = [
   },
   {
     title: "イラスト管理 SaaS への移行",
-    slug: "karigallery-saas",
+    slug: "karigallery",
     challenge: "散らばったイラスト資産を、一箇所で管理しつつ決済や公開まで行いたい。",
     action: "Prisma v7 と Auth.js で基盤を刷新。Stripe と連携し、安全な課金フローを実装。",
     result: "アセットのアップロードから公開、販売までが一元管理可能になった。",

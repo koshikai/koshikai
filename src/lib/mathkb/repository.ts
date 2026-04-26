@@ -105,6 +105,8 @@ export async function searchNotes(
           AND (
             $1::text IS NULL
             OR notes.search_document @@ websearch_to_tsquery('simple', $1)
+            -- TODO: Consider replacing ILIKE with pg_trgm % operator for
+            -- index-backed similarity search once ranking behavior is verified.
             OR notes.title ILIKE '%' || $1 || '%'
             OR COALESCE(notes.summary, '') ILIKE '%' || $1 || '%'
             OR notes.body_plain ILIKE '%' || $1 || '%'

@@ -1,6 +1,6 @@
 export interface MathKbTag {
   name: string;
-  noteCount?: number;
+  noteCount: number;
   slug: string;
 }
 

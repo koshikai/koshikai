@@ -7,8 +7,6 @@ import { SetupNotice } from "@/components/mathkb/SetupNotice";
 import { getMathKbNoteState } from "@/lib/mathkb/service";
 import { getSiteConfig, getEffectiveVariant } from "@/lib/site-config";
 
-export const dynamic = "force-dynamic";
-
 interface NotePageProps {
   params: Promise<{ slug: string }>;
 }
@@ -72,7 +70,7 @@ export default async function NotePage({ params }: NotePageProps) {
 
   if (state.status === "setup") {
     return (
-      <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(125,211,252,0.2),_transparent_35%),linear-gradient(180deg,_#f8fafc_0%,_#eef2ff_55%,_#f8fafc_100%)] px-6 py-10 dark:bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.18),_transparent_28%),linear-gradient(180deg,_#09090b_0%,_#111827_60%,_#09090b_100%)]">
+      <div className="min-h-screen bg-page-gradient px-6 py-10">
         <main className="mx-auto max-w-5xl">
           <SetupNotice message={state.message} />
         </main>
@@ -83,7 +81,7 @@ export default async function NotePage({ params }: NotePageProps) {
   const { note } = state;
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(125,211,252,0.2),_transparent_35%),linear-gradient(180deg,_#f8fafc_0%,_#eef2ff_55%,_#f8fafc_100%)] dark:bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.18),_transparent_28%),linear-gradient(180deg,_#09090b_0%,_#111827_60%,_#09090b_100%)]">
+    <div className="min-h-screen bg-page-gradient">
       <main id="main-content" className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-6 py-10 sm:px-8 sm:py-14">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <Link
