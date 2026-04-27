@@ -20,6 +20,7 @@ MATHKB_DATABASE_URL=postgresql://user:password@host:5432/mathkb
 MATHKB_APP_DATABASE_URL=postgresql://user:password@host:5432/mathkb
 MCP_DATABASE_URL=postgresql://user:password@host:5432/mathkb
 MATHKB_DATABASE_SSL=disable (default) | require
+MATHKB_POOL_MAX=10 (default)
 MCP_BIND_HOST=0.0.0.0
 MCP_PORT=3004
 MCP_PATH=/mcp
@@ -117,10 +118,12 @@ v1 は `notes`, `tags`, `note_tags` のみです。`concepts` 系は未実装で
 
 実装済みの読み取り専用ツール:
 
-- `search_notes(query, field, tag, limit)` (`limit` は default 10, max 50)
+- `search_notes(query, field, tag, limit, page)` (`limit` は default 10, max 50、`page` は default 1)
 - `get_note(slug)`
 - `list_fields()`
 - `list_tags()`
+
+MCP HTTP サーバーには、IP ごとに 60 req/min のレート制限を備えています。
 
 未実装:
 
@@ -131,6 +134,7 @@ v1 は `notes`, `tags`, `note_tags` のみです。`concepts` 系は未実装で
 
 ```bash
 bun run lint
+bun run test
 bun run build
 ```
 

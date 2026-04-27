@@ -108,6 +108,10 @@ env ファイルは手動で配置する必要があります。
 - MCP は読み取り専用ツールのみ、`mcp_reader` ロール維持
 - `SITE_URL` は内部 URL を設定
 
+### MCP レート制限
+
+MCP HTTP サーバーには IP ベースのレート制限（60 req/min）を備えています。超過すると `429 Too Many Requests` が返されます。
+
 ### 安全な運用のための推奨
 
 `docker-compose.internal.yaml` の `ports` を `127.0.0.1:3103:3000` のように loopback bind に変更し、必要なものだけ reverse proxy や SSH port forward で中継することを推奨します。
@@ -115,8 +119,10 @@ env ファイルは手動で配置する必要があります。
 ## 監視
 
 - `GET /healthz` on `mathkb-app`
-- `GET /healthz` on `mathkb-mcp`
+- `GET /healthz` on `mathkb-mcp`（成功時に DB プール統計を JSON ログ出力）
 - Docker healthcheck により自動復旧
+
+DB プール統計（`logPoolStats()`）には `total`, `idle`, `waiting` の接続数が含まれます。
 
 ## トラブルシューティング
 

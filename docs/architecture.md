@@ -60,7 +60,7 @@
 
 - 内部限定の数学ナレッジベース
 - PostgreSQL 全文検索対応
-- タグ・分野フィルタリング
+- タグ・分野フィルタリング、ページネーション対応
 - `robots.txt` 全拒否、`sitemap.xml` 空
 
 ## データベース設計
@@ -101,10 +101,12 @@
 
 | ツール名 | 説明 |
 |----------|------|
-| `search_notes` | 全文検索・フィルタ（`limit` default 10, max 50） |
+| `search_notes` | 全文検索・フィルタ（`limit` default 10, max 50、`page` default 1） |
 | `get_note` | slug 指定で単一ノート取得 |
 | `list_fields` | 分野一覧取得 |
 | `list_tags` | タグ一覧取得 |
+
+レート制限: IP ごとに 60 req/min（超過時は 429 を返す）
 
 ### 通信方式
 
@@ -128,9 +130,11 @@
 
 ### MathKB 用
 
-- `MathKbHome`: KB トップページ（検索・一覧）
+- `MathKbHome`: KB トップページ（検索・一覧・ページネーション）
+- `SearchForm`: クライアントサイド検索フォーム（`scroll: false` 対応）
 - `MarkdownArticle`: Markdown レンダリング
 - `SetupNotice`: DB 未設定時のセットアップ案内
+- `ThemeToggle`: ダークモード手動切り替え（Cookie 永続化）
 
 ## ビルド・出力
 
@@ -157,3 +161,7 @@ bun run build      # standalone 出力（Docker 時）
 3. **Tailwind v4**: PostCSS 経由で使用
 4. **MDX**: コンテンツ管理用に使用（`pageExtensions` に `mdx` を含む）
 5. **pg**: PostgreSQL 接続用（`pg` パッケージ使用）
+6. **Zod v4**: スキーマバリデーション（`parseMathKbFilters` など）
+7. **OGP 画像**: `next/og` の `ImageResponse` で動的生成（1200x630）
+8. **PWA**: `manifest.ts` で Web App Manifest を動的生成
+9. **ダークモード**: システム設定 + 手動切り替え（Cookie 永続化、`@variant dark`）
