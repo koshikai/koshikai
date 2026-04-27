@@ -101,75 +101,17 @@ v1 は `notes`, `tags`, `note_tags` のみです。`concepts` 系は未実装で
 
 ## Deployment
 
-公開ポートフォリオ用 compose:
+デプロイの詳細は [`docs/deployment.md`](./docs/deployment.md) を参照してください。
 
-- [`docker-compose.prod.yaml`](./docker-compose.prod.yaml)
+概要:
 
-内部KB + MCP 用 compose:
+- `main` ブランチへの push で GitHub Actions 経由で自動デプロイ
+- Proxmox 上の self-hosted runner で Docker Compose を実行
+- 公開ポートフォリオ（`docker-compose.prod.yaml`）と内部KB（`docker-compose.internal.yaml`）を分離
 
-- [`docker-compose.internal.yaml`](./docker-compose.internal.yaml)
+## Architecture
 
-内部KB は `Dockerfile`、MCP サーバーは [`Dockerfile.mcp`](./Dockerfile.mcp) を使います。`docker-compose.internal.yaml` には NocoDB も含まれており、管理UI としてそのまま起動できます。`.env.mathkb` に `MATHKB_APP_DATABASE_URL` / `MCP_DATABASE_URL` を設定すると、compose 上でも DB ロールを分離できます。未指定時は `MATHKB_DATABASE_URL` を両方で共有します。
-
-想定ポート:
-
-- `3002`: 公開ポートフォリオ
-- `3103`: 内部KB UI (host -> container `3000`)
-- `3104`: MCP HTTP (host -> container `3004`)
-- `8180`: NocoDB (host -> container `8080`)
-
-監視用:
-
-- `GET /healthz` on `mathkb-app`
-- `GET /healthz` on `mathkb-mcp`
-
-## LAN-only Operations Policy
-
-内部KB UI / MCP / NocoDB は、インターネット公開を前提にしていません。`mathkb` 系のスタックは LAN 内またはホストローカルでのみ到達できるように運用してください。
-
-- `3103`, `3104`, `8180` はルータでポート開放しない
-- Proxmox ホストまたはゲストOSの firewall で、許可元を `192.168.0.0/16`, `10.0.0.0/8`, `172.16.0.0/12` など必要な内部セグメントに限定する
-- 外部から使いたい場合も、公開 ingress ではなく VPN を使う
-- MCP は書き込みツールを追加せず、DB ロールも `mcp_reader` の read-only を維持する
-- `SITE_URL` は `mathkb` 用に内部URLを設定する
-
-`docker-compose.internal.yaml` の `ports` はそのままでも動きますが、安全側に倒すなら `127.0.0.1:3103:3000` のように loopback bind へ変更し、必要なものだけ reverse proxy や SSH port forward で中継してください。
-
-## GitHub Actions Deploy
-
-`main` への push で [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml) が動きます。
-
-- `ghcr.io/koshikai/koshikai:latest` を build / push
-- `ghcr.io/koshikai/koshikai-mcp:latest` を build / push
-- Proxmox 上の self-hosted runner で `$HOME/deploy/koshikai` に compose を同期して公開ポートフォリオを再起動
-- `/opt/home/.env.mathkb` または `$HOME/deploy/koshikai/.env.mathkb` が存在する場合のみ、内部KB / MCP / NocoDB も再起動
-
-公開側は `/opt/home/.env.prod`、内部側は `/opt/home/.env.mathkb` を置いておけば、そのまま symlink されて使われます。必要なら直接 `$HOME/deploy/koshikai` 側に置いても構いません。内部側で DB ロールを分ける場合は `.env.mathkb` に `MATHKB_APP_DATABASE_URL` と `MCP_DATABASE_URL` を追加してください。
-
-### Proxmox prerequisites
-
-GitHub Actions 側の workflow 定義は揃っており、次の前提が満たされていればデプロイできます。
-
-- Proxmox 上に self-hosted GitHub Actions runner がある
-- runner ホストで Docker Engine と Docker Compose plugin が使える
-- runner ユーザーが `docker` を実行できる
-- runner ホストから `ghcr.io` と GitHub へ outbound 接続できる
-- 公開側を動かすなら `/opt/home/.env.prod` または `$HOME/deploy/koshikai/.env.prod` がある
-- 内部KB / MCP も動かすなら `/opt/home/.env.mathkb` または `$HOME/deploy/koshikai/.env.mathkb` がある
-
-手で置く必要があるファイルは基本的に env だけです。compose ファイルは workflow が毎回 `$HOME/deploy/koshikai` に同期します。
-
-- 必須: `/opt/home/.env.prod`
-- 任意: `/opt/home/.env.mathkb`
-- 自動同期: `docker-compose.prod.yaml`, `docker-compose.internal.yaml`, `.env.mathkb.example`
-
-初期セットアップ用に [`scripts/setup_server.sh`](./scripts/setup_server.sh) もあります。このスクリプトは `/opt/home` と `/opt/actions-runner-home` を作り、runner 用のベースディレクトリを用意します。
-
-workflow の挙動は次の通りです。
-
-- `.env.prod` が無いと公開側 deploy job は失敗する
-- `.env.mathkb` が無いと内部KB / MCP / NocoDB の再起動はスキップされる
-- `mathkb-mcp` は `Dockerfile.mcp` から別イメージとして build / push される
+システムアーキテクチャの詳細は [`docs/architecture.md`](./docs/architecture.md) を参照してください。
 
 ## MCP Tools
 
