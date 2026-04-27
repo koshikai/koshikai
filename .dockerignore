@@ -13,5 +13,4 @@ db
 .vscode
 .eslintrc*
 eslint.config.*
-postcss.config.*
 README.md
