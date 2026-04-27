@@ -3,7 +3,7 @@ import createMDX from "@next/mdx";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
-  pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
+  pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
   experimental: {
     optimizePackageImports: ["lucide-react"],
   },

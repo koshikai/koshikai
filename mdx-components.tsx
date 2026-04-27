@@ -1,7 +1,14 @@
 import type { MDXComponents } from "mdx/types";
+import type React from "react";
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
+    h1: (props) => (
+      <h1
+        className="mt-12 mb-4 text-2xl font-black tracking-tight text-zinc-900 sm:text-3xl dark:text-zinc-50"
+        {...props}
+      />
+    ),
     h2: (props) => (
       <h2
         className="mt-10 mb-3 text-xl font-bold tracking-tight text-zinc-900 sm:mt-12 sm:mb-4 sm:text-2xl dark:text-zinc-50"
@@ -52,6 +59,33 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ),
     strong: (props) => (
       <strong className="font-semibold text-zinc-900 dark:text-zinc-100" {...props} />
+    ),
+    hr: (props) => (
+      <hr className="my-8 border-zinc-200 dark:border-zinc-700" {...props} />
+    ),
+    img: ({ alt = "", ...props }: React.ImgHTMLAttributes<HTMLImageElement>) => (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img className="my-6 rounded-2xl shadow-lg max-w-full h-auto" alt={alt} {...props} />
+    ),
+    table: (props) => (
+      <div className="my-6 overflow-x-auto">
+        <table className="w-full text-sm text-left text-zinc-700 dark:text-zinc-300" {...props} />
+      </div>
+    ),
+    thead: (props) => (
+      <thead className="text-xs uppercase bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300" {...props} />
+    ),
+    tbody: (props) => (
+      <tbody className="divide-y divide-zinc-200 dark:divide-zinc-700" {...props} />
+    ),
+    tr: (props) => (
+      <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50" {...props} />
+    ),
+    th: (props) => (
+      <th className="px-4 py-3 font-semibold" {...props} />
+    ),
+    td: (props) => (
+      <td className="px-4 py-3" {...props} />
     ),
     ...components,
   };

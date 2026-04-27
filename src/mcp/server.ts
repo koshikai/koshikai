@@ -300,11 +300,11 @@ async function startHttpServer() {
       sessionIdGenerator: undefined,
     });
 
-    try {
-      res.on("close", () => {
-        void transport.close();
-      });
+    res.on("close", () => {
+      void transport.close();
+    });
 
+    try {
       await mathKbServer.connect(transport);
       await transport.handleRequest(req, res, req.body);
     } catch (error) {
@@ -320,6 +320,9 @@ async function startHttpServer() {
           id: null,
         });
       }
+
+      // Ensure transport is closed on error even if response hasn't closed yet
+      await transport.close().catch(() => {});
     }
   });
 

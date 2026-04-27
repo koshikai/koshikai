@@ -16,7 +16,7 @@ export interface SiteConfig {
 
 function getConfiguredBaseUrl(variant: SiteVariant) {
   const fallbackUrl =
-    variant === "mathkb" ? "http://127.0.0.1:3003" : "https://koshikai.dev";
+    variant === "mathkb" ? "http://127.0.0.1:3103" : "https://koshikai.dev";
 
   return process.env.SITE_URL ?? fallbackUrl;
 }

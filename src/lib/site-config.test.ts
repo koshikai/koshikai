@@ -3,7 +3,6 @@ import {
   getSiteVariant,
   getSiteConfig,
   getSiteConfigByVariant,
-  type SiteVariant,
 } from "./site-config";
 
 describe("getSiteVariant", () => {
@@ -49,7 +48,7 @@ describe("getSiteConfigByVariant", () => {
     const config = getSiteConfigByVariant("mathkb");
 
     expect(config.variant).toBe("mathkb");
-    expect(config.baseUrl).toBe("http://127.0.0.1:3003");
+    expect(config.baseUrl).toBe("http://127.0.0.1:3103");
     expect(config.name).toBe("Private Math Knowledge Base");
     expect(config.title).toBe("Private Math Knowledge Base");
     expect(config.keywords).toContain("PostgreSQL search");
