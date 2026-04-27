@@ -131,12 +131,15 @@ export function PortfolioHome() {
               </div>
 
               <h1 className="text-pretty text-5xl leading-[1.1] font-extrabold tracking-tight text-zinc-800 drop-shadow-sm sm:text-7xl dark:text-zinc-50">
-                Building apps that <br />
-                <span className="relative whitespace-normal sm:whitespace-nowrap">
-                  <span className="relative z-10 inline-block cursor-default bg-linear-to-r from-sky-400 to-emerald-400 bg-clip-text text-transparent motion-safe:transition-transform motion-safe:hover:scale-105">
+                Building apps that{" "}
+                <span className="relative inline-block">
+                  <span className="bg-linear-to-r from-sky-400 to-emerald-400 bg-clip-text text-transparent">
                     make life better
                   </span>
-                  <span className="absolute bottom-2 left-0 -z-10 h-3 w-full rounded-full bg-yellow-200/60 -rotate-2 dark:bg-yellow-900/40"></span>
+                  <span
+                    className="absolute bottom-2 left-0 -z-10 h-3 w-full rounded-full bg-yellow-200/60 -rotate-2 dark:bg-yellow-900/40"
+                    aria-hidden="true"
+                  />
                 </span>
               </h1>
 
@@ -151,9 +154,9 @@ export function PortfolioHome() {
             </div>
 
             <div className="hidden md:flex justify-center items-center relative h-[450px] w-full" style={{ perspective: '1000px' }}>
-              <div className="absolute h-[300px] w-[300px] rounded-full bg-linear-to-r from-sky-400/20 to-emerald-400/20 blur-[80px] dark:from-sky-900/30 dark:to-emerald-900/30 animate-pulse"></div>
+              <div className="absolute h-[300px] w-[300px] rounded-full bg-linear-to-r from-sky-400/20 to-emerald-400/20 blur-[80px] dark:from-sky-900/30 dark:to-emerald-900/30 animate-pulse motion-reduce:animate-none"></div>
 
-              <div className="absolute inset-0 flex items-center justify-center animate-[spin_40s_linear_infinite]" style={{ transformStyle: 'preserve-3d' }}>
+              <div className="absolute inset-0 flex items-center justify-center animate-[spin_40s_linear_infinite] motion-reduce:animate-none" style={{ transformStyle: 'preserve-3d' }}>
                 <div className="absolute h-64 w-64 rounded-full border-2 border-dashed border-sky-400/30 dark:border-sky-500/20" style={{ transform: 'rotateX(60deg) rotateY(20deg)' }}>
                   <div className="absolute top-0 left-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.8)]"></div>
                 </div>
@@ -162,11 +165,11 @@ export function PortfolioHome() {
                   <div className="absolute bottom-0 left-1/4 h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.8)]"></div>
                 </div>
 
-                <div className="absolute h-96 w-96 rounded-full border border-purple-400/20 dark:border-purple-500/10 animate-[spin_60s_linear_infinite_reverse]" style={{ transform: 'rotateX(50deg) rotateY(40deg)' }}></div>
+                <div className="absolute h-96 w-96 rounded-full border border-purple-400/20 dark:border-purple-500/10 animate-[spin_60s_linear_infinite_reverse] motion-reduce:animate-none" style={{ transform: 'rotateX(50deg) rotateY(40deg)' }}></div>
               </div>
 
-              <div className="relative z-10 flex h-64 w-64 items-center justify-center animate-float overflow-visible" style={{ transformStyle: 'preserve-3d' }}>
-                <div className="absolute z-0 h-20 w-20 rounded-full bg-white/60 backdrop-blur-3xl shadow-[0_0_40px_rgba(255,255,255,1)] dark:bg-zinc-800/80 dark:shadow-[0_0_40px_rgba(56,189,248,0.3)] animate-pulse"></div>
+              <div className="relative z-10 flex h-64 w-64 items-center justify-center animate-float motion-reduce:animate-none overflow-visible" style={{ transformStyle: 'preserve-3d' }}>
+                <div className="absolute z-0 h-20 w-20 rounded-full bg-white/60 backdrop-blur-3xl shadow-[0_0_40px_rgba(255,255,255,1)] dark:bg-zinc-800/80 dark:shadow-[0_0_40px_rgba(56,189,248,0.3)] animate-pulse motion-reduce:animate-none"></div>
                 <div className="absolute inset-4 rounded-[2rem] border border-white/20 bg-linear-to-br from-white/10 to-transparent backdrop-blur-md shadow-2xl dark:border-zinc-700/30 dark:from-zinc-700/20" style={{ transform: 'rotateX(20deg) rotateY(-20deg) translateZ(-50px)' }}></div>
                 <div className="absolute inset-0 rounded-[2.5rem] border border-white/40 bg-linear-to-tr from-white/20 to-transparent backdrop-blur-xl shadow-2xl dark:border-zinc-600/40 dark:from-zinc-600/30" style={{ transform: 'rotateX(20deg) rotateY(-20deg) translateZ(0px)' }}></div>
 
@@ -185,8 +188,8 @@ export function PortfolioHome() {
                    </div>
                 </div>
 
-                <div className="absolute top-1/4 -right-12 h-2 w-2 rounded-full bg-sky-400 shadow-[0_0_10px_rgba(56,189,248,1)] animate-bounce" style={{ animationDuration: '2.5s' }}></div>
-                <div className="absolute bottom-1/4 -left-12 h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,1)] animate-bounce" style={{ animationDuration: '3.2s' }}></div>
+                <div className="absolute top-1/4 -right-12 h-2 w-2 rounded-full bg-sky-400 shadow-[0_0_10px_rgba(56,189,248,1)] animate-bounce motion-reduce:animate-none" style={{ animationDuration: '2.5s' }}></div>
+                <div className="absolute bottom-1/4 -left-12 h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,1)] animate-bounce motion-reduce:animate-none" style={{ animationDuration: '3.2s' }}></div>
               </div>
             </div>
           </div>

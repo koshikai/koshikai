@@ -27,7 +27,8 @@ export async function GET() {
   }
 
   try {
-    await getMathKbPool().query("SELECT 1");
+    const pool = getMathKbPool();
+    await pool.query("SELECT 1");
 
     return NextResponse.json({
       ok: true,

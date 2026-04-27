@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { hasMathKbDatabaseConfig } from "@/lib/mathkb/db";
 import { getNoteBySlug, listFields, listTags, searchNotes } from "@/lib/mathkb/repository";
 import type {
@@ -43,15 +44,27 @@ function toSetupMessage(error: unknown) {
   return "数学KBを読み込めませんでした。DB接続と schema 適用状況を確認してください。";
 }
 
+const rawParamSchema = z.union([z.string(), z.array(z.string())]).optional();
+
+const rawSearchFiltersSchema = z.object({
+  q: rawParamSchema,
+  field: rawParamSchema,
+  tag: rawParamSchema,
+  limit: rawParamSchema,
+  view: rawParamSchema,
+});
+
 export function parseMathKbFilters(
   rawSearchParams: Record<string, string | string[] | undefined>,
 ): MathKbSearchFilters {
-  const view = pickFirst(rawSearchParams.view);
+  const parsed = rawSearchFiltersSchema.parse(rawSearchParams);
+  const view = pickFirst(parsed.view);
+
   return {
-    query: pickFirst(rawSearchParams.q).trim(),
-    field: pickFirst(rawSearchParams.field).trim(),
-    tag: pickFirst(rawSearchParams.tag).trim(),
-    limit: clampLimit(rawSearchParams.limit, 24),
+    query: pickFirst(parsed.q).trim(),
+    field: pickFirst(parsed.field).trim(),
+    tag: pickFirst(parsed.tag).trim(),
+    limit: clampLimit(parsed.limit, 24),
     view: view === "list" ? "list" : "card",
   };
 }

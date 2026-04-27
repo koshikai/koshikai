@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { ArrowLeft, BookOpenText, Layers3, Search, Tags } from "lucide-react";
+import { ArrowLeft, BookOpenText, Layers3, Tags } from "lucide-react";
 
+import { SearchForm } from "@/components/mathkb/SearchForm";
 import { SetupNotice } from "@/components/mathkb/SetupNotice";
 import type { MathKbHomeState, MathKbSearchFilters, MathKbTag } from "@/lib/mathkb/types";
 
@@ -116,64 +117,11 @@ export function MathKbHome({ state }: MathKbHomeProps) {
         ) : (
           <>
             <section className="grid gap-6 lg:grid-cols-[1.7fr_1fr]">
-              <div className="rounded-[2rem] border border-zinc-200/80 bg-white/90 p-6 shadow-[0_24px_80px_-48px_rgba(15,23,42,0.45)] dark:border-zinc-800 dark:bg-zinc-900/80">
-                <div className="mb-5 flex items-center gap-3">
-                  <Search className="h-5 w-5 text-sky-600 dark:text-sky-300" />
-                  <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
-                    Search Notes
-                  </h2>
-                </div>
-
-                <form action="/" className="grid gap-4 md:grid-cols-[2fr_1fr_1fr_auto_auto]">
-                  <input
-                    type="search"
-                    name="q"
-                    defaultValue={state.data.filters.query}
-                    placeholder="定理名、キーワード、メモ断片で検索"
-                    className="rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none ring-0 transition-colors focus:border-sky-400 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50"
-                  />
-
-                  <select
-                    name="field"
-                    defaultValue={state.data.filters.field}
-                    className="rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition-colors focus:border-sky-400 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50"
-                  >
-                    <option value="">All fields</option>
-                    {state.data.fields.map((field) => (
-                      <option key={field.name} value={field.name}>
-                        {field.name}
-                      </option>
-                    ))}
-                  </select>
-
-                  <select
-                    name="tag"
-                    defaultValue={state.data.filters.tag}
-                    className="rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition-colors focus:border-sky-400 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50"
-                  >
-                    <option value="">All tags</option>
-                    {state.data.tags.map((tag) => (
-                      <option key={tag.slug} value={tag.slug}>
-                        {tag.name}
-                      </option>
-                    ))}
-                  </select>
-
-                  <button
-                    type="submit"
-                    className="rounded-2xl bg-sky-600 px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-sky-500"
-                  >
-                    Search
-                  </button>
-
-                  <Link
-                    href="/"
-                    className="rounded-2xl border border-zinc-200 px-5 py-3 text-center text-sm font-bold text-zinc-600 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
-                  >
-                    Clear
-                  </Link>
-                </form>
-              </div>
+              <SearchForm
+                filters={state.data.filters}
+                fields={state.data.fields}
+                tags={state.data.tags}
+              />
 
               <div className="rounded-[2rem] border border-zinc-200/80 bg-white/90 p-6 shadow-[0_24px_80px_-48px_rgba(15,23,42,0.45)] dark:border-zinc-800 dark:bg-zinc-900/80">
                 <div className="flex items-center gap-3">

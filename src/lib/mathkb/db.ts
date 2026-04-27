@@ -35,11 +35,17 @@ export function getMathKbPool() {
   }
 
   if (!globalThis.mathKbPool) {
-    globalThis.mathKbPool = new Pool({
+    const pool = new Pool({
       connectionString,
       max: Number(process.env.MATHKB_POOL_MAX ?? 10),
       ssl: getSslConfig(),
     });
+
+    pool.on("error", (err) => {
+      console.error("[mathkb-db] Unexpected PostgreSQL pool error:", err.message);
+    });
+
+    globalThis.mathKbPool = pool;
   }
 
   return globalThis.mathKbPool;

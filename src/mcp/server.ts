@@ -5,6 +5,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { z } from "zod";
+import { getMathKbPool, hasMathKbDatabaseConfig } from "../lib/mathkb/db";
 import { getNoteBySlug, listFields, listTags, searchNotes } from "../lib/mathkb/repository";
 import type { MathKbSearchFilters } from "../lib/mathkb/types";
 
@@ -38,13 +39,35 @@ const fieldSchema = z.object({
   noteCount: z.number().int().nonnegative(),
 });
 
-function log(message: string, error?: unknown) {
-  if (error) {
-    console.error(`[mathkb-mcp] ${message}`, error);
-    return;
+interface LogEntry {
+  level: "info" | "warn" | "error";
+  message: string;
+  timestamp: string;
+  error?: string;
+}
+
+function logStructured(
+  level: "info" | "warn" | "error",
+  message: string,
+  error?: unknown,
+) {
+  const entry: LogEntry = {
+    level,
+    message: `[mathkb-mcp] ${message}`,
+    timestamp: new Date().toISOString(),
+  };
+
+  if (error instanceof Error) {
+    entry.error = error.message;
+  } else if (error !== undefined) {
+    entry.error = String(error);
   }
 
-  console.error(`[mathkb-mcp] ${message}`);
+  console.error(JSON.stringify(entry));
+}
+
+function log(message: string, error?: unknown) {
+  logStructured("error", message, error);
 }
 
 function formatError(error: unknown) {
@@ -287,8 +310,19 @@ async function startHttpServer() {
     ...(allowedHosts && allowedHosts.length > 0 ? { allowedHosts } : {}),
   });
 
-  app.get("/healthz", (_req: Request, res: Response) => {
-    res.json({ ok: true });
+  app.get("/healthz", async (_req: Request, res: Response) => {
+    try {
+      if (hasMathKbDatabaseConfig()) {
+        await getMathKbPool().query("SELECT 1");
+      }
+      res.json({ ok: true });
+    } catch (error) {
+      log("healthz check failed", error);
+      res.status(503).json({
+        ok: false,
+        error: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
   });
 
   // Reuse a single McpServer instance across requests to avoid
