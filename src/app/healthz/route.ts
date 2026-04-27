@@ -27,7 +27,8 @@ export async function GET() {
   }
 
   try {
-    await getnotesPool().query("SELECT 1");
+    const pool = getnotesPool();
+    await pool.query("SELECT 1");
 
     return NextResponse.json({
       ok: true,

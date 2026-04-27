@@ -1,5 +1,5 @@
 # Alpine 上の Bun build が不安定なため、Docker では glibc ベースを使う
-FROM oven/bun:1 AS base
+FROM oven/bun:1.3.13 AS base
 
 # Install dependencies only when needed
 FROM base AS deps

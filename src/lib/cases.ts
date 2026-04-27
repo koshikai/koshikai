@@ -75,19 +75,13 @@ export const caseItems: CaseItem[] = [
   },
 ];
 
-const caseMdxModules: Record<
-  string,
-  () => Promise<{ default: ComponentType }>
-> = {
-  "immich-distributed": () => import("@/content/cases/immich-distributed.mdx"),
-  infrastructure: () => import("@/content/cases/infrastructure.mdx"),
-  nosmoke: () => import("@/content/cases/nosmoke.mdx"),
-  karigallery: () => import("@/content/cases/karigallery.mdx"),
-  shuukatsu: () => import("@/content/cases/shuukatsu.mdx"),
-  "home-backup": () => import("@/content/cases/home-backup.mdx"),
-  "deploy-automation": () => import("@/content/cases/deploy-automation.mdx"),
-  "research-workflow": () => import("@/content/cases/research-workflow.mdx"),
-};
+const caseMdxModules: Record<string, () => Promise<{ default: ComponentType }>> =
+  Object.fromEntries(
+    caseItems.map((item) => [
+      item.slug,
+      () => import(`@/content/cases/${item.slug}.mdx`),
+    ]),
+  );
 
 export function getCaseBySlug(slug: string) {
   return caseItems.find((item) => item.slug === slug);
