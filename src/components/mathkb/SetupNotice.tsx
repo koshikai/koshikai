@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 interface SetupNoticeProps {
   message: string;
 }
@@ -16,6 +18,20 @@ export function SetupNotice({ message }: SetupNoticeProps) {
         `db/mathkb.sql` を適用し、`MATHKB_DATABASE_URL` を設定したうえで
         `SITE_VARIANT=mathkb` のサービスとして起動してください。
       </p>
+      <div className="mt-6 flex flex-wrap gap-3">
+        <Link
+          href="https://koshikai.dev"
+          className="inline-flex items-center gap-2 rounded-xl bg-sky-600 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-sky-500"
+        >
+          ポートフォリオに戻る
+        </Link>
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 rounded-xl border border-zinc-300 px-5 py-2.5 text-sm font-bold text-zinc-700 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+        >
+          再読み込み
+        </Link>
+      </div>
     </section>
   );
 }

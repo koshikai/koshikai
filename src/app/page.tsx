@@ -3,6 +3,10 @@ import { PortfolioHome } from "@/components/PortfolioHome";
 import { getMathKbHomeState } from "@/lib/mathkb/service";
 import { getEffectiveVariant } from "@/lib/site-config";
 
+// Prevent static generation of the home page since mathkb variant
+// depends on runtime env vars and database availability.
+export const dynamic = "force-dynamic";
+
 interface HomePageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }

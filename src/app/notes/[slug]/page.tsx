@@ -7,6 +7,8 @@ import { SetupNotice } from "@/components/mathkb/SetupNotice";
 import { getMathKbNoteState } from "@/lib/mathkb/service";
 import { getSiteConfig, getEffectiveVariant } from "@/lib/site-config";
 
+export const dynamic = "force-dynamic";
+
 interface NotePageProps {
   params: Promise<{ slug: string }>;
 }
