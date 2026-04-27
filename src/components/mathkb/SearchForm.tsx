@@ -31,7 +31,7 @@ export function SearchForm({ filters, fields, tags }: SearchFormProps) {
 
     const url = params.toString() ? `/?${params.toString()}` : "/";
     startTransition(() => {
-      router.push(url);
+      router.push(url, { scroll: false });
     });
   };
 

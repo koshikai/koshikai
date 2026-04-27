@@ -50,3 +50,23 @@ export function getMathKbPool() {
 
   return globalThis.mathKbPool;
 }
+
+export function logPoolStats() {
+  const pool = globalThis.mathKbPool;
+  if (!pool) return;
+
+  const stats = {
+    total: pool.totalCount,
+    idle: pool.idleCount,
+    waiting: pool.waitingCount,
+  };
+
+  console.error(
+    JSON.stringify({
+      level: "info",
+      message: "[mathkb-db] Pool stats",
+      timestamp: new Date().toISOString(),
+      stats,
+    }),
+  );
+}

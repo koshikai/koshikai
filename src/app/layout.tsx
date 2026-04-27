@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { cookies } from "next/headers";
 import "@fontsource/m-plus-rounded-1c/japanese-400.css";
 import "@fontsource/m-plus-rounded-1c/japanese-500.css";
 import "@fontsource/m-plus-rounded-1c/japanese-700.css";
@@ -6,6 +7,16 @@ import "@fontsource/m-plus-rounded-1c/japanese-800.css";
 import "./globals.css";
 import { getSiteConfig } from "@/lib/site-config";
 import { DevOverlay } from "@/components/DevOverlay";
+import { ThemeToggle } from "@/components/ThemeToggle";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fffbf0" },
+    { media: "(prefers-color-scheme: dark)", color: "#1a1625" },
+  ],
+};
 
 export async function generateMetadata(): Promise<Metadata> {
   const site = getSiteConfig();
@@ -73,12 +84,23 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 
-export default function RootLayout({
+async function getThemeClass() {
+  try {
+    const cookieStore = await cookies();
+    const theme = cookieStore.get("theme")?.value;
+    return theme === "dark" ? "dark" : "";
+  } catch {
+    return "";
+  }
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   const site = getSiteConfig();
+  const themeClass = await getThemeClass();
   const jsonLd =
     site.variant === "mathkb"
       ? {
@@ -110,7 +132,7 @@ export default function RootLayout({
         };
 
   return (
-    <html lang="ja" suppressHydrationWarning>
+    <html lang="ja" suppressHydrationWarning className={themeClass}>
       <body className="antialiased">
         <script
           type="application/ld+json"
@@ -123,6 +145,7 @@ export default function RootLayout({
           メインコンテンツへスキップ
         </a>
         {children}
+        <ThemeToggle />
         <DevOverlay />
       </body>
     </html>

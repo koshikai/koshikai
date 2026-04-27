@@ -4,6 +4,7 @@ import type {
   MathKbNoteDetail,
   MathKbNoteListItem,
   MathKbSearchFilters,
+  MathKbSearchResult,
   MathKbTag,
 } from "@/lib/mathkb/types";
 
@@ -65,13 +66,14 @@ function mapDetailRow(row: DetailRow): MathKbNoteDetail {
 
 export async function searchNotes(
   filters: MathKbSearchFilters,
-): Promise<MathKbNoteListItem[]> {
+): Promise<MathKbSearchResult> {
   const pool = getMathKbPool();
   const query = filters.query.trim() || null;
   const field = filters.field || null;
   const tag = filters.tag || null;
+  const offset = (filters.page - 1) * filters.limit;
 
-  const result = await pool.query<SearchRow>(
+  const result = await pool.query<SearchRow & { total_count: number }>(
     `
       WITH filtered_notes AS (
         SELECT
@@ -105,44 +107,51 @@ export async function searchNotes(
           AND (
             $1::text IS NULL
             OR notes.search_document @@ websearch_to_tsquery('simple', $1)
-            -- TODO: Consider replacing ILIKE with pg_trgm % operator for
-            -- index-backed similarity search once ranking behavior is verified.
             OR notes.title ILIKE '%' || $1 || '%'
             OR COALESCE(notes.summary, '') ILIKE '%' || $1 || '%'
             OR notes.body_plain ILIKE '%' || $1 || '%'
           )
+      ),
+      paginated_notes AS (
+        SELECT
+          filtered_notes.slug,
+          filtered_notes.title,
+          filtered_notes.field,
+          filtered_notes.summary,
+          filtered_notes.updated_at,
+          COALESCE(
+            json_agg(
+              json_build_object('name', tags.name, 'slug', tags.slug)
+              ORDER BY tags.name
+            ) FILTER (WHERE tags.id IS NOT NULL),
+            '[]'::json
+          ) AS tags
+        FROM filtered_notes
+        LEFT JOIN note_tags ON note_tags.note_id = filtered_notes.id
+        LEFT JOIN tags ON tags.id = note_tags.tag_id
+        GROUP BY
+          filtered_notes.id,
+          filtered_notes.slug,
+          filtered_notes.title,
+          filtered_notes.field,
+          filtered_notes.summary,
+          filtered_notes.updated_at,
+          filtered_notes.rank
+        ORDER BY filtered_notes.rank DESC, filtered_notes.updated_at DESC
+        LIMIT $4 OFFSET $5
       )
       SELECT
-        filtered_notes.slug,
-        filtered_notes.title,
-        filtered_notes.field,
-        filtered_notes.summary,
-        filtered_notes.updated_at,
-        COALESCE(
-          json_agg(
-            json_build_object('name', tags.name, 'slug', tags.slug)
-            ORDER BY tags.name
-          ) FILTER (WHERE tags.id IS NOT NULL),
-          '[]'::json
-        ) AS tags
-      FROM filtered_notes
-      LEFT JOIN note_tags ON note_tags.note_id = filtered_notes.id
-      LEFT JOIN tags ON tags.id = note_tags.tag_id
-      GROUP BY
-        filtered_notes.id,
-        filtered_notes.slug,
-        filtered_notes.title,
-        filtered_notes.field,
-        filtered_notes.summary,
-        filtered_notes.updated_at,
-        filtered_notes.rank
-      ORDER BY filtered_notes.rank DESC, filtered_notes.updated_at DESC
-      LIMIT $4
+        paginated_notes.*,
+        (SELECT COUNT(*) FROM filtered_notes) AS total_count
+      FROM paginated_notes
     `,
-    [query, field, tag, filters.limit],
+    [query, field, tag, filters.limit, offset],
   );
 
-  return result.rows.map(mapSearchRow);
+  const totalFilteredNotes = Number(result.rows[0]?.total_count ?? 0);
+  const notes = result.rows.map(mapSearchRow);
+
+  return { notes, totalFilteredNotes };
 }
 
 export async function getNoteBySlug(slug: string) {

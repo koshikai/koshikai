@@ -28,9 +28,15 @@ export interface MathKbNoteDetail extends MathKbNoteListItem {
 export interface MathKbSearchFilters {
   field: string;
   limit: number;
+  page: number;
   query: string;
   tag: string;
   view?: "card" | "list";
+}
+
+export interface MathKbSearchResult {
+  notes: MathKbNoteListItem[];
+  totalFilteredNotes: number;
 }
 
 export interface MathKbHomeData {
@@ -39,6 +45,7 @@ export interface MathKbHomeData {
   notes: MathKbNoteListItem[];
   tags: MathKbTag[];
   totalNotes: number;
+  totalFilteredNotes: number;
 }
 
 export interface MathKbSetupState {

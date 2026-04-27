@@ -54,6 +54,9 @@ const nextConfig: NextConfig = {
   },
   // Enable standalone output for Docker builds
   output: process.env.DOCKER_BUILD === "true" ? "standalone" : undefined,
+  images: {
+    remotePatterns: [],
+  },
   async headers() {
     return [
       {

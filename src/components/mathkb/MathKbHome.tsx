@@ -28,6 +28,10 @@ function buildFilterHref(
     params.set("tag", nextFilters.tag);
   }
 
+  if (nextFilters.page && nextFilters.page > 1) {
+    params.set("page", String(nextFilters.page));
+  }
+
   if (nextFilters.view && nextFilters.view !== "card") {
     params.set("view", nextFilters.view);
   }
@@ -271,6 +275,36 @@ export function MathKbHome({ state }: MathKbHomeProps) {
                         </article>
                       );
                     })}
+                  </div>
+                )}
+
+                {/* Pagination */}
+                {state.data.totalFilteredNotes > state.data.filters.limit && (
+                  <div className="flex items-center justify-center gap-2 pt-4">
+                    {state.data.filters.page > 1 && (
+                      <Link
+                        href={buildFilterHref(state.data.filters, {
+                          page: state.data.filters.page - 1,
+                        })}
+                        className="rounded-xl border border-zinc-200 bg-white px-4 py-2 text-sm font-bold text-zinc-700 transition-colors hover:border-sky-300 hover:text-sky-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:border-sky-700 dark:hover:text-sky-200"
+                      >
+                        ← Prev
+                      </Link>
+                    )}
+                    <span className="text-sm font-bold text-zinc-500 dark:text-zinc-400">
+                      Page {state.data.filters.page} of{" "}
+                      {Math.ceil(state.data.totalFilteredNotes / state.data.filters.limit)}
+                    </span>
+                    {state.data.filters.page * state.data.filters.limit < state.data.totalFilteredNotes && (
+                      <Link
+                        href={buildFilterHref(state.data.filters, {
+                          page: state.data.filters.page + 1,
+                        })}
+                        className="rounded-xl border border-zinc-200 bg-white px-4 py-2 text-sm font-bold text-zinc-700 transition-colors hover:border-sky-300 hover:text-sky-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:border-sky-700 dark:hover:text-sky-200"
+                      >
+                        Next →
+                      </Link>
+                    )}
                   </div>
                 )}
               </div>

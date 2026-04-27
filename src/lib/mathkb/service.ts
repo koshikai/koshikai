@@ -7,6 +7,20 @@ import type {
   MathKbSearchFilters,
 } from "@/lib/mathkb/types";
 
+function clampPage(value: string | string[] | undefined, fallback: number) {
+  const first = pickFirst(value);
+  if (!first) {
+    return fallback;
+  }
+
+  const parsed = Number(first);
+  if (!Number.isFinite(parsed) || parsed < 1) {
+    return fallback;
+  }
+
+  return Math.trunc(parsed);
+}
+
 function pickFirst(
   value: string | string[] | undefined,
   fallback = "",
@@ -51,6 +65,7 @@ const rawSearchFiltersSchema = z.object({
   field: rawParamSchema,
   tag: rawParamSchema,
   limit: rawParamSchema,
+  page: rawParamSchema,
   view: rawParamSchema,
 });
 
@@ -65,6 +80,7 @@ export function parseMathKbFilters(
     field: pickFirst(parsed.field).trim(),
     tag: pickFirst(parsed.tag).trim(),
     limit: clampLimit(parsed.limit, 24),
+    page: clampPage(parsed.page, 1),
     view: view === "list" ? "list" : "card",
   };
 }
@@ -75,7 +91,7 @@ export async function getMathKbHomeState(
   const filters = parseMathKbFilters(rawSearchParams);
 
   try {
-    const [notes, fields, tags] = await Promise.all([
+    const [searchResult, fields, tags] = await Promise.all([
       searchNotes(filters),
       listFields(),
       listTags(),
@@ -86,9 +102,10 @@ export async function getMathKbHomeState(
       data: {
         filters,
         fields,
-        notes,
+        notes: searchResult.notes,
         tags,
         totalNotes: fields.reduce((sum, field) => sum + field.noteCount, 0),
+        totalFilteredNotes: searchResult.totalFilteredNotes,
       },
     };
   } catch (error) {

@@ -5,7 +5,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { z } from "zod";
-import { getMathKbPool, hasMathKbDatabaseConfig } from "../lib/mathkb/db";
+import { getMathKbPool, hasMathKbDatabaseConfig, logPoolStats } from "../lib/mathkb/db";
 import { getNoteBySlug, listFields, listTags, searchNotes } from "../lib/mathkb/repository";
 import type { MathKbSearchFilters } from "../lib/mathkb/types";
 
@@ -85,12 +85,12 @@ function createToolError(message: string) {
   };
 }
 
-function toSearchText(notes: Awaited<ReturnType<typeof searchNotes>>) {
-  if (notes.length === 0) {
+function toSearchText(result: Awaited<ReturnType<typeof searchNotes>>) {
+  if (result.notes.length === 0) {
     return "No notes matched the given filters.";
   }
 
-  return notes
+  return result.notes
     .map((note, index) => {
       const tags = note.tags.map((tag) => `#${tag.name}`).join(", ");
       const metadata = [note.field, tags].filter(Boolean).join(" | ");
@@ -118,6 +118,7 @@ function toNoteText(note: NonNullable<Awaited<ReturnType<typeof getNoteBySlug>>>
 function buildFilters(input: {
   field?: string;
   limit?: number;
+  page?: number;
   query?: string;
   tag?: string;
 }): MathKbSearchFilters {
@@ -126,6 +127,7 @@ function buildFilters(input: {
     field: input.field?.trim() ?? "",
     tag: input.tag?.trim() ?? "",
     limit: input.limit ?? 10,
+    page: Math.max(1, Math.floor(input.page ?? 1)),
   };
 }
 
@@ -165,12 +167,12 @@ function createMathKbServer() {
     },
     async (input) => {
       try {
-        const notes = await searchNotes(buildFilters(input));
+        const result = await searchNotes(buildFilters(input));
         return {
-          content: [{ type: "text" as const, text: toSearchText(notes) }],
+          content: [{ type: "text" as const, text: toSearchText(result) }],
           structuredContent: {
-            count: notes.length,
-            notes,
+            count: result.totalFilteredNotes,
+            notes: result.notes,
           },
         };
       } catch (error) {
@@ -298,6 +300,26 @@ async function startStdioServer() {
   log("stdio transport ready");
 }
 
+// Simple in-memory rate limiter: 60 requests per minute per IP
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + 60_000 });
+    return true;
+  }
+
+  if (entry.count >= 60) {
+    return false;
+  }
+
+  entry.count++;
+  return true;
+}
+
 async function startHttpServer() {
   const host = process.env.MCP_BIND_HOST ?? "0.0.0.0";
   const port = Number(process.env.MCP_PORT ?? "3004");
@@ -310,10 +332,27 @@ async function startHttpServer() {
     ...(allowedHosts && allowedHosts.length > 0 ? { allowedHosts } : {}),
   });
 
+  app.use((req: Request, res: Response, next) => {
+    const ip = req.ip ?? req.socket.remoteAddress ?? "unknown";
+    if (!checkRateLimit(ip)) {
+      res.status(429).json({
+        jsonrpc: "2.0",
+        error: {
+          code: -32000,
+          message: "Rate limit exceeded. Try again later.",
+        },
+        id: null,
+      });
+      return;
+    }
+    next();
+  });
+
   app.get("/healthz", async (_req: Request, res: Response) => {
     try {
       if (hasMathKbDatabaseConfig()) {
         await getMathKbPool().query("SELECT 1");
+        logPoolStats();
       }
       res.json({ ok: true });
     } catch (error) {

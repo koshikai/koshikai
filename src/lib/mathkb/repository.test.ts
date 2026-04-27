@@ -23,6 +23,7 @@ describe("repository", () => {
             summary: "A test summary",
             updated_at: "2024-01-01T00:00:00.000Z",
             tags: [{ name: "test-tag", slug: "test-tag" }],
+            total_count: 1,
           },
         ],
       });
@@ -32,10 +33,12 @@ describe("repository", () => {
         field: "",
         tag: "",
         limit: 10,
+        page: 1,
       });
 
-      expect(result).toHaveLength(1);
-      expect(result[0]).toMatchObject({
+      expect(result.notes).toHaveLength(1);
+      expect(result.totalFilteredNotes).toBe(1);
+      expect(result.notes[0]).toMatchObject({
         slug: "test-note",
         title: "Test Note",
         field: "Algebra",
@@ -53,9 +56,11 @@ describe("repository", () => {
         field: "",
         tag: "",
         limit: 10,
+        page: 1,
       });
 
-      expect(result).toHaveLength(0);
+      expect(result.notes).toHaveLength(0);
+      expect(result.totalFilteredNotes).toBe(0);
     });
   });
 
