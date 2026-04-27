@@ -7,7 +7,7 @@ services:
       [
         "/bin/sh",
         "-c",
-        "export MATHKB_DATABASE_URL=\"$${MATHKB_APP_DATABASE_URL:-$${MATHKB_DATABASE_URL:-}}\"; exec bun server.js",
+        "export MATHKB_DATABASE_URL=\"$${MATHKB_APP_DATABASE_URL:-$${MATHKB_DATABASE_URL:-}}\"; exec node server.js",
       ]
     ports:
       - "3103:3000"
