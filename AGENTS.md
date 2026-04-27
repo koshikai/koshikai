@@ -70,9 +70,12 @@ SITE_URL=variant ごとの canonical / metadata 用 URL
 notes_DATABASE_URL=postgresql://user:password@host:5432/notes
 notes_APP_DATABASE_URL=postgresql://user:password@host:5432/notes
 MCP_DATABASE_URL=postgresql://user:password@host:5432/notes
+notes_DATABASE_SSL=disable (default) | require
+notes_POOL_MAX=10 (default)
 MCP_BIND_HOST=0.0.0.0
 MCP_PORT=3004
 MCP_PATH=/mcp
+MCP_ALLOWED_HOSTS=comma-separated optional host allowlist
 ```
 
 ## 開発フロー
