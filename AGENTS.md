@@ -11,6 +11,7 @@
 - **スタイリング**: Tailwind CSS v4
 - **テスト**: Vitest + @testing-library/react + happy-dom
 - **Lint**: ESLint (eslint-config-next)
+- **バリデーション**: Zod v4
 - **MDX**: @next/mdx（コンテンツ管理用）
 
 ## 重要なファイル・ディレクトリ
