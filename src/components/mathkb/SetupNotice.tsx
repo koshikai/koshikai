@@ -20,7 +20,7 @@ export function SetupNotice({ message }: SetupNoticeProps) {
       </p>
       <div className="mt-6 flex flex-wrap gap-3">
         <Link
-          href="https://koshikai.dev"
+          href="/?v=portfolio"
           className="inline-flex items-center gap-2 rounded-xl bg-sky-600 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-sky-500"
         >
           ポートフォリオに戻る

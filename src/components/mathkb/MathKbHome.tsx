@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookOpenText, Layers3, Search, Tags } from "lucide-react";
+import { ArrowLeft, BookOpenText, Layers3, Search, Tags } from "lucide-react";
 
 import { SetupNotice } from "@/components/mathkb/SetupNotice";
 import type { MathKbHomeState, MathKbSearchFilters, MathKbTag } from "@/lib/mathkb/types";
@@ -62,6 +62,20 @@ function TagPill({
 export function MathKbHome({ state }: MathKbHomeProps) {
   return (
     <div className="min-h-screen bg-page-gradient">
+      <header className="border-b border-zinc-200/60 bg-white/60 backdrop-blur dark:border-zinc-800/60 dark:bg-zinc-900/60">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-3 sm:px-8">
+          <Link
+            href="/?v=portfolio"
+            className="inline-flex items-center gap-2 text-sm font-bold text-zinc-600 transition-colors hover:text-sky-700 dark:text-zinc-300 dark:hover:text-sky-300"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            ポートフォリオに戻る
+          </Link>
+          <span className="text-[10px] font-bold tracking-[0.2em] text-zinc-400 uppercase dark:text-zinc-500">
+            Private
+          </span>
+        </div>
+      </header>
       <main id="main-content" className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 py-10 sm:px-8 sm:py-14">
         <section className="rounded-3xl border border-white/70 bg-white/70 p-6 shadow-sm backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/70">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
