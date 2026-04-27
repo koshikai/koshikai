@@ -17,7 +17,7 @@ services:
       - NODE_ENV=production
       - SITE_VARIANT=mathkb
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3000/healthz >/dev/null || exit 1"]
+      test: ["CMD-SHELL", "node -e \"require('http').get('http://127.0.0.1:3000/healthz', (r) => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))\""]
       interval: 30s
       timeout: 5s
       retries: 3
@@ -44,7 +44,7 @@ services:
       - MCP_PATH=/mcp
       - MATHKB_POOL_MAX=3
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3004/healthz >/dev/null || exit 1"]
+      test: ["CMD-SHELL", "bun -e \"await fetch('http://127.0.0.1:3004/healthz').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))\""]
       interval: 30s
       timeout: 5s
       retries: 3
