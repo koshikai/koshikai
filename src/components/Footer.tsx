@@ -1,6 +1,7 @@
 import { VariantSwitcher } from "./VariantSwitcher";
+import type { SiteVariant } from "@/lib/site-config";
 
-export function Footer({ currentVariant }: { currentVariant?: string }) {
+export function Footer({ currentVariant }: { currentVariant?: SiteVariant }) {
     return (
         <footer className="w-full mt-12 py-12 bg-[#fffbf0] dark:bg-[#1a1625] border-t-4 border-dashed border-zinc-200 dark:border-zinc-800 motion-safe:transition-[background-color,border-color] motion-safe:duration-300">
             <div className="mx-auto max-w-4xl px-6 flex flex-col items-center gap-6 sm:flex-row sm:justify-between">

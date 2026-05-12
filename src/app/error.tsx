@@ -11,7 +11,7 @@ interface ErrorPageProps {
 export default function ErrorPage({ error, reset }: ErrorPageProps) {
   return (
     <main id="main-content" className="flex min-h-screen items-center justify-center bg-page-gradient px-6 py-12">
-      <section className="w-full max-w-2xl rounded-[2rem] border border-white/70 bg-white/80 p-10 text-center shadow-[0_30px_80px_-48px_rgba(15,23,42,0.45)] backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/70">
+      <section role="alert" className="w-full max-w-2xl rounded-[2rem] border border-white/70 bg-white/80 p-10 text-center shadow-[0_30px_80px_-48px_rgba(15,23,42,0.45)] backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/70">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-300">
           <RefreshCw className="h-7 w-7" />
         </div>
