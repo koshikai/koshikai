@@ -303,8 +303,8 @@ export function PortfolioHome() {
             <ProjectCard
               title="no"
               subtitle="nosmoke.koshikai.dev"
-              description="Next.js 16.2 採用の高度な PWA。Optimistic UI や Glassmorphism によるネイティブ級の体験。Jest による網羅的なテストと Recharts での可視化を統合。"
-              features={["Next.js 16.2", "PWA", "Optimistic UI", "Jest/RTL"]}
+              description="Next.js 16.2 + PWA に Optimistic UI を組み合わせたネイティブ級の禁煙記録アプリ。AI コーチ（OpenRouter）と 3D バッジ（Three.js）で継続を支援。"
+              features={["Next.js 16.2", "PWA", "AI Coach", "3D Badges"]}
               href="https://nosmoke.koshikai.dev"
               accentColor="green"
               icon={<Cigarette className="h-7 w-7" />}
@@ -313,7 +313,7 @@ export function PortfolioHome() {
             <ProjectCard
               title="KariGallery"
               subtitle="gallery.koshikai.dev"
-              description="Prisma v7.7 と Auth.js を軸にしたイラスト管理 SaaS。Stripe 決済やブラウザ画像圧縮、Framer Motion による滑らかな UI を備えたフルスタック構成。"
+              description="友人のイラスト販売用に制作したが、現在は偽名によるダミーデータを表示するギャラリーとして運用中。Stripe 決済は技術検証済み。"
               features={["Prisma v7.7", "Auth.js", "Stripe API", "Image Compression"]}
               href="https://gallery.koshikai.dev"
               accentColor="purple"
