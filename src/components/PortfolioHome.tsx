@@ -223,6 +223,16 @@ export function PortfolioHome() {
               icon={<Images className="h-7 w-7" />}
             />
           </div>
+
+          <div className="mt-10 text-center">
+            <Link
+              href="/cases"
+              className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white/80 px-5 py-3 text-sm font-bold text-zinc-700 shadow-sm transition-colors hover:border-sky-300 hover:text-sky-700 dark:border-zinc-700 dark:bg-zinc-900/60 dark:text-zinc-300 dark:hover:border-sky-700 dark:hover:text-sky-200"
+            >
+              他の事例を見る
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </div>
         </section>
 
         {/* --- Research --- */}
