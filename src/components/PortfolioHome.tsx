@@ -11,7 +11,7 @@ import Link from "next/link";
 import { Footer } from "@/components/Footer";
 import { ProjectCard } from "@/components/ProjectCard";
 import { ResearchSection } from "@/components/ResearchSection";
-import { caseItems } from "@/lib/cases";
+import { caseItems, type CaseItem } from "@/lib/cases";
 
 const sections = [
   { id: "hero", label: "Top" },
@@ -64,10 +64,14 @@ const solveAreas = [
   },
 ];
 
+function assertFeaturedCase(item: CaseItem): item is typeof item & { challenge: string; action: string; result: string } {
+  return !!(item.challenge && item.action && item.result);
+}
+
 const featuredCaseSlugs = ["immich-distributed", "nosmoke", "karigallery"];
 
-const featuredCases = caseItems.filter((item) =>
-  featuredCaseSlugs.includes(item.slug),
+const featuredCases = caseItems.filter(
+  (item) => featuredCaseSlugs.includes(item.slug) && assertFeaturedCase(item),
 );
 
 const operationHighlights = [
@@ -219,7 +223,7 @@ export function PortfolioHome() {
           <div className="grid gap-6 md:grid-cols-3">
             {featuredCases.map((study) => (
               <article
-                key={study.title}
+                key={study.slug}
                 className="rounded-3xl border-2 border-zinc-200 bg-white/80 p-6 shadow-sm dark:border-zinc-700 dark:bg-zinc-900/50 hover:shadow-lg transition-shadow"
               >
                 <h3 className="mb-4 text-xl font-bold text-zinc-800 dark:text-zinc-100">

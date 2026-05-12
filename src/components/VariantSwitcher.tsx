@@ -2,9 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { setSiteVariant } from "@/lib/actions";
+import type { SiteVariant } from "@/lib/site-config";
 
 interface VariantSwitcherProps {
-  currentVariant: string;
+  currentVariant: SiteVariant;
 }
 
 export function VariantSwitcher({ currentVariant }: VariantSwitcherProps) {
