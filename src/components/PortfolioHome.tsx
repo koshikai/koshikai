@@ -1,25 +1,15 @@
-import {
-  ArrowRight,
-  Cigarette,
-  Database,
-  Images,
-  Server,
-  ShieldCheck,
-  Wrench,
-} from "lucide-react";
+import { ArrowRight, Cigarette, Database, Images, Server, ShieldCheck, Wrench } from "lucide-react";
 import Link from "next/link";
 import { Footer } from "@/components/Footer";
 import { ProjectCard } from "@/components/ProjectCard";
 import { ResearchSection } from "@/components/ResearchSection";
-import { caseItems, type CaseItem } from "@/lib/cases";
 
 const sections = [
   { id: "hero", label: "Top" },
   { id: "principles", label: "Principles" },
-  { id: "cases", label: "Cases" },
-  { id: "infrastructure", label: "Infra" },
   { id: "projects", label: "Projects" },
   { id: "research", label: "Research" },
+  { id: "infrastructure", label: "Infra" },
   { id: "toolbox", label: "Toolbox" },
 ];
 
@@ -64,16 +54,6 @@ const solveAreas = [
   },
 ];
 
-function assertFeaturedCase(item: CaseItem): item is typeof item & { challenge: string; action: string; result: string } {
-  return !!(item.challenge && item.action && item.result);
-}
-
-const featuredCaseSlugs = ["immich-distributed", "nosmoke", "karigallery"];
-
-const featuredCases = caseItems.filter(
-  (item) => featuredCaseSlugs.includes(item.slug) && assertFeaturedCase(item),
-);
-
 const operationHighlights = [
   "Proxmox VE によるサーバー仮想化とリソース管理",
   "Tailscale によるセキュアな拠点間通信とリモートアクセス",
@@ -83,10 +63,12 @@ const operationHighlights = [
 ];
 
 const toolboxByUse = [
-  { use: "Front-end", tools: "Next.js, TypeScript, Tailwind CSS, Framer Motion" },
-  { use: "Back-end & DB", tools: "Node.js, Prisma, PostgreSQL, Redis" },
-  { use: "Infrastructure", tools: "Proxmox, Docker, Tailscale, Cloudflare" },
-  { use: "Management", tools: "NocoDB, Linear, GitHub Actions" },
+  { use: "Front-end", tools: "Next.js, React 19, TypeScript, Tailwind CSS, Framer Motion" },
+  { use: "Back-end & DB", tools: "Node.js, Prisma, PostgreSQL, Redis, Auth.js" },
+  { use: "Infrastructure", tools: "Proxmox, Docker, Tailscale, Cloudflare, AWS" },
+  { use: "Languages & Runtimes", tools: "TypeScript, Python, Bun, C#, .NET" },
+  { use: "Quality & Testing", tools: "Playwright, Jest, React Testing Library" },
+  { use: "AI & Research", tools: "PyTorch, MCP, RAG, Prompt Engineering, Marimo" },
 ];
 
 export function PortfolioHome() {
@@ -211,48 +193,42 @@ export function PortfolioHome() {
           </div>
         </section>
 
-        {/* --- Case Studies --- */}
-        <section id="cases" className="mx-auto max-w-4xl px-6 py-12 scroll-mt-24 w-full">
+        {/* --- Projects --- */}
+        <section id="projects" className="mx-auto max-w-4xl px-6 py-12 scroll-mt-24 w-full">
           <div className="mb-10 flex items-center gap-4">
             <h2 className="text-pretty text-3xl font-black italic tracking-tight text-zinc-800 dark:text-zinc-100 uppercase">
-              Case Studies
+              Existing Projects
             </h2>
             <div className="h-[2px] flex-1 bg-linear-to-r from-zinc-200 via-zinc-400/30 to-transparent dark:from-zinc-800 dark:via-zinc-600/30 dark:to-transparent rounded-full"></div>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-3">
-            {featuredCases.map((study) => (
-              <article
-                key={study.slug}
-                className="rounded-3xl border-2 border-zinc-200 bg-white/80 p-6 shadow-sm dark:border-zinc-700 dark:bg-zinc-900/50 hover:shadow-lg transition-shadow"
-              >
-                <h3 className="mb-4 text-xl font-bold text-zinc-800 dark:text-zinc-100">
-                  {study.title}
-                </h3>
-                <div className="space-y-3 text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
-                  <p>
-                    <span className="font-semibold text-zinc-800 dark:text-zinc-100 italic">課題:</span> {study.challenge}
-                  </p>
-                  <p>
-                    <span className="font-semibold text-zinc-800 dark:text-zinc-100 italic">対応:</span> {study.action}
-                  </p>
-                  <p>
-                    <span className="font-semibold text-zinc-800 dark:text-zinc-100 italic">結果:</span> {study.result}
-                  </p>
-                </div>
-                <Link
-                  href={`/cases/${study.slug}`}
-                  className="mt-6 inline-flex items-center gap-1 text-sm font-bold text-sky-700 hover:text-sky-600 dark:text-sky-300 dark:hover:text-sky-200"
-                >
-                  詳細を見る
-                  <ArrowRight className="h-3 w-3" aria-hidden="true" />
-                </Link>
-              </article>
-            ))}
+          <div className="grid gap-8 sm:grid-cols-2">
+            <ProjectCard
+              title="no"
+              subtitle="nosmoke.koshikai.dev"
+              description="Next.js 16.2 + PWA に Optimistic UI を組み合わせたネイティブ級の禁煙記録アプリ。AI コーチ（OpenRouter）と 3D バッジ（Three.js）で継続を支援。"
+              features={["Next.js 16.2", "PWA", "AI Coach", "3D Badges"]}
+              href="https://nosmoke.koshikai.dev"
+              accentColor="green"
+              icon={<Cigarette className="h-7 w-7" />}
+            />
+
+            <ProjectCard
+              title="KariGallery"
+              subtitle="gallery.koshikai.dev"
+              description="友人のイラスト販売用に制作したが、現在は偽名によるダミーデータを表示するギャラリーとして運用中。Stripe 決済は技術検証済み。"
+              features={["Prisma v7.7", "Auth.js", "Stripe API", "Image Compression"]}
+              href="https://gallery.koshikai.dev"
+              accentColor="purple"
+              icon={<Images className="h-7 w-7" />}
+            />
           </div>
         </section>
 
-        {/* --- Infrastructure Highlights --- */}
+        {/* --- Research --- */}
+        <ResearchSection id="research" className="scroll-mt-24" />
+
+        {/* --- Infrastructure --- */}
         <section id="infrastructure" className="mx-auto max-w-4xl px-6 py-12 scroll-mt-24 w-full">
           <div className="mb-10 flex items-center gap-4">
             <h2 className="text-pretty text-3xl font-black italic tracking-tight text-zinc-800 dark:text-zinc-100 uppercase">
@@ -287,38 +263,6 @@ export function PortfolioHome() {
                 </li>
               ))}
             </ul>
-          </div>
-        </section>
-
-        {/* --- Projects --- */}
-        <section id="projects" className="mx-auto max-w-4xl px-6 py-12 scroll-mt-24 w-full">
-          <div className="mb-10 flex items-center gap-4">
-            <h2 className="text-pretty text-3xl font-black italic tracking-tight text-zinc-800 dark:text-zinc-100 uppercase">
-              Existing Projects
-            </h2>
-            <div className="h-[2px] flex-1 bg-linear-to-r from-zinc-200 via-zinc-400/30 to-transparent dark:from-zinc-800 dark:via-zinc-600/30 dark:to-transparent rounded-full"></div>
-          </div>
-
-          <div className="grid gap-8 sm:grid-cols-2">
-            <ProjectCard
-              title="no"
-              subtitle="nosmoke.koshikai.dev"
-              description="Next.js 16.2 + PWA に Optimistic UI を組み合わせたネイティブ級の禁煙記録アプリ。AI コーチ（OpenRouter）と 3D バッジ（Three.js）で継続を支援。"
-              features={["Next.js 16.2", "PWA", "AI Coach", "3D Badges"]}
-              href="https://nosmoke.koshikai.dev"
-              accentColor="green"
-              icon={<Cigarette className="h-7 w-7" />}
-            />
-
-            <ProjectCard
-              title="KariGallery"
-              subtitle="gallery.koshikai.dev"
-              description="友人のイラスト販売用に制作したが、現在は偽名によるダミーデータを表示するギャラリーとして運用中。Stripe 決済は技術検証済み。"
-              features={["Prisma v7.7", "Auth.js", "Stripe API", "Image Compression"]}
-              href="https://gallery.koshikai.dev"
-              accentColor="purple"
-              icon={<Images className="h-7 w-7" />}
-            />
           </div>
         </section>
 
