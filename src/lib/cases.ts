@@ -41,8 +41,8 @@ export const caseItems: CaseItem[] = [
     slug: "nosmoke",
     title: "NoSmoke: 洗練された PWA 支援アプリ",
     summary:
-      "Next.js 16.2 と Optimistic UI による、ネイティブ級の操作感を持つ禁煙支援 PWA の開発。",
-    tags: ["Next.js", "PWA", "Prisma", "Framer Motion", "Recharts"],
+      "Next.js 16.2 + PWA + Optimistic UI によるネイティブ級の禁煙記録アプリ。AI コーチ（OpenRouter）と 3D バッジ（Three.js）で継続を支援。",
+    tags: ["Next.js", "PWA", "AI Coach", "Three.js", "Recharts"],
     publishedAt: "2026-04-21",
     challenge:
       "既存の禁煙アプリが複雑すぎたり、オフライン時の挙動が不安定だったりした。",
@@ -55,19 +55,19 @@ export const caseItems: CaseItem[] = [
   },
   {
     slug: "karigallery",
-    title: "KariGallery: 決済・認証統合ギャラリー",
+    title: "KariGallery: ダミーデータ検証ギャラリー",
     summary:
-      "Auth.js と Stripe API を統合し、ブラウザ画像圧縮や最新の Prisma v7.7 を活用した商用レベルの SaaS 基盤。",
+      "友人のイラスト販売用に制作したが、現在は偽名によるダミーデータを表示。Stripe 決済は技術検証済み。",
     tags: ["Auth.js", "Stripe", "Prisma v7.7", "Image Processing"],
     publishedAt: "2026-04-21",
     challenge:
-      "散らばったイラスト資産を、一箇所で管理しつつ決済や公開まで行いたい。",
+      "友人のイラストを一箇所で管理・公開したい。加えて決済機能の技術検証も行いたい。",
     action:
-      "Prisma v7 と Auth.js で基盤を刷新。Stripe と連携し、安全な課金フローを実装。",
+      "Prisma v7 と Auth.js で基盤を構築。Stripe と連携し決済フローを実装し、Sandbox 環境で動作確認。",
     result:
-      "アセットのアップロードから公開、販売までが一元管理可能になった。",
+      "技術的には販売可能な状態だが、法的手続きの負荷を考慮し本番決済は停止。現在は偽名のダミーデータで運用中。",
     learning:
-      "サードパーティ API との堅牢な連携と、拡張性を重視した DB スキーマ設計。",
+      "個人開発では技術面だけでなく、法律・運用の準備コストも判断材料に含める必要があること。",
   },
   {
     slug: "shuukatsu",
