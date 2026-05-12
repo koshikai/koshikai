@@ -6,6 +6,10 @@ export interface CaseItem {
   summary: string;
   tags: string[];
   publishedAt: string;
+  challenge?: string;
+  action?: string;
+  result?: string;
+  learning?: string;
 }
 
 export const caseItems: CaseItem[] = [
@@ -16,6 +20,14 @@ export const caseItems: CaseItem[] = [
       "Proxmox と Windows GPU をネットワーク越しに連携させ、機械学習タスクを効率的に分散処理する写真管理基盤の構築。",
     tags: ["Immich", "Distributed", "GPU Offloading", "Docker", "Proxmox"],
     publishedAt: "2026-04-21",
+    challenge:
+      "単一の NAS 故障による全データの消失リスクと、家族全員での共有漏れ。",
+    action:
+      "Proxmox + Docker で Immich を構築。ストレージは ZFS ミラーで冗長化し、バックアップを自動化。",
+    result:
+      "家族全員がどこからでも写真をアップロード可能になり、データ消失リスクを最小化。",
+    learning:
+      "計算リソースとストレージを適切に分離し、メンテナンス性を高める構成の重要性。",
   },
   {
     slug: "infrastructure",
@@ -32,6 +44,14 @@ export const caseItems: CaseItem[] = [
       "Next.js 16.2 と Optimistic UI による、ネイティブ級の操作感を持つ禁煙支援 PWA の開発。",
     tags: ["Next.js", "PWA", "Prisma", "Framer Motion", "Recharts"],
     publishedAt: "2026-04-21",
+    challenge:
+      "既存の禁煙アプリが複雑すぎたり、オフライン時の挙動が不安定だったりした。",
+    action:
+      "Next.js と PWA を組み合わせ、オフライン優先の UI を構築。グラフによる可視化を統合。",
+    result:
+      "自身の禁煙継続に成功し、軽量かつ信頼性の高いツールとしての実用性を証明。",
+    learning:
+      "ユーザーの心理的な障壁を下げるための、徹底的にスムーズな UI 操作感の追求。",
   },
   {
     slug: "karigallery",
@@ -40,6 +60,14 @@ export const caseItems: CaseItem[] = [
       "Auth.js と Stripe API を統合し、ブラウザ画像圧縮や最新の Prisma v7.7 を活用した商用レベルの SaaS 基盤。",
     tags: ["Auth.js", "Stripe", "Prisma v7.7", "Image Processing"],
     publishedAt: "2026-04-21",
+    challenge:
+      "散らばったイラスト資産を、一箇所で管理しつつ決済や公開まで行いたい。",
+    action:
+      "Prisma v7 と Auth.js で基盤を刷新。Stripe と連携し、安全な課金フローを実装。",
+    result:
+      "アセットのアップロードから公開、販売までが一元管理可能になった。",
+    learning:
+      "サードパーティ API との堅牢な連携と、拡張性を重視した DB スキーマ設計。",
   },
   {
     slug: "shuukatsu",

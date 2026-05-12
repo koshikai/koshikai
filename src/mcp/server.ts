@@ -297,7 +297,7 @@ async function startStdioServer() {
   const transport = new StdioServerTransport();
 
   await server.connect(transport);
-  log("stdio transport ready");
+  logStructured("info", "stdio transport ready");
 }
 
 // Simple in-memory rate limiter: 60 requests per minute per IP
@@ -409,7 +409,7 @@ async function startHttpServer() {
 
   await new Promise<void>((resolve, reject) => {
     const server = app.listen(port, host, () => {
-      log(`HTTP transport ready at http://${host}:${port}${path}`);
+      logStructured("info", `HTTP transport ready at http://${host}:${port}${path}`);
       resolve();
     });
 

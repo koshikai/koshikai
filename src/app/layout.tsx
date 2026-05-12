@@ -5,7 +5,7 @@ import "@fontsource/m-plus-rounded-1c/japanese-500.css";
 import "@fontsource/m-plus-rounded-1c/japanese-700.css";
 import "@fontsource/m-plus-rounded-1c/japanese-800.css";
 import "./globals.css";
-import { getSiteConfig } from "@/lib/site-config";
+import { getEffectiveSiteConfig } from "@/lib/site-config";
 import { DevOverlay } from "@/components/DevOverlay";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
@@ -19,7 +19,7 @@ export const viewport: Viewport = {
 };
 
 export async function generateMetadata(): Promise<Metadata> {
-  const site = getSiteConfig();
+  const site = await getEffectiveSiteConfig();
   const isMathKb = site.variant === "mathkb";
 
   return {
@@ -99,7 +99,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const site = getSiteConfig();
+  const site = await getEffectiveSiteConfig();
   const themeClass = await getThemeClass();
   const jsonLd =
     site.variant === "mathkb"

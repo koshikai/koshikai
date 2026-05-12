@@ -21,14 +21,6 @@
   --foreground: #fcecff;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-    --background: #1a1625;
-    --foreground: #fcecff;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
@@ -62,6 +54,10 @@ body {
     background-image: radial-gradient(circle at top, rgba(125,211,252,0.2), transparent 35%), linear-gradient(180deg, #f8fafc 0%, #eef2ff 55%, #f8fafc 100%);
   }
 
+  .dark .bg-page-gradient {
+    background-image: radial-gradient(circle at top, rgba(56,189,248,0.18), transparent 28%), linear-gradient(180deg, #09090b 0%, #111827 60%, #09090b 100%);
+  }
+
   .case-article-shell {
     border-radius: var(--radius-3xl);
     border: 1px solid rgba(255, 255, 255, 0.7);
@@ -70,6 +66,11 @@ body {
     box-shadow: 0 30px 80px -48px rgba(15, 23, 42, 0.45);
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
+  }
+
+  .dark .case-article-shell {
+    border-color: var(--color-zinc-800);
+    background-color: rgba(24, 24, 27, 0.75);
   }
 
   .case-article-content {
@@ -84,18 +85,6 @@ body {
     }
   }
 
-  @media (prefers-color-scheme: dark) {
-    .case-article-shell {
-      border-color: var(--color-zinc-800);
-      background-color: rgba(24, 24, 27, 0.75);
-    }
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .bg-page-gradient {
-    background-image: radial-gradient(circle at top, rgba(56,189,248,0.18), transparent 28%), linear-gradient(180deg, #09090b 0%, #111827 60%, #09090b 100%);
-  }
 }
 
 @keyframes float {

@@ -11,6 +11,7 @@ import Link from "next/link";
 import { Footer } from "@/components/Footer";
 import { ProjectCard } from "@/components/ProjectCard";
 import { ResearchSection } from "@/components/ResearchSection";
+import { caseItems } from "@/lib/cases";
 
 const sections = [
   { id: "hero", label: "Top" },
@@ -63,32 +64,11 @@ const solveAreas = [
   },
 ];
 
-const caseStudies = [
-  {
-    title: "自宅内写真管理の分散化",
-    slug: "immich-distributed",
-    challenge: "単一の NAS 故障による全データの消失リスクと、家族全員での共有漏れ。",
-    action: "Proxmox + Docker で Immich を構築。ストレージは ZFS ミラーで冗長化し、バックアップを自動化。",
-    result: "家族全員がどこからでも写真をアップロード可能になり、データ消失リスクを最小化。",
-    learning: "計算リソースとストレージを適切に分離し、メンテナンス性を高める構成の重要性。",
-  },
-  {
-    title: "禁煙支援 PWA の開発",
-    slug: "nosmoke",
-    challenge: "既存の禁煙アプリが複雑すぎたり、オフライン時の挙動が不安定だったりした。",
-    action: "Next.js と PWA を組み合わせ、オフライン優先の UI を構築。グラフによる可視化を統合。",
-    result: "自身の禁煙継続に成功し、軽量かつ信頼性の高いツールとしての実用性を証明。",
-    learning: "ユーザーの心理的な障壁を下げるための、徹底的にスムーズな UI 操作感の追求。",
-  },
-  {
-    title: "イラスト管理 SaaS への移行",
-    slug: "karigallery",
-    challenge: "散らばったイラスト資産を、一箇所で管理しつつ決済や公開まで行いたい。",
-    action: "Prisma v7 と Auth.js で基盤を刷新。Stripe と連携し、安全な課金フローを実装。",
-    result: "アセットのアップロードから公開、販売までが一元管理可能になった。",
-    learning: "サードパーティ API との堅牢な連携と、拡張性を重視した DB スキーマ設計。",
-  },
-];
+const featuredCaseSlugs = ["immich-distributed", "nosmoke", "karigallery"];
+
+const featuredCases = caseItems.filter((item) =>
+  featuredCaseSlugs.includes(item.slug),
+);
 
 const operationHighlights = [
   "Proxmox VE によるサーバー仮想化とリソース管理",
@@ -237,7 +217,7 @@ export function PortfolioHome() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-3">
-            {caseStudies.map((study) => (
+            {featuredCases.map((study) => (
               <article
                 key={study.title}
                 className="rounded-3xl border-2 border-zinc-200 bg-white/80 p-6 shadow-sm dark:border-zinc-700 dark:bg-zinc-900/50 hover:shadow-lg transition-shadow"
