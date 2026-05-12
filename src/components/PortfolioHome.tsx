@@ -266,9 +266,6 @@ export function PortfolioHome() {
           </div>
         </section>
 
-        {/* --- Research --- */}
-        <ResearchSection id="research" className="scroll-mt-24" />
-
         {/* --- Toolbox --- */}
         <section id="toolbox" className="mx-auto max-w-4xl px-6 py-12 pb-32 scroll-mt-24 w-full">
           <div className="mb-10 flex items-center gap-4">
