@@ -58,7 +58,7 @@ export function SearchForm({ filters, fields, tags }: SearchFormProps) {
             name="q"
             defaultValue={filters.query}
             placeholder="定理名、キーワード、メモ断片で検索"
-            className="rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none ring-0 transition-colors focus:border-sky-400 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50"
+            className="rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none ring-0 transition-colors focus:border-sky-400 focus-visible:ring-2 focus-visible:ring-sky-500 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50"
           />
         </div>
 
@@ -70,7 +70,7 @@ export function SearchForm({ filters, fields, tags }: SearchFormProps) {
             id="search-field"
             name="field"
             defaultValue={filters.field}
-            className="rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition-colors focus:border-sky-400 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50"
+            className="rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition-colors focus:border-sky-400 focus-visible:ring-2 focus-visible:ring-sky-500 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50"
           >
             <option value="">All fields</option>
             {fields.map((field) => (
@@ -89,7 +89,7 @@ export function SearchForm({ filters, fields, tags }: SearchFormProps) {
             id="search-tag"
             name="tag"
             defaultValue={filters.tag}
-            className="rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition-colors focus:border-sky-400 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50"
+            className="rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition-colors focus:border-sky-400 focus-visible:ring-2 focus-visible:ring-sky-500 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50"
           >
             <option value="">All tags</option>
             {tags.map((tag) => (
@@ -103,9 +103,9 @@ export function SearchForm({ filters, fields, tags }: SearchFormProps) {
         <button
           type="submit"
           disabled={isPending}
-          className="rounded-2xl bg-sky-600 px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-sky-500 disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded-2xl bg-sky-600 px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-sky-500 focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isPending ? "..." : "Search"}
+          {isPending ? "…" : "Search"}
         </button>
 
         <Link

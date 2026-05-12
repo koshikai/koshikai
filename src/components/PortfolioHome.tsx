@@ -29,13 +29,13 @@ function SideNav() {
         <a
           key={section.id}
           href={`#${section.id}`}
-          className="group flex items-center justify-end gap-3 text-right transition-all"
+                  className="group flex items-center justify-end gap-3 text-right transition-[gap,opacity] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sky-500 rounded"
           aria-label={`Jump to ${section.label}`}
         >
-          <span className="pointer-events-none text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-500">
+          <span className="pointer-events-none text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 opacity-0 transition-[opacity,transform] group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-500">
             {section.label}
           </span>
-          <div className="h-1 w-4 rounded-full bg-zinc-200 transition-all group-hover:w-8 group-hover:bg-sky-500 dark:bg-zinc-800" />
+          <div className="h-1 w-4 rounded-full bg-zinc-200 transition-[width,background-color] group-hover:w-8 group-hover:bg-sky-500 dark:bg-zinc-800" />
         </a>
       ))}
     </nav>
@@ -210,7 +210,7 @@ export function PortfolioHome() {
               return (
                 <article
                   key={area.title}
-                  className="group rounded-3xl border-2 border-zinc-200 bg-white/80 p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-sky-300 dark:border-zinc-700 dark:bg-zinc-900/50 dark:hover:border-sky-800"
+                  className="group rounded-3xl border-2 border-zinc-200 bg-white/80 p-6 shadow-sm transition-[transform,border-color] hover:-translate-y-1 hover:border-sky-300 dark:border-zinc-700 dark:bg-zinc-900/50 dark:hover:border-sky-800"
                 >
                   <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-50 text-sky-600 group-hover:bg-sky-600 group-hover:text-white dark:bg-sky-950/40 dark:text-sky-300 transition-colors">
                     <Icon className="h-6 w-6" aria-hidden="true" />
@@ -240,7 +240,7 @@ export function PortfolioHome() {
             {caseStudies.map((study) => (
               <article
                 key={study.title}
-                className="rounded-3xl border-2 border-zinc-200 bg-white/80 p-6 shadow-sm dark:border-zinc-700 dark:bg-zinc-900/50 hover:shadow-lg transition-all"
+                className="rounded-3xl border-2 border-zinc-200 bg-white/80 p-6 shadow-sm dark:border-zinc-700 dark:bg-zinc-900/50 hover:shadow-lg transition-shadow"
               >
                 <h3 className="mb-4 text-xl font-bold text-zinc-800 dark:text-zinc-100">
                   {study.title}
@@ -261,7 +261,7 @@ export function PortfolioHome() {
                   className="mt-6 inline-flex items-center gap-1 text-sm font-bold text-sky-700 hover:text-sky-600 dark:text-sky-300 dark:hover:text-sky-200"
                 >
                   詳細を見る
-                  <ArrowRight className="h-3 w-3" />
+                  <ArrowRight className="h-3 w-3" aria-hidden="true" />
                 </Link>
               </article>
             ))}
@@ -290,7 +290,7 @@ export function PortfolioHome() {
                 className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-emerald-700 hover:text-emerald-600 dark:text-emerald-300 dark:hover:text-emerald-200"
               >
                 詳細: Immich 分散アーキテクチャの構築
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
             <ul role="list" className="space-y-3 text-sm text-zinc-600 dark:text-zinc-300">

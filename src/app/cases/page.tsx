@@ -20,7 +20,7 @@ export default function CasesPage() {
             href="/"
             className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white/80 px-4 py-2 text-sm font-bold text-zinc-700 transition-colors hover:border-sky-300 hover:text-sky-700 dark:border-zinc-700 dark:bg-zinc-900/70 dark:text-zinc-200 dark:hover:border-sky-700 dark:hover:text-sky-200"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             Back to top
           </Link>
         </div>
@@ -65,7 +65,7 @@ export default function CasesPage() {
                 className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-sky-700 hover:text-sky-600 sm:mt-6 dark:text-sky-300 dark:hover:text-sky-200"
               >
                 詳しく見る
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </article>
           ))}

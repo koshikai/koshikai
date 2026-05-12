@@ -79,7 +79,7 @@ export function ProjectCard({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`group relative flex flex-col gap-4 rounded-[2.5rem] border ${colors.border} ${colors.bg} ${colors.hover} ${colors.shadow} backdrop-blur-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-400 dark:focus-visible:outline-zinc-600 p-7 transition-all duration-500 hover:-translate-y-2`}
+      className={`group relative flex flex-col gap-4 rounded-[2.5rem] border ${colors.border} ${colors.bg} ${colors.hover} ${colors.shadow} backdrop-blur-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-400 dark:focus-visible:outline-zinc-600 p-7 transition-[transform,box-shadow] duration-500 hover:-translate-y-2`}
     >
       {/* Background radial glow */}
       <div className={`absolute top-0 right-0 h-32 w-32 bg-radial ${colors.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-700`}></div>
@@ -87,11 +87,11 @@ export function ProjectCard({
       <div className="flex items-start justify-between">
         <div
           aria-hidden="true"
-          className={`flex h-14 w-14 items-center justify-center rounded-2xl ${colors.iconBg} text-white shadow-lg transition-all duration-500 group-hover:rotate-6 group-hover:scale-110`}
+          className={`flex h-14 w-14 items-center justify-center rounded-2xl ${colors.iconBg} text-white shadow-lg transition-transform duration-500 group-hover:rotate-6 group-hover:scale-110`}
         >
           {icon}
         </div>
-        <div className="rounded-full bg-zinc-100/50 dark:bg-zinc-700/50 p-2.5 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-2 group-hover:translate-x-0">
+        <div className="rounded-full bg-zinc-100/50 dark:bg-zinc-700/50 p-2.5 opacity-0 group-hover:opacity-100 transition-[opacity,transform] duration-500 translate-x-2 group-hover:translate-x-0">
           <ExternalLink
             aria-hidden="true"
             className="h-4 w-4 text-zinc-500 dark:text-zinc-300"

@@ -85,7 +85,7 @@ export function ResearchSection({
           return (
             <div
               key={item.title}
-              className={`group flex flex-col gap-4 rounded-[2.5rem] border border-white/50 bg-white/40 p-7 shadow-2xl backdrop-blur-xl dark:border-zinc-700/30 dark:bg-zinc-900/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)]`}
+              className={`group flex flex-col gap-4 rounded-[2.5rem] border border-white/50 bg-white/40 p-7 shadow-2xl backdrop-blur-xl dark:border-zinc-700/30 dark:bg-zinc-900/40 transition-[transform,box-shadow] duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)]`}
             >
               <div className="relative">
                 {/* Glowing Ambient Effect behind icon */}

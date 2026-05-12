@@ -73,7 +73,7 @@ export function MathKbHome({ state }: MathKbHomeProps) {
             href="/?v=portfolio"
             className="inline-flex items-center gap-2 text-sm font-bold text-zinc-600 transition-colors hover:text-sky-700 dark:text-zinc-300 dark:hover:text-sky-300"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             ポートフォリオに戻る
           </Link>
           <span className="text-[10px] font-bold tracking-[0.2em] text-zinc-400 uppercase dark:text-zinc-500">
@@ -96,19 +96,19 @@ export function MathKbHome({ state }: MathKbHomeProps) {
             <div className="flex gap-4">
               <div className="flex flex-col items-center px-4 border-r border-zinc-200 dark:border-zinc-800">
                 <p className="text-[10px] font-bold text-zinc-500 uppercase">Notes</p>
-                <p className="text-xl font-black text-zinc-900 dark:text-zinc-50">
+                <p className="text-xl font-black text-zinc-900 tabular-nums dark:text-zinc-50">
                   {state.status === "ready" ? state.data.totalNotes : "--"}
                 </p>
               </div>
               <div className="flex flex-col items-center px-4 border-r border-zinc-200 dark:border-zinc-800">
                 <p className="text-[10px] font-bold text-zinc-500 uppercase">Fields</p>
-                <p className="text-xl font-black text-zinc-900 dark:text-zinc-50">
+                <p className="text-xl font-black text-zinc-900 tabular-nums dark:text-zinc-50">
                   {state.status === "ready" ? state.data.fields.length : "--"}
                 </p>
               </div>
               <div className="flex flex-col items-center px-4">
                 <p className="text-[10px] font-bold text-zinc-500 uppercase">Tags</p>
-                <p className="text-xl font-black text-zinc-900 dark:text-zinc-50">
+                <p className="text-xl font-black text-zinc-900 tabular-nums dark:text-zinc-50">
                   {state.status === "ready" ? state.data.tags.length : "--"}
                 </p>
               </div>
@@ -129,7 +129,7 @@ export function MathKbHome({ state }: MathKbHomeProps) {
 
               <div className="rounded-[2rem] border border-zinc-200/80 bg-white/90 p-6 shadow-[0_24px_80px_-48px_rgba(15,23,42,0.45)] dark:border-zinc-800 dark:bg-zinc-900/80">
                 <div className="flex items-center gap-3">
-                  <Layers3 className="h-5 w-5 text-indigo-600 dark:text-indigo-300" />
+                  <Layers3 className="h-5 w-5 text-indigo-600 dark:text-indigo-300" aria-hidden="true" />
                   <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
                     Fields
                   </h2>
@@ -172,21 +172,21 @@ export function MathKbHome({ state }: MathKbHomeProps) {
                   <div className="flex items-center gap-1 rounded-xl bg-zinc-100 p-1 dark:bg-zinc-800">
                     <Link
                       href={buildFilterHref(state.data.filters, { view: "card" })}
-                      className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
+                      className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-colors ${
                         state.data.filters.view === "card"
                           ? "bg-white text-sky-600 shadow-sm dark:bg-zinc-700 dark:text-sky-300"
                           : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
-                      }`}
+                      } focus-visible:ring-2 focus-visible:ring-sky-500`}
                     >
                       Cards
                     </Link>
                     <Link
                       href={buildFilterHref(state.data.filters, { view: "list" })}
-                      className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
+                      className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-colors ${
                         state.data.filters.view === "list"
                           ? "bg-white text-sky-600 shadow-sm dark:bg-zinc-700 dark:text-sky-300"
                           : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
-                      }`}
+                      } focus-visible:ring-2 focus-visible:ring-sky-500`}
                     >
                       List
                     </Link>
@@ -311,7 +311,7 @@ export function MathKbHome({ state }: MathKbHomeProps) {
 
               <aside className="rounded-[2rem] border border-zinc-200/80 bg-white/90 p-6 shadow-[0_24px_80px_-48px_rgba(15,23,42,0.45)] dark:border-zinc-800 dark:bg-zinc-900/80">
                 <div className="flex items-center gap-3">
-                  <Tags className="h-5 w-5 text-rose-600 dark:text-rose-300" />
+                  <Tags className="h-5 w-5 text-rose-600 dark:text-rose-300" aria-hidden="true" />
                   <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
                     Tags
                   </h2>
