@@ -15,27 +15,19 @@ export interface CaseItem {
 export const caseItems: CaseItem[] = [
   {
     slug: "immich-distributed",
-    title: "Immich 分散アーキテクチャの構築",
+    title: "分散インフラ基盤の構築と運用",
     summary:
-      "Proxmox と Windows GPU をネットワーク越しに連携させ、機械学習タスクを効率的に分散処理する写真管理基盤の構築。",
-    tags: ["Immich", "Distributed", "GPU Offloading", "Docker", "Proxmox"],
+      "自宅サーバー上で Proxmox と LXC により 10 以上のサービスを統合運用。GPU オフロードによる Immich 分散処理と IaC 自動化で、低コストなインフラを実現。",
+    tags: ["Proxmox", "Immich", "GPU Offloading", "MCP", "IaC"],
     publishedAt: "2026-04-21",
     challenge:
-      "単一の NAS 故障による全データの消失リスクと、家族全員での共有漏れ。",
+      "単一ノードでは処理しきれない機械学習タスクと、増え続けるサービスの運用コスト。",
     action:
-      "Proxmox + Docker で Immich を構築。ストレージは ZFS ミラーで冗長化し、バックアップを自動化。",
+      "Proxmox + LXC でサービスを統合し、Windows GPU へ ML 処理をオフロード。IaC と MCP で運用を自動化。",
     result:
-      "家族全員がどこからでも写真をアップロード可能になり、データ消失リスクを最小化。",
+      "低消費電力なサーバーで快適なセルフホスト環境を実現。運用の自動化率が大幅に向上。",
     learning:
-      "計算リソースとストレージを適切に分離し、メンテナンス性を高める構成の重要性。",
-  },
-  {
-    slug: "infrastructure",
-    title: "高度な分散インフラ・AI自動化基盤",
-    summary:
-      "Proxmox VE と GPU オフロードによる分散構成、および AI エージェント用 MCP サーバーの自動同期スクリプト群の開発。",
-    tags: ["Proxmox", "LXC", "GPU Pass-through", "IaC", "MCP"],
-    publishedAt: "2026-04-21",
+      "リソースの適切な配置と、運用ルールの自動化が継続可能なインフラには不可欠。",
   },
   {
     slug: "nosmoke",
@@ -68,14 +60,6 @@ export const caseItems: CaseItem[] = [
       "技術的には販売可能な状態だが、法的手続きの負荷を考慮し本番決済は停止。現在は偽名のダミーデータで運用中。",
     learning:
       "個人開発では技術面だけでなく、法律・運用の準備コストも判断材料に含める必要があること。",
-  },
-  {
-    slug: "shuukatsu",
-    title: "就職活動・自己史分析プロジェクト",
-    summary:
-      "React 19, Tailwind CSS v4, Bun 等の最新スタックを用いた、自己史インポートとエピソード管理ツール。",
-    tags: ["React 19", "Tailwind CSS v4", "Bun", "PostgreSQL"],
-    publishedAt: "2026-04-21",
   },
   {
     slug: "home-backup",
