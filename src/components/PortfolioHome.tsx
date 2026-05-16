@@ -1,4 +1,4 @@
-import { ArrowRight, Cigarette, Database, Images, Server, ShieldCheck, Wrench } from "lucide-react";
+import { ArrowRight, Cigarette, Database, GraduationCap, Images, Server, ShieldCheck, Wrench } from "lucide-react";
 import Link from "next/link";
 import { Footer } from "@/components/Footer";
 import { ProjectCard } from "@/components/ProjectCard";
@@ -6,6 +6,7 @@ import { ResearchSection } from "@/components/ResearchSection";
 
 const sections = [
   { id: "hero", label: "Top" },
+  { id: "about", label: "About" },
   { id: "principles", label: "Principles" },
   { id: "projects", label: "Projects" },
   { id: "research", label: "Research" },
@@ -115,8 +116,13 @@ export function PortfolioHome() {
                 <span className="font-bold text-orange-500 dark:text-orange-400">
                   問題を前に進める
                 </span>
-                ことに取り組んでいます。
+                こと                に取り組んでいます。
               </p>
+
+              <div className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50/80 px-4 py-1.5 text-sm text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800/50 dark:text-zinc-400">
+                <GraduationCap className="h-3.5 w-3.5" aria-hidden="true" />
+                北海道大学大学院 情報科学院 修士1年
+              </div>
             </div>
 
             <div className="hidden md:flex justify-center items-center relative h-[450px] w-full" style={{ perspective: '1000px' }}>
@@ -158,6 +164,30 @@ export function PortfolioHome() {
                 <div className="absolute bottom-1/4 -left-12 h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,1)] animate-bounce motion-reduce:animate-none" style={{ animationDuration: '3.2s' }}></div>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* --- About --- */}
+        <section id="about" className="mx-auto max-w-4xl px-6 py-12 scroll-mt-24 w-full">
+          <div className="mb-10 flex items-center gap-4">
+            <h2 className="text-pretty text-3xl font-black italic tracking-tight text-zinc-800 dark:text-zinc-100 uppercase">
+              About
+            </h2>
+            <div className="h-[2px] flex-1 bg-linear-to-r from-zinc-200 via-zinc-400/30 to-transparent dark:from-zinc-800 dark:via-zinc-600/30 dark:to-transparent rounded-full"></div>
+          </div>
+
+          <div className="rounded-3xl border-2 border-zinc-200 bg-white/80 p-8 dark:border-zinc-700 dark:bg-zinc-900/50">
+            <p className="text-base leading-relaxed text-zinc-600 dark:text-zinc-300">
+              開発を始めたきっかけは、「自分が不便だと思うことを自分で直したい」という一点です。
+              最初は小さなスクリプトから始まり、いつの間にか自宅にサーバーを置いてインフラを組み、論文を読みながらコードを書くようになっていました。
+            </p>
+            <p className="mt-4 text-base leading-relaxed text-zinc-600 dark:text-zinc-300">
+              特定の肩書きにこだわらず、フロントエンド・インフラ・研究の間を渡り歩きながら、
+              「これ、なんとかならないか」を形にし続けています。
+            </p>
+            <p className="mt-4 text-base leading-relaxed text-zinc-600 dark:text-zinc-300">
+              いま特に関心があるのは、LLM やエージェントを実用的な運用の現場にどう組み込むかという領域です。
+            </p>
           </div>
         </section>
 
@@ -253,13 +283,13 @@ export function PortfolioHome() {
                 <Server className="h-6 w-6" aria-hidden="true" />
               </div>
               <p className="text-base leading-relaxed text-zinc-600 dark:text-zinc-300 flex-1">
-                Proxmox を基盤に、自宅サーバーを大学時代から継続運用しています。生活課題を起点に、バックアップ、自動化、障害対応までを一体で設計し、技術を実用へつなげる運用を続けています。
+                Proxmox を基盤に、自宅サーバーを大学時代から継続運用しています。生活課題を起点に、バックアップ、自動化、障害対応までを一体で設計し、技術を実用に結びつける運用を続けています。
               </p>
               <Link
                 href="/cases/immich-distributed"
                 className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-emerald-700 hover:text-emerald-600 dark:text-emerald-300 dark:hover:text-emerald-200"
               >
-                詳細: Immich 分散アーキテクチャの構築
+                詳細: 分散インフラ基盤の構築と運用
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
