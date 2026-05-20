@@ -8,7 +8,7 @@ WORKDIR /app
 # Install dependencies based on the preferred package manager
 COPY package.json bun.lock ./
 # Use production flag if possible, but we need devDeps for build
-RUN bun install --frozen-lockfile --ignore-scripts
+RUN bun install --frozen-lockfile --ignore-scripts --backend=copy
 
 # Rebuild the source code only when needed
 # Install Bun on Node.js image to ensure consistent build results
