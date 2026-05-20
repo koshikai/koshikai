@@ -11,6 +11,10 @@ interface VariantSwitcherProps {
 export function VariantSwitcher({ currentVariant }: VariantSwitcherProps) {
   const router = useRouter();
 
+  if (process.env.NODE_ENV === "production") {
+    return null;
+  }
+
   const handleSwitch = async (v: "portfolio" | "mathkb" | "default") => {
     await setSiteVariant(v);
     router.refresh();

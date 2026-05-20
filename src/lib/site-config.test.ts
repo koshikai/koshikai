@@ -1,9 +1,17 @@
-import { describe, expect, it, beforeEach, afterEach } from "vitest";
+import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 import {
   getSiteVariant,
   getSiteConfig,
   getSiteConfigByVariant,
+  getEffectiveVariant,
 } from "./site-config";
+
+const mockGet = vi.fn();
+vi.mock("next/headers", () => ({
+  cookies: vi.fn(() => Promise.resolve({
+    get: (key: string) => mockGet(key),
+  })),
+}));
 
 describe("getSiteVariant", () => {
   const originalEnv = process.env;
@@ -89,5 +97,50 @@ describe("getSiteConfig", () => {
 
     process.env.SITE_VARIANT = "portfolio";
     expect(getSiteConfig().variant).toBe("portfolio");
+  });
+});
+
+describe("getEffectiveVariant", () => {
+  const originalEnv = process.env;
+
+  beforeEach(() => {
+    process.env = { ...originalEnv };
+    mockGet.mockReset();
+  });
+
+  afterEach(() => {
+    process.env = originalEnv;
+  });
+
+  it("returns portfolio when in production and base variant is portfolio, ignoring cookie overrides", async () => {
+    process.env = { ...originalEnv, NODE_ENV: "production" };
+    delete process.env.SITE_VARIANT;
+
+    mockGet.mockReturnValue({ value: "mathkb" });
+
+    const variant = await getEffectiveVariant();
+    expect(variant).toBe("portfolio");
+    expect(mockGet).not.toHaveBeenCalled();
+  });
+
+  it("respects cookie overrides when in development environment", async () => {
+    process.env = { ...originalEnv, NODE_ENV: "development" };
+    delete process.env.SITE_VARIANT;
+
+    mockGet.mockReturnValue({ value: "mathkb" });
+
+    const variant = await getEffectiveVariant();
+    expect(variant).toBe("mathkb");
+    expect(mockGet).toHaveBeenCalledWith("site-variant");
+  });
+
+  it("respects cookie overrides when base variant is mathkb even in production", async () => {
+    process.env = { ...originalEnv, NODE_ENV: "production", SITE_VARIANT: "mathkb" };
+
+    mockGet.mockReturnValue({ value: "portfolio" });
+
+    const variant = await getEffectiveVariant();
+    expect(variant).toBe("portfolio");
+    expect(mockGet).toHaveBeenCalledWith("site-variant");
   });
 });
