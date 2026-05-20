@@ -26,6 +26,11 @@ export function getSiteVariant(): SiteVariant {
 }
 
 export async function getEffectiveVariant(): Promise<SiteVariant> {
+  const baseVariant = getSiteVariant();
+  if (process.env.NODE_ENV === "production" && baseVariant === "portfolio") {
+    return "portfolio";
+  }
+
   try {
     const cookieStore = await cookies();
     const override = cookieStore.get("site-variant")?.value;
@@ -35,7 +40,7 @@ export async function getEffectiveVariant(): Promise<SiteVariant> {
   } catch {
     // cookies() might fail in some contexts, fallback to env
   }
-  return getSiteVariant();
+  return baseVariant;
 }
 
 export function getSiteConfig(): SiteConfig {
