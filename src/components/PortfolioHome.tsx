@@ -234,11 +234,11 @@ export function PortfolioHome() {
 
           <div className="grid gap-8 sm:grid-cols-2">
             <ProjectCard
-              title="no"
-              subtitle="nosmoke.koshikai.dev"
+              title="Smoke it."
+              subtitle="smoke-it.koshikai.dev"
               description="Next.js 16.2 + PWA に Optimistic UI を組み合わせたネイティブ級の禁煙記録アプリ。AI コーチ（OpenRouter）と 3D バッジ（Three.js）で継続を支援。"
               features={["Next.js 16.2", "PWA", "AI Coach", "3D Badges"]}
-              href="https://nosmoke.koshikai.dev"
+              href="https://smoke-it.koshikai.dev"
               accentColor="green"
               icon={<Cigarette className="h-7 w-7" />}
             />

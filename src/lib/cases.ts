@@ -30,8 +30,8 @@ export const caseItems: CaseItem[] = [
       "リソースの適切な配置と、運用ルールの自動化が継続可能なインフラには不可欠。",
   },
   {
-    slug: "nosmoke",
-    title: "NoSmoke: 洗練された PWA 支援アプリ",
+    slug: "smoke-it",
+    title: "Smoke it.: 洗練された PWA 支援アプリ",
     summary:
       "Next.js 16.2 + PWA + Optimistic UI によるネイティブ級の禁煙記録アプリ。AI コーチ（OpenRouter）と 3D バッジ（Three.js）で継続を支援。",
     tags: ["Next.js", "PWA", "AI Coach", "Three.js", "Recharts"],
