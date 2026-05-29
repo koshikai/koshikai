@@ -1,4 +1,7 @@
-import { ArrowRight, Cigarette, Database, GraduationCap, Images, Server, ShieldCheck, Wrench } from "lucide-react";
+"use client";
+
+import { useEffect, useState } from "react";
+import { ArrowRight, Cigarette, Database, GraduationCap, Images, Menu, Server, ShieldCheck, Wrench, X } from "lucide-react";
 import Link from "next/link";
 import { Footer } from "@/components/Footer";
 import { ProjectCard } from "@/components/ProjectCard";
@@ -14,23 +17,133 @@ const sections = [
   { id: "toolbox", label: "Toolbox" },
 ];
 
-function SideNav() {
+function SideNav({ activeSection }: { activeSection: string }) {
   return (
-    <nav className="fixed right-8 top-1/2 z-50 hidden -translate-y-1/2 flex-col gap-4 xl:flex">
-      {sections.map((section) => (
-        <a
-          key={section.id}
-          href={`#${section.id}`}
-                  className="group flex items-center justify-end gap-3 text-right transition-[gap,opacity] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sky-500 rounded"
-          aria-label={`Jump to ${section.label}`}
-        >
-          <span className="pointer-events-none text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 opacity-0 transition-[opacity,transform] group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-500">
-            {section.label}
-          </span>
-          <div className="h-1 w-4 rounded-full bg-zinc-200 transition-[width,background-color] group-hover:w-8 group-hover:bg-sky-500 dark:bg-zinc-800" />
-        </a>
-      ))}
+    <nav className="fixed right-8 top-1/2 z-50 hidden -translate-y-1/2 flex-col gap-4 xl:flex" aria-label="セクションナビゲーション">
+      {sections.map((section) => {
+        const isActive = activeSection === section.id;
+        return (
+          <a
+            key={section.id}
+            href={`#${section.id}`}
+            className="group flex items-center justify-end gap-3 text-right transition-[gap,opacity] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sky-500 rounded"
+            aria-label={`Jump to ${section.label}`}
+          >
+            <span className={`pointer-events-none text-[10px] font-black uppercase tracking-[0.2em] transition-[opacity,transform] group-hover:translate-x-0 group-hover:opacity-100 ${
+              isActive 
+                ? "text-sky-500 opacity-100 translate-x-0 dark:text-sky-400" 
+                : "text-zinc-400 opacity-0 dark:text-zinc-500"
+            }`}>
+              {section.label}
+            </span>
+            <div className={`h-1 rounded-full transition-[width,background-color] ${
+              isActive 
+                ? "w-8 bg-sky-500 dark:bg-sky-400" 
+                : "w-4 bg-zinc-200 group-hover:w-8 group-hover:bg-sky-500 dark:bg-zinc-800"
+            }`} />
+          </a>
+        );
+      })}
     </nav>
+  );
+}
+
+function Header({ activeSection }: { activeSection: string }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <header className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+      isScrolled 
+        ? "bg-white/80 dark:bg-zinc-950/80 shadow-md backdrop-blur-md py-4 border-b border-zinc-200/50 dark:border-zinc-800/50" 
+        : "bg-transparent py-6"
+    }`}>
+      <div className="mx-auto max-w-7xl px-6 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2 font-sans font-bold text-zinc-800 dark:text-zinc-100 hover:text-sky-500 dark:hover:text-sky-400 transition-colors">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-tr from-sky-400 to-blue-500 text-sm font-bold text-white shadow-inner">
+            K
+          </div>
+          <span>koshikai.dev</span>
+        </Link>
+
+        {/* Desktop Menu */}
+        <nav className="hidden lg:flex items-center gap-6" aria-label="グローバルナビゲーション">
+          {sections.map((section) => {
+            const isActive = activeSection === section.id;
+            return (
+              <a
+                key={section.id}
+                href={`#${section.id}`}
+                className={`text-xs font-black uppercase tracking-wider transition-colors ${
+                  isActive 
+                    ? "text-sky-500 dark:text-sky-400" 
+                    : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-100"
+                }`}
+              >
+                {section.label}
+              </a>
+            );
+          })}
+          <Link
+            href="/cases"
+            className="text-xs font-black uppercase tracking-wider text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-100 border-l border-zinc-300 dark:border-zinc-700 pl-4"
+          >
+            Case Studies
+          </Link>
+        </nav>
+
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="flex lg:hidden h-10 w-10 items-center justify-center rounded-full border border-zinc-200 bg-white/50 dark:border-zinc-700 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500"
+          aria-label={isOpen ? "メニューを閉じる" : "メニューを開く"}
+          aria-expanded={isOpen}
+        >
+          {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
+      </div>
+
+      {/* Mobile Drawer */}
+      {isOpen && (
+        <div className="lg:hidden absolute top-full left-0 right-0 border-b border-zinc-200 bg-white/95 px-6 py-6 shadow-xl dark:border-zinc-800 dark:bg-zinc-950/95 backdrop-blur-lg animate-fade-in-up">
+          <nav className="flex flex-col gap-4" aria-label="モバイルナビゲーション">
+            {sections.map((section) => {
+              const isActive = activeSection === section.id;
+              return (
+                <a
+                  key={section.id}
+                  href={`#${section.id}`}
+                  onClick={() => setIsOpen(false)}
+                  className={`text-sm font-bold uppercase tracking-wider transition-colors ${
+                    isActive 
+                      ? "text-sky-500 dark:text-sky-400" 
+                      : "text-zinc-600 dark:text-zinc-300 hover:text-sky-500"
+                  }`}
+                >
+                  {section.label}
+                </a>
+              );
+            })}
+            <div className="h-[1px] bg-zinc-200 dark:bg-zinc-800" />
+            <Link
+              href="/cases"
+              onClick={() => setIsOpen(false)}
+              className="text-sm font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-300 hover:text-sky-500"
+            >
+              Case Studies
+            </Link>
+          </nav>
+        </div>
+      )}
+    </header>
   );
 }
 
@@ -73,11 +186,44 @@ const toolboxByUse = [
 ];
 
 export function PortfolioHome() {
+  const [activeSection, setActiveSection] = useState("hero");
+
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: "-20% 0px -60% 0px",
+      threshold: 0,
+    };
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    sections.forEach((section) => {
+      const element = document.getElementById(section.id);
+      if (element) observer.observe(element);
+    });
+
+    return () => {
+      sections.forEach((section) => {
+        const element = document.getElementById(section.id);
+        if (element) observer.unobserve(element);
+      });
+    };
+  }, []);
+
   return (
     <div className="relative min-h-screen bg-white font-sans selection:bg-sky-100 selection:text-sky-900 dark:bg-zinc-950 dark:selection:bg-sky-900/30 dark:selection:text-sky-200">
-      <SideNav />
+      <Header activeSection={activeSection} />
+      <SideNav activeSection={activeSection} />
 
-      <main className="relative flex flex-col items-center">
+      <main className="relative flex flex-col items-center pt-16 lg:pt-0">
         {/* --- Hero Section --- */}
         <section id="hero" className="relative flex min-h-[90vh] w-full flex-col items-center justify-center overflow-hidden px-6 pt-20 pb-32 scroll-mt-24">
           <div className="pointer-events-none absolute top-0 left-0 -z-10 h-full w-full overflow-hidden">

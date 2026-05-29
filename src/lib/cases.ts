@@ -68,6 +68,14 @@ export const caseItems: CaseItem[] = [
       "スマホ故障をきっかけに、写真と動画を守るための自宅バックアップ運用を設計・継続したケース。",
     tags: ["Home Server", "Backup", "Proxmox"],
     publishedAt: "2026-04-21",
+    challenge:
+      "スマホの突発的な故障によるデータ喪失リスクと、クラウド依存コストの上昇、復旧手順の未整理。",
+    action:
+      "Proxmox 上に自動バックアップを再設計し、定期的な世代バックアップ保持と復旧手順のドキュメント化を実施。",
+    result:
+      "バックアップ運用が日常に溶け込み、障害時のリスクを排除。「保存されているはず」の曖昧さを解消。",
+    learning:
+      "システムの信頼性は高度な技術選定だけでなく、手順の明文化と運用のセット設計で担保されること。",
   },
   {
     slug: "deploy-automation",
@@ -76,6 +84,14 @@ export const caseItems: CaseItem[] = [
       "手動更新で発生していた再現性の課題を、CI/CD と運用手順の整備で改善したケース。",
     tags: ["CI/CD", "GitHub Actions", "Self-hosted Runner"],
     publishedAt: "2026-04-21",
+    challenge:
+      "手動作業の多さによるミスのリスク、手順の属人化、および反映状態の履歴追跡が困難なこと。",
+    action:
+      "GitHub Actions と self-hosted runner を用いた自動デプロイフローの整備と、検証環境の固定化。",
+    result:
+      "反復コストの大幅削減と反映手順の再現性の向上。トラブル時の確認ポイントが明確になり復旧が容易に。",
+    learning:
+      "自動化の本質的な価値は、作業の高速化だけでなく「判断と処理の一貫性」を作り出せることにある。",
   },
   {
     slug: "research-workflow",
@@ -84,6 +100,14 @@ export const caseItems: CaseItem[] = [
       "検証条件の明確化と記録を徹底し、研究プロセスの再現性を高めたケース。",
     tags: ["Research", "Reproducibility", "Experiment Design"],
     publishedAt: "2026-04-21",
+    challenge:
+      "曖昧な実験条件による結果比較の困難さ、履歴管理不足による再検証の遅れ、検証品質のばらつき。",
+    action:
+      "探索速度よりも再現性を優先し、条件固定と記録ルールを先に整備。知識基盤と連携した再現実験環境の構築。",
+    result:
+      "同一条件での再検証が容易になり、Cortical Development (32/32) や Wnt5a (96/96) での再現性を実証。",
+    learning:
+      "再現性の高い研究ワークフローは、結論の信頼性を高めるだけでなく、結果的に次のアプローチへの改善速度を高めること。",
   },
 ];
 
