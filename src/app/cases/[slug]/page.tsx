@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { AlertCircle, ArrowLeft, CheckCircle, Lightbulb, Wrench } from "lucide-react";
 import { getCaseBySlug, getCaseContentComponent, caseItems } from "@/lib/cases";
 import { getSiteConfig, getEffectiveVariant } from "@/lib/site-config";
 
@@ -92,6 +92,57 @@ export default async function CaseDetailPage({ params }: CaseDetailPageProps) {
               </span>
             ))}
           </div>
+
+          {/* Summary Dashboard Grid */}
+          {(item.challenge || item.action || item.result || item.learning) && (
+            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+              {item.challenge && (
+                <div className="flex flex-col gap-2 rounded-2xl border border-red-200/60 bg-red-50/20 p-5 dark:border-red-900/40 dark:bg-red-950/10">
+                  <div className="flex items-center gap-2 font-bold text-red-700 dark:text-red-400">
+                    <AlertCircle className="h-5 w-5" aria-hidden="true" />
+                    <span>Challenge / 課題</span>
+                  </div>
+                  <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300 font-medium">
+                    {item.challenge}
+                  </p>
+                </div>
+              )}
+              {item.action && (
+                <div className="flex flex-col gap-2 rounded-2xl border border-sky-200/60 bg-sky-50/20 p-5 dark:border-sky-900/40 dark:bg-sky-950/10">
+                  <div className="flex items-center gap-2 font-bold text-sky-700 dark:text-sky-400">
+                    <Wrench className="h-5 w-5" aria-hidden="true" />
+                    <span>Action / 解決策</span>
+                  </div>
+                  <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300 font-medium">
+                    {item.action}
+                  </p>
+                </div>
+              )}
+              {item.result && (
+                <div className="flex flex-col gap-2 rounded-2xl border border-emerald-200/60 bg-emerald-50/20 p-5 dark:border-emerald-900/40 dark:bg-emerald-950/10">
+                  <div className="flex items-center gap-2 font-bold text-emerald-700 dark:text-emerald-400">
+                    <CheckCircle className="h-5 w-5" aria-hidden="true" />
+                    <span>Result / 結果</span>
+                  </div>
+                  <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300 font-medium">
+                    {item.result}
+                  </p>
+                </div>
+              )}
+              {item.learning && (
+                <div className="flex flex-col gap-2 rounded-2xl border border-purple-200/60 bg-purple-50/20 p-5 dark:border-purple-900/40 dark:bg-purple-950/10">
+                  <div className="flex items-center gap-2 font-bold text-purple-700 dark:text-purple-400">
+                    <Lightbulb className="h-5 w-5" aria-hidden="true" />
+                    <span>Learning / 学び</span>
+                  </div>
+                  <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300 font-medium">
+                    {item.learning}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
           <div className="case-article-content mt-8 sm:mt-10">
             <Content />
           </div>
