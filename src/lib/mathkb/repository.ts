@@ -232,3 +232,198 @@ export async function listTags(): Promise<MathKbTag[]> {
     noteCount: Number(row.note_count),
   }));
 }
+
+export function generateSlug(text: string, prefix = ""): string {
+  const cleaned = text
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  if (cleaned.length > 0) {
+    return prefix ? `${prefix}-${cleaned}` : cleaned;
+  }
+
+  // Non-ASCII fallback using a simple numeric hash representation
+  let hash = 0;
+  for (let i = 0; i < text.length; i++) {
+    const char = text.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  const hashStr = Math.abs(hash).toString(36);
+  return prefix ? `${prefix}-${hashStr}` : hashStr;
+}
+
+export async function createNote(note: {
+  title: string;
+  field: string;
+  summary?: string;
+  bodyMarkdown: string;
+  isPublic?: boolean;
+  tags?: string[];
+}) {
+  const pool = getMathKbPool();
+  const client = await pool.connect();
+  const slug = generateSlug(note.title);
+
+  try {
+    await client.query("BEGIN");
+
+    const isPublic = note.isPublic ?? false;
+    const summary = note.summary ?? "";
+    const noteResult = await client.query<{ id: string }>(
+      `
+        INSERT INTO notes (slug, title, field, summary, body_markdown, is_public)
+        VALUES ($1, $2, $3, $4, $5, $6)
+        RETURNING id
+      `,
+      [slug, note.title, note.field, summary, note.bodyMarkdown, isPublic],
+    );
+
+    const noteId = noteResult.rows[0].id;
+
+    if (note.tags && note.tags.length > 0) {
+      for (const tagName of note.tags) {
+        const trimmedTagName = tagName.trim();
+        if (!trimmedTagName) continue;
+
+        const tagSlug = generateSlug(trimmedTagName);
+
+        const tagResult = await client.query<{ id: string }>(
+          `
+            INSERT INTO tags (slug, name)
+            VALUES ($1, $2)
+            ON CONFLICT (name) DO UPDATE SET name = EXCLUDED.name
+            RETURNING id
+          `,
+          [tagSlug, trimmedTagName],
+        );
+
+        const tagId = tagResult.rows[0].id;
+
+        await client.query(
+          `
+            INSERT INTO note_tags (note_id, tag_id)
+            VALUES ($1, $2)
+            ON CONFLICT DO NOTHING
+          `,
+          [noteId, tagId],
+        );
+      }
+    }
+
+    await client.query("COMMIT");
+    return { success: true, slug };
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
+export async function updateNote(
+  slug: string,
+  note: {
+    title?: string;
+    field?: string;
+    summary?: string;
+    bodyMarkdown?: string;
+    isPublic?: boolean;
+    tags?: string[];
+  },
+) {
+  const pool = getMathKbPool();
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    const checkResult = await client.query<{ id: string }>(
+      "SELECT id FROM notes WHERE slug = $1 LIMIT 1",
+      [slug],
+    );
+
+    if (checkResult.rows.length === 0) {
+      throw new Error(`Note with slug '${slug}' not found.`);
+    }
+
+    const noteId = checkResult.rows[0].id;
+
+    const updates: string[] = [];
+    const values: unknown[] = [];
+    let counter = 1;
+
+    if (note.title !== undefined) {
+      updates.push(`title = $${counter++}`);
+      values.push(note.title);
+    }
+    if (note.field !== undefined) {
+      updates.push(`field = $${counter++}`);
+      values.push(note.field);
+    }
+    if (note.summary !== undefined) {
+      updates.push(`summary = $${counter++}`);
+      values.push(note.summary);
+    }
+    if (note.bodyMarkdown !== undefined) {
+      updates.push(`body_markdown = $${counter++}`);
+      values.push(note.bodyMarkdown);
+    }
+    if (note.isPublic !== undefined) {
+      updates.push(`is_public = $${counter++}`);
+      values.push(note.isPublic);
+    }
+
+    if (updates.length > 0) {
+      values.push(slug);
+      const updateQuery = `
+        UPDATE notes
+        SET ${updates.join(", ")}
+        WHERE slug = $${counter}
+      `;
+      await client.query(updateQuery, values);
+    }
+
+    if (note.tags !== undefined) {
+      await client.query("DELETE FROM note_tags WHERE note_id = $1", [noteId]);
+
+      for (const tagName of note.tags) {
+        const trimmedTagName = tagName.trim();
+        if (!trimmedTagName) continue;
+
+        const tagSlug = generateSlug(trimmedTagName);
+
+        const tagResult = await client.query<{ id: string }>(
+          `
+            INSERT INTO tags (slug, name)
+            VALUES ($1, $2)
+            ON CONFLICT (name) DO UPDATE SET name = EXCLUDED.name
+            RETURNING id
+          `,
+          [tagSlug, trimmedTagName],
+        );
+
+        const tagId = tagResult.rows[0].id;
+
+        await client.query(
+          `
+            INSERT INTO note_tags (note_id, tag_id)
+            VALUES ($1, $2)
+            ON CONFLICT DO NOTHING
+          `,
+          [noteId, tagId],
+        );
+      }
+    }
+
+    await client.query("COMMIT");
+    return { success: true };
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
+}

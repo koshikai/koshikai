@@ -5,7 +5,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { z } from "zod";
 import { getMathKbPool, hasMathKbDatabaseConfig, logPoolStats } from "../lib/mathkb/db";
-import { getNoteBySlug, listFields, listTags, searchNotes } from "../lib/mathkb/repository";
+import { getNoteBySlug, listFields, listTags, searchNotes, createNote, updateNote } from "../lib/mathkb/repository";
 import type { MathKbSearchFilters } from "../lib/mathkb/types";
 
 const noteTagSchema = z.object({
@@ -284,6 +284,86 @@ function createMathKbServer() {
         };
       } catch (error) {
         return createToolError(`list_tags failed: ${formatError(error)}`);
+      }
+    },
+  );
+
+  server.registerTool(
+    "create_note",
+    {
+      title: "Create a note",
+      description: "Create a new math note in the database. Tags and slug generation are handled automatically.",
+      inputSchema: z.object({
+        title: z.string().trim().min(1),
+        field: z.string().trim().min(1),
+        summary: z.string().trim().optional(),
+        bodyMarkdown: z.string().trim().min(1),
+        isPublic: z.boolean().optional(),
+        tags: z.array(z.string().trim()).optional(),
+      }),
+      outputSchema: z.object({
+        success: z.boolean(),
+        slug: z.string(),
+      }),
+      annotations: {
+        readOnlyHint: false,
+        destructiveHint: false,
+      },
+    },
+    async (input) => {
+      try {
+        const result = await createNote(input);
+        return {
+          content: [
+            {
+              type: "text" as const,
+              text: `Note created successfully with slug: ${result.slug}`,
+            },
+          ],
+          structuredContent: result,
+        };
+      } catch (error) {
+        return createToolError(`create_note failed: ${formatError(error)}`);
+      }
+    },
+  );
+
+  server.registerTool(
+    "update_note",
+    {
+      title: "Update a note",
+      description: "Update an existing math note specified by slug in the database. Tags can be replaced if specified.",
+      inputSchema: z.object({
+        slug: z.string().trim().min(1),
+        title: z.string().trim().optional(),
+        field: z.string().trim().optional(),
+        summary: z.string().trim().optional(),
+        bodyMarkdown: z.string().trim().optional(),
+        isPublic: z.boolean().optional(),
+        tags: z.array(z.string().trim()).optional(),
+      }),
+      outputSchema: z.object({
+        success: z.boolean(),
+      }),
+      annotations: {
+        readOnlyHint: false,
+        destructiveHint: false,
+      },
+    },
+    async ({ slug, ...updates }) => {
+      try {
+        const result = await updateNote(slug, updates);
+        return {
+          content: [
+            {
+              type: "text" as const,
+              text: `Note with slug '${slug}' updated successfully.`,
+            },
+          ],
+          structuredContent: result,
+        };
+      } catch (error) {
+        return createToolError(`update_note failed: ${formatError(error)}`);
       }
     },
   );
