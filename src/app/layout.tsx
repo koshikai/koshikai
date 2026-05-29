@@ -76,10 +76,6 @@ export async function generateMetadata(): Promise<Metadata> {
             "max-snippet": -1,
           },
         },
-    icons: {
-      icon: "/icon.svg",
-      apple: "/icon.svg",
-    },
   };
 }
 
@@ -111,25 +107,34 @@ export default async function RootLayout({
           description: site.description,
           inLanguage: "ja-JP",
         }
-      : {
-          "@context": "https://schema.org",
-          "@type": "Person",
-          name: "koshikai",
-          url: site.baseUrl,
-          jobTitle: "Software Developer",
-          description:
-            "Personal Developer & Creator building apps that make life better.",
-          sameAs: ["https://github.com/koshikai"],
-          knowsAbout: [
-            "Next.js",
-            "React",
-            "TypeScript",
-            "Python",
-            "AI Agents",
-            "LLMs",
-            "MCP",
-          ],
-        };
+      : [
+          {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: "koshikai.dev",
+            alternateName: ["koshikai"],
+            url: site.baseUrl,
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            name: "koshikai",
+            url: site.baseUrl,
+            jobTitle: "Software Developer",
+            description:
+              "Personal Developer & Creator building apps that make life better.",
+            sameAs: ["https://github.com/koshikai"],
+            knowsAbout: [
+              "Next.js",
+              "React",
+              "TypeScript",
+              "Python",
+              "AI Agents",
+              "LLMs",
+              "MCP",
+            ],
+          }
+        ];
 
   return (
     <html lang="ja" suppressHydrationWarning className={themeClass}>
