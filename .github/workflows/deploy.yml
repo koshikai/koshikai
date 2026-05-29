@@ -30,6 +30,18 @@ jobs:
         with:
           bun-version: 1.3.13
 
+      - name: Get Bun cache directory
+        id: bun-cache
+        run: echo "dir=$(bun pm cache)" >> $GITHUB_OUTPUT
+
+      - name: Cache Bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.bun-cache.outputs.dir }}
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
@@ -41,6 +53,12 @@ jobs:
 
       - name: Run security audit
         run: bun audit
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Log in to GHCR
         uses: docker/login-action@v3
@@ -65,6 +83,8 @@ jobs:
           push: true
           tags: ${{ steps.app_meta.outputs.tags }}
           labels: ${{ steps.app_meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Extract MCP metadata
         id: mcp_meta
@@ -83,6 +103,8 @@ jobs:
           push: true
           tags: ${{ steps.mcp_meta.outputs.tags }}
           labels: ${{ steps.mcp_meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   deploy:
     name: Deploy to Proxmox
