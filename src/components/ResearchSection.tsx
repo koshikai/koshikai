@@ -25,6 +25,37 @@ const researchItems = [
   },
 ] as const;
 
+const presentations = [
+  {
+    title: "A Reinforcement Learning Approach to Set Stabilization of Boolean Networks by Edge Removal Control",
+    conference: "SICE FES 2026 (The SICE Festival with Annual Conference)",
+    date: "2026.09 (予定)",
+    style: "ポスター発表",
+    location: "パシフィコ横浜 (神奈川)",
+    isInternational: true,
+    isFuture: true,
+  },
+  {
+    title: "Edge Removal Control of Boolean Networks with STL Specifications Using Reinforcement Learning",
+    conference: "The 41st International Technical Conference on Circuits/Systems, Computers and Communications (ITC-CSCC 2026)",
+    date: "2026.07 (予定)",
+    style: "口頭発表 (Oral)",
+    location: "Bangkok, Thailand",
+    details: "Paper ID: 1571266141",
+    isInternational: true,
+    isFuture: true,
+  },
+  {
+    title: "ブーリアンネットワークのモデルフリーエッジ除去制御",
+    conference: "第70回システム制御情報学会研究発表講演会 (SCI'26)",
+    date: "2026.05",
+    style: "口頭発表",
+    location: "ウインクあいち (愛知)",
+    isInternational: false,
+    isFuture: false,
+  },
+] as const;
+
 export function ResearchSection({
   id,
   className,
@@ -99,6 +130,60 @@ export function ResearchSection({
             </div>
           );
         })}
+      </div>
+
+      {/* Publications & Presentations */}
+      <div className="mt-16">
+        <h3 className="text-2xl font-black italic tracking-tight text-zinc-800 dark:text-zinc-100 mb-6 uppercase flex items-center gap-4">
+          <span>Publications & Presentations</span>
+          <div className="h-[1px] flex-1 bg-zinc-200 dark:bg-zinc-800 rounded-full"></div>
+        </h3>
+        
+        <div className="space-y-4">
+          {presentations.map((pres, idx) => (
+            <article
+              key={idx}
+              className="group relative flex flex-col gap-3 rounded-3xl border border-zinc-200 bg-white/40 p-6 shadow-sm backdrop-blur-md dark:border-zinc-850 dark:bg-zinc-900/30 transition-[transform,border-color,box-shadow] duration-350 hover:-translate-y-0.5 hover:border-sky-300 dark:hover:border-sky-900 hover:shadow-md"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap gap-1.5">
+                  <span className={`rounded-lg px-2.5 py-1 text-[9px] font-black uppercase tracking-wider ${
+                    pres.isInternational
+                      ? "bg-purple-100/80 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300 border border-purple-200/20"
+                      : "bg-teal-100/80 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300 border border-teal-200/20"
+                  }`}>
+                    {pres.isInternational ? "International / 国際会議" : "Domestic / 国内学会"}
+                  </span>
+                  <span className="rounded-lg bg-zinc-100/80 px-2.5 py-1 text-[9px] font-black uppercase tracking-wider text-zinc-600 dark:bg-zinc-800/80 dark:text-zinc-400 border border-zinc-200/20 dark:border-zinc-700/20">
+                    {pres.style}
+                  </span>
+                  {pres.isFuture && (
+                    <span className="rounded-lg bg-sky-100/80 px-2.5 py-1 text-[9px] font-black uppercase tracking-wider text-sky-700 dark:bg-sky-900/30 dark:text-sky-300 border border-sky-200/20">
+                      Forthcoming / 発表予定
+                    </span>
+                  )}
+                </div>
+                <time className="text-xs font-bold text-zinc-400 dark:text-zinc-500">{pres.date}</time>
+              </div>
+
+              <h4 className="text-base font-extrabold text-zinc-800 dark:text-zinc-100 leading-snug group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
+                {pres.title}
+              </h4>
+
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs text-zinc-600 dark:text-zinc-400 font-medium">
+                <span className="font-bold">{pres.conference}</span>
+                <span className="text-zinc-400 dark:text-zinc-500">
+                  {pres.location}
+                  {"details" in pres && (
+                    <span className="ml-2 px-1.5 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-800 font-mono text-[10px]">
+                      {pres.details}
+                    </span>
+                  )}
+                </span>
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );
