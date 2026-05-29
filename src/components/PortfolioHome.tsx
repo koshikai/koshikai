@@ -223,7 +223,7 @@ export function PortfolioHome() {
       <Header activeSection={activeSection} />
       <SideNav activeSection={activeSection} />
 
-      <main className="relative flex flex-col items-center pt-16 lg:pt-24">
+      <main className="relative flex flex-col items-center pt-16 lg:pt-0">
         {/* --- Hero Section --- */}
         <section id="hero" className="relative flex min-h-[90vh] w-full flex-col items-center justify-center overflow-hidden px-6 pt-20 pb-32 scroll-mt-24">
           <div className="pointer-events-none absolute top-0 left-0 -z-10 h-full w-full overflow-hidden">
@@ -234,14 +234,7 @@ export function PortfolioHome() {
 
           <div className="grid md:grid-cols-[1.2fr_0.8fr] items-center gap-12 max-w-7xl w-full mx-auto">
             <div className="flex w-full flex-col items-center gap-8 text-center md:items-start md:text-left">
-              <div className="animate-fade-in-up inline-flex items-center gap-3 rounded-full border border-zinc-200 bg-white/50 px-4 py-2 shadow-sm backdrop-blur-sm motion-reduce:animate-none dark:border-zinc-700 dark:bg-zinc-800/50">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-tr from-sky-400 to-blue-500 text-lg font-bold text-white shadow-inner">
-                  K
-                </div>
-                <span className="text-sm font-bold tracking-wide text-zinc-600 dark:text-zinc-300">
-                  koshikai.dev
-                </span>
-              </div>
+
 
               <h1 className="text-pretty text-5xl leading-[1.1] font-extrabold tracking-tight text-zinc-800 drop-shadow-sm sm:text-7xl dark:text-zinc-50">
                 Building apps that{" "}
