@@ -223,7 +223,7 @@ export function PortfolioHome() {
       <Header activeSection={activeSection} />
       <SideNav activeSection={activeSection} />
 
-      <main className="relative flex flex-col items-center pt-16 lg:pt-0">
+      <main className="relative flex flex-col items-center pt-16 lg:pt-24">
         {/* --- Hero Section --- */}
         <section id="hero" className="relative flex min-h-[90vh] w-full flex-col items-center justify-center overflow-hidden px-6 pt-20 pb-32 scroll-mt-24">
           <div className="pointer-events-none absolute top-0 left-0 -z-10 h-full w-full overflow-hidden">
