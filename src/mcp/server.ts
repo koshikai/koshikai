@@ -5,7 +5,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { z } from "zod";
 import { getMathKbPool, hasMathKbDatabaseConfig, logPoolStats } from "../lib/mathkb/db";
-import { getNoteBySlug, listFields, listTags, searchNotes, createNote, updateNote } from "../lib/mathkb/repository";
+import { getNoteBySlug, listFields, listTags, searchNotes, createNote, updateNote, semanticSearchNotes } from "../lib/mathkb/repository";
 import type { MathKbSearchFilters } from "../lib/mathkb/types";
 
 const noteTagSchema = z.object({
@@ -364,6 +364,46 @@ function createMathKbServer() {
         };
       } catch (error) {
         return createToolError(`update_note failed: ${formatError(error)}`);
+      }
+    },
+  );
+
+  server.registerTool(
+    "semantic_search_notes",
+    {
+      title: "Semantic search notes",
+      description:
+        "Search math notes by conceptual meaning using vector embeddings. Ideal for finding related math topics even if keywords differ. This tool is read-only.",
+      inputSchema: z.object({
+        query: z.string().trim().min(1),
+        limit: z.number().int().min(1).max(50).optional(),
+      }),
+      outputSchema: z.object({
+        count: z.number().int().nonnegative(),
+        notes: z.array(noteSummarySchema),
+      }),
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+      },
+    },
+    async ({ query, limit }) => {
+      try {
+        const notes = await semanticSearchNotes(query, limit ?? 5);
+        return {
+          content: [
+            {
+              type: "text" as const,
+              text: toSearchText({ notes, totalFilteredNotes: notes.length }),
+            },
+          ],
+          structuredContent: {
+            count: notes.length,
+            notes,
+          },
+        };
+      } catch (error) {
+        return createToolError(`semantic_search_notes failed: ${formatError(error)}`);
       }
     },
   );

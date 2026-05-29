@@ -7,7 +7,12 @@ import {
   generateSlug,
   createNote,
   updateNote,
+  semanticSearchNotes,
 } from "./repository";
+
+vi.mock("./embedding", () => ({
+  getEmbedding: vi.fn(async () => new Array(384).fill(0.1)),
+}));
 
 const mockQuery = vi.fn();
 const mockClient = {
@@ -209,6 +214,7 @@ describe("repository", () => {
     it("updates note properties and resets tags in a transaction", async () => {
       mockClient.query.mockResolvedValueOnce({ rows: [] }) // BEGIN
         .mockResolvedValueOnce({ rows: [{ id: "1" }] }) // SELECT id check
+        .mockResolvedValueOnce({ rows: [{ title: "Old", summary: "Old", body_markdown: "Old" }] }) // SELECT title, summary, body_markdown (for embedding)
         .mockResolvedValueOnce({ rows: [] }) // UPDATE notes
         .mockResolvedValueOnce({ rows: [] }) // DELETE note_tags
         .mockResolvedValueOnce({ rows: [{ id: "20" }] }) // INSERT tags
@@ -239,6 +245,32 @@ describe("repository", () => {
 
       expect(mockClient.query).toHaveBeenCalledWith("ROLLBACK");
       expect(mockClient.release).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("semanticSearchNotes", () => {
+    it("returns similar notes ordered by embedding distance", async () => {
+      mockQuery.mockResolvedValueOnce({
+        rows: [
+          {
+            slug: "attractor-note",
+            title: "Attractor Note",
+            field: "Control Theory",
+            summary: "summary",
+            updated_at: "2024-01-01T00:00:00.000Z",
+            tags: [],
+          },
+        ],
+      });
+
+      const result = await semanticSearchNotes("attractor dynamics", 2);
+
+      expect(result).toHaveLength(1);
+      expect(result[0].title).toBe("Attractor Note");
+      expect(mockQuery).toHaveBeenCalledWith(
+        expect.stringContaining("ORDER BY notes.embedding <=> $1"),
+        [expect.any(Array), 2]
+      );
     });
   });
 });

@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS notes (
   summary TEXT NOT NULL DEFAULT '',
   body_markdown TEXT NOT NULL,
   body_plain TEXT NOT NULL DEFAULT '',
+  embedding vector(384),
   is_public BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -70,6 +71,9 @@ CREATE TABLE IF NOT EXISTS note_tags (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   PRIMARY KEY (note_id, tag_id)
 );
+
+CREATE INDEX IF NOT EXISTS notes_embedding_hnsw_idx
+  ON notes USING hnsw (embedding vector_cosine_ops);
 
 CREATE INDEX IF NOT EXISTS notes_search_document_idx
   ON notes USING GIN (search_document);

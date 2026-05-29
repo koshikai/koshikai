@@ -1,4 +1,5 @@
 import { getMathKbPool } from "@/lib/mathkb/db";
+import { getEmbedding } from "./embedding";
 import type {
   MathKbField,
   MathKbNoteDetail,
@@ -272,13 +273,18 @@ export async function createNote(note: {
 
     const isPublic = note.isPublic ?? false;
     const summary = note.summary ?? "";
+
+    // Generate embedding for the new note
+    const vectorText = `${note.title}\n${summary}\n${note.bodyMarkdown}`;
+    const embedding = await getEmbedding(vectorText, "passage");
+
     const noteResult = await client.query<{ id: string }>(
       `
-        INSERT INTO notes (slug, title, field, summary, body_markdown, is_public)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        INSERT INTO notes (slug, title, field, summary, body_markdown, is_public, embedding)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING id
       `,
-      [slug, note.title, note.field, summary, note.bodyMarkdown, isPublic],
+      [slug, note.title, note.field, summary, note.bodyMarkdown, isPublic, embedding],
     );
 
     const noteId = noteResult.rows[0].id;
@@ -355,9 +361,29 @@ export async function updateNote(
     const values: unknown[] = [];
     let counter = 1;
 
+    // Check if we need to recompute embedding
+    let shouldRecomputeEmbedding = false;
+    let currentTitle = "";
+    let currentSummary = "";
+    let currentBodyMarkdown = "";
+
+    if (note.title !== undefined || note.summary !== undefined || note.bodyMarkdown !== undefined) {
+      shouldRecomputeEmbedding = true;
+      const currentNote = await client.query<{ title: string; summary: string; body_markdown: string }>(
+        "SELECT title, summary, body_markdown FROM notes WHERE id = $1",
+        [noteId],
+      );
+      if (currentNote.rows.length > 0) {
+        currentTitle = currentNote.rows[0].title;
+        currentSummary = currentNote.rows[0].summary;
+        currentBodyMarkdown = currentNote.rows[0].body_markdown;
+      }
+    }
+
     if (note.title !== undefined) {
       updates.push(`title = $${counter++}`);
       values.push(note.title);
+      currentTitle = note.title;
     }
     if (note.field !== undefined) {
       updates.push(`field = $${counter++}`);
@@ -366,14 +392,23 @@ export async function updateNote(
     if (note.summary !== undefined) {
       updates.push(`summary = $${counter++}`);
       values.push(note.summary);
+      currentSummary = note.summary;
     }
     if (note.bodyMarkdown !== undefined) {
       updates.push(`body_markdown = $${counter++}`);
       values.push(note.bodyMarkdown);
+      currentBodyMarkdown = note.bodyMarkdown;
     }
     if (note.isPublic !== undefined) {
       updates.push(`is_public = $${counter++}`);
       values.push(note.isPublic);
+    }
+
+    if (shouldRecomputeEmbedding) {
+      const vectorText = `${currentTitle}\n${currentSummary}\n${currentBodyMarkdown}`;
+      const embedding = await getEmbedding(vectorText, "passage");
+      updates.push(`embedding = $${counter++}`);
+      values.push(embedding);
     }
 
     if (updates.length > 0) {
@@ -426,4 +461,36 @@ export async function updateNote(
   } finally {
     client.release();
   }
+}
+
+export async function semanticSearchNotes(query: string, limit = 5): Promise<MathKbNoteListItem[]> {
+  const pool = getMathKbPool();
+  const embedding = await getEmbedding(query, "query");
+
+  const result = await pool.query<SearchRow>(
+    `
+      SELECT
+        notes.slug,
+        notes.title,
+        notes.field,
+        notes.summary,
+        notes.updated_at,
+        COALESCE(
+          json_agg(
+            json_build_object('name', tags.name, 'slug', tags.slug)
+            ORDER BY tags.name
+          ) FILTER (WHERE tags.id IS NOT NULL),
+          '[]'::json
+        ) AS tags
+      FROM notes
+      LEFT JOIN note_tags ON note_tags.note_id = notes.id
+      LEFT JOIN tags ON tags.id = note_tags.tag_id
+      GROUP BY notes.id
+      ORDER BY notes.embedding <=> $1 ASC
+      LIMIT $2
+    `,
+    [embedding, limit],
+  );
+
+  return result.rows.map(mapSearchRow);
 }
