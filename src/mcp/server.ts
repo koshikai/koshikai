@@ -483,10 +483,6 @@ async function startHttpServer() {
     }
   });
 
-  // Reuse a single McpServer instance across requests to avoid
-  // leaking DB pool connections and other resources.
-  const mathKbServer = createMathKbServer();
-
   app.post(path, async (req: Request, res: Response) => {
     const transport = new StreamableHTTPServerTransport({
       sessionIdGenerator: undefined,
@@ -497,6 +493,7 @@ async function startHttpServer() {
     });
 
     try {
+      const mathKbServer = createMathKbServer();
       await mathKbServer.connect(transport);
       await transport.handleRequest(req, res, req.body);
     } catch (error) {
