@@ -268,8 +268,8 @@ describe("repository", () => {
       expect(result).toHaveLength(1);
       expect(result[0].title).toBe("Attractor Note");
       expect(mockQuery).toHaveBeenCalledWith(
-        expect.stringContaining("ORDER BY notes.embedding <=> $1"),
-        [expect.any(Array), 2]
+        expect.stringContaining("ORDER BY notes.embedding <=> $1::vector"),
+        [expect.stringMatching(/^\[[\d.,\-]+\]$/), 2]
       );
     });
   });
