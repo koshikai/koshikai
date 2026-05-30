@@ -8,7 +8,7 @@ WORKDIR /app
 # Install dependencies based on the preferred package manager
 COPY package.json bun.lock ./
 # Use production flag if possible, but we need devDeps for build
-RUN bun install --frozen-lockfile --backend=copy
+RUN --mount=type=cache,target=/root/.bun/install/cache bun install --frozen-lockfile --backend=copy
 
 # Rebuild the source code only when needed
 # Install Bun on Node.js image to ensure consistent build results
@@ -29,7 +29,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_OPTIONS="--max-old-space-size=2048"
 ENV DOCKER_BUILD=true
 
-RUN bun run build
+RUN --mount=type=cache,target=/app/.next/cache bun run build
 
 # Production image, copy all the files and run next
 FROM node:22-slim AS runner
