@@ -44,6 +44,15 @@ function normalizeTags(tags: MathKbTag[] | null) {
   return tags ?? [];
 }
 
+/**
+ * pgvector が受け付ける文字列リテラル形式 "[x, y, ...]" に変換する。
+ * pg ライブラリは number[] を PostgreSQL 配列 "{x, y, ...}" として送るため、
+ * 明示的に文字列化する必要がある。
+ */
+function toVectorLiteral(embedding: number[]): string {
+  return `[${embedding.join(",")}]`;
+}
+
 function mapSearchRow(row: SearchRow): MathKbNoteListItem {
   return {
     slug: row.slug,
@@ -281,10 +290,10 @@ export async function createNote(note: {
     const noteResult = await client.query<{ id: string }>(
       `
         INSERT INTO notes (slug, title, field, summary, body_markdown, is_public, embedding)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        VALUES ($1, $2, $3, $4, $5, $6, $7::vector)
         RETURNING id
       `,
-      [slug, note.title, note.field, summary, note.bodyMarkdown, isPublic, embedding],
+      [slug, note.title, note.field, summary, note.bodyMarkdown, isPublic, toVectorLiteral(embedding)],
     );
 
     const noteId = noteResult.rows[0].id;
@@ -407,8 +416,8 @@ export async function updateNote(
     if (shouldRecomputeEmbedding) {
       const vectorText = `${currentTitle}\n${currentSummary}\n${currentBodyMarkdown}`;
       const embedding = await getEmbedding(vectorText, "passage");
-      updates.push(`embedding = $${counter++}`);
-      values.push(embedding);
+      updates.push(`embedding = $${counter++}::vector`);
+      values.push(toVectorLiteral(embedding));
     }
 
     if (updates.length > 0) {
@@ -486,10 +495,10 @@ export async function semanticSearchNotes(query: string, limit = 5): Promise<Mat
       LEFT JOIN note_tags ON note_tags.note_id = notes.id
       LEFT JOIN tags ON tags.id = note_tags.tag_id
       GROUP BY notes.id
-      ORDER BY notes.embedding <=> $1 ASC
+      ORDER BY notes.embedding <=> $1::vector ASC
       LIMIT $2
     `,
-    [embedding, limit],
+    [toVectorLiteral(embedding), limit],
   );
 
   return result.rows.map(mapSearchRow);
