@@ -503,3 +503,34 @@ export async function semanticSearchNotes(query: string, limit = 5): Promise<Mat
 
   return result.rows.map(mapSearchRow);
 }
+
+export async function deleteNote(slug: string) {
+  const pool = getMathKbPool();
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    const checkResult = await client.query<{ id: string }>(
+      "SELECT id FROM notes WHERE slug = $1 LIMIT 1",
+      [slug],
+    );
+
+    if (checkResult.rows.length === 0) {
+      throw new Error(`Note with slug '${slug}' not found.`);
+    }
+
+    const noteId = checkResult.rows[0].id;
+
+    await client.query("DELETE FROM note_tags WHERE note_id = $1", [noteId]);
+    await client.query("DELETE FROM notes WHERE id = $1", [noteId]);
+
+    await client.query("COMMIT");
+    return { success: true };
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
+}

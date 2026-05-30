@@ -5,7 +5,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { z } from "zod";
 import { getMathKbPool, hasMathKbDatabaseConfig, logPoolStats } from "../lib/mathkb/db";
-import { getNoteBySlug, listFields, listTags, searchNotes, createNote, updateNote, semanticSearchNotes } from "../lib/mathkb/repository";
+import { getNoteBySlug, listFields, listTags, searchNotes, createNote, updateNote, semanticSearchNotes, deleteNote } from "../lib/mathkb/repository";
 import type { MathKbSearchFilters } from "../lib/mathkb/types";
 
 const noteTagSchema = z.object({
@@ -404,6 +404,40 @@ function createMathKbServer() {
         };
       } catch (error) {
         return createToolError(`semantic_search_notes failed: ${formatError(error)}`);
+      }
+    },
+  );
+
+  server.registerTool(
+    "delete_note",
+    {
+      title: "Delete a note",
+      description: "Delete an existing math note specified by slug from the database.",
+      inputSchema: z.object({
+        slug: z.string().trim().min(1),
+      }),
+      outputSchema: z.object({
+        success: z.boolean(),
+      }),
+      annotations: {
+        readOnlyHint: false,
+        destructiveHint: true,
+      },
+    },
+    async ({ slug }) => {
+      try {
+        const result = await deleteNote(slug);
+        return {
+          content: [
+            {
+              type: "text" as const,
+              text: `Note with slug '${slug}' deleted successfully.`,
+            },
+          ],
+          structuredContent: result,
+        };
+      } catch (error) {
+        return createToolError(`delete_note failed: ${formatError(error)}`);
       }
     },
   );
