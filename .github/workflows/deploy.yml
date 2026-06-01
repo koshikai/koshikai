@@ -8,6 +8,8 @@ on:
       - '**.md'
       - '.gitignore'
       - '.dockerignore'
+      - 'Dockerfile.mcp'
+      - 'src/mcp/**'
   workflow_dispatch:
 
 concurrency:
@@ -56,11 +58,18 @@ jobs:
       - name: Run tests
         run: bun run test --run
 
-      - name: Run security audit
-        run: bun audit
+      - name: Detect lockfile changes
+        id: lockfile-changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            lockfile:
+              - 'bun.lock'
+              - 'package.json'
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+      - name: Run security audit
+        if: steps.lockfile-changes.outputs.lockfile == 'true' || github.event_name == 'workflow_dispatch'
+        run: bun audit
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
