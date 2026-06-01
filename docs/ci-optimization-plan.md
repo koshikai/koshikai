@@ -1,15 +1,46 @@
 # CI/CD パイプライン改善計画
 
-最終更新: 2026-06-01 (Phase 1 完了)
+最終更新: 2026-06-01 (Phase 2 完了)
 
 ## 進捗
 
 | Phase | 状態 | コミット | 実測削減 |
 |-------|------|----------|----------|
 | Phase 1: 即時実施 (リスク低) | ✅ 完了 | `9b2d3b6` | 約 25-40秒 (QEMU + bun audit) |
-| Phase 2: 並列化 | ⏳ 未着手 | — | 期待 2-4分 |
+| Phase 2: 並列化 | ✅ 完了 | `45df1a4` | 期待 2-4分 (MCP skip + lint 並列) |
 | Phase 3: ビルド最適化 | ⏳ 未着手 | — | 期待 30-60秒 |
 | Phase 4: デプロイ最適化 | ⏳ 未着手 | — | 期待 30-60秒 |
+
+## Phase 2 実施結果 (2026-06-01)
+
+### 変更内容
+
+`.github/workflows/deploy.yml` を 5 ジョブ構成に再構築:
+
+```
+                  ┌─ lint-test (ubuntu-latest) ──────┐
+                  │  - bun install + lint + test     │
+push to main ────►│  - bun audit (lockfile 変更時)   ├──► build-app ──┐
+                  │                                  ├──► build-mcp ──┼──► deploy
+                  ├─ changes (ubuntu-latest) ────────┤   (MCP変更時) │   (self-hosted)
+                  │  - dorny/paths-filter で検出     │               │
+                  │  - mcp 出力: true/false          │               │
+                  └──────────────────────────────────┘               │
+                                                                    │
+```
+
+### 期待削減
+
+- **lint-test 並列化**: lint/test/audit (約 1-1.5分) が build-app と並列実行 → 30-60秒短縮
+- **build-mcp スキップ**: アプリだけの変更時 (大半のケース) は MCP ビルドが完全スキップ → 1-2分短縮
+- **MCP 関連変更時のみ**: `Dockerfile.mcp` / `src/mcp/**` / `package.json` / `bun.lock` が変わったときだけ build-mcp が走る
+
+### 注意点
+
+- `build-mcp` を skip する条件は lockfile 変更も含むため、依存追加時も必ず再ビルドされる
+- `workflow_dispatch` の場合は必ず build-mcp が走る (manual trigger で MCP だけ再ビルドしたいケースに対応)
+- `deploy-public` / `deploy-internal` の並列化は Phase 4 と組み合わせて再検討 (single self-hosted runner で並列化効果が薄いため)
+- `lint-test` 失敗時の挙動: `build-app` / `build-mcp` は `needs.lint-test.result == 'success'` でガード、デプロイは走らない
 
 ## Phase 1 実施結果 (2026-06-01)
 
