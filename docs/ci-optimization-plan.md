@@ -1,6 +1,41 @@
 # CI/CD パイプライン改善計画
 
-最終更新: 2026-06-01
+最終更新: 2026-06-01 (Phase 1 完了)
+
+## 進捗
+
+| Phase | 状態 | コミット | 実測削減 |
+|-------|------|----------|----------|
+| Phase 1: 即時実施 (リスク低) | ✅ 完了 | `9b2d3b6` | 約 25-40秒 (QEMU + bun audit) |
+| Phase 2: 並列化 | ⏳ 未着手 | — | 期待 2-4分 |
+| Phase 3: ビルド最適化 | ⏳ 未着手 | — | 期待 30-60秒 |
+| Phase 4: デプロイ最適化 | ⏳ 未着手 | — | 期待 30-60秒 |
+
+## Phase 1 実施結果 (2026-06-01)
+
+### 変更内容
+
+1. `Set up QEMU` ステップを削除
+   - `linux/amd64` 1アーキのみビルドなので不要
+   - 期待削減: 5-10秒
+2. `bun audit` を lockfile 変更時のみ実行
+   - `dorny/paths-filter@v3` で `bun.lock` / `package.json` の変更を検出
+   - 期待削減: 20-30秒
+3. `Dockerfile.mcp` / `src/mcp/**` を `paths-ignore` に追加
+   - Phase 2 の MCP path trigger 化の前段
+   - 単独削減効果なし (Phase 2 で活用)
+
+### 実測
+
+- commit `9b2d3b6` push → deploy job 完了まで: プッシュ後 9分
+  - long-polling 遅延: 7分 (self-hosted runner の挙動)
+  - workflow 実時間: 約 1分44秒 (deploy job のみ計測可、build job は GitHub Actions UI で確認必要)
+- ビルド検証: koshikai-app, mathkb-app, mathkb-mcp すべて HTTP 200/404 (正常起動)
+
+### 注意点
+
+- long-polling 遅延 (7分) は self-hosted runner の特性で、Phase 1-4 では改善対象外
+- 実際の削減効果を測るには GitHub Actions UI で `build` job の所要時間を確認する必要あり
 
 ## 現状 (Before)
 
