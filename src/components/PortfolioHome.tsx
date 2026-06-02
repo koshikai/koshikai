@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowRight, Cigarette, Database, GraduationCap, Images, Menu, Server, ShieldCheck, Wrench, X } from "lucide-react";
+import { ArrowRight, Briefcase, Cigarette, Database, GraduationCap, Images, Menu, Server, ShieldCheck, Wrench, X } from "lucide-react";
 import Link from "next/link";
 import { Footer } from "@/components/Footer";
 import { ProjectCard } from "@/components/ProjectCard";
@@ -371,15 +371,25 @@ export function PortfolioHome() {
             <div className="h-[2px] flex-1 bg-linear-to-r from-zinc-200 via-zinc-400/30 to-transparent dark:from-zinc-800 dark:via-zinc-600/30 dark:to-transparent rounded-full"></div>
           </div>
 
-          <div className="grid gap-8 sm:grid-cols-2">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             <ProjectCard
               title="Smoke it."
               subtitle="smoke-it.koshikai.dev"
-              description="Next.js 16.2 + PWA に Optimistic UI を組み合わせたネイティブ級の禁煙記録アプリ。AI コーチ（OpenRouter）と 3D バッジ（Three.js）で継続を支援。"
+              description="Next.js 16.2 + PWA に Optimistic UI を組み合わせたネイティブ級の喫煙記録管理アプリ。AI コーチ（OpenRouter）と 3D バッジ（Three.js）で自分の習慣と向き合う継続を支援。"
               features={["Next.js 16.2", "PWA", "AI Coach", "3D Badges"]}
               href="https://smoke-it.koshikai.dev"
               accentColor="green"
               icon={<Cigarette className="h-7 w-7" />}
+            />
+
+            <ProjectCard
+              title="Shuukatsu Hub"
+              subtitle="shuukatsu.koshikai.dev"
+              description="就活進捗と企業ログイン情報の一元管理、Markdownによる自分史やES下書きの蓄積、ES作成アシスタント機能を備えた統合就活支援ツール。"
+              features={["Next.js 16", "PostgreSQL", "ES Assist", "Knowledge Base"]}
+              href="https://shuukatsu.koshikai.dev"
+              accentColor="blue"
+              icon={<Briefcase className="h-7 w-7" />}
             />
 
             <ProjectCard
