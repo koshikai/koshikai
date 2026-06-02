@@ -1,4 +1,4 @@
-import { Brain, FlaskConical } from "lucide-react";
+import { Brain, FlaskConical, GitMerge } from "lucide-react";
 
 const researchItems = [
   {
@@ -11,6 +11,17 @@ const researchItems = [
     bg: "bg-sky-50 dark:bg-sky-900/20",
     border: "border-sky-200 dark:border-sky-800",
     features: ["Q-learning", "STL Formalization", "Boolean Network", "卒業論文"],
+  },
+  {
+    title: "モデル間制御知識転移 (C2D)",
+    description:
+      "同一の生物学的機構を異なる粒度（解像度）で記述した2つのBN（例：アポトーシスの n25 モデルと n39 モデル）を対象とし、粗いモデルの制御知識を詳細なモデルへ転移する手法の研究。GNNによる構造・意味特徴量の埋め込みと、Action-Prior Transfer（アクション優先度転移）による方策適応手法を提案し、検証中。",
+    icon: GitMerge,
+    color: "bg-purple-500",
+    accent: "text-purple-600 dark:text-purple-400",
+    bg: "bg-purple-50 dark:bg-purple-900/20",
+    border: "border-purple-200 dark:border-purple-800",
+    features: ["Transfer Learning", "GNN", "Action-Prior", "修士研究"],
   },
   {
     title: "対話的研究実験環境",
@@ -86,7 +97,7 @@ export function ResearchSection({
         </p>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
+      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {researchItems.map((item) => {
           const Icon = item.icon;
 
