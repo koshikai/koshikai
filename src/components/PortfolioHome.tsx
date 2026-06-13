@@ -424,13 +424,22 @@ export function PortfolioHome() {
               <p className="text-base leading-relaxed text-zinc-600 dark:text-zinc-300 flex-1">
                 Proxmox を基盤に、自宅サーバーを大学時代から継続運用しています。生活課題を起点に、バックアップ、自動化、障害対応までを一体で設計し、技術を実用に結びつける運用を続けています。
               </p>
-              <Link
-                href="/cases/immich-distributed"
-                className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-emerald-700 hover:text-emerald-600 dark:text-emerald-300 dark:hover:text-emerald-200"
-              >
-                詳細: 分散インフラ基盤の構築と運用
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
+              <div className="mt-6 space-y-2.5">
+                {[
+                  { slug: "immich-distributed", title: "分散インフラ基盤の構築と運用" },
+                  { slug: "home-backup", title: "自宅バックアップ基盤の構築" },
+                  { slug: "deploy-automation", title: "デプロイ作業の自動化" },
+                ].map((caseStudy) => (
+                  <Link
+                    key={caseStudy.slug}
+                    href={`/cases/${caseStudy.slug}`}
+                    className="group flex items-center justify-between rounded-xl border border-zinc-200/60 bg-zinc-50/50 px-4 py-3 text-sm font-bold text-zinc-700 transition-all duration-300 hover:border-emerald-300 hover:bg-emerald-50/30 hover:text-emerald-700 dark:border-zinc-700/50 dark:bg-zinc-800/30 dark:text-zinc-300 dark:hover:border-emerald-800 dark:hover:bg-emerald-950/20 dark:hover:text-emerald-300"
+                  >
+                    <span>{caseStudy.title}</span>
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                  </Link>
+                ))}
+              </div>
             </div>
             <ul role="list" className="space-y-3 text-sm text-zinc-600 dark:text-zinc-300">
               {operationHighlights.map((item) => (
