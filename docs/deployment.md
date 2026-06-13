@@ -58,6 +58,7 @@
 | notes-nocodb | `notes-nocodb` | `8180:8080` | `nocodb/nocodb:latest` |
 
 内部 KB スタックは `.env.notes` が存在する場合のみデプロイされます。
+`notes-mcp` は常駐メモリ削減のため `notes_ENABLE_EMBEDDINGS=false` で起動し、通常検索・取得・書き込みを優先します。セマンティック検索を使う場合は embedding 生成を別プロセスに分離するか、この値を明示的に有効化します。
 
 ## Dockerfile
 
