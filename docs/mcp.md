@@ -22,21 +22,23 @@ MCP サーバーでは、以下の 7 つのツールが実装されています�
 | `list_tags` | 登録されているすべてのタグとノート数を一覧取得します。 | なし |
 | `get_note` | スラグを指定して、単一ノートの詳細（Markdown本文、メタデータ、タグ）を取得します。 | `slug` (string) |
 | `search_notes` | キーワード、分野、タグを用いた伝統的な全文検索・フィルタリングを行います。 | `query`, `field`, `tag`, `limit`, `page` |
-| `semantic_search_notes` | **【新機能】** 自然言語クエリを用いた完全ローカルでのセマンティック（ベクトル）検索を行います。 | `query` (string), `limit` (number) |
+| `semantic_search_notes` | **【新機能】** 自然言語クエリを用いた完全ローカルでのセマンティック（ベクトル）検索を行います。`MATHKB_ENABLE_EMBEDDINGS=false` の場合は無効です。 | `query` (string), `limit` (number) |
 
 ### 書き込み・編集ツール (Write/Update)
 *※これらのツールを利用するには、MCPサーバーのDB接続が `mcp_writer` ロールである必要があります。*
 
 | ツール名 | 説明 | 主要引数 |
 |:---|:---|:---|
-| `create_note` | **【新機能】** ナレッジベースに新しいノートを登録します。スラグの自動生成、タグの自動登録・紐付けも行われます。 | `title`, `field`, `summary`, `bodyMarkdown`, `isPublic`, `tags` |
-| `update_note` | **【新機能】** 既存のノートの情報を部分更新します。本文やタイトルが変更された場合、埋め込みベクトルも自動で再計算されます。 | `slug`, `title`, `field`, `summary`, `bodyMarkdown`, `isPublic`, `tags` |
+| `create_note` | **【新機能】** ナレッジベースに新しいノートを登録します。スラグの自動生成、タグの自動登録・紐付けも行われます。embedding 無効時はベクトルなしで保存します。 | `title`, `field`, `summary`, `bodyMarkdown`, `isPublic`, `tags` |
+| `update_note` | **【新機能】** 既存のノートの情報を部分更新します。本文やタイトルが変更された場合、embedding 有効時は埋め込みベクトルも自動で再計算されます。embedding 無効時は古いベクトルを `NULL` にします。 | `slug`, `title`, `field`, `summary`, `bodyMarkdown`, `isPublic`, `tags` |
 
 ---
 
 ## 完全ローカル・セマンティック検索の仕組み
 
 本プロジェクトのセマンティック検索は、外部の有料クラウドAPIを一切使用せず、**自宅サーバー（Proxmox）のCPUリソースのみで完結する完全ローカルな構成**で動作します。
+
+本番の `mathkb-mcp` コンテナでは、常駐メモリを抑えるため `MATHKB_ENABLE_EMBEDDINGS=false` を設定しています。この場合、通常検索・取得・ノート作成/更新は継続しますが、`@xenova/transformers` と `Xenova/multilingual-e5-small` は読み込まれず、`semantic_search_notes` は無効になります。
 
 ### 1. 使用モデル
 - **モデル**: `Xenova/multilingual-e5-small` (約130MB / 384次元)

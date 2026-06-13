@@ -58,6 +58,7 @@
 | mathkb-nocodb | `mathkb-nocodb` | `8180:8080` | `nocodb/nocodb:latest` |
 
 内部 KB スタックは `.env.mathkb` が存在する場合のみデプロイされます。
+`mathkb-mcp` は常駐メモリ削減のため `MATHKB_ENABLE_EMBEDDINGS=false` で起動し、通常検索・取得・書き込みを優先します。セマンティック検索を使う場合は embedding 生成を別プロセスに分離するか、この値を明示的に有効化します。
 
 ## Dockerfile
 

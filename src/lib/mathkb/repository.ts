@@ -1,5 +1,4 @@
 import { getMathKbPool } from "@/lib/mathkb/db";
-import { getEmbedding } from "./embedding";
 import type {
   MathKbField,
   MathKbNoteDetail,
@@ -51,6 +50,28 @@ function normalizeTags(tags: MathKbTag[] | null) {
  */
 function toVectorLiteral(embedding: number[]): string {
   return `[${embedding.join(",")}]`;
+}
+
+function areEmbeddingsEnabled() {
+  const value = process.env.MATHKB_ENABLE_EMBEDDINGS?.trim().toLowerCase();
+  return !["0", "false", "no", "off"].includes(value ?? "");
+}
+
+async function getOptionalEmbedding(text: string, type: "query" | "passage") {
+  if (!areEmbeddingsEnabled()) {
+    return null;
+  }
+
+  const { getEmbedding } = await import("./embedding");
+  return getEmbedding(text, type);
+}
+
+function assertEmbeddingsEnabled(operation: string) {
+  if (!areEmbeddingsEnabled()) {
+    throw new Error(
+      `${operation} requires embeddings, but MATHKB_ENABLE_EMBEDDINGS is disabled.`,
+    );
+  }
 }
 
 function mapSearchRow(row: SearchRow): MathKbNoteListItem {
@@ -283,18 +304,25 @@ export async function createNote(note: {
     const isPublic = note.isPublic ?? false;
     const summary = note.summary ?? "";
 
-    // Generate embedding for the new note
     const vectorText = `${note.title}\n${summary}\n${note.bodyMarkdown}`;
-    const embedding = await getEmbedding(vectorText, "passage");
-
-    const noteResult = await client.query<{ id: string }>(
-      `
-        INSERT INTO notes (slug, title, field, summary, body_markdown, is_public, embedding)
-        VALUES ($1, $2, $3, $4, $5, $6, $7::vector)
-        RETURNING id
-      `,
-      [slug, note.title, note.field, summary, note.bodyMarkdown, isPublic, toVectorLiteral(embedding)],
-    );
+    const embedding = await getOptionalEmbedding(vectorText, "passage");
+    const noteResult = embedding
+      ? await client.query<{ id: string }>(
+          `
+            INSERT INTO notes (slug, title, field, summary, body_markdown, is_public, embedding)
+            VALUES ($1, $2, $3, $4, $5, $6, $7::vector)
+            RETURNING id
+          `,
+          [slug, note.title, note.field, summary, note.bodyMarkdown, isPublic, toVectorLiteral(embedding)],
+        )
+      : await client.query<{ id: string }>(
+          `
+            INSERT INTO notes (slug, title, field, summary, body_markdown, is_public)
+            VALUES ($1, $2, $3, $4, $5, $6)
+            RETURNING id
+          `,
+          [slug, note.title, note.field, summary, note.bodyMarkdown, isPublic],
+        );
 
     const noteId = noteResult.rows[0].id;
 
@@ -415,9 +443,14 @@ export async function updateNote(
 
     if (shouldRecomputeEmbedding) {
       const vectorText = `${currentTitle}\n${currentSummary}\n${currentBodyMarkdown}`;
-      const embedding = await getEmbedding(vectorText, "passage");
-      updates.push(`embedding = $${counter++}::vector`);
-      values.push(toVectorLiteral(embedding));
+      const embedding = await getOptionalEmbedding(vectorText, "passage");
+
+      if (embedding) {
+        updates.push(`embedding = $${counter++}::vector`);
+        values.push(toVectorLiteral(embedding));
+      } else {
+        updates.push("embedding = NULL");
+      }
     }
 
     if (updates.length > 0) {
@@ -473,8 +506,13 @@ export async function updateNote(
 }
 
 export async function semanticSearchNotes(query: string, limit = 5): Promise<MathKbNoteListItem[]> {
+  assertEmbeddingsEnabled("semanticSearchNotes");
   const pool = getMathKbPool();
-  const embedding = await getEmbedding(query, "query");
+  const embedding = await getOptionalEmbedding(query, "query");
+
+  if (!embedding) {
+    throw new Error("semanticSearchNotes requires embeddings.");
+  }
 
   const result = await pool.query<SearchRow>(
     `
@@ -494,6 +532,7 @@ export async function semanticSearchNotes(query: string, limit = 5): Promise<Mat
       FROM notes
       LEFT JOIN note_tags ON note_tags.note_id = notes.id
       LEFT JOIN tags ON tags.id = note_tags.tag_id
+      WHERE notes.embedding IS NOT NULL
       GROUP BY notes.id
       ORDER BY notes.embedding <=> $1::vector ASC
       LIMIT $2

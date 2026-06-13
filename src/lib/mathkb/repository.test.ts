@@ -32,6 +32,7 @@ describe("repository", () => {
     vi.clearAllMocks();
     mockClient.query.mockReset();
     mockClient.release.mockReset();
+    delete process.env.MATHKB_ENABLE_EMBEDDINGS;
   });
 
   describe("searchNotes", () => {
@@ -208,6 +209,25 @@ describe("repository", () => {
       expect(mockClient.query).toHaveBeenCalledWith("ROLLBACK");
       expect(mockClient.release).toHaveBeenCalledTimes(1);
     });
+
+    it("creates notes without loading embeddings when embeddings are disabled", async () => {
+      process.env.MATHKB_ENABLE_EMBEDDINGS = "false";
+      mockClient.query.mockResolvedValueOnce({ rows: [] }) // BEGIN
+        .mockResolvedValueOnce({ rows: [{ id: "1" }] }) // INSERT INTO notes
+        .mockResolvedValueOnce({ rows: [] }); // COMMIT
+
+      const result = await createNote({
+        title: "Plain Note",
+        field: "Algebra",
+        bodyMarkdown: "# Content",
+      });
+
+      expect(result).toEqual({ success: true, slug: "plain-note" });
+      expect(mockClient.query).toHaveBeenCalledWith(
+        expect.stringContaining("INSERT INTO notes (slug, title, field, summary, body_markdown, is_public)"),
+        ["plain-note", "Plain Note", "Algebra", "", "# Content", false],
+      );
+    });
   });
 
   describe("updateNote", () => {
@@ -246,6 +266,22 @@ describe("repository", () => {
       expect(mockClient.query).toHaveBeenCalledWith("ROLLBACK");
       expect(mockClient.release).toHaveBeenCalledTimes(1);
     });
+
+    it("clears stale embeddings when content changes while embeddings are disabled", async () => {
+      process.env.MATHKB_ENABLE_EMBEDDINGS = "false";
+      mockClient.query.mockResolvedValueOnce({ rows: [] }) // BEGIN
+        .mockResolvedValueOnce({ rows: [{ id: "1" }] }) // SELECT id check
+        .mockResolvedValueOnce({ rows: [{ title: "Old", summary: "Old", body_markdown: "Old" }] }) // current note
+        .mockResolvedValueOnce({ rows: [] }) // UPDATE notes
+        .mockResolvedValueOnce({ rows: [] }); // COMMIT
+
+      await updateNote("existing-note", { bodyMarkdown: "# Updated" });
+
+      expect(mockClient.query).toHaveBeenCalledWith(
+        expect.stringContaining("embedding = NULL"),
+        expect.arrayContaining(["# Updated", "existing-note"]),
+      );
+    });
   });
 
   describe("semanticSearchNotes", () => {
@@ -271,6 +307,15 @@ describe("repository", () => {
         expect.stringContaining("ORDER BY notes.embedding <=> $1::vector"),
         [expect.stringMatching(/^\[[\d.,\-]+\]$/), 2]
       );
+    });
+
+    it("fails before querying when embeddings are disabled", async () => {
+      process.env.MATHKB_ENABLE_EMBEDDINGS = "false";
+
+      await expect(semanticSearchNotes("attractor dynamics", 2)).rejects.toThrow(
+        "semanticSearchNotes requires embeddings",
+      );
+      expect(mockQuery).not.toHaveBeenCalled();
     });
   });
 });
