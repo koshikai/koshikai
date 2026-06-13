@@ -87,7 +87,9 @@ jobs:
           filters: |
             mcp:
               - 'Dockerfile.mcp'
+              - 'docker-compose.internal.yaml'
               - 'src/mcp/**'
+              - 'src/lib/mathkb/**'
               - 'package.json'
               - 'bun.lock'
 
