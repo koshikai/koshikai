@@ -1,4 +1,4 @@
-import { Brain, FlaskConical, GitMerge } from "lucide-react";
+import { Brain, FlaskConical, GitMerge, GraduationCap, Trophy } from "lucide-react";
 
 const researchItems = [
   {
@@ -64,6 +64,28 @@ const presentations = [
     location: "ウインクあいち (愛知)",
     isInternational: false,
     isFuture: false,
+    award: "学生発表賞",
+  },
+] as const;
+
+const courses = [
+  {
+    name: "グローバル消費インテリジェンス寄付講座 (GCI)",
+    org: "東京大学 松尾研究室",
+    completedAt: "2025.09",
+    highlight: "NFL予測 AUC 0.808→0.927、離職分析 ROI 445% の事業計画を策定",
+  },
+  {
+    name: "LLM 大規模言語モデル講座 基礎編",
+    org: "東京大学 松尾・岩澤研究室",
+    completedAt: "2025.12",
+    highlight: "Transformer・RLHF・RAG の理論と実装",
+  },
+  {
+    name: "Deep Learning 基礎講座",
+    org: "東京大学 松尾・岩澤研究室",
+    completedAt: "2026.01",
+    highlight: "CNN・RNN・最適化手法の数理と実装",
   },
 ] as const;
 
@@ -149,7 +171,7 @@ export function ResearchSection({
           <span>Publications & Presentations</span>
           <div className="h-[1px] flex-1 bg-zinc-200 dark:bg-zinc-800 rounded-full"></div>
         </h3>
-        
+
         <div className="space-y-4">
           {presentations.map((pres, idx) => (
             <article
@@ -173,6 +195,12 @@ export function ResearchSection({
                       Forthcoming / 発表予定
                     </span>
                   )}
+                  {"award" in pres && (
+                    <span className="inline-flex items-center gap-1 rounded-lg bg-amber-100/80 px-2.5 py-1 text-[9px] font-black uppercase tracking-wider text-amber-700 dark:bg-amber-900/30 dark:text-amber-300 border border-amber-200/20">
+                      <Trophy className="h-2.5 w-2.5" aria-hidden="true" />
+                      {pres.award}
+                    </span>
+                  )}
                 </div>
                 <time className="text-xs font-bold text-zinc-400 dark:text-zinc-500">{pres.date}</time>
               </div>
@@ -193,6 +221,43 @@ export function ResearchSection({
                 </span>
               </div>
             </article>
+          ))}
+        </div>
+      </div>
+
+      {/* Courses & Certifications */}
+      <div className="mt-12">
+        <h3 className="text-2xl font-black italic tracking-tight text-zinc-800 dark:text-zinc-100 mb-6 uppercase flex items-center gap-4">
+          <span>Courses & Certifications</span>
+          <div className="h-[1px] flex-1 bg-zinc-200 dark:bg-zinc-800 rounded-full"></div>
+        </h3>
+
+        <div className="grid gap-4 sm:grid-cols-3">
+          {courses.map((course) => (
+            <div
+              key={course.name}
+              className="flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-white/60 p-5 dark:border-zinc-700 dark:bg-zinc-900/40"
+            >
+              <div className="flex items-start gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600 dark:bg-indigo-900/40 dark:text-indigo-300">
+                  <GraduationCap className="h-4 w-4" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-zinc-800 dark:text-zinc-100 leading-snug">
+                    {course.name}
+                  </p>
+                  <p className="mt-0.5 text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                    {course.org}
+                  </p>
+                </div>
+              </div>
+              <p className="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
+                {course.highlight}
+              </p>
+              <time className="mt-auto text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
+                修了 {course.completedAt}
+              </time>
+            </div>
           ))}
         </div>
       </div>
