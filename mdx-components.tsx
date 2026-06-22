@@ -53,7 +53,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ),
     pre: (props) => (
       <pre
-        className="my-6 overflow-x-auto rounded-2xl bg-zinc-900 px-5 py-4 text-sm leading-relaxed text-zinc-100 dark:bg-zinc-800/80"
+        className="my-6 overflow-x-auto rounded-2xl bg-zinc-900 px-5 py-4 text-sm leading-relaxed text-zinc-100 dark:bg-zinc-800/80 [&_code]:bg-transparent [&_code]:p-0 [&_code]:text-inherit"
         {...props}
       />
     ),

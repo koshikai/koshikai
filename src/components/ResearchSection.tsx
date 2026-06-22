@@ -99,7 +99,7 @@ export function ResearchSection({
   return (
     <section
       id={id}
-      className={`mx-auto max-w-4xl px-6 py-12 animate-fade-in-up ${className || ""}`}
+      className={`mx-auto max-w-4xl w-full px-6 py-12 animate-fade-in-up ${className || ""}`}
       aria-labelledby="research-heading"
     >
       <div className="flex items-center gap-4 mb-10">
