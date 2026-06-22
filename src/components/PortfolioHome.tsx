@@ -223,7 +223,7 @@ export function PortfolioHome() {
       <Header activeSection={activeSection} />
       <SideNav activeSection={activeSection} />
 
-      <main className="relative flex flex-col items-center pt-16 lg:pt-0">
+      <main id="main-content" className="relative flex flex-col items-center pt-16 lg:pt-0">
         {/* --- Hero Section --- */}
         <section id="hero" className="relative flex min-h-[90vh] w-full flex-col items-center justify-center overflow-hidden px-6 pt-20 pb-32 scroll-mt-24">
           <div className="pointer-events-none absolute top-0 left-0 -z-10 h-full w-full overflow-hidden">
@@ -255,7 +255,7 @@ export function PortfolioHome() {
                 <span className="font-bold text-orange-500 dark:text-orange-400">
                   問題を前に進める
                 </span>
-                こと                に取り組んでいます。
+                ことに取り組んでいます。
               </p>
 
               <div className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50/80 px-4 py-1.5 text-sm text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800/50 dark:text-zinc-400">

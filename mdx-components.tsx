@@ -51,6 +51,12 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {...props}
       />
     ),
+    pre: (props) => (
+      <pre
+        className="my-6 overflow-x-auto rounded-2xl bg-zinc-900 px-5 py-4 text-sm leading-relaxed text-zinc-100 dark:bg-zinc-800/80"
+        {...props}
+      />
+    ),
     code: (props) => (
       <code
         className="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.85em] text-zinc-800 dark:bg-zinc-800 dark:text-zinc-100"
