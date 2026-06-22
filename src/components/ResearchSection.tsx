@@ -83,7 +83,7 @@ export function ResearchSection({
       <div className="flex items-center gap-4 mb-10">
         <h2
           id="research-heading"
-          className="text-3xl font-bold text-zinc-800 dark:text-zinc-100 italic text-balance tracking-tight"
+          className="text-pretty text-3xl font-black italic tracking-tight text-zinc-800 dark:text-zinc-100 uppercase"
         >
           Academic Research
         </h2>
