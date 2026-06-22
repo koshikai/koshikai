@@ -5,8 +5,7 @@ import "@fontsource/m-plus-rounded-1c/japanese-500.css";
 import "@fontsource/m-plus-rounded-1c/japanese-700.css";
 import "@fontsource/m-plus-rounded-1c/japanese-800.css";
 import "./globals.css";
-import { getEffectiveSiteConfig } from "@/lib/site-config";
-import { DevOverlay } from "@/components/DevOverlay";
+import { getSiteConfig } from "@/lib/site-config";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const viewport: Viewport = {
@@ -18,15 +17,14 @@ export const viewport: Viewport = {
   ],
 };
 
-export async function generateMetadata(): Promise<Metadata> {
-  const site = await getEffectiveSiteConfig();
-  const isMathKb = site.variant === "mathkb";
+export function generateMetadata(): Metadata {
+  const site = getSiteConfig();
 
   return {
     metadataBase: new URL(site.baseUrl),
     title: {
       default: site.title,
-      template: isMathKb ? "%s | Private Math Knowledge Base" : "%s | koshikai.dev",
+      template: "%s | koshikai.dev",
     },
     description: site.description,
     keywords: site.keywords,
@@ -54,31 +52,19 @@ export async function generateMetadata(): Promise<Metadata> {
       description: site.description,
       creator: "@koshikai",
     },
-    robots: isMathKb
-      ? {
-          index: false,
-          follow: false,
-          nocache: true,
-          googleBot: {
-            index: false,
-            follow: false,
-            noimageindex: true,
-          },
-        }
-      : {
-          index: true,
-          follow: true,
-          googleBot: {
-            index: true,
-            follow: true,
-            "max-video-preview": -1,
-            "max-image-preview": "large",
-            "max-snippet": -1,
-          },
-        },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
   };
 }
-
 
 async function getThemeClass() {
   try {
@@ -95,53 +81,43 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const site = await getEffectiveSiteConfig();
+  const site = getSiteConfig();
   const themeClass = await getThemeClass();
-  const jsonLd =
-    site.variant === "mathkb"
-      ? {
-          "@context": "https://schema.org",
-          "@type": "WebSite",
-          name: site.name,
-          url: site.baseUrl,
-          description: site.description,
-          inLanguage: "ja-JP",
-        }
-      : [
-          {
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            name: "koshikai.dev",
-            alternateName: ["koshikai"],
-            url: site.baseUrl,
-          },
-          {
-            "@context": "https://schema.org",
-            "@type": "Person",
-            name: "koshikai",
-            url: site.baseUrl,
-            jobTitle: "Software Developer",
-            description:
-              "Personal Developer & Creator building apps that make life better.",
-            sameAs: ["https://github.com/koshikai"],
-            knowsAbout: [
-              "Next.js",
-              "React",
-              "TypeScript",
-              "Python",
-              "AI Agents",
-              "LLMs",
-              "MCP",
-            ],
-          }
-        ];
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "koshikai.dev",
+      alternateName: ["koshikai"],
+      url: site.baseUrl,
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: "koshikai",
+      url: site.baseUrl,
+      jobTitle: "Software Developer",
+      description:
+        "Personal Developer & Creator building apps that make life better.",
+      sameAs: ["https://github.com/koshikai"],
+      knowsAbout: [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "Python",
+        "AI Agents",
+        "LLMs",
+        "MCP",
+      ],
+    },
+  ];
 
   return (
     <html lang="ja" suppressHydrationWarning className={themeClass}>
       <body className="antialiased">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
         />
         <a
           href="#main-content"
@@ -151,7 +127,6 @@ export default async function RootLayout({
         </a>
         {children}
         <ThemeToggle />
-        <DevOverlay />
       </body>
     </html>
   );

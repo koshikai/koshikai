@@ -1,6 +1,4 @@
-import { cookies } from "next/headers";
-
-export type SiteVariant = "portfolio" | "mathkb";
+const BASE_URL = process.env.SITE_URL ?? "https://koshikai.dev";
 
 export interface SiteConfig {
   baseUrl: string;
@@ -11,71 +9,11 @@ export interface SiteConfig {
   name: string;
   title: string;
   twitterTitle: string;
-  variant: SiteVariant;
-}
-
-function getConfiguredBaseUrl(variant: SiteVariant) {
-  const fallbackUrl =
-    variant === "mathkb" ? "http://127.0.0.1:3103" : "https://koshikai.dev";
-
-  return process.env.SITE_URL ?? fallbackUrl;
-}
-
-export function getSiteVariant(): SiteVariant {
-  return process.env.SITE_VARIANT === "mathkb" ? "mathkb" : "portfolio";
-}
-
-export async function getEffectiveVariant(): Promise<SiteVariant> {
-  const baseVariant = getSiteVariant();
-  if (process.env.NODE_ENV === "production" && baseVariant === "portfolio") {
-    return "portfolio";
-  }
-
-  try {
-    const cookieStore = await cookies();
-    const override = cookieStore.get("site-variant")?.value;
-    if (override === "mathkb" || override === "portfolio") {
-      return override as SiteVariant;
-    }
-  } catch {
-    // cookies() might fail in some contexts, fallback to env
-  }
-  return baseVariant;
 }
 
 export function getSiteConfig(): SiteConfig {
-  return getSiteConfigByVariant(getSiteVariant());
-}
-
-export async function getEffectiveSiteConfig(): Promise<SiteConfig> {
-  const variant = await getEffectiveVariant();
-  return getSiteConfigByVariant(variant);
-}
-
-export function getSiteConfigByVariant(variant: SiteVariant): SiteConfig {
-  if (variant === "mathkb") {
-    return {
-      variant,
-      baseUrl: getConfiguredBaseUrl(variant),
-      name: "Private Math Knowledge Base",
-      title: "Private Math Knowledge Base",
-      twitterTitle: "Private Math Knowledge Base",
-      headline: "Research notes for internal use",
-      description:
-        "数学研究ノートを内部向けに蓄積・検索するためのプライベートナレッジベース。",
-      locale: "ja_JP",
-      keywords: [
-        "math knowledge base",
-        "private research notes",
-        "PostgreSQL search",
-        "MCP",
-      ],
-    };
-  }
-
   return {
-    variant,
-    baseUrl: getConfiguredBaseUrl(variant),
+    baseUrl: BASE_URL,
     name: "koshikai.dev",
     title: "koshikai.dev | Solving everyday problems with systems",
     twitterTitle: "koshikai.dev | Solving everyday problems with systems",
