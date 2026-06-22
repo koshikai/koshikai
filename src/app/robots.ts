@@ -4,15 +4,6 @@ import { getSiteConfig } from "@/lib/site-config";
 export default function robots(): MetadataRoute.Robots {
     const site = getSiteConfig();
 
-    if (site.variant === "notes") {
-        return {
-            rules: {
-                userAgent: "*",
-                disallow: "/",
-            },
-        };
-    }
-
     return {
         rules: {
             userAgent: "*",

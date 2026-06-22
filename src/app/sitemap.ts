@@ -5,10 +5,6 @@ import { getSiteConfig } from "@/lib/site-config";
 export default function sitemap(): MetadataRoute.Sitemap {
     const site = getSiteConfig();
 
-    if (site.variant === "notes") {
-        return [];
-    }
-
     return [
         {
             url: site.baseUrl,

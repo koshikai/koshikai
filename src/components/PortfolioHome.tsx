@@ -481,7 +481,7 @@ export function PortfolioHome() {
         </section>
       </main>
 
-      <Footer currentVariant="portfolio" />
+      <Footer />
     </div>
   );
 }
