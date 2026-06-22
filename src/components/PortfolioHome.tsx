@@ -223,9 +223,9 @@ export function PortfolioHome() {
       <Header activeSection={activeSection} />
       <SideNav activeSection={activeSection} />
 
-      <main id="main-content" className="relative flex flex-col items-center pt-16 lg:pt-0">
+      <main id="main-content" className="relative flex flex-col items-center">
         {/* --- Hero Section --- */}
-        <section id="hero" className="relative flex min-h-[90vh] w-full flex-col items-center justify-center overflow-hidden px-6 pt-20 pb-32 scroll-mt-24">
+        <section id="hero" className="relative flex min-h-dvh w-full flex-col items-center justify-center overflow-hidden px-6 pt-16 pb-16 lg:pt-20 lg:pb-20 scroll-mt-24">
           <div className="pointer-events-none absolute top-0 left-0 -z-10 h-full w-full overflow-hidden">
             <div className="absolute top-[-10%] right-[-5%] h-[500px] w-[500px] animate-blob rounded-full bg-pink-200/40 opacity-70 blur-3xl filter mix-blend-multiply motion-reduce:animate-none dark:bg-pink-900/20 dark:mix-blend-normal"></div>
             <div className="animation-delay-2000 absolute top-[20%] left-[-10%] h-[400px] w-[400px] animate-blob rounded-full bg-blue-200/40 opacity-70 blur-3xl filter mix-blend-multiply motion-reduce:animate-none dark:bg-blue-900/20 dark:mix-blend-normal"></div>
