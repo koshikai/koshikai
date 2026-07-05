@@ -1,12 +1,14 @@
 import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { getSiteConfig } from "@/lib/site-config";
 
 export const alt = "koshikai.dev";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function Image() {
+  const site = getSiteConfig();
   const fontsDir = join(process.cwd(), "node_modules", "@fontsource");
   const [serifData, monoData] = await Promise.all([
     readFile(join(fontsDir, "zen-old-mincho", "files", "zen-old-mincho-latin-600-normal.woff")),
@@ -58,7 +60,7 @@ export default async function Image() {
               maxWidth: 900,
             }}
           >
-            Building apps that make life better
+            {site.headline}
           </h1>
         </div>
 

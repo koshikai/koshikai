@@ -102,8 +102,7 @@ export default async function RootLayout({
       name: "koshikai",
       url: site.baseUrl,
       jobTitle: "Software Developer",
-      description:
-        "Personal Developer & Creator building apps that make life better.",
+      description: site.description,
       sameAs: ["https://github.com/koshikai"],
       knowsAbout: [
         "Next.js",
