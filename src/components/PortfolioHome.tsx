@@ -255,16 +255,12 @@ export function PortfolioHome() {
               Hokkaido University · Graduate School of Information Science · M1
             </p>
 
-            <h1 className="mt-8 max-w-4xl text-pretty font-serif text-4xl font-semibold leading-[1.15] tracking-tight text-foreground sm:text-6xl">
-              Building apps that make life better
-            </h1>
-
-            <p className="mt-8 max-w-2xl text-base leading-[1.9] text-muted">
+            <h1 className="mt-8 max-w-2xl text-pretty font-serif text-2xl font-semibold leading-[1.7] tracking-tight text-foreground sm:text-3xl">
               生活や運用の課題を見つけて、実装し、改善を続けることを大切にしています。
               特定の職種に寄せるより、必要なツールを組み合わせて
-              <span className="text-foreground">問題を前に進める</span>
+              <span className="text-accent">問題を前に進める</span>
               ことに取り組んでいます。
-            </p>
+            </h1>
 
             <div className="mt-12 border-t border-border pt-6">
               <ul className="flex flex-wrap gap-x-6 gap-y-2 list-none">
