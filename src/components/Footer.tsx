@@ -1,13 +1,13 @@
 export function Footer() {
     return (
-        <footer className="w-full mt-12 py-12 bg-[#fffbf0] dark:bg-[#1a1625] border-t-4 border-dashed border-zinc-200 dark:border-zinc-800 motion-safe:transition-[background-color,border-color] motion-safe:duration-300">
-            <div className="mx-auto max-w-4xl px-6 flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
+        <footer className="mt-24 w-full border-t border-border bg-background py-12">
+            <div className="mx-auto flex max-w-5xl flex-col items-center gap-6 px-6 sm:flex-row sm:justify-between">
 
-                <div className="flex flex-col items-center sm:items-start">
-                    <span className="font-bold text-lg text-zinc-800 dark:text-zinc-100 font-sans tracking-wide">
+                <div className="flex flex-col items-center gap-1 sm:items-start">
+                    <span className="font-mono text-sm tracking-tight text-foreground">
                         koshikai.dev
                     </span>
-                    <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+                    <p className="font-mono text-[11px] text-muted">
                         © {new Date().getFullYear()} All rights reserved.
                     </p>
                 </div>
@@ -18,10 +18,10 @@ export function Footer() {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="GitHub"
-                        className="flex items-center justify-center p-3 rounded-full bg-zinc-100 hover:bg-sky-100 text-zinc-600 hover:text-sky-500 dark:bg-zinc-800 dark:hover:bg-sky-900/50 dark:text-zinc-300 dark:hover:text-sky-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-400 dark:focus-visible:outline-zinc-600 motion-safe:transition-[transform,background-color,color] motion-safe:duration-300 motion-safe:hover:scale-110 motion-safe:hover:rotate-6"
+                        className="flex items-center justify-center p-2 text-muted transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
                     >
                         <svg
-                            className="h-6 w-6"
+                            className="h-5 w-5"
                             fill="currentColor"
                             viewBox="0 0 24 24"
                             aria-hidden="true"

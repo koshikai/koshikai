@@ -1,46 +1,55 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowRight, Cigarette, Database, GraduationCap, Images, Menu, Server, ShieldCheck, Wrench, X } from "lucide-react";
+import { ArrowRight, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { Footer } from "@/components/Footer";
 import { ProjectCard } from "@/components/ProjectCard";
+import { Reveal } from "@/components/Reveal";
 import { ResearchSection } from "@/components/ResearchSection";
+import { SectionHeading } from "@/components/SectionHeading";
 
 const sections = [
-  { id: "hero", label: "Top" },
-  { id: "about", label: "About" },
-  { id: "principles", label: "Principles" },
-  { id: "projects", label: "Projects" },
-  { id: "research", label: "Research" },
-  { id: "infrastructure", label: "Infra" },
-  { id: "toolbox", label: "Toolbox" },
+  { id: "hero", index: "00", label: "Top" },
+  { id: "about", index: "01", label: "About" },
+  { id: "principles", index: "02", label: "Principles" },
+  { id: "projects", index: "03", label: "Projects" },
+  { id: "research", index: "04", label: "Research" },
+  { id: "infrastructure", index: "05", label: "Infra" },
+  { id: "toolbox", index: "06", label: "Toolbox" },
 ];
 
 function SideNav({ activeSection }: { activeSection: string }) {
   return (
-    <nav className="fixed right-8 top-1/2 z-50 hidden -translate-y-1/2 flex-col gap-4 xl:flex" aria-label="セクションナビゲーション">
+    <nav
+      className="fixed right-8 top-1/2 z-50 hidden -translate-y-1/2 flex-col gap-2.5 xl:flex"
+      aria-label="セクションナビゲーション"
+    >
       {sections.map((section) => {
         const isActive = activeSection === section.id;
         return (
           <a
             key={section.id}
             href={`#${section.id}`}
-            className="group flex items-center justify-end gap-3 text-right transition-[gap,opacity] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sky-500 rounded"
+            className="group flex items-center justify-end gap-3 text-right rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
             aria-label={`Jump to ${section.label}`}
           >
-            <span className={`pointer-events-none text-[10px] font-black uppercase tracking-[0.2em] transition-[opacity,transform] group-hover:translate-x-0 group-hover:opacity-100 ${
-              isActive 
-                ? "text-sky-500 opacity-100 translate-x-0 dark:text-sky-400" 
-                : "text-zinc-400 opacity-0 dark:text-zinc-500"
-            }`}>
+            <span
+              className={`font-mono text-[10px] uppercase tracking-[0.18em] transition-colors ${
+                isActive
+                  ? "text-accent"
+                  : "text-muted/60 group-hover:text-foreground"
+              }`}
+            >
               {section.label}
             </span>
-            <div className={`h-1 rounded-full transition-[width,background-color] ${
-              isActive 
-                ? "w-8 bg-sky-500 dark:bg-sky-400" 
-                : "w-4 bg-zinc-200 group-hover:w-8 group-hover:bg-sky-500 dark:bg-zinc-800"
-            }`} />
+            <span
+              className={`h-px transition-[width,background-color] ${
+                isActive
+                  ? "w-6 bg-accent"
+                  : "w-3 bg-border group-hover:w-6 group-hover:bg-foreground"
+              }`}
+            />
           </a>
         );
       })}
@@ -60,32 +69,36 @@ function Header({ activeSection }: { activeSection: string }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const navSections = sections.filter((s) => s.id !== "hero");
+
   return (
-    <header className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-      isScrolled 
-        ? "bg-white/80 dark:bg-zinc-950/80 shadow-md backdrop-blur-md py-4 border-b border-zinc-200/50 dark:border-zinc-800/50" 
-        : "bg-transparent py-6"
-    }`}>
-      <div className="mx-auto max-w-7xl px-6 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 font-sans font-bold text-zinc-800 dark:text-zinc-100 hover:text-sky-500 dark:hover:text-sky-400 transition-colors">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-tr from-sky-400 to-blue-500 text-sm font-bold text-white shadow-inner">
-            K
-          </div>
-          <span>koshikai.dev</span>
+    <header
+      className={`fixed left-0 right-0 top-0 z-40 transition-[background-color,border-color,padding] duration-300 ${
+        isScrolled
+          ? "border-b border-border bg-background/90 py-3 backdrop-blur-sm"
+          : "border-b border-transparent bg-transparent py-5"
+      }`}
+    >
+      <div className="mx-auto flex max-w-5xl items-center justify-between px-6">
+        <Link
+          href="/"
+          className="font-mono text-sm tracking-tight text-foreground transition-colors hover:text-accent"
+        >
+          koshikai.dev
         </Link>
 
         {/* Desktop Menu */}
-        <nav className="hidden lg:flex items-center gap-6" aria-label="グローバルナビゲーション">
-          {sections.map((section) => {
+        <nav className="hidden items-center gap-6 lg:flex" aria-label="グローバルナビゲーション">
+          {navSections.map((section) => {
             const isActive = activeSection === section.id;
             return (
               <a
                 key={section.id}
                 href={`#${section.id}`}
-                className={`text-xs font-black uppercase tracking-wider transition-colors ${
-                  isActive 
-                    ? "text-sky-500 dark:text-sky-400" 
-                    : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-100"
+                className={`font-mono text-[11px] uppercase tracking-[0.16em] transition-colors ${
+                  isActive
+                    ? "text-accent"
+                    : "text-muted hover:text-foreground"
                 }`}
               >
                 {section.label}
@@ -94,16 +107,16 @@ function Header({ activeSection }: { activeSection: string }) {
           })}
           <Link
             href="/cases"
-            className="text-xs font-black uppercase tracking-wider text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-100 border-l border-zinc-300 dark:border-zinc-700 pl-4"
+            className="border-l border-border pl-4 font-mono text-[11px] uppercase tracking-[0.16em] text-muted transition-colors hover:text-foreground"
           >
-            Case Studies
+            Cases
           </Link>
         </nav>
 
         {/* Mobile Menu Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex lg:hidden h-10 w-10 items-center justify-center rounded-full border border-zinc-200 bg-white/50 dark:border-zinc-700 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500"
+          className="flex h-9 w-9 items-center justify-center border border-border text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent lg:hidden"
           aria-label={isOpen ? "メニューを閉じる" : "メニューを開く"}
           aria-expanded={isOpen}
         >
@@ -113,30 +126,29 @@ function Header({ activeSection }: { activeSection: string }) {
 
       {/* Mobile Drawer */}
       {isOpen && (
-        <div className="lg:hidden absolute top-full left-0 right-0 border-b border-zinc-200 bg-white/95 px-6 py-6 shadow-xl dark:border-zinc-800 dark:bg-zinc-950/95 backdrop-blur-lg animate-fade-in-up">
+        <div className="absolute left-0 right-0 top-full border-b border-border bg-background px-6 py-6 lg:hidden">
           <nav className="flex flex-col gap-4" aria-label="モバイルナビゲーション">
-            {sections.map((section) => {
+            {navSections.map((section) => {
               const isActive = activeSection === section.id;
               return (
                 <a
                   key={section.id}
                   href={`#${section.id}`}
                   onClick={() => setIsOpen(false)}
-                  className={`text-sm font-bold uppercase tracking-wider transition-colors ${
-                    isActive 
-                      ? "text-sky-500 dark:text-sky-400" 
-                      : "text-zinc-600 dark:text-zinc-300 hover:text-sky-500"
+                  className={`flex items-baseline gap-3 font-mono text-sm uppercase tracking-[0.16em] transition-colors ${
+                    isActive ? "text-accent" : "text-muted hover:text-foreground"
                   }`}
                 >
+                  <span className="text-[11px] text-accent/70">{section.index}</span>
                   {section.label}
                 </a>
               );
             })}
-            <div className="h-[1px] bg-zinc-200 dark:bg-zinc-800" />
+            <div className="h-px bg-border" />
             <Link
               href="/cases"
               onClick={() => setIsOpen(false)}
-              className="text-sm font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-300 hover:text-sky-500"
+              className="font-mono text-sm uppercase tracking-[0.16em] text-muted transition-colors hover:text-foreground"
             >
               Case Studies
             </Link>
@@ -152,19 +164,16 @@ const solveAreas = [
     title: "生活の不便を仕組みに置き換える",
     description:
       "日常で繰り返す手間を見つけ、継続して使える仕組みとして設計・実装します。",
-    icon: Wrench,
   },
   {
     title: "一貫性のある運用設計",
     description:
       "作って終わりではなく、バックアップや監視を含めた運用可能な状態を目指します。",
-    icon: ShieldCheck,
   },
   {
     title: "データの価値を維持する",
     description:
       "年月が経っても参照可能で、移行や拡張に耐えうるデータ構造を検討します。",
-    icon: Database,
   },
 ];
 
@@ -174,6 +183,18 @@ const operationHighlights = [
   "Immich / NocoDB 等のセルフホストサービスの安定運用",
   "ZFS / 外部ストレージへの自動バックアップ体制の構築",
   "Cloudflare Tunnel を活用した安全なサービス公開",
+];
+
+const infraCases = [
+  { slug: "immich-distributed", title: "分散インフラ基盤の構築と運用" },
+  { slug: "home-backup", title: "自宅バックアップ基盤の構築" },
+  { slug: "deploy-automation", title: "デプロイ作業の自動化" },
+];
+
+const credentials = [
+  "北海道大学大学院 情報科学院 M1",
+  "SCI'26 学生発表賞",
+  "松尾研 修了 ×3",
 ];
 
 const toolboxByUse = [
@@ -219,265 +240,214 @@ export function PortfolioHome() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-white font-sans selection:bg-sky-100 selection:text-sky-900 dark:bg-zinc-950 dark:selection:bg-sky-900/30 dark:selection:text-sky-200">
+    <div className="relative min-h-screen bg-background font-sans text-foreground">
       <Header activeSection={activeSection} />
       <SideNav activeSection={activeSection} />
 
       <main id="main-content" className="relative flex flex-col items-center">
         {/* --- Hero Section --- */}
-        <section id="hero" className="relative flex min-h-dvh w-full flex-col items-center justify-center overflow-hidden px-6 pt-16 pb-16 lg:pt-20 lg:pb-20 scroll-mt-24">
-          <div className="pointer-events-none absolute top-0 left-0 -z-10 h-full w-full overflow-hidden">
-            <div className="absolute top-[-10%] right-[-5%] h-[500px] w-[500px] animate-blob rounded-full bg-pink-200/40 opacity-70 blur-3xl filter mix-blend-multiply motion-reduce:animate-none dark:bg-pink-900/20 dark:mix-blend-normal"></div>
-            <div className="animation-delay-2000 absolute top-[20%] left-[-10%] h-[400px] w-[400px] animate-blob rounded-full bg-blue-200/40 opacity-70 blur-3xl filter mix-blend-multiply motion-reduce:animate-none dark:bg-blue-900/20 dark:mix-blend-normal"></div>
-            <div className="animation-delay-4000 absolute right-[20%] bottom-[-10%] h-[600px] w-[600px] animate-blob rounded-full bg-yellow-200/40 opacity-70 blur-3xl filter mix-blend-multiply motion-reduce:animate-none dark:bg-yellow-900/20 dark:mix-blend-normal"></div>
-          </div>
+        <section
+          id="hero"
+          className="flex min-h-dvh w-full flex-col justify-center px-6 pb-16 pt-28 scroll-mt-24"
+        >
+          <div className="mx-auto w-full max-w-5xl">
+            <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-muted">
+              Hokkaido University · Graduate School of Information Science · M1
+            </p>
 
-          <div className="grid md:grid-cols-[1.2fr_0.8fr] items-center gap-12 max-w-7xl w-full mx-auto">
-            <div className="flex w-full flex-col items-center gap-8 text-center md:items-start md:text-left">
+            <h1 className="mt-8 max-w-4xl text-pretty font-serif text-4xl font-semibold leading-[1.15] tracking-tight text-foreground sm:text-6xl">
+              Building apps that make life better
+            </h1>
 
+            <p className="mt-8 max-w-2xl text-base leading-[1.9] text-muted">
+              生活や運用の課題を見つけて、実装し、改善を続けることを大切にしています。
+              特定の職種に寄せるより、必要なツールを組み合わせて
+              <span className="text-foreground">問題を前に進める</span>
+              ことに取り組んでいます。
+            </p>
 
-              <h1 className="text-pretty text-5xl leading-[1.1] font-extrabold tracking-tight text-zinc-800 drop-shadow-sm sm:text-7xl dark:text-zinc-50">
-                Building apps that{" "}
-                <span className="relative inline-block">
-                  <span className="bg-linear-to-r from-sky-400 to-emerald-400 bg-clip-text text-transparent">
-                    make life better
-                  </span>
-                  <span
-                    className="absolute bottom-2 left-0 -z-10 h-3 w-full rounded-full bg-yellow-200/60 -rotate-2 dark:bg-yellow-900/40"
-                    aria-hidden="true"
-                  />
-                </span>
-              </h1>
-
-              <p className="max-w-2xl text-xl leading-relaxed font-medium text-zinc-600 dark:text-zinc-300">
-                生活や運用の課題を見つけて、実装し、改善を続けることを大切にしています。
-                特定の職種に寄せるより、必要なツールを組み合わせて
-                <span className="font-bold text-orange-500 dark:text-orange-400">
-                  問題を前に進める
-                </span>
-                ことに取り組んでいます。
-              </p>
-
-              <div className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50/80 px-4 py-1.5 text-sm text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800/50 dark:text-zinc-400">
-                <GraduationCap className="h-3.5 w-3.5" aria-hidden="true" />
-                北海道大学大学院 情報科学院 修士1年
-              </div>
-            </div>
-
-            <div className="hidden md:flex justify-center items-center relative h-[450px] w-full" style={{ perspective: '1000px' }}>
-              <div className="absolute h-[300px] w-[300px] rounded-full bg-linear-to-r from-sky-400/20 to-emerald-400/20 blur-[80px] dark:from-sky-900/30 dark:to-emerald-900/30 animate-pulse motion-reduce:animate-none"></div>
-
-              <div className="absolute inset-0 flex items-center justify-center animate-[spin_40s_linear_infinite] motion-reduce:animate-none" style={{ transformStyle: 'preserve-3d' }}>
-                <div className="absolute h-64 w-64 rounded-full border-2 border-dashed border-sky-400/30 dark:border-sky-500/20" style={{ transform: 'rotateX(60deg) rotateY(20deg)' }}>
-                  <div className="absolute top-0 left-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.8)]"></div>
-                </div>
-                
-                <div className="absolute h-80 w-80 rounded-full border border-emerald-400/30 dark:border-emerald-500/20" style={{ transform: 'rotateX(70deg) rotateY(-30deg)' }}>
-                  <div className="absolute bottom-0 left-1/4 h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.8)]"></div>
-                </div>
-
-                <div className="absolute h-96 w-96 rounded-full border border-purple-400/20 dark:border-purple-500/10 animate-[spin_60s_linear_infinite_reverse] motion-reduce:animate-none" style={{ transform: 'rotateX(50deg) rotateY(40deg)' }}></div>
-              </div>
-
-              <div className="relative z-10 flex h-64 w-64 items-center justify-center animate-float motion-reduce:animate-none overflow-visible" style={{ transformStyle: 'preserve-3d' }}>
-                <div className="absolute z-0 h-20 w-20 rounded-full bg-white/60 backdrop-blur-3xl shadow-[0_0_40px_rgba(255,255,255,1)] dark:bg-zinc-800/80 dark:shadow-[0_0_40px_rgba(56,189,248,0.3)] animate-pulse motion-reduce:animate-none"></div>
-                <div className="absolute inset-4 rounded-[2rem] border border-white/20 bg-linear-to-br from-white/10 to-transparent backdrop-blur-md shadow-2xl dark:border-zinc-700/30 dark:from-zinc-700/20" style={{ transform: 'rotateX(20deg) rotateY(-20deg) translateZ(-50px)' }}></div>
-                <div className="absolute inset-0 rounded-[2.5rem] border border-white/40 bg-linear-to-tr from-white/20 to-transparent backdrop-blur-xl shadow-2xl dark:border-zinc-600/40 dark:from-zinc-600/30" style={{ transform: 'rotateX(20deg) rotateY(-20deg) translateZ(0px)' }}></div>
-
-                <div className="absolute inset-0" style={{ transformStyle: 'preserve-3d', transform: 'rotateX(20deg) rotateY(-20deg) translateZ(60px)' }}>
-                   <div className="absolute top-2 left-2 flex h-20 w-20 items-center justify-center rounded-2xl border border-sky-300/50 bg-white/40 backdrop-blur-2xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-transform duration-500 hover:scale-110 hover:-translate-y-2 dark:border-sky-600/50 dark:bg-zinc-800/60 dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
-                     <Server className="h-8 w-8 text-sky-600 dark:text-sky-400" aria-hidden="true" />
-                   </div>
-                   <div className="absolute bottom-2 right-2 flex h-20 w-20 items-center justify-center rounded-2xl border border-emerald-300/50 bg-white/40 backdrop-blur-2xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-transform duration-500 hover:scale-110 hover:-translate-y-2 dark:border-emerald-600/50 dark:bg-zinc-800/60 dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
-                     <Database className="h-8 w-8 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
-                   </div>
-                   <div className="absolute top-6 right-6 flex h-14 w-14 items-center justify-center rounded-xl border border-purple-300/50 bg-white/40 backdrop-blur-2xl shadow-lg transition-transform duration-500 hover:scale-110 hover:-translate-y-1 dark:border-purple-600/50 dark:bg-zinc-800/60">
-                     <ShieldCheck className="h-6 w-6 text-purple-600 dark:text-purple-400" aria-hidden="true" />
-                   </div>
-                   <div className="absolute bottom-6 left-6 flex h-14 w-14 items-center justify-center rounded-xl border border-orange-300/50 bg-white/40 backdrop-blur-2xl shadow-lg transition-transform duration-500 hover:scale-110 hover:-translate-y-1 dark:border-orange-600/50 dark:bg-zinc-800/60">
-                     <Wrench className="h-6 w-6 text-orange-600 dark:text-orange-400" aria-hidden="true" />
-                   </div>
-                </div>
-
-                <div className="absolute top-1/4 -right-12 h-2 w-2 rounded-full bg-sky-400 shadow-[0_0_10px_rgba(56,189,248,1)] animate-bounce motion-reduce:animate-none" style={{ animationDuration: '2.5s' }}></div>
-                <div className="absolute bottom-1/4 -left-12 h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,1)] animate-bounce motion-reduce:animate-none" style={{ animationDuration: '3.2s' }}></div>
-              </div>
+            <div className="mt-12 border-t border-border pt-6">
+              <ul className="flex flex-wrap gap-x-6 gap-y-2 list-none">
+                {credentials.map((item) => (
+                  <li
+                    key={item}
+                    className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <nav
+                className="mt-6 flex flex-wrap gap-x-5 gap-y-2 list-none"
+                aria-label="セクション目次"
+              >
+                {sections
+                  .filter((s) => s.id !== "hero")
+                  .map((section) => (
+                    <a
+                      key={section.id}
+                      href={`#${section.id}`}
+                      className="group inline-flex items-baseline gap-1.5 font-mono text-xs text-muted transition-colors hover:text-accent"
+                    >
+                      <span className="text-accent">{section.index}</span>
+                      <span className="tracking-[0.1em] group-hover:underline">
+                        {section.label}
+                      </span>
+                    </a>
+                  ))}
+              </nav>
             </div>
           </div>
         </section>
 
         {/* --- About --- */}
-        <section id="about" className="mx-auto max-w-4xl px-6 py-12 scroll-mt-24 w-full">
-          <div className="mb-10 flex items-center gap-4">
-            <h2 className="text-pretty text-3xl font-black italic tracking-tight text-zinc-800 dark:text-zinc-100 uppercase">
-              About
-            </h2>
-            <div className="h-[2px] flex-1 bg-linear-to-r from-zinc-200 via-zinc-400/30 to-transparent dark:from-zinc-800 dark:via-zinc-600/30 dark:to-transparent rounded-full"></div>
-          </div>
-
-          <div className="rounded-3xl border-2 border-zinc-200 bg-white/80 p-8 dark:border-zinc-700 dark:bg-zinc-900/50">
-            <p className="text-base leading-relaxed text-zinc-600 dark:text-zinc-300">
-              開発を始めたきっかけは、「自分が不便だと思うことを自分で直したい」という一点です。
-              最初は小さなスクリプトから始まり、いつの間にか自宅にサーバーを置いてインフラを組み、論文を読みながらコードを書くようになっていました。
-            </p>
-            <p className="mt-4 text-base leading-relaxed text-zinc-600 dark:text-zinc-300">
-              特定の肩書きにこだわらず、フロントエンド・インフラ・研究の間を渡り歩きながら、
-              「これ、なんとかならないか」を形にし続けています。
-            </p>
-            <p className="mt-4 text-base leading-relaxed text-zinc-600 dark:text-zinc-300">
-              いま特に関心があるのは、LLM やエージェントを実用的な運用の現場にどう組み込むかという領域です。
-            </p>
-          </div>
+        <section id="about" className="mx-auto w-full max-w-5xl px-6 py-20 scroll-mt-24 sm:py-28">
+          <Reveal>
+            <SectionHeading index="01" label="About" title="はじまりは「自分で直したい」" />
+            <div className="max-w-2xl space-y-6 text-base leading-[1.9] text-muted">
+              <p>
+                開発を始めたきっかけは、「自分が不便だと思うことを自分で直したい」という一点です。
+                最初は小さなスクリプトから始まり、いつの間にか自宅にサーバーを置いてインフラを組み、論文を読みながらコードを書くようになっていました。
+              </p>
+              <p>
+                特定の肩書きにこだわらず、フロントエンド・インフラ・研究の間を渡り歩きながら、
+                「これ、なんとかならないか」を形にし続けています。
+              </p>
+              <p>
+                いま特に関心があるのは、LLM やエージェントを実用的な運用の現場にどう組み込むかという領域です。
+              </p>
+            </div>
+          </Reveal>
         </section>
 
         {/* --- Core Principles --- */}
-        <section id="principles" className="mx-auto max-w-4xl px-6 py-12 scroll-mt-24 w-full">
-          <div className="mb-10 flex items-center gap-4">
-            <h2 className="text-pretty text-3xl font-black italic tracking-tight text-zinc-800 dark:text-zinc-100 uppercase">
-              Core Principles
-            </h2>
-            <div className="h-[2px] flex-1 bg-linear-to-r from-zinc-200 via-zinc-400/30 to-transparent dark:from-zinc-800 dark:via-zinc-600/30 dark:to-transparent rounded-full"></div>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-3">
-            {solveAreas.map((area) => {
-              const Icon = area.icon;
-              return (
-                <article
+        <section id="principles" className="mx-auto w-full max-w-5xl px-6 py-20 scroll-mt-24 sm:py-28">
+          <Reveal>
+            <SectionHeading index="02" label="Principles" title="大切にしていること" />
+            <ul className="list-none">
+              {solveAreas.map((area, i) => (
+                <li
                   key={area.title}
-                  className="group rounded-3xl border-2 border-zinc-200 bg-white/80 p-6 shadow-sm transition-[transform,border-color] hover:-translate-y-1 hover:border-sky-300 dark:border-zinc-700 dark:bg-zinc-900/50 dark:hover:border-sky-800"
+                  className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 border-t border-border py-7 sm:grid-cols-[3rem_1fr]"
                 >
-                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-50 text-sky-600 group-hover:bg-sky-600 group-hover:text-white dark:bg-sky-950/40 dark:text-sky-300 transition-colors">
-                    <Icon className="h-6 w-6" aria-hidden="true" />
+                  <span className="font-mono text-sm text-accent">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div>
+                    <h3 className="font-serif text-lg font-semibold text-foreground">
+                      {area.title}
+                    </h3>
+                    <p className="mt-2 max-w-xl text-sm leading-[1.9] text-muted">
+                      {area.description}
+                    </p>
                   </div>
-                  <h3 className="mb-2 text-lg font-bold text-zinc-800 dark:text-zinc-100">
-                    {area.title}
-                  </h3>
-                  <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
-                    {area.description}
-                  </p>
-                </article>
-              );
-            })}
-          </div>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
         </section>
 
         {/* --- Projects --- */}
-        <section id="projects" className="mx-auto max-w-4xl px-6 py-12 scroll-mt-24 w-full">
-          <div className="mb-10 flex items-center gap-4">
-            <h2 className="text-pretty text-3xl font-black italic tracking-tight text-zinc-800 dark:text-zinc-100 uppercase">
-              Existing Projects
-            </h2>
-            <div className="h-[2px] flex-1 bg-linear-to-r from-zinc-200 via-zinc-400/30 to-transparent dark:from-zinc-800 dark:via-zinc-600/30 dark:to-transparent rounded-full"></div>
-          </div>
+        <section id="projects" className="mx-auto w-full max-w-5xl px-6 py-20 scroll-mt-24 sm:py-28">
+          <Reveal>
+            <SectionHeading index="03" label="Projects" title="つくったもの" />
+            <div className="border-t border-border">
+              <ProjectCard
+                title="Smoke it."
+                subtitle="smoke-it.koshikai.dev"
+                description="Next.js 16.2 + PWA に Optimistic UI を組み合わせたネイティブ級の喫煙記録管理アプリ。AI コーチ（OpenRouter）と 3D バッジ（Three.js）で自分の習慣と向き合う継続を支援。"
+                features={["Next.js 16.2", "PWA", "AI Coach", "3D Badges"]}
+                href="https://smoke-it.koshikai.dev"
+              />
 
-          <div className="grid gap-8 sm:grid-cols-2 max-w-3xl mx-auto">
-            <ProjectCard
-              title="Smoke it."
-              subtitle="smoke-it.koshikai.dev"
-              description="Next.js 16.2 + PWA に Optimistic UI を組み合わせたネイティブ級の喫煙記録管理アプリ。AI コーチ（OpenRouter）と 3D バッジ（Three.js）で自分の習慣と向き合う継続を支援。"
-              features={["Next.js 16.2", "PWA", "AI Coach", "3D Badges"]}
-              href="https://smoke-it.koshikai.dev"
-              accentColor="green"
-              icon={<Cigarette className="h-7 w-7" />}
-            />
+              <ProjectCard
+                title="KariGallery"
+                subtitle="gallery.koshikai.dev"
+                description="友人のイラスト販売用に制作したが、現在は偽名によるダミーデータを表示するギャラリーとして運用中。Stripe 決済は技術検証済み。"
+                features={["Prisma v7.7", "Auth.js", "Stripe API", "Image Compression"]}
+                href="https://gallery.koshikai.dev"
+              />
+            </div>
 
-            <ProjectCard
-              title="KariGallery"
-              subtitle="gallery.koshikai.dev"
-              description="友人のイラスト販売用に制作したが、現在は偽名によるダミーデータを表示するギャラリーとして運用中。Stripe 決済は技術検証済み。"
-              features={["Prisma v7.7", "Auth.js", "Stripe API", "Image Compression"]}
-              href="https://gallery.koshikai.dev"
-              accentColor="purple"
-              icon={<Images className="h-7 w-7" />}
-            />
-          </div>
-
-          <div className="mt-10 text-center">
-            <Link
-              href="/cases"
-              className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white/80 px-5 py-3 text-sm font-bold text-zinc-700 shadow-sm transition-colors hover:border-sky-300 hover:text-sky-700 dark:border-zinc-700 dark:bg-zinc-900/60 dark:text-zinc-300 dark:hover:border-sky-700 dark:hover:text-sky-200"
-            >
-              他の事例を見る
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
-          </div>
+            <div className="mt-8">
+              <Link
+                href="/cases"
+                className="group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-foreground transition-colors hover:text-accent"
+              >
+                <span className="border-b border-border pb-0.5 transition-colors group-hover:border-accent">
+                  他の事例を見る
+                </span>
+                <ArrowRight
+                  className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 motion-reduce:transition-none"
+                  aria-hidden="true"
+                />
+              </Link>
+            </div>
+          </Reveal>
         </section>
 
         {/* --- Research --- */}
         <ResearchSection id="research" className="scroll-mt-24" />
 
         {/* --- Infrastructure --- */}
-        <section id="infrastructure" className="mx-auto max-w-4xl px-6 py-12 scroll-mt-24 w-full">
-          <div className="mb-10 flex items-center gap-4">
-            <h2 className="text-pretty text-3xl font-black italic tracking-tight text-zinc-800 dark:text-zinc-100 uppercase">
-              Infrastructure
-            </h2>
-            <div className="h-[2px] flex-1 bg-linear-to-r from-zinc-200 via-zinc-400/30 to-transparent dark:from-zinc-800 dark:via-zinc-600/30 dark:to-transparent rounded-full"></div>
-          </div>
-
-          <div className="grid gap-8 rounded-3xl border-2 border-zinc-200 bg-white/80 p-8 dark:border-zinc-700 dark:bg-zinc-900/50 md:grid-cols-[1.2fr_1fr]">
-            <div className="flex flex-col h-full">
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-300">
-                <Server className="h-6 w-6" aria-hidden="true" />
+        <section id="infrastructure" className="mx-auto w-full max-w-5xl px-6 py-20 scroll-mt-24 sm:py-28">
+          <Reveal>
+            <SectionHeading index="05" label="Infrastructure" title="自宅から続けるインフラ運用" />
+            <div className="grid gap-12 md:grid-cols-[1.1fr_1fr]">
+              <div>
+                <p className="max-w-xl text-base leading-[1.9] text-muted">
+                  Proxmox を基盤に、自宅サーバーを大学時代から継続運用しています。生活課題を起点に、バックアップ、自動化、障害対応までを一体で設計し、技術を実用に結びつける運用を続けています。
+                </p>
+                <div className="mt-8">
+                  {infraCases.map((caseStudy) => (
+                    <Link
+                      key={caseStudy.slug}
+                      href={`/cases/${caseStudy.slug}`}
+                      className="group flex items-center justify-between border-t border-border py-4 text-sm text-foreground transition-colors last:border-b hover:text-accent"
+                    >
+                      <span>{caseStudy.title}</span>
+                      <ArrowRight
+                        className="h-4 w-4 text-muted transition-[transform,color] group-hover:translate-x-1 group-hover:text-accent motion-reduce:transition-none"
+                        aria-hidden="true"
+                      />
+                    </Link>
+                  ))}
+                </div>
               </div>
-              <p className="text-base leading-relaxed text-zinc-600 dark:text-zinc-300 flex-1">
-                Proxmox を基盤に、自宅サーバーを大学時代から継続運用しています。生活課題を起点に、バックアップ、自動化、障害対応までを一体で設計し、技術を実用に結びつける運用を続けています。
-              </p>
-              <div className="mt-6 space-y-2.5">
-                {[
-                  { slug: "immich-distributed", title: "分散インフラ基盤の構築と運用" },
-                  { slug: "home-backup", title: "自宅バックアップ基盤の構築" },
-                  { slug: "deploy-automation", title: "デプロイ作業の自動化" },
-                ].map((caseStudy) => (
-                  <Link
-                    key={caseStudy.slug}
-                    href={`/cases/${caseStudy.slug}`}
-                    className="group flex items-center justify-between rounded-xl border border-zinc-200/60 bg-zinc-50/50 px-4 py-3 text-sm font-bold text-zinc-700 transition-all duration-300 hover:border-emerald-300 hover:bg-emerald-50/30 hover:text-emerald-700 dark:border-zinc-700/50 dark:bg-zinc-800/30 dark:text-zinc-300 dark:hover:border-emerald-800 dark:hover:bg-emerald-950/20 dark:hover:text-emerald-300"
+              <ul role="list" className="list-none">
+                {operationHighlights.map((item) => (
+                  <li
+                    key={item}
+                    className="border-t border-border py-4 text-sm leading-relaxed text-muted last:border-b"
                   >
-                    <span>{caseStudy.title}</span>
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-                  </Link>
+                    {item}
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
-            <ul role="list" className="space-y-3 text-sm text-zinc-600 dark:text-zinc-300">
-              {operationHighlights.map((item) => (
-                <li
-                  key={item}
-                  className="rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 dark:border-zinc-700 dark:bg-zinc-800/60"
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
+          </Reveal>
         </section>
 
         {/* --- Toolbox --- */}
-        <section id="toolbox" className="mx-auto max-w-4xl px-6 py-12 pb-32 scroll-mt-24 w-full">
-          <div className="mb-10 flex items-center gap-4">
-            <h2 className="text-pretty text-3xl font-black italic tracking-tight text-zinc-800 dark:text-zinc-100 uppercase">
-              Toolbox & Stacks
-            </h2>
-            <div className="h-[2px] flex-1 bg-linear-to-r from-zinc-200 via-zinc-400/30 to-transparent dark:from-zinc-800 dark:via-zinc-600/30 dark:to-transparent rounded-full"></div>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            {toolboxByUse.map((group) => (
-              <article
-                key={group.use}
-                className="rounded-2xl border-2 border-zinc-200 bg-white/80 px-5 py-4 dark:border-zinc-700 dark:bg-zinc-900/50"
-              >
-                <p className="mb-1 text-sm font-bold text-zinc-800 dark:text-zinc-100">
-                  {group.use}
-                </p>
-                <p className="text-sm text-zinc-600 dark:text-zinc-300">
-                  {group.tools}
-                </p>
-              </article>
-            ))}
-          </div>
+        <section id="toolbox" className="mx-auto w-full max-w-5xl px-6 py-20 pb-28 scroll-mt-24 sm:py-28">
+          <Reveal>
+            <SectionHeading index="06" label="Toolbox" title="道具箱" />
+            <dl className="list-none">
+              {toolboxByUse.map((group) => (
+                <div
+                  key={group.use}
+                  className="grid grid-cols-1 gap-1 border-t border-border py-5 last:border-b sm:grid-cols-[12rem_1fr] sm:gap-6"
+                >
+                  <dt className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
+                    {group.use}
+                  </dt>
+                  <dd className="text-sm leading-relaxed text-foreground">
+                    {group.tools}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </Reveal>
         </section>
       </main>
 

@@ -1,9 +1,14 @@
 import type { Metadata, Viewport } from "next";
 import { cookies } from "next/headers";
-import "@fontsource/m-plus-rounded-1c/japanese-400.css";
-import "@fontsource/m-plus-rounded-1c/japanese-500.css";
-import "@fontsource/m-plus-rounded-1c/japanese-700.css";
-import "@fontsource/m-plus-rounded-1c/japanese-800.css";
+import "@fontsource/noto-sans-jp/japanese-400.css";
+import "@fontsource/noto-sans-jp/japanese-500.css";
+import "@fontsource/noto-sans-jp/japanese-700.css";
+import "@fontsource/zen-old-mincho/japanese-400.css";
+import "@fontsource/zen-old-mincho/japanese-600.css";
+import "@fontsource/zen-old-mincho/japanese-700.css";
+import "@fontsource/jetbrains-mono/400.css";
+import "@fontsource/jetbrains-mono/500.css";
+import "@fontsource/jetbrains-mono/700.css";
 import "./globals.css";
 import { getSiteConfig } from "@/lib/site-config";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -12,8 +17,8 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fffbf0" },
-    { media: "(prefers-color-scheme: dark)", color: "#1a1625" },
+    { media: "(prefers-color-scheme: light)", color: "#fafaf7" },
+    { media: "(prefers-color-scheme: dark)", color: "#131315" },
   ],
 };
 
@@ -121,7 +126,7 @@ export default async function RootLayout({
         />
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-zinc-900 focus:shadow-lg dark:focus:bg-zinc-900 dark:focus:text-zinc-100"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:border focus:border-border focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-foreground focus:outline-2 focus:outline-accent"
         >
           メインコンテンツへスキップ
         </a>

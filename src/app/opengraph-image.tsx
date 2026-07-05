@@ -7,15 +7,11 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function Image() {
-  const fontPath = join(
-    process.cwd(),
-    "node_modules",
-    "@fontsource",
-    "m-plus-rounded-1c",
-    "files",
-    "m-plus-rounded-1c-latin-700-normal.woff"
-  );
-  const fontData = await readFile(fontPath);
+  const fontsDir = join(process.cwd(), "node_modules", "@fontsource");
+  const [serifData, monoData] = await Promise.all([
+    readFile(join(fontsDir, "zen-old-mincho", "files", "zen-old-mincho-latin-600-normal.woff")),
+    readFile(join(fontsDir, "jetbrains-mono", "files", "jetbrains-mono-latin-400-normal.woff")),
+  ]);
 
   return new ImageResponse(
     (
@@ -25,71 +21,64 @@ export default async function Image() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "linear-gradient(135deg, #f8fafc 0%, #eef2ff 55%, #f8fafc 100%)",
-          padding: 64,
-          fontFamily: '"M PLUS Rounded 1c", sans-serif',
+          justifyContent: "space-between",
+          background: "#fafaf7",
+          padding: 80,
+          fontFamily: '"Zen Old Mincho", serif',
         }}
       >
-        <div
+        <span
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 96,
-            height: 96,
-            borderRadius: 48,
-            background: "linear-gradient(to top right, #38bdf8, #3b82f6)",
-            marginBottom: 32,
-            boxShadow: "0 10px 30px rgba(56, 189, 248, 0.3)",
-          }}
-        >
-          <span
-            style={{
-              fontSize: 48,
-              fontWeight: 700,
-              color: "white",
-            }}
-          >
-            K
-          </span>
-        </div>
-        <h1
-          style={{
-            fontSize: 72,
-            fontWeight: 800,
-            color: "#18181b",
-            textAlign: "center",
-            lineHeight: 1.1,
-            marginBottom: 24,
+            fontFamily: '"JetBrains Mono", monospace',
+            fontSize: 24,
+            letterSpacing: 4,
+            textTransform: "uppercase",
+            color: "#6b6b71",
           }}
         >
           koshikai.dev
-        </h1>
-        <p
+        </span>
+
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div
+            style={{
+              width: 72,
+              height: 2,
+              background: "#b23a32",
+              marginBottom: 40,
+            }}
+          />
+          <h1
+            style={{
+              fontSize: 76,
+              fontWeight: 600,
+              color: "#17171a",
+              lineHeight: 1.15,
+              margin: 0,
+              maxWidth: 900,
+            }}
+          >
+            Building apps that make life better
+          </h1>
+        </div>
+
+        <span
           style={{
-            fontSize: 32,
-            fontWeight: 500,
-            color: "#52525b",
-            textAlign: "center",
-            maxWidth: 800,
-            lineHeight: 1.4,
+            fontFamily: '"JetBrains Mono", monospace',
+            fontSize: 22,
+            letterSpacing: 2,
+            color: "#6b6b71",
           }}
         >
-          Solving everyday problems with systems
-        </p>
+          Hokkaido University · Graduate School of IS · M1
+        </span>
       </div>
     ),
     {
       ...size,
       fonts: [
-        {
-          name: "M PLUS Rounded 1c",
-          data: fontData,
-          style: "normal",
-          weight: 700,
-        },
+        { name: "Zen Old Mincho", data: serifData, style: "normal", weight: 600 },
+        { name: "JetBrains Mono", data: monoData, style: "normal", weight: 400 },
       ],
     }
   );

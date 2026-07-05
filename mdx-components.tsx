@@ -5,90 +5,90 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     h1: (props) => (
       <h1
-        className="mt-12 mb-4 text-2xl font-black tracking-tight text-zinc-900 sm:text-3xl dark:text-zinc-50"
+        className="mt-12 mb-4 font-serif text-2xl font-semibold tracking-tight text-foreground sm:text-3xl"
         {...props}
       />
     ),
     h2: (props) => (
       <h2
-        className="mt-10 mb-3 text-xl font-bold tracking-tight text-zinc-900 sm:mt-12 sm:mb-4 sm:text-2xl dark:text-zinc-50"
+        className="mt-10 mb-3 font-serif text-xl font-semibold tracking-tight text-foreground sm:mt-12 sm:mb-4 sm:text-2xl"
         {...props}
       />
     ),
     h3: (props) => (
       <h3
-        className="mt-7 mb-2.5 text-lg font-semibold tracking-tight text-zinc-900 sm:mt-8 sm:mb-3 sm:text-xl dark:text-zinc-100"
+        className="mt-7 mb-2.5 font-serif text-lg font-semibold tracking-tight text-foreground sm:mt-8 sm:mb-3 sm:text-xl"
         {...props}
       />
     ),
     p: (props) => (
       <p
-        className="mb-4 text-sm leading-7 text-zinc-700 sm:text-base sm:leading-8 dark:text-zinc-300"
+        className="mb-4 text-sm leading-[1.9] text-muted sm:text-base"
         {...props}
       />
     ),
     ul: (props) => (
       <ul
-        className="mb-5 list-disc space-y-2 pl-5 text-sm leading-7 text-zinc-700 sm:pl-6 sm:text-base sm:leading-8 dark:text-zinc-300"
+        className="mb-5 list-disc space-y-2 pl-5 text-sm leading-[1.9] text-muted marker:text-accent sm:pl-6 sm:text-base"
         {...props}
       />
     ),
     ol: (props) => (
       <ol
-        className="mb-5 list-decimal space-y-2 pl-5 text-sm leading-7 text-zinc-700 sm:pl-6 sm:text-base sm:leading-8 dark:text-zinc-300"
+        className="mb-5 list-decimal space-y-2 pl-5 text-sm leading-[1.9] text-muted marker:text-accent sm:pl-6 sm:text-base"
         {...props}
       />
     ),
     a: (props) => (
       <a
-        className="font-semibold text-sky-700 underline underline-offset-4 hover:text-sky-600 dark:text-sky-300 dark:hover:text-sky-200"
+        className="text-accent underline underline-offset-4 decoration-accent/40 transition-[text-decoration-color] hover:decoration-accent"
         {...props}
       />
     ),
     blockquote: (props) => (
       <blockquote
-        className="my-6 border-l-4 border-zinc-300 pl-4 text-sm leading-7 text-zinc-600 italic sm:text-base sm:leading-8 dark:border-zinc-700 dark:text-zinc-300"
+        className="my-6 border-l-2 border-accent pl-4 text-sm leading-[1.9] text-muted italic sm:text-base"
         {...props}
       />
     ),
     pre: (props) => (
       <pre
-        className="my-6 overflow-x-auto rounded-2xl bg-zinc-900 px-5 py-4 text-sm leading-relaxed text-zinc-100 dark:bg-zinc-800/80 [&_code]:bg-transparent [&_code]:p-0 [&_code]:text-inherit"
+        className="my-6 overflow-x-auto rounded-sm border border-border bg-surface px-5 py-4 font-mono text-sm leading-relaxed text-foreground [&_code]:bg-transparent [&_code]:p-0 [&_code]:text-inherit"
         {...props}
       />
     ),
     code: (props) => (
       <code
-        className="rounded bg-zinc-100 px-1.5 py-0.5 text-[0.85em] text-zinc-800 dark:bg-zinc-800 dark:text-zinc-100"
+        className="rounded-sm border border-border bg-surface px-1.5 py-0.5 font-mono text-[0.85em] text-foreground"
         {...props}
       />
     ),
     strong: (props) => (
-      <strong className="font-semibold text-zinc-900 dark:text-zinc-100" {...props} />
+      <strong className="font-semibold text-foreground" {...props} />
     ),
     hr: (props) => (
-      <hr className="my-8 border-zinc-200 dark:border-zinc-700" {...props} />
+      <hr className="my-8 border-border" {...props} />
     ),
     img: ({ alt = "", ...props }: React.ImgHTMLAttributes<HTMLImageElement>) => (
       // eslint-disable-next-line @next/next/no-img-element
-      <img className="my-6 rounded-2xl shadow-lg max-w-full h-auto" alt={alt} {...props} />
+      <img className="my-6 h-auto max-w-full border border-border" alt={alt} {...props} />
     ),
     table: (props) => (
       <div className="my-6 overflow-x-auto">
-        <table className="w-full text-sm text-left text-zinc-700 dark:text-zinc-300" {...props} />
+        <table className="w-full border border-border text-left text-sm text-muted" {...props} />
       </div>
     ),
     thead: (props) => (
-      <thead className="text-xs uppercase bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300" {...props} />
+      <thead className="border-b border-border bg-surface font-mono text-[11px] uppercase tracking-[0.1em] text-foreground" {...props} />
     ),
     tbody: (props) => (
-      <tbody className="divide-y divide-zinc-200 dark:divide-zinc-700" {...props} />
+      <tbody className="divide-y divide-border" {...props} />
     ),
     tr: (props) => (
-      <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50" {...props} />
+      <tr {...props} />
     ),
     th: (props) => (
-      <th className="px-4 py-3 font-semibold" {...props} />
+      <th className="px-4 py-3 font-medium" {...props} />
     ),
     td: (props) => (
       <td className="px-4 py-3" {...props} />
