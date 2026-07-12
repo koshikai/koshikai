@@ -5,7 +5,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { z } from "zod";
 import { getMathKbPool, hasMathKbDatabaseConfig, logPoolStats } from "../lib/mathkb/db";
-import { getNoteBySlug, listFields, listTags, searchNotes, createNote, updateNote, semanticSearchNotes, deleteNote } from "../lib/mathkb/repository";
+import { getNoteBySlug, listFields, listTags, searchNotes, createNote, updateNote, semanticSearchNotes } from "../lib/mathkb/repository";
 import type { MathKbSearchFilters } from "../lib/mathkb/types";
 
 const noteTagSchema = z.object({
@@ -130,7 +130,7 @@ function buildFilters(input: {
   };
 }
 
-function createMathKbServer() {
+export function createMathKbServer() {
   const server = new McpServer(
     {
       name: "private-mathkb",
@@ -408,40 +408,6 @@ function createMathKbServer() {
     },
   );
 
-  server.registerTool(
-    "delete_note",
-    {
-      title: "Delete a note",
-      description: "Delete an existing math note specified by slug from the database.",
-      inputSchema: z.object({
-        slug: z.string().trim().min(1),
-      }),
-      outputSchema: z.object({
-        success: z.boolean(),
-      }),
-      annotations: {
-        readOnlyHint: false,
-        destructiveHint: true,
-      },
-    },
-    async ({ slug }) => {
-      try {
-        const result = await deleteNote(slug);
-        return {
-          content: [
-            {
-              type: "text" as const,
-              text: `Note with slug '${slug}' deleted successfully.`,
-            },
-          ],
-          structuredContent: result,
-        };
-      } catch (error) {
-        return createToolError(`delete_note failed: ${formatError(error)}`);
-      }
-    },
-  );
-
   return server;
 }
 
@@ -455,12 +421,28 @@ async function startStdioServer() {
 
 // Simple in-memory rate limiter: 60 requests per minute per IP
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+let nextRateLimitCleanupAt = 0;
 
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
+export function resetRateLimitState() {
+  rateLimitMap.clear();
+  nextRateLimitCleanupAt = 0;
+}
+
+export function getRateLimitEntryCount() {
+  return rateLimitMap.size;
+}
+
+export function checkRateLimit(ip: string, now = Date.now()): boolean {
+  if (now >= nextRateLimitCleanupAt) {
+    for (const [key, value] of rateLimitMap) {
+      if (now >= value.resetAt) rateLimitMap.delete(key);
+    }
+    nextRateLimitCleanupAt = now + 60_000;
+  }
+
   const entry = rateLimitMap.get(ip);
 
-  if (!entry || now > entry.resetAt) {
+  if (!entry || now >= entry.resetAt) {
     rateLimitMap.set(ip, { count: 1, resetAt: now + 60_000 });
     return true;
   }
@@ -473,9 +455,26 @@ function checkRateLimit(ip: string): boolean {
   return true;
 }
 
-async function startHttpServer() {
+export function validateMcpConfig(mode: string) {
+  if (mode !== "http" && mode !== "stdio") {
+    throw new Error(`Unsupported MCP transport '${mode}'. Use 'http' or 'stdio'.`);
+  }
+
+  if (!hasMathKbDatabaseConfig()) {
+    throw new Error("MATHKB_DATABASE_URL or DATABASE_URL must be configured before starting MCP.");
+  }
+
+  if (
+    mode === "http" &&
+    process.env.NODE_ENV === "production" &&
+    !process.env.MCP_ALLOWED_HOSTS?.trim()
+  ) {
+    throw new Error("MCP_ALLOWED_HOSTS must be configured for production HTTP mode.");
+  }
+}
+
+export function createMathKbHttpApp() {
   const host = process.env.MCP_BIND_HOST ?? "0.0.0.0";
-  const port = Number(process.env.MCP_PORT ?? "3004");
   const path = process.env.MCP_PATH ?? "/mcp";
   const allowedHosts = process.env.MCP_ALLOWED_HOSTS?.split(",")
     .map((value) => value.trim())
@@ -503,10 +502,8 @@ async function startHttpServer() {
 
   app.get("/healthz", async (_req: Request, res: Response) => {
     try {
-      if (hasMathKbDatabaseConfig()) {
-        await getMathKbPool().query("SELECT 1");
-        logPoolStats();
-      }
+      await getMathKbPool().query("SELECT 1");
+      logPoolStats();
       res.json({ ok: true });
     } catch (error) {
       log("healthz check failed", error);
@@ -557,6 +554,15 @@ async function startHttpServer() {
     res.status(405).set("Allow", "POST").send("Method Not Allowed");
   });
 
+  return app;
+}
+
+async function startHttpServer() {
+  const host = process.env.MCP_BIND_HOST ?? "0.0.0.0";
+  const port = Number(process.env.MCP_PORT ?? "3004");
+  const path = process.env.MCP_PATH ?? "/mcp";
+  const app = createMathKbHttpApp();
+
   await new Promise<void>((resolve, reject) => {
     const server = app.listen(port, host, () => {
       logStructured("info", `HTTP transport ready at http://${host}:${port}${path}`);
@@ -569,6 +575,7 @@ async function startHttpServer() {
 
 async function main() {
   const mode = process.argv[2] ?? process.env.MCP_TRANSPORT ?? "http";
+  validateMcpConfig(mode);
 
   if (mode === "stdio") {
     await startStdioServer();
@@ -578,7 +585,9 @@ async function main() {
   await startHttpServer();
 }
 
-main().catch((error) => {
-  log("fatal error", error);
-  process.exit(1);
-});
+if (import.meta.main) {
+  main().catch((error) => {
+    log("fatal error", error);
+    process.exit(1);
+  });
+}

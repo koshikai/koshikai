@@ -9,7 +9,6 @@ services:
       - .env.prod
     environment:
       - NODE_ENV=production
-      - SITE_VARIANT=portfolio
       - SITE_URL=https://koshikai.dev
     healthcheck:
       test: ["CMD-SHELL", "node -e \"require('http').get('http://127.0.0.1:3000/healthz', (r) => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))\""]

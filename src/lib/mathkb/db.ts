@@ -5,7 +5,8 @@ declare global {
 }
 
 function getDatabaseUrl() {
-  return process.env.MATHKB_DATABASE_URL ?? process.env.DATABASE_URL ?? null;
+  const value = process.env.MATHKB_DATABASE_URL ?? process.env.DATABASE_URL;
+  return value?.trim() ? value : null;
 }
 
 function getSslConfig() {

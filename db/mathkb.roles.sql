@@ -3,10 +3,6 @@
 
 DO $$
 BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'mathkb_app') THEN
-    CREATE ROLE mathkb_app LOGIN PASSWORD 'change-me';
-  END IF;
-
   IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'mcp_reader') THEN
     CREATE ROLE mcp_reader LOGIN PASSWORD 'change-me';
   END IF;
@@ -21,18 +17,19 @@ BEGIN
 END
 $$;
 
-GRANT USAGE ON SCHEMA public TO mathkb_app, mcp_reader, mcp_writer, mathkb_nocodb;
+GRANT USAGE ON SCHEMA public TO mcp_reader, mcp_writer, mathkb_nocodb;
 
-GRANT SELECT ON notes, tags, note_tags TO mathkb_app;
 GRANT SELECT ON notes, tags, note_tags TO mcp_reader;
 GRANT SELECT, INSERT, UPDATE ON notes, tags, note_tags TO mcp_writer;
+GRANT DELETE ON note_tags TO mcp_writer;
+REVOKE DELETE ON notes, tags FROM mcp_writer;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO mcp_writer;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON notes, tags, note_tags TO mathkb_nocodb;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO mathkb_nocodb;
 
 ALTER DEFAULT PRIVILEGES IN SCHEMA public
-GRANT SELECT ON TABLES TO mathkb_app, mcp_reader;
+GRANT SELECT ON TABLES TO mcp_reader;
 
 ALTER DEFAULT PRIVILEGES IN SCHEMA public
 GRANT SELECT, INSERT, UPDATE ON TABLES TO mcp_writer;

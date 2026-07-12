@@ -31,45 +31,9 @@ export interface MathKbSearchFilters {
   page: number;
   query: string;
   tag: string;
-  view?: "card" | "list";
 }
 
 export interface MathKbSearchResult {
   notes: MathKbNoteListItem[];
   totalFilteredNotes: number;
 }
-
-export interface MathKbHomeData {
-  fields: MathKbField[];
-  filters: MathKbSearchFilters;
-  notes: MathKbNoteListItem[];
-  tags: MathKbTag[];
-  totalNotes: number;
-  totalFilteredNotes: number;
-}
-
-export interface MathKbSetupState {
-  message: string;
-  status: "setup";
-}
-
-export interface MathKbReadyState {
-  data: MathKbHomeData;
-  status: "ready";
-}
-
-export type MathKbHomeState = MathKbReadyState | MathKbSetupState;
-
-export interface MathKbNoteReadyState {
-  note: MathKbNoteDetail;
-  status: "ready";
-}
-
-export interface MathKbNoteMissingState {
-  status: "missing";
-}
-
-export type MathKbNoteState =
-  | MathKbNoteMissingState
-  | MathKbNoteReadyState
-  | MathKbSetupState;

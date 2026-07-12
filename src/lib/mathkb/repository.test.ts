@@ -231,6 +231,21 @@ describe("repository", () => {
   });
 
   describe("updateNote", () => {
+    it("keeps tag links when tags are omitted", async () => {
+      mockClient.query.mockResolvedValueOnce({ rows: [] })
+        .mockResolvedValueOnce({ rows: [{ id: "1" }] })
+        .mockResolvedValueOnce({ rows: [] })
+        .mockResolvedValueOnce({ rows: [] });
+
+      await updateNote("existing-note", { field: "Topology" });
+
+      expect(mockClient.query).not.toHaveBeenCalledWith(
+        expect.stringContaining("DELETE FROM note_tags"),
+        expect.anything(),
+      );
+      expect(mockClient.query).toHaveBeenCalledWith("COMMIT");
+    });
+
     it("updates note properties and resets tags in a transaction", async () => {
       mockClient.query.mockResolvedValueOnce({ rows: [] }) // BEGIN
         .mockResolvedValueOnce({ rows: [{ id: "1" }] }) // SELECT id check

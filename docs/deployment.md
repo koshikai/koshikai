@@ -1,144 +1,114 @@
 # Deployment
 
-このドキュメントでは、koshikai.dev のデプロイ構成について詳細に説明します。
-
 ## 概要
 
-デプロイは **GitHub Actions → GHCR → Proxmox self-hosted runner → Docker Compose** の流れで行われます。
+`main` への push を起点に、GitHub Actions が検証、Docker image build、GHCR への push、Proxmox 上の self-hosted runner での Docker Compose 更新を行います。
 
-## CI/CD パイプライン
+`docs/**`、Markdown、`.gitignore`、`.dockerignore` のみの変更では workflow は起動しません。手動実行には `workflow_dispatch` を使います。
 
-### GitHub Actions Workflow
+## CI/CD jobs
 
-`.github/workflows/deploy.yml` が `main` ブランチへの push 時に実行されます。
+### `lint-test`
 
-#### Build Job（`ubuntu-latest`）
+- Bun 1.3.13
+- `bun install --frozen-lockfile`
+- `bun run lint`
+- `bun run test --run`
+- `package.json` または `bun.lock` 変更時と手動実行時のみ `bun audit`
 
-1. アプリ用 Docker イメージのビルド・プッシュ
-   - `ghcr.io/koshikai/koshikai:latest`
-   - `ghcr.io/koshikai/koshikai:sha-{commit}`
-2. MCP サーバー用 Docker イメージのビルド・プッシュ
-   - `ghcr.io/koshikai/koshikai-mcp:latest`
-   - `ghcr.io/koshikai/koshikai-mcp:sha-{commit}`
+### `changes`
 
-#### Deploy Job（`self-hosted` on Proxmox）
+MCP image の再buildが必要かを判定します。対象は `Dockerfile.mcp`、`docker-compose.internal.yaml`、`src/mcp/**`、`src/lib/mathkb/**`、`package.json`、`bun.lock` です。
 
-1. デプロイメントマニフェストの同期
-   - `$HOME/deploy/koshikai` に compose ファイルをコピー
-   - `/opt/home/.env.prod` → `$HOME/deploy/koshikai/.env.prod`（symlink）
-   - `/opt/home/.env.mathkb` → `$HOME/deploy/koshikai/.env.mathkb`（symlink）
-2. 公開ポートフォリオの再起動
-   - `docker compose -p koshikai_public -f docker-compose.prod.yaml pull`
-   - `docker compose -p koshikai_public -f docker-compose.prod.yaml up -d --remove-orphans`
-3. 内部 KB / MCP / NocoDB の再起動（`.env.mathkb` が存在する場合のみ）
-   - `docker compose -p koshikai_mathkb -f docker-compose.internal.yaml pull`
-   - `docker compose -p koshikai_mathkb -f docker-compose.internal.yaml up -d --remove-orphans`
-4. 古いイメージのクリーンアップ（24時間以上前）
+### `build-app`
 
-## Docker 構成
+検証成功後、Web image を常に build / push します。
 
-### 公開ポートフォリオ（`docker-compose.prod.yaml`）
+- `ghcr.io/koshikai/koshikai:latest`
+- `ghcr.io/koshikai/koshikai:{commit-sha}`
+
+### `build-mcp`
+
+MCP 関連変更時または手動実行時のみ build / push します。
+
+- `ghcr.io/koshikai/koshikai-mcp:latest`
+- `ghcr.io/koshikai/koshikai-mcp:{commit-sha}`
+
+### `deploy`
+
+app build が成功し、MCP build が成功またはskipされた場合に self-hosted runner で実行します。
+
+1. compose files を `$HOME/deploy/koshikai` に同期
+2. `/opt/home/.env.prod` と `/opt/home/.env.mathkb` があれば symlink
+3. 公開 portfolio を pull / restart
+4. `.env.mathkb` があれば内部 compose stack を pull / restart
+5. 24時間より古い未使用 image を削除
+
+同一ブランチの古い実行は concurrency 設定によりcancelされます。
+
+## Compose
+
+### 公開: `docker-compose.prod.yaml`
 
 | 項目 | 値 |
-|------|-----|
-| サービス名 | `app` |
-| コンテナ名 | `koshikai-app` |
-| イメージ | `ghcr.io/koshikai/koshikai:latest` |
-| ポート | `3002:3000` |
-| 環境変数 | `.env.prod` |
-| 固定環境変数 | `NODE_ENV=production`, `SITE_VARIANT=portfolio`, `SITE_URL=https://koshikai.dev` |
-| ヘルスチェック | `GET /healthz` |
+|---|---|
+| service / container | `app` / `koshikai-app` |
+| image | `ghcr.io/koshikai/koshikai:latest` |
+| port | `3002:3000` |
+| env file | `.env.prod` |
+| health check | `GET /healthz` |
 
-### 内部 KB スタック（`docker-compose.internal.yaml`）
+### 内部: `docker-compose.internal.yaml`
 
-| サービス | コンテナ名 | ポート | イメージ |
-|----------|-----------|--------|----------|
-| mathkb-app | `mathkb-app` | `3103:3000` | `ghcr.io/koshikai/koshikai:latest` |
-| mathkb-mcp | `mathkb-mcp` | `3104:3004` | `ghcr.io/koshikai/koshikai-mcp:latest` |
-| mathkb-nocodb | `mathkb-nocodb` | `8180:8080` | `nocodb/nocodb:latest` |
+| Service | Port | 現在の実体 |
+|---|---:|---|
+| `mathkb-mcp` | `3104:3004` | MathKB MCP HTTP server |
 
-内部 KB スタックは `.env.mathkb` が存在する場合のみデプロイされます。
-`mathkb-mcp` は常駐メモリ削減のため `MATHKB_ENABLE_EMBEDDINGS=false` で起動し、通常検索・取得・書き込みを優先します。セマンティック検索を使う場合は embedding 生成を別プロセスに分離するか、この値を明示的に有効化します。
+現在の compose に NocoDB service は定義されていません。外部管理の NocoDB を使う場合は、この compose とは別に管理します。
 
-## Dockerfile
+`mathkb-mcp` は `MATHKB_ENABLE_EMBEDDINGS=false` で起動するため、全文検索・取得・作成・更新は利用できますが、セマンティック検索は無効です。
 
-### アプリ用（`Dockerfile`）
+## 必要なサーバー環境
 
-マルチステージビルド：
+- Docker Engine と Docker Compose plugin
+- Docker を実行できる self-hosted GitHub Actions runner
+- GitHub / GHCR への outbound 接続
+- `/opt/home/.env.prod`（公開 deploy に必須）
+- `/opt/home/.env.mathkb`（内部 deploy を行う場合）
 
-1. **deps ステージ**: `oven/bun:1` で依存関係をインストール
-2. **builder ステージ**: `node:22-slim` + Bun でビルド
-   - `DOCKER_BUILD=true` で `output: "standalone"` を有効化
-   - メモリ制限: `--max-old-space-size=2048`
-3. **runner ステージ**: `node:22-slim` で実行
-   - 非 root ユーザー (`nextjs:nodejs`) で実行
-   - `.next/standalone` を利用して軽量化
+`scripts/setup_server.sh` は `/opt/home` と `/opt/actions-runner-home` を作成します。env files と runner 本体は別途設定します。
 
-### MCP 用（`Dockerfile.mcp`）
+## セキュリティ
 
-Bun ランタイムで MCP HTTP サーバーを実行します。
+- MCP は認証を持たないため、`3104` をインターネット公開しない
+- 現行 `ports` は全interfaceへbindするため、host firewallでLANまたはVPNからの接続だけを許可する
+- より安全にする場合は `127.0.0.1:3104:3004` に変更し、認証付きreverse proxy、VPN、SSH tunnelを利用する
+- `MCP_ALLOWED_HOSTS` はHost header対策であり、利用者認証の代替ではない
+- MCP の用途に応じて `mcp_reader` または `mcp_writer` を使う
+- `.env.*` とDBパスワードをrepositoryへcommitしない
 
-## サーバー前提条件
+## Health check
 
-Proxmox 上の self-hosted runner で以下が必要です：
+- Web: `http://127.0.0.1:3000/healthz`
+- MCP: `http://127.0.0.1:3004/healthz`
 
-- Docker Engine + Docker Compose plugin
-- runner ユーザーが `docker` グループに所属
-- `ghcr.io` および GitHub への outbound 接続
-- `/opt/home/.env.prod`（公開側の必須ファイル）
-- `/opt/home/.env.mathkb`（内部側の任意ファイル）
+MCP health check は常に `SELECT 1` を実行します。DB未設定時はserver自体が起動せず、接続失敗時は503を返します。
 
-### 初期セットアップ
+## 既知の改善事項
 
-`scripts/setup_server.sh` を実行すると：
+1. MCP portをLAN firewallで許可元限定する
+2. image tagを`latest`だけでなくcommit SHAに固定し、rollbackを容易にする
 
-- `/opt/home` を作成
-- `/opt/actions-runner-home` を作成
-
-env ファイルは手動で配置する必要があります。
-
-## ネットワーク・セキュリティ
-
-### LAN-only Operations Policy
-
-内部 KB UI / MCP / NocoDB はインターネット公開を前提としていません：
-
-- `3103`, `3104`, `8180` はルータでポート開放しない
-- Firewall で許可元をプライベートセグメントに限定（`192.168.0.0/16`, `10.0.0.0/8`, `172.16.0.0/12`）
-- 外部から使う場合は VPN を使用
-- MCP は読み取り専用ツールのみ、`mcp_reader` ロール維持
-- `SITE_URL` は内部 URL を設定
-
-### MCP レート制限
-
-MCP HTTP サーバーには IP ベースのレート制限（60 req/min）を備えています。超過すると `429 Too Many Requests` が返されます。
-
-### 安全な運用のための推奨
-
-`docker-compose.internal.yaml` の `ports` を `127.0.0.1:3103:3000` のように loopback bind に変更し、必要なものだけ reverse proxy や SSH port forward で中継することを推奨します。
-
-## 監視
-
-- `GET /healthz` on `mathkb-app`
-- `GET /healthz` on `mathkb-mcp`（成功時に DB プール統計を JSON ログ出力）
-- Docker healthcheck により自動復旧
-
-DB プール統計（`logPoolStats()`）には `total`, `idle`, `waiting` の接続数が含まれます。
-
-## トラブルシューティング
+## Troubleshooting
 
 ### `.env.prod` がない
 
-```
-Missing .env.prod. Place it in /opt/home/.env.prod or $DEPLOY_DIR/.env.prod before deploying.
-```
-
-→ `/opt/home/.env.prod` を作成してください。
+公開deployは失敗します。`/opt/home/.env.prod` または `$HOME/deploy/koshikai/.env.prod` に配置してください。
 
 ### `.env.mathkb` がない
 
-内部 KB / MCP / NocoDB のデプロイがスキップされます。意図的でない場合は env ファイルを配置してください。
+内部compose deployはskipされます。公開portfolioには影響しません。
 
-### レガシーコンテナの移行
+### MCPのsemantic searchが失敗する
 
-workflow 内で古いプロジェクト名のコンテナを検出・削除するロジックがあります。`koshikai-app` などのコンテナ名が競合する場合は自動的にクリーンアップされます。
+本番composeではembeddingが無効です。`MATHKB_ENABLE_EMBEDDINGS=true` にするとmodel読み込みと追加memoryが必要になります。

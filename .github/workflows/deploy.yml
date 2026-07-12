@@ -249,7 +249,7 @@ jobs:
           cd "$DEPLOY_DIR"
           if [ -f .env.mathkb ]; then
             PROJECT_NAME="koshikai_mathkb"
-            for container_name in mathkb-app mathkb-mcp mathkb-nocodb; do
+            for container_name in mathkb-mcp; do
               if docker inspect "$container_name" >/dev/null 2>&1; then
                 CURRENT_PROJECT="$(docker inspect -f '{{ index .Config.Labels "com.docker.compose.project" }}' "$container_name" 2>/dev/null || true)"
                 if [ "$CURRENT_PROJECT" != "$PROJECT_NAME" ]; then
