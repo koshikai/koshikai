@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { cookies } from "next/headers";
 import "@fontsource/noto-sans-jp/japanese-400.css";
 import "@fontsource/noto-sans-jp/japanese-500.css";
 import "@fontsource/noto-sans-jp/japanese-700.css";
@@ -71,23 +70,23 @@ export function generateMetadata(): Metadata {
   };
 }
 
-async function getThemeClass() {
-  try {
-    const cookieStore = await cookies();
-    const theme = cookieStore.get("theme")?.value;
-    return theme === "dark" ? "dark" : "";
-  } catch {
-    return "";
-  }
-}
+const themeInitScript = `
+try {
+  const storedTheme = localStorage.getItem("theme");
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  document.documentElement.classList.toggle(
+    "dark",
+    storedTheme === "dark" || (storedTheme === null && prefersDark),
+  );
+} catch {}
+`;
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   const site = getSiteConfig();
-  const themeClass = await getThemeClass();
   const jsonLd = [
     {
       "@context": "https://schema.org",
@@ -117,7 +116,10 @@ export default async function RootLayout({
   ];
 
   return (
-    <html lang="ja" suppressHydrationWarning className={themeClass}>
+    <html lang="ja" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="antialiased">
         <script
           type="application/ld+json"

@@ -42,19 +42,6 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN groupadd --system --gid 1001 nodejs && \
     useradd --system --uid 1001 --gid nodejs nextjs
 
-# Install onnxruntime shared library required by @xenova/transformers.
-# The npm package ships the .so only for native addons; node:22-slim lacks it.
-ARG ONNXRUNTIME_NODE_VERSION=1.14.0
-RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates && \
-    curl -fsSL "https://registry.npmjs.org/onnxruntime-node/-/onnxruntime-node-${ONNXRUNTIME_NODE_VERSION}.tgz" \
-        -o /tmp/onnxruntime-node.tgz && \
-    mkdir -p /tmp/onnxruntime-extract && \
-    tar -xzf /tmp/onnxruntime-node.tgz -C /tmp/onnxruntime-extract && \
-    cp /tmp/onnxruntime-extract/package/bin/napi-v3/linux/x64/libonnxruntime.so.${ONNXRUNTIME_NODE_VERSION} /usr/lib/ && \
-    ldconfig && \
-    rm -rf /tmp/onnxruntime-node.tgz /tmp/onnxruntime-extract && \
-    apt-get purge -y curl && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
-
 COPY --from=builder /app/public ./public
 
 # Set the correct permission for prerender cache

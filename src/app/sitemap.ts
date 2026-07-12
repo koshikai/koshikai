@@ -8,13 +8,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     return [
         {
             url: site.baseUrl,
-            lastModified: new Date(),
             changeFrequency: "monthly",
             priority: 1,
         },
         {
             url: `${site.baseUrl}/cases`,
-            lastModified: new Date(),
             changeFrequency: "monthly",
             priority: 0.8,
         },

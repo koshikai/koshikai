@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useSyncExternalStore } from "react";
 import { Moon, Sun } from "lucide-react";
-import { setTheme } from "@/lib/actions";
+
+const themeQuery = "(prefers-color-scheme: dark)";
 
 function subscribe(callback: () => void) {
   const observer = new MutationObserver(callback);
@@ -24,14 +25,34 @@ function getServerSnapshot() {
 export function ThemeToggle() {
   const isDark = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
-  const toggle = useCallback(async () => {
+  useEffect(() => {
+    const media = window.matchMedia(themeQuery);
+    const applySystemTheme = (event: MediaQueryListEvent | MediaQueryList) => {
+      if (localStorage.getItem("theme") === null) {
+        document.documentElement.classList.toggle("dark", event.matches);
+      }
+    };
+    const applyStoredTheme = (event: StorageEvent) => {
+      if (event.key !== "theme") return;
+      document.documentElement.classList.toggle(
+        "dark",
+        event.newValue === "dark" || (event.newValue === null && media.matches),
+      );
+    };
+
+    applySystemTheme(media);
+    media.addEventListener("change", applySystemTheme);
+    window.addEventListener("storage", applyStoredTheme);
+    return () => {
+      media.removeEventListener("change", applySystemTheme);
+      window.removeEventListener("storage", applyStoredTheme);
+    };
+  }, []);
+
+  const toggle = useCallback(() => {
     const next = !isDark;
-    if (next) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-    await setTheme(next ? "dark" : "light");
+    document.documentElement.classList.toggle("dark", next);
+    localStorage.setItem("theme", next ? "dark" : "light");
   }, [isDark]);
 
   return (
