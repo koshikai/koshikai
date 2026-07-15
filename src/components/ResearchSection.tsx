@@ -1,4 +1,5 @@
 import { Trophy } from "lucide-react";
+import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeading } from "@/components/SectionHeading";
 
@@ -76,6 +77,46 @@ const courses = [
   },
 ] as const;
 
+const figureAlt =
+  "Wnt5a モデルの制御結果。上段は目標集合へのハミング距離が時刻 2 で 0 に到達し以後維持される様子、下段は各時刻に除去したエッジを示すヒートマップ。";
+
+function ResultFigure() {
+  return (
+    <figure className="mb-16">
+      <div className="relative aspect-[2081/1535] w-full border border-border">
+        <Image
+          src="/images/research/trajectory-recovery-light.webp"
+          alt={figureAlt}
+          fill
+          sizes="(min-width: 1024px) 64rem, 100vw"
+          className="object-contain dark:hidden"
+        />
+        <Image
+          src="/images/research/trajectory-recovery-dark.webp"
+          alt=""
+          aria-hidden="true"
+          fill
+          sizes="(min-width: 1024px) 64rem, 100vw"
+          className="hidden object-contain dark:block"
+        />
+      </div>
+      <figcaption className="mt-4 border-t border-border pt-3">
+        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
+          Fig. — Wnt5a / recovery constraint / init=83
+        </span>
+        <p className="mt-2 max-w-2xl text-sm leading-[1.9] text-muted">
+          学習した方策による制御の実行例。上段は目標集合へのハミング距離で、時刻 2
+          で 0 に到達し、到達期限 H=7 を越えて以降も維持されています。下段は各時刻に
+          どのエッジを除去したかを示し、
+          <span className="text-accent">朱色のマス</span>
+          が介入にあたります。96 個の初期状態すべてで成功率 100%
+          を達成しました。
+        </p>
+      </figcaption>
+    </figure>
+  );
+}
+
 function SubHeading({ children }: { children: React.ReactNode }) {
   return (
     <h3 className="mb-6 flex items-center gap-4 font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
@@ -110,6 +151,8 @@ export function ResearchSection({
           ブーリアンネットワークの制御理論を中心に、強化学習と形式手法を組み合わせた研究を行っています。
           実験環境から理論検証までを一貫して自ら設計し、再現性を重視したフローで進めています。
         </p>
+
+        <ResultFigure />
 
         {/* Research topics */}
         <ul className="mb-16 list-none">

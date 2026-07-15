@@ -145,23 +145,38 @@ This is a background that text will be placed on top of; it must never compete w
 - KariGallery は現在ダミーデータ運用中なので、キャプチャもダミーデータのままで問題ありません
   (むしろ本文で「ダミーデータ」と明記済みなので整合します)。
 
-### 4-2. 研究セクションの図表
+### 4-2. 研究セクションの図表 【対応済み】
 
-`#research` のブーリアンネットワーク制御は、**図があれば一番伝わるのに現状ゼロ**です。
+`#research` に実データの図を 1 枚組み込み済みです。
 
-| 必要な図 | 内容 | 作り方 |
-| --- | --- | --- |
-| BN の状態遷移 / エッジ除去の概念図 | Cortical Development や Wnt5a のネットワーク構造とエッジ除去制御 | 研究で使っている実データから matplotlib / graphviz で描画 |
-| Q学習の学習曲線 | 制御成功率 100% に至る収束の様子 | Marimo 環境の実験結果から出力 |
-| C2D の転移概念図 | n25 → n39 モデルへの Action-Prior Transfer | 自作の図 (draw.io 等) |
+**出どころ**: 研究リポジトリ `~/workspace/bn_edge_removel/`
+学会ポスター用の図生成スクリプト `scripts/generate_sice_poster_figures.py` に
+`--style portfolio` を追加し、サイトのパレットで再出力しています。
+
+```bash
+cd ~/workspace/bn_edge_removel
+uv run python scripts/generate_sice_poster_figures.py \
+  --style portfolio --output-dir /path/to/figures
+```
+
+- `--style poster` (既定) は従来どおり学会用パレットで PDF+PNG を出力します（出力は 1 バイトも変わりません）。
+- `--style portfolio` はサイトのパレットで light / dark の PNG を出力します。
+- 配色の役割: 地 `#fafaf7`(dark: `#131315`) / 線 `#17171a`(dark: `#ecebe7`) /
+  参照線 `#6b6b71` / **朱色 `#b23a32`(dark: `#e4675b`) は「目標到達」と「除去したエッジ」のみ**。
+- フォントは JetBrains Mono を第一候補にしていますが、**matplotlib は woff を読めない**ため
+  実際には Noto Sans Mono にフォールバックします。完全一致させたい場合は
+  JetBrains Mono の ttf をシステムにインストールしてください。
+
+**採用した図**: `trajectory_recovery` (Wnt5a / recovery / init=83)
+→ `public/images/research/trajectory-recovery-{light,dark}.webp`
+1 枚で「目標への距離」「除去したエッジ」「距離→0 の到達」が同時に伝わるため。
+
+**未採用 (必要なら追加可)**:
+- `convergence_wnt5a` — 96 初期状態すべてが目標へ収束する様子
+- `convergence` / `trajectory_monotone` — Cortical Development (monotone 制約) 版
+- C2D の転移概念図 — 修士研究分。実験がまだ検証中のため図も未確定
 
 これらは**論文の実データそのもの**なので、AI に「それっぽい図」を描かせると捏造になります。
-既に Marimo で再現可能な実験環境を持っているとのことなので、そこから出力するのが最短です。
-
-出力時のスタイル指定 (matplotlib):
-- 背景 `#fafaf7` / 線 `#17171a` / 強調 `#b23a32` / グリッド `#e4e3dc`
-- フォント JetBrains Mono (軸ラベル)
-- ダークモード用に `#131315` 背景版も出力するか、SVG で `currentColor` を使う
 
 ### 4-3. About セクションの顔写真 (任意)
 
