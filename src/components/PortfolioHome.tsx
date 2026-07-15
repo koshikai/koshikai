@@ -357,6 +357,8 @@ export function PortfolioHome() {
                 image={{
                   src: "/images/projects/smoke-it.webp",
                   alt: "Smoke it. のアプリ画面",
+                  width: 780,
+                  height: 1688,
                 }}
               />
 
@@ -369,6 +371,8 @@ export function PortfolioHome() {
                 image={{
                   src: "/images/projects/karigallery.webp",
                   alt: "KariGallery のギャラリー画面",
+                  width: 1920,
+                  height: 1200,
                 }}
               />
             </div>

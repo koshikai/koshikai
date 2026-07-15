@@ -10,6 +10,8 @@ interface ProjectCardProps {
   image?: {
     src: string;
     alt: string;
+    width: number;
+    height: number;
   };
 }
 
@@ -53,16 +55,17 @@ export function ProjectCard({
           </ul>
         </div>
 
+        {/* Screenshots range from phone portrait to desktop landscape, so the
+            frame follows each image instead of cropping it to a shared shape. */}
         {image && (
-          <div className="relative hidden aspect-[4/5] w-40 shrink-0 overflow-hidden border border-border bg-surface sm:block md:w-44">
-            <Image
-              src={image.src}
-              alt={image.alt}
-              fill
-              sizes="176px"
-              className="object-cover object-top"
-            />
-          </div>
+          <Image
+            src={image.src}
+            alt={image.alt}
+            width={image.width}
+            height={image.height}
+            sizes="240px"
+            className="hidden h-auto max-h-52 w-auto max-w-60 shrink-0 border border-border bg-surface sm:block"
+          />
         )}
       </div>
 
