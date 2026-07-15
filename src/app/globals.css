@@ -67,6 +67,17 @@ body {
       padding-block: calc(var(--spacing) * 14);
     }
   }
+
+  /* SVG diagrams loaded via <img> resolve light-dark() against the embedding
+     element's color-scheme, not the page's .dark class — pin it to the site
+     theme so toggling dark mode also flips the diagrams. */
+  .case-article-content img {
+    color-scheme: light;
+  }
+
+  :root.dark .case-article-content img {
+    color-scheme: dark;
+  }
 }
 
 @keyframes reveal {
