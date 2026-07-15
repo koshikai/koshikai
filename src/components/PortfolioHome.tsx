@@ -354,6 +354,10 @@ export function PortfolioHome() {
                 description="Next.js 16.2 + PWA に Optimistic UI を組み合わせたネイティブ級の喫煙記録管理アプリ。AI コーチ（OpenRouter）と 3D バッジ（Three.js）で自分の習慣と向き合う継続を支援。"
                 features={["Next.js 16.2", "PWA", "AI Coach", "3D Badges"]}
                 href="https://smoke-it.koshikai.dev"
+                image={{
+                  src: "/images/projects/smoke-it.webp",
+                  alt: "Smoke it. のアプリ画面",
+                }}
               />
 
               <ProjectCard
@@ -362,6 +366,10 @@ export function PortfolioHome() {
                 description="友人のイラスト販売用に制作したが、現在は偽名によるダミーデータを表示するギャラリーとして運用中。Stripe 決済は技術検証済み。"
                 features={["Prisma v7.7", "Auth.js", "Stripe API", "Image Compression"]}
                 href="https://gallery.koshikai.dev"
+                image={{
+                  src: "/images/projects/karigallery.webp",
+                  alt: "KariGallery のギャラリー画面",
+                }}
               />
             </div>
 
