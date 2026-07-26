@@ -16,6 +16,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
             changeFrequency: "monthly",
             priority: 0.8,
         },
+        {
+            url: `${site.baseUrl}/llm-benchmarks`,
+            changeFrequency: "monthly",
+            priority: 0.5,
+        },
         ...caseItems.map((item) => ({
             url: `${site.baseUrl}/cases/${item.slug}`,
             lastModified: new Date(item.publishedAt),

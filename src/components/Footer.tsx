@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export function Footer() {
     return (
         <footer className="mt-24 w-full border-t border-border bg-background py-12">
@@ -12,7 +14,13 @@ export function Footer() {
                     </p>
                 </div>
 
-                <div className="flex gap-4">
+                <div className="flex items-center gap-4">
+                    <Link
+                        href="/llm-benchmarks"
+                        className="font-mono text-xs text-muted transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+                    >
+                        LLM Benchmarks
+                    </Link>
                     <a
                         href="https://github.com/koshikai"
                         target="_blank"
