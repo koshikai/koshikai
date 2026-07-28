@@ -26,12 +26,17 @@
 | パス | 用途 |
 |---|---|
 | `src/app/` | ポートフォリオの App Router ページ |
+| `src/app/llm-benchmarks/` | LLM ベンチマーク比較ページ |
 | `src/components/` | React コンポーネント |
 | `src/content/cases/` | MDX ケーススタディ |
 | `src/lib/site-config.ts` | サイト metadata 設定 |
+| `src/lib/cases.ts` | MDX ケースの読み込みと一覧生成 |
+| `src/lib/benchmarks-data.ts` | ベンチマークページのデータ |
 | `src/mcp/server.ts` | MathKB MCP サーバー |
 | `src/lib/mathkb/` | DB、リポジトリ、embedding |
+| `src/test/setup.ts` | Vitest 共通セットアップ |
 | `db/` | PostgreSQL schema、role、seed |
+| `db/migrations/` | 適用済みスキーマ変更 |
 | `scripts/` | 運用スクリプト |
 | `Dockerfile` | ポートフォリオ image |
 | `Dockerfile.mcp` | MCP image |
@@ -75,7 +80,11 @@ bun run build
 ## ドキュメント
 
 - `README.md`: 概要とクイックスタート
+- `docs/README.md`: docs の索引
 - `docs/architecture.md`: 現行アーキテクチャ
 - `docs/deployment.md`: CI/CD と Docker 運用
 - `docs/mcp.md`: MCP と DB の仕様
+- `docs/image-assets.md`: デザインシステムと画像アセット要件
 - `docs/ci-optimization-plan.md`: CI 最適化の履歴と残課題
+
+構成やパスを変更したときは、`README.md`、`AGENTS.md`、該当する `docs/` を同じ commit で更新してください。
