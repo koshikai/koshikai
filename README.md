@@ -9,11 +9,19 @@ Web アプリは `koshikai.dev` 向けのポートフォリオ専用です。Mat
 - `src/app/`: ポートフォリオの App Router ページ、メタデータ、ヘルスチェック
 - `src/components/`: ポートフォリオ UI
 - `src/content/cases/`: MDX ケーススタディ
+- `src/lib/`: サイト設定（`site-config.ts`）、ケース読み込み（`cases.ts`）、ベンチマークデータ
 - `src/mcp/server.ts`: MathKB MCP サーバー（Streamable HTTP / stdio）
 - `src/lib/mathkb/`: PostgreSQL リポジトリ、型、embedding 生成
+- `src/test/setup.ts`: Vitest の共通セットアップ
 - `db/`: MathKB のスキーマ、ロール、サンプルデータ
+- `db/migrations/`: 適用済みスキーマ変更
+- `docs/`: 詳細ドキュメント（[`docs/README.md`](./docs/README.md) が索引）
+- `scripts/`: サーバー準備とスキーマ適用のスクリプト
+- `public/images/`: 図版とスクリーンショット
 - `docker-compose.prod.yaml`: 公開ポートフォリオ
 - `docker-compose.internal.yaml`: MathKB MCP の内部スタック定義
+
+主な route は `/`、`/cases`、`/cases/[slug]`、`/llm-benchmarks`、`/healthz` です。詳細は [`docs/architecture.md`](./docs/architecture.md) を参照してください。
 
 ## ローカル開発
 
@@ -65,7 +73,7 @@ MATHKB_DATABASE_URL="postgresql://mcp_reader:change-me@localhost:5432/mathkb" bu
 | `MCP_ALLOWED_HOSTS` | production HTTP時 | 未設定 | 許可する Host のカンマ区切り一覧 |
 | `MCP_TRANSPORT` | いいえ | `http` | CLI 引数を使わない場合の `http` / `stdio` 切り替え |
 
-Docker Compose では `.env.mathkb` 内の `MCP_DATABASE_URL` を `MATHKB_DATABASE_URL` に渡します。本番HTTP起動では `MCP_ALLOWED_HOSTS` が必須です。
+Docker Compose では `.env.mathkb` 内の `MCP_DATABASE_URL` を `MATHKB_DATABASE_URL` に渡します。本番HTTP起動では `MCP_ALLOWED_HOSTS` が必須です。内部スタック用のテンプレートは [`.env.mathkb.example`](./.env.mathkb.example) にあります。
 
 ## MathKB データベース
 
