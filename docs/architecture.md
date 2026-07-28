@@ -31,6 +31,7 @@ GitHub main
 | `/` | ポートフォリオトップ |
 | `/cases` | ケーススタディ一覧 |
 | `/cases/[slug]` | MDX ケーススタディ詳細 |
+| `/llm-benchmarks` | LLM ベンチマーク比較（`src/lib/benchmarks-data.ts`） |
 | `/healthz` | Web container health check |
 | `/robots.txt` | crawler 設定 |
 | `/sitemap.xml` | sitemap |
