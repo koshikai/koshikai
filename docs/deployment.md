@@ -74,7 +74,7 @@ app build が成功し、MCP build が成功またはskipされた場合に self
 - Docker を実行できる self-hosted GitHub Actions runner
 - GitHub / GHCR への outbound 接続
 - `/opt/home/.env.prod`（公開 deploy に必須）
-- `/opt/home/.env.mathkb`（内部 deploy を行う場合）
+- `/opt/home/.env.mathkb`（内部 deploy を行う場合。テンプレートは `.env.mathkb.example`）
 
 `scripts/setup_server.sh` は `/opt/home` と `/opt/actions-runner-home` を作成します。env files と runner 本体は別途設定します。
 
@@ -107,7 +107,11 @@ MCP health check は常に `SELECT 1` を実行します。DB未設定時はserv
 
 ### `.env.mathkb` がない
 
-内部compose deployはskipされます。公開portfolioには影響しません。
+内部compose deployはskipされます。公開portfolioには影響しません。テンプレートは `.env.mathkb.example` にあります。
+
+### `mathkb-mcp` が起動直後に落ちる
+
+`docker-compose.internal.yaml` は `NODE_ENV=production` かつ HTTP transport で起動するため、`MCP_ALLOWED_HOSTS` が未設定だとserverが例外を投げて終了します。compose の `environment` には含まれないため、`.env.mathkb` で必ず指定してください。`MCP_DATABASE_URL` も同様に必須です。
 
 ### MCPのsemantic searchが失敗する
 
