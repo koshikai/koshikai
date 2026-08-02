@@ -10,6 +10,8 @@
  *    3ポイント以上変わるため、条件なしの数値は比較に使えない。
  * 3. 1つの指標につき出典を1系統に揃える。ベンダー公称値と第三者ハーネス値を
  *    同じ列に混ぜない。
+ * 4. 価格は AA リーダーボードの Cost per Task（同一ハーネス・同一スナップショットの
+ *    タスク実行コスト）を唯一の出典とする。ベンダー公称の入出力単価は混ぜない。
  */
 
 export type VerificationStatus = "verified" | "unverified";
@@ -50,10 +52,15 @@ export interface ModelBenchmarkScore {
   releaseDateSource: BenchmarkSource | null;
   /** null = そのモデルにはその指標の公表値が存在しない（N/A） */
   scores: Record<string, BenchmarkScore | null>;
+  /**
+   * AA リーダーボードの Cost per Task（USD）。
+   * ベンチマーク1タスクを実行する API コストで、指標と同じ条件設定の値。
+   */
+  pricing: BenchmarkScore | null;
 }
 
 /** データセットの最終検証月 (YYYY-MM)。 */
-export const BENCHMARK_DATASET_VERIFIED_AT = "2026-07";
+export const BENCHMARK_DATASET_VERIFIED_AT = "2026-08";
 
 const AA_LEADERBOARD: BenchmarkSource = {
   label: "Artificial Analysis — Models leaderboard",
@@ -63,6 +70,16 @@ const AA_LEADERBOARD: BenchmarkSource = {
 const AA_GPQA: BenchmarkSource = {
   label: "Artificial Analysis — GPQA Diamond",
   url: "https://artificialanalysis.ai/evaluations/gpqa-diamond",
+};
+
+const AA_HLE: BenchmarkSource = {
+  label: "Artificial Analysis — Humanity's Last Exam",
+  url: "https://artificialanalysis.ai/evaluations/humanitys-last-exam",
+};
+
+const AA_GDPVAL_V2: BenchmarkSource = {
+  label: "Artificial Analysis — GDPval-AA v2",
+  url: "https://artificialanalysis.ai/evaluations/gdpval-aa",
 };
 
 const TBENCH_21: BenchmarkSource = {
@@ -110,6 +127,22 @@ const OFFICECHAI_GEMINI_36: BenchmarkSource = {
   url: "https://officechai.com/ai/gemini-3-6-flash-benchmarks/",
 };
 
+const AA_V4_FLASH_0731_ARTICLE: BenchmarkSource = {
+  label:
+    "Artificial Analysis — DeepSeek V4 Flash 0731 scores 50 on the Intelligence Index",
+  url: "https://artificialanalysis.ai/articles/deepseek-v4-flash-0731-scores-50-on-the-artificial-analysis-intelligence-index-10-points-above-previous-deepseek-v4-flash",
+};
+
+const DEEPSEEK_API_CHANGELOG: BenchmarkSource = {
+  label: "DeepSeek API Docs — Change Log",
+  url: "https://api-docs.deepseek.com/updates/",
+};
+
+const CURSORBENCH_32: BenchmarkSource = {
+  label: "Cursor — CursorBench 3.2",
+  url: "https://cursor.com/cursorbench",
+};
+
 export const BENCHMARK_METRICS: BenchmarkMetric[] = [
   {
     id: "aa_intelligence_index",
@@ -132,6 +165,26 @@ export const BENCHMARK_METRICS: BenchmarkMetric[] = [
     scaleMax: 100,
   },
   {
+    id: "hle",
+    name: "Humanity's Last Exam (AA-HLE)",
+    category: "Reasoning",
+    description:
+      "専門家レベルの知識・推論を問う公開問題セット（数学・物理・生物など）への正答率。AA が独自ハーネスで計測した値。",
+    sourcePolicy: "Artificial Analysis の同一ハーネスによる計測値のみ",
+    unit: "%",
+    scaleMax: 100,
+  },
+  {
+    id: "gdpval_aa_v2",
+    name: "GDPval-AA v2",
+    category: "Agentic Knowledge",
+    description:
+      "AA が設計したエージェント型の知識労働タスク（ウェブ調査・レポート作成・情報統合など）の成績を Elo レーティングで比較。Intelligence Index の構成評価の1つ。",
+    sourcePolicy: "Artificial Analysis の同一ハーネスによる計測値のみ",
+    unit: "Elo",
+    scaleMax: 2000,
+  },
+  {
     id: "swe_bench_pro",
     name: "SWE-bench Pro",
     category: "Software Engineering",
@@ -148,6 +201,17 @@ export const BENCHMARK_METRICS: BenchmarkMetric[] = [
     description: "CLI / OS 操作をエージェントに自律実行させるタスクの完了率。",
     sourcePolicy:
       "Terminal-Bench 公式リーダーボードに掲載されたエントリのみ（未掲載モデルは N/A）",
+    unit: "%",
+    scaleMax: 100,
+  },
+  {
+    id: "cursorbench_32",
+    name: "CursorBench 3.2",
+    category: "Coding Agent",
+    description:
+      "実 Cursor セッション由来の曖昧なマルチファイル課題を Cursor エージェントで解決させる成功率。IDE エージェントとモデルの組み合わせを測るベンダー自走ハーネスで、生のモデル性能とは別物。",
+    sourcePolicy:
+      "Cursor 公式 CursorBench ページの公表値のみ（effort 設定は行ごとに併記）",
     unit: "%",
     scaleMax: 100,
   },
@@ -175,6 +239,20 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
         measuredAt: "2026-07",
         verification: "verified",
       },
+      hle: {
+        value: 52.6,
+        configuration: "max effort",
+        source: AA_HLE,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
+      gdpval_aa_v2: {
+        value: 1858,
+        configuration: "max effort",
+        source: AA_GDPVAL_V2,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
       swe_bench_pro: {
         value: 79.2,
         configuration: "Anthropic システムカード Table 8.1.A",
@@ -184,6 +262,20 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
       },
       // 公式 Terminal-Bench リーダーボード未掲載
       terminal_bench_21: null,
+      cursorbench_32: {
+        value: 70.0,
+        configuration: "Cursor エージェント / Max effort",
+        source: CURSORBENCH_32,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
+    },
+    pricing: {
+      value: 2.34,
+      configuration: "max effort",
+      source: AA_LEADERBOARD,
+      measuredAt: "2026-08",
+      verification: "verified",
     },
   },
   {
@@ -201,6 +293,20 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
         verification: "verified",
       },
       gpqa_diamond: null,
+      hle: {
+        value: 53.3,
+        configuration: "Adaptive Reasoning / max effort",
+        source: AA_HLE,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
+      gdpval_aa_v2: {
+        value: 1746,
+        configuration: "max effort",
+        source: AA_GDPVAL_V2,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
       swe_bench_pro: {
         value: 80.3,
         configuration: "リーダーボード集計値",
@@ -215,6 +321,20 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
         measuredAt: "2026-07",
         verification: "verified",
       },
+      cursorbench_32: {
+        value: 70.5,
+        configuration: "Cursor エージェント / Max effort",
+        source: CURSORBENCH_32,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
+    },
+    pricing: {
+      value: 3.15,
+      configuration: "with fallback / max effort",
+      source: AA_LEADERBOARD,
+      measuredAt: "2026-08",
+      verification: "verified",
     },
   },
   {
@@ -238,10 +358,38 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
         measuredAt: "2026-07",
         verification: "verified",
       },
+      hle: {
+        value: 47.2,
+        configuration: "max effort",
+        source: AA_HLE,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
+      gdpval_aa_v2: {
+        value: 1733,
+        configuration: "max effort",
+        source: AA_GDPVAL_V2,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
       // OpenAI は launch 時に SWE-bench 系を公表していない
       swe_bench_pro: null,
       // 公式 Terminal-Bench リーダーボードには Terra / Luna のみ掲載
       terminal_bench_21: null,
+      cursorbench_32: {
+        value: 67.2,
+        configuration: "Cursor エージェント / Max effort",
+        source: CURSORBENCH_32,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
+    },
+    pricing: {
+      value: 1.86,
+      configuration: "max effort",
+      source: AA_LEADERBOARD,
+      measuredAt: "2026-08",
+      verification: "verified",
     },
   },
   {
@@ -265,8 +413,36 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
         measuredAt: "2026-07",
         verification: "verified",
       },
+      hle: {
+        value: 44.3,
+        configuration: "—",
+        source: AA_HLE,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
+      gdpval_aa_v2: {
+        value: 1687,
+        configuration: "max effort",
+        source: AA_GDPVAL_V2,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
       swe_bench_pro: null,
       terminal_bench_21: null,
+      cursorbench_32: {
+        value: 60.8,
+        configuration: "Cursor エージェント / Max effort",
+        source: CURSORBENCH_32,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
+    },
+    pricing: {
+      value: 0.86,
+      configuration: "max effort",
+      source: AA_LEADERBOARD,
+      measuredAt: "2026-08",
+      verification: "verified",
     },
   },
   {
@@ -284,6 +460,20 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
         verification: "verified",
       },
       gpqa_diamond: null,
+      hle: {
+        value: 39.6,
+        configuration: "max effort",
+        source: AA_HLE,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
+      gdpval_aa_v2: {
+        value: 1600,
+        configuration: "max effort",
+        source: AA_GDPVAL_V2,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
       swe_bench_pro: {
         value: 63.2,
         configuration: "ベンダー公表値",
@@ -298,6 +488,20 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
         measuredAt: "2026-07",
         verification: "verified",
       },
+      cursorbench_32: {
+        value: 61.5,
+        configuration: "Cursor エージェント / Max effort",
+        source: CURSORBENCH_32,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
+    },
+    pricing: {
+      value: 1.72,
+      configuration: "max effort",
+      source: AA_LEADERBOARD,
+      measuredAt: "2026-08",
+      verification: "verified",
     },
   },
   {
@@ -321,8 +525,86 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
         measuredAt: "2026-07",
         verification: "verified",
       },
+      hle: {
+        value: 38.3,
+        configuration: "—",
+        source: AA_HLE,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
+      gdpval_aa_v2: {
+        value: 1423,
+        configuration: "high effort",
+        source: AA_GDPVAL_V2,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
       swe_bench_pro: null,
       terminal_bench_21: null,
+      cursorbench_32: {
+        value: 53.5,
+        configuration: "Cursor エージェント / High effort（Flash に Max ティアなし）",
+        source: CURSORBENCH_32,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
+    },
+    pricing: {
+      value: 0.56,
+      configuration: "—",
+      source: AA_LEADERBOARD,
+      measuredAt: "2026-08",
+      verification: "verified",
+    },
+  },
+  {
+    modelId: "deepseek-v4-flash",
+    modelName: "DeepSeek V4 Flash",
+    developer: "DeepSeek",
+    releaseDate: "2026-07-31",
+    releaseDateSource: DEEPSEEK_API_CHANGELOG,
+    scores: {
+      aa_intelligence_index: {
+        value: 50,
+        configuration: "Flash 0731 / Reasoning / max effort",
+        source: AA_LEADERBOARD,
+        measuredAt: "2026-07",
+        verification: "verified",
+      },
+      gpqa_diamond: {
+        value: 91,
+        configuration: "Flash 0731 / Reasoning / max effort（AA 計測）",
+        source: AA_V4_FLASH_0731_ARTICLE,
+        measuredAt: "2026-07",
+        verification: "verified",
+      },
+      hle: {
+        value: 32.1,
+        configuration: "Flash 0731 / max effort",
+        source: AA_HLE,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
+      gdpval_aa_v2: {
+        value: 1559,
+        configuration: "Flash 0731 / Reasoning / max effort",
+        source: AA_GDPVAL_V2,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
+      // SWE-bench Pro はベンダー公称値のみでリーダーボード未掲載
+      swe_bench_pro: null,
+      // Terminal-Bench 公式リーダーボードに DeepSeek エントリなし
+      terminal_bench_21: null,
+      // CursorBench 3.2 に DeepSeek エントリなし
+      cursorbench_32: null,
+    },
+    pricing: {
+      value: 0.03,
+      configuration: "Flash 0731 / max effort",
+      source: AA_LEADERBOARD,
+      measuredAt: "2026-08",
+      verification: "verified",
     },
   },
   {
@@ -346,6 +628,15 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
         measuredAt: "2026-07",
         verification: "verified",
       },
+      hle: {
+        value: 44.7,
+        configuration: "Preview",
+        source: AA_HLE,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
+      // GDPval-AA v2 は AA リーダーボードにエントリなし
+      gdpval_aa_v2: null,
       swe_bench_pro: null,
       terminal_bench_21: {
         value: 65.8,
@@ -354,6 +645,15 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
         measuredAt: "2026-07",
         verification: "verified",
       },
+      // CursorBench 3.2 未掲載
+      cursorbench_32: null,
+    },
+    pricing: {
+      value: 0.34,
+      configuration: "Preview",
+      source: AA_LEADERBOARD,
+      measuredAt: "2026-08",
+      verification: "verified",
     },
   },
   {
@@ -377,6 +677,20 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
         measuredAt: "2026-07",
         verification: "verified",
       },
+      hle: {
+        value: 38.1,
+        configuration: "—",
+        source: AA_HLE,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
+      gdpval_aa_v2: {
+        value: 1270,
+        configuration: "—",
+        source: AA_GDPVAL_V2,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
       swe_bench_pro: {
         value: 60.6,
         configuration: "第三者集計",
@@ -385,6 +699,15 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
         verification: "verified",
       },
       terminal_bench_21: null,
+      // CursorBench 3.2 未掲載
+      cursorbench_32: null,
+    },
+    pricing: {
+      value: 1.28,
+      configuration: "—",
+      source: AA_LEADERBOARD,
+      measuredAt: "2026-08",
+      verification: "verified",
     },
   },
   {
@@ -402,8 +725,31 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
         verification: "verified",
       },
       gpqa_diamond: null,
+      hle: {
+        value: 35.9,
+        configuration: "max effort",
+        source: AA_HLE,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
+      gdpval_aa_v2: {
+        value: 1304,
+        configuration: "max effort",
+        source: AA_GDPVAL_V2,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
       swe_bench_pro: null,
       terminal_bench_21: null,
+      // CursorBench 3.2 未掲載
+      cursorbench_32: null,
+    },
+    pricing: {
+      value: 0.05,
+      configuration: "max effort",
+      source: AA_LEADERBOARD,
+      measuredAt: "2026-08",
+      verification: "verified",
     },
   },
 ];
