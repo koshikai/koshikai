@@ -100,6 +100,15 @@ describe("LLM Benchmarks Data", () => {
       }
     }
   });
+
+  // モデルには 6 桁 hex のイメージカラーを 1 色ずつ割り当てる（散布図で点を識別するため）
+  it("assigns a unique brand color to every model", () => {
+    const colors = LLM_BENCHMARK_SCORES.map((model) => model.color);
+    for (const color of colors) {
+      expect(color).toMatch(/^#[0-9a-fA-F]{6}$/);
+    }
+    expect(new Set(colors).size).toBe(colors.length);
+  });
 });
 
 describe("LlmBenchmarksPage Component & Interactive View", () => {
