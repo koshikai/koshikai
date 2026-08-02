@@ -47,6 +47,8 @@ export interface ModelBenchmarkScore {
   modelId: string;
   modelName: string;
   developer: string;
+  /** モデルのイメージカラー（ベンダーブランド色を基調にした 6 桁 hex） */
+  color: string;
   /** 発表日 (YYYY-MM-DD)。確認できない場合は null。 */
   releaseDate: string | null;
   releaseDateSource: BenchmarkSource | null;
@@ -222,6 +224,7 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
     modelId: "claude-opus-5",
     modelName: "Claude Opus 5",
     developer: "Anthropic",
+    color: "#CC785C",
     releaseDate: "2026-07-24",
     releaseDateSource: ANTHROPIC_OPUS_5,
     scores: {
@@ -282,6 +285,7 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
     modelId: "claude-fable-5",
     modelName: "Claude Fable 5",
     developer: "Anthropic",
+    color: "#F0B429",
     releaseDate: null,
     releaseDateSource: null,
     scores: {
@@ -341,6 +345,7 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
     modelId: "gpt-5-6-sol",
     modelName: "GPT-5.6 Sol",
     developer: "OpenAI",
+    color: "#10A37F",
     releaseDate: "2026-07-09",
     releaseDateSource: AA_GPT_56,
     scores: {
@@ -396,6 +401,7 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
     modelId: "kimi-k3",
     modelName: "Kimi K3",
     developer: "Moonshot AI",
+    color: "#4F46E5",
     releaseDate: "2026-07-16",
     releaseDateSource: LLM_STATS_KIMI,
     scores: {
@@ -449,6 +455,7 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
     modelId: "claude-sonnet-5",
     modelName: "Claude Sonnet 5",
     developer: "Anthropic",
+    color: "#9C6B53",
     releaseDate: "2026-06-30",
     releaseDateSource: VELLUM_SONNET_5,
     scores: {
@@ -508,6 +515,7 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
     modelId: "gemini-3-6-flash",
     modelName: "Gemini 3.6 Flash",
     developer: "Google",
+    color: "#4285F4",
     releaseDate: "2026-07-21",
     releaseDateSource: OFFICECHAI_GEMINI_36,
     scores: {
@@ -561,6 +569,7 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
     modelId: "deepseek-v4-flash",
     modelName: "DeepSeek V4 Flash",
     developer: "DeepSeek",
+    color: "#8CA0FF",
     releaseDate: "2026-07-31",
     releaseDateSource: DEEPSEEK_API_CHANGELOG,
     scores: {
@@ -611,6 +620,7 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
     modelId: "gemini-3-1-pro",
     modelName: "Gemini 3.1 Pro",
     developer: "Google",
+    color: "#0B57D0",
     releaseDate: null,
     releaseDateSource: null,
     scores: {
@@ -660,6 +670,7 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
     modelId: "qwen-3-7-max",
     modelName: "Qwen 3.7 Max",
     developer: "Alibaba Cloud",
+    color: "#8B5CF6",
     releaseDate: null,
     releaseDateSource: null,
     scores: {
@@ -714,6 +725,7 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
     modelId: "deepseek-v4",
     modelName: "DeepSeek V4 Pro",
     developer: "DeepSeek",
+    color: "#4D6BFE",
     releaseDate: null,
     releaseDateSource: null,
     scores: {
