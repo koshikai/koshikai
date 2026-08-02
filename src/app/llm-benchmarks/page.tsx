@@ -9,7 +9,7 @@ const site = getSiteConfig();
 
 const title = "LLM Benchmarks Comparison (2026 Snapshot)";
 const description =
-  "2026年最新世代フロンティアモデル（Claude 5, GPT-5.6 Sol, Gemini 3.6 Flash/3.1 Pro, Qwen 3.7 Max, Kimi K3等）の定量的ベンチマーク比較グラフ。出典未確定の参考値を含みます。";
+  "2026年最新世代フロンティアモデル（Claude 5, GPT-5.6 Sol, Gemini 3.6 Flash/3.1 Pro, Qwen 3.7 Max, Kimi K3, DeepSeek V4 Flash等）の定量的ベンチマーク比較グラフ。出典未確定の参考値を含みます。";
 
 export const metadata: Metadata = {
   title,
@@ -55,8 +55,9 @@ export default function LlmBenchmarksPage() {
             最新 LLM ベンチマーク測定比較
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-[1.9] text-muted">
-            2026年に発表された最新世代フロンティアモデル（Claude Opus 5 / Fable 5 / Sonnet 5, GPT-5.6 Sol, Gemini 3.6 Flash / 3.1 Pro, Kimi K3, Qwen 3.7 Max, DeepSeek V4 Pro）の評価スナップショットです。
+            2026年に発表された最新世代フロンティアモデル（Claude Opus 5 / Fable 5 / Sonnet 5, GPT-5.6 Sol, Gemini 3.6 Flash / 3.1 Pro, Kimi K3, Qwen 3.7 Max, DeepSeek V4 Pro / V4 Flash）の評価スナップショットです。
             掲載しているのは各開発元の公表値または明示した第三者リーダーボードに実在する値のみで、推定値による穴埋めは行っていません。
+            コストは Artificial Analysis の Cost per Task（同一タスク1回の API 実行コスト）で全モデル横並びに比較できます。
           </p>
         </header>
 
@@ -90,6 +91,10 @@ export default function LlmBenchmarksPage() {
                 <li>
                   <strong className="text-foreground">列をまたいだ比較はできません。</strong>{" "}
                   指標ごとに出典系統を1つに固定しているため、列内の比較のみ意味を持ちます。
+                </li>
+                <li>
+                  <strong className="text-foreground">コストはタスク実行コストで統一しています。</strong>{" "}
+                  「コスト/タスク (USD)」は Artificial Analysis が同一ハーネスで計測する Cost per Task で、ベンダーごとの入出力単価やキャッシュ価格の違いに依存しません。
                 </li>
               </ul>
               <p className="mt-3 font-mono text-[11px] text-muted">

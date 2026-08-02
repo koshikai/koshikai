@@ -6,12 +6,13 @@ import {
   LLM_BENCHMARK_SCORES,
   type BenchmarkMetric,
   type BenchmarkScore,
+  type ModelBenchmarkScore,
 } from "@/lib/benchmarks-data";
 
-type ViewMode = "chart" | "table";
+type ViewMode = "chart" | "scatter" | "table";
 type SortDirection = "asc" | "desc";
 /** テーブルのソート対象: モデル属性 or 指標 ID */
-type SortKey = "modelName" | "developer" | "releaseDate" | string;
+type SortKey = "modelName" | "developer" | "releaseDate" | "pricing" | string;
 
 function formatValue(
   score: BenchmarkScore | null | undefined,
@@ -49,6 +50,165 @@ function SourceLink({ score }: { score: BenchmarkScore }) {
 /** 値の再現条件を1行で表す（テーブルの title 属性などに使う） */
 function provenanceText(score: BenchmarkScore): string {
   return `${score.configuration} / 出典: ${score.source.label} / 確認: ${score.measuredAt}`;
+}
+
+/** プロット領域の余白（%）。軸ラベルと重ならないためのマージン */
+const PLOT = { left: 7, right: 4, top: 5, bottom: 16 };
+
+/** 横軸コスト（対数）・縦軸スコアの散布図。スコアとコストが両方分かるモデルのみプロットする */
+function ScatterChart({
+  models,
+  metric,
+}: {
+  models: ModelBenchmarkScore[];
+  metric: BenchmarkMetric;
+}) {
+  const plotted = models.filter(
+    (m) => m.scores[metric.id] && m.pricing,
+  );
+
+  const missing = models.filter(
+    (m) => !(m.scores[metric.id] && m.pricing),
+  );
+
+  if (plotted.length === 0) {
+    return (
+      <p className="font-mono text-xs text-muted">
+        スコアとコストが両方確認できるモデルがいません。
+      </p>
+    );
+  }
+
+  const costs = plotted.map((m) => m.pricing!.value);
+  const logMin = Math.log10(Math.min(...costs));
+  const logMax = Math.log10(Math.max(...costs));
+  const pad = (logMax - logMin) * 0.08 || 0.2;
+  const lMin = logMin - pad;
+  const lMax = logMax + pad;
+
+  const xPct = (cost: number) =>
+    ((Math.log10(cost) - lMin) / (lMax - lMin)) *
+      (100 - PLOT.left - PLOT.right) +
+    PLOT.left;
+
+  const yPct = (score: number) =>
+    PLOT.top +
+    (1 - score / metric.scaleMax) * (100 - PLOT.top - PLOT.bottom);
+
+  // 対数軸の目盛り: 10 のべき乗と 3×10 のべき乗の系列から範囲内を拾う
+  const xTicks: number[] = [];
+  for (let e = -3; e <= 2; e++) {
+    for (const m of [1, 3]) {
+      const tick = m * 10 ** e;
+      if (tick >= Math.pow(10, lMin) && tick <= Math.pow(10, lMax)) {
+        xTicks.push(tick);
+      }
+    }
+  }
+
+  const formatTick = (v: number) =>
+    v >= 1 ? `$${v.toFixed(0)}` : `$${v.toFixed(2)}`;
+
+  const yTicks = [0, 0.25, 0.5, 0.75, 1].map((r) => r * metric.scaleMax);
+
+  return (
+    <div>
+      <div className="relative h-[440px] w-full font-mono text-[10px] text-muted">
+        {/* プロット枠 */}
+        <div
+          className="absolute border-l border-b border-border"
+          style={{
+            left: `${PLOT.left}%`,
+            right: `${PLOT.right}%`,
+            top: `${PLOT.top}%`,
+            bottom: `${PLOT.bottom}%`,
+          }}
+          aria-hidden="true"
+        />
+
+        {/* 横軸（コスト）グリッド */}
+        {xTicks.map((tick) => (
+          <div
+            key={tick}
+            className="absolute border-l border-border/30"
+            style={{
+              left: `${xPct(tick)}%`,
+              top: `${PLOT.top}%`,
+              bottom: `${PLOT.bottom}%`,
+            }}
+            aria-hidden="true"
+          >
+            <span
+              className="absolute -translate-x-1/2 whitespace-nowrap"
+              style={{ top: "100%", marginTop: 4 }}
+            >
+              {formatTick(tick)}
+            </span>
+          </div>
+        ))}
+
+        {/* 縦軸（スコア）グリッド */}
+        {yTicks.map((tick) => (
+          <div
+            key={tick}
+            className="absolute border-t border-border/30"
+            style={{
+              left: `${PLOT.left}%`,
+              right: `${PLOT.right}%`,
+              top: `${yPct(tick)}%`,
+            }}
+            aria-hidden="true"
+          >
+            <span
+              className="absolute -translate-y-1/2 text-right"
+              style={{ right: "100%", marginRight: 8 }}
+            >
+              {tick}
+            </span>
+          </div>
+        ))}
+
+        {/* プロットポイント */}
+        {plotted.map((model) => {
+          const score = model.scores[metric.id]!;
+          const x = xPct(model.pricing!.value);
+          const y = yPct(score.value);
+
+          return (
+            <div
+              key={model.modelId}
+              className="absolute z-10 -translate-x-1/2 -translate-y-1/2"
+              style={{ left: `${x}%`, top: `${y}%` }}
+            >
+              <div
+                className="h-3 w-3 rounded-full bg-accent border border-background shadow-sm transition-transform group-hover:scale-125 hover:scale-125"
+                title={`${model.modelName} — ${metric.name}: ${formatValue(
+                  score,
+                  metric,
+                )}（${provenanceText(score)}） / コスト: $${model.pricing!.value.toFixed(
+                  2,
+                )}（${provenanceText(model.pricing!)}）`}
+              />
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 whitespace-nowrap bg-background/90 px-1 font-sans text-[10px] text-foreground/80">
+                {model.modelName}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      <p className="mt-2 text-right font-mono text-[10px] leading-relaxed text-muted">
+        横軸: コスト/タスク (USD, 対数スケール) / 縦軸: {metric.name}
+      </p>
+
+      {missing.length > 0 && (
+        <p className="mt-4 border-t border-border pt-3 font-mono text-[11px] leading-[1.8] text-muted">
+          スコアかコストが確認できないためプロットしていないモデル:{" "}
+          {missing.map((m) => m.modelName).join(" / ")}
+        </p>
+      )}
+    </div>
+  );
 }
 
 export function BenchmarkView() {
@@ -96,6 +256,14 @@ export function BenchmarkView() {
         if (!b.releaseDate) return -1;
         return a.releaseDate.localeCompare(b.releaseDate) * factor;
       }
+      if (sortKey === "pricing") {
+        // コスト未計測 (null) は常に末尾
+        const priceA = a.pricing;
+        const priceB = b.pricing;
+        if (!priceA) return 1;
+        if (!priceB) return -1;
+        return (priceA.value - priceB.value) * factor;
+      }
       // 指標列: 公表値なし (N/A) は常に末尾へ寄せる
       const scoreA = a.scores[sortKey];
       const scoreB = b.scores[sortKey];
@@ -112,7 +280,10 @@ export function BenchmarkView() {
     }
     setSortKey(key);
     setSortDirection(
-      key === "modelName" || key === "developer" || key === "releaseDate"
+      key === "modelName" ||
+        key === "developer" ||
+        key === "releaseDate" ||
+        key === "pricing"
         ? "asc"
         : "desc",
     );
@@ -145,6 +316,18 @@ export function BenchmarkView() {
           </button>
           <button
             type="button"
+            aria-pressed={viewMode === "scatter"}
+            onClick={() => setViewMode("scatter")}
+            className={`px-3 py-1.5 font-mono text-xs font-medium rounded-sm transition-colors ${
+              viewMode === "scatter"
+                ? "bg-foreground text-background"
+                : "text-muted hover:text-foreground"
+            }`}
+          >
+            散布図 (Scatter)
+          </button>
+          <button
+            type="button"
             aria-pressed={viewMode === "table"}
             onClick={() => setViewMode("table")}
             className={`px-3 py-1.5 font-mono text-xs font-medium rounded-sm transition-colors ${
@@ -157,7 +340,7 @@ export function BenchmarkView() {
           </button>
         </div>
 
-        {viewMode === "chart" && (
+        {viewMode !== "table" && (
           <div className="flex flex-wrap items-center gap-1.5 font-mono text-xs">
             <span className="text-muted mr-1 text-[11px] uppercase tracking-wider hidden md:inline">
               指標選択:
@@ -241,6 +424,14 @@ export function BenchmarkView() {
                       条件: {score.configuration} / 出典:{" "}
                       <SourceLink score={score} /> / 確認: {score.measuredAt}
                     </p>
+
+                    {model.pricing && (
+                      <p className="pl-7 font-mono text-[10px] leading-relaxed text-muted">
+                        コスト/タスク: ${model.pricing.value.toFixed(2)} USD /{" "}
+                        出典: <SourceLink score={model.pricing} /> / 確認:{" "}
+                        {model.pricing.measuredAt}
+                      </p>
+                    )}
                   </div>
                 );
               })}
@@ -253,6 +444,28 @@ export function BenchmarkView() {
               </p>
             )}
           </div>
+        </div>
+      )}
+
+      {/* 散布図表示モード: 横軸コスト / 縦軸スコア */}
+      {viewMode === "scatter" && (
+        <div className="border border-border p-6 rounded-sm bg-background">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 border-b border-border pb-4 mb-6">
+            <div>
+              <h2 className="font-serif text-xl font-semibold text-foreground flex flex-wrap items-center gap-2">
+                <span>コスト vs {selectedMetric.name}</span>
+                <span className="rounded-sm border border-border px-2 py-0.5 font-mono text-[10px] text-muted">
+                  {selectedMetric.category}
+                </span>
+              </h2>
+              <p className="mt-1 text-xs leading-[1.8] text-muted">
+                横軸は Artificial Analysis の Cost per Task（USD・対数軸）です。左上（安くて
+                スコアが高い）ほどコストパフォーマンスに優れます。
+              </p>
+            </div>
+          </div>
+
+          <ScatterChart models={LLM_BENCHMARK_SCORES} metric={selectedMetric} />
         </div>
       )}
 
@@ -271,6 +484,7 @@ export function BenchmarkView() {
                     ["modelName", "モデル名"],
                     ["developer", "開発元"],
                     ["releaseDate", "発表日"],
+                    ["pricing", "コスト/タスク (USD)"],
                   ] as const
                 ).map(([key, label]) => (
                   <th
@@ -328,6 +542,18 @@ export function BenchmarkView() {
                   <td className="px-4 py-3.5 text-muted">{model.developer}</td>
                   <td className="px-4 py-3.5 text-muted">
                     {model.releaseDate ?? "未確認"}
+                  </td>
+                  <td
+                    title={
+                      model.pricing
+                        ? provenanceText(model.pricing)
+                        : undefined
+                    }
+                    className={`px-4 py-3.5 text-right font-medium ${
+                      model.pricing ? "text-foreground" : "text-muted"
+                    }`}
+                  >
+                    {model.pricing ? `$${model.pricing.value.toFixed(2)}` : "N/A"}
                   </td>
                   {BENCHMARK_METRICS.map((metric) => {
                     const score = model.scores[metric.id];

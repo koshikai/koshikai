@@ -2,6 +2,7 @@ import { render, screen, fireEvent, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import LlmBenchmarksPage from "./page";
 import {
+  BENCHMARK_DATASET_VERIFIED_AT,
   BENCHMARK_METRICS,
   LLM_BENCHMARK_SCORES,
 } from "@/lib/benchmarks-data";
@@ -10,6 +11,10 @@ const allScores = LLM_BENCHMARK_SCORES.flatMap((model) =>
   BENCHMARK_METRICS.map((metric) => model.scores[metric.id]).filter(
     (score) => score !== null && score !== undefined,
   ),
+);
+
+const allPricing = LLM_BENCHMARK_SCORES.map((model) => model.pricing).filter(
+  (pricing): pricing is NonNullable<typeof pricing> => pricing !== null,
 );
 
 describe("LLM Benchmarks Data", () => {
@@ -60,9 +65,39 @@ describe("LLM Benchmarks Data", () => {
     }
   });
 
+  // 価格（Cost per Task）もスコアと同じ不変条件を満たす
+  it("attaches a source, configuration and measurement date to every pricing entry", () => {
+    expect(allPricing.length).toBeGreaterThan(0);
+    expect(allPricing.length).toBe(LLM_BENCHMARK_SCORES.length);
+    for (const pricing of allPricing) {
+      expect(pricing!.source.label.trim().length).toBeGreaterThan(0);
+      expect(pricing!.source.url).toMatch(/^https:\/\//);
+      expect(pricing!.configuration.trim().length).toBeGreaterThan(0);
+      expect(pricing!.measuredAt).toMatch(/^\d{4}-\d{2}$/);
+      expect(pricing!.verification).toBe("verified");
+      expect(pricing!.value).toBeGreaterThan(0);
+    }
+  });
+
   it("fixes a single source policy per metric", () => {
     for (const metric of BENCHMARK_METRICS) {
       expect(metric.sourcePolicy.trim().length).toBeGreaterThan(0);
+    }
+  });
+
+  // HLE と GDPval-AA v2 は AA の同一ハーネス計測に列を固定する（index と同じ方針）
+  it("keeps AA-measured metrics on a single Artificial Analysis source", () => {
+    for (const metricId of ["hle", "gdpval_aa_v2"] as const) {
+      const scores = LLM_BENCHMARK_SCORES.flatMap((model) =>
+        model.scores[metricId] !== null ? [model.scores[metricId]!] : [],
+      );
+      expect(scores.length).toBeGreaterThan(0);
+      for (const score of scores) {
+        expect(score.source.url).toMatch(
+          /^https:\/\/artificialanalysis\.ai\/evaluations\//,
+        );
+        expect(score.measuredAt).toBe(BENCHMARK_DATASET_VERIFIED_AT);
+      }
     }
   });
 });
@@ -92,6 +127,28 @@ describe("LlmBenchmarksPage Component & Interactive View", () => {
     expect(chartButton).toHaveAttribute("aria-pressed", "false");
   });
 
+  it("renders a scatter view of cost vs score", () => {
+    render(<LlmBenchmarksPage />);
+    fireEvent.click(screen.getByRole("button", { name: "散布図 (Scatter)" }));
+
+    expect(
+      screen.getByRole("heading", {
+        name: /コスト vs AA Intelligence Index v4\.1/,
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/横軸: コスト\/タスク/)).toBeInTheDocument();
+  });
+
+  it("lists models not plotted in the scatter view when data is missing", () => {
+    render(<LlmBenchmarksPage />);
+    fireEvent.click(screen.getByRole("button", { name: "散布図 (Scatter)" }));
+    fireEvent.click(screen.getByRole("button", { name: "SWE-bench Pro" }));
+
+    expect(
+      screen.getByText(/スコアかコストが確認できないためプロットしていないモデル/),
+    ).toBeInTheDocument();
+  });
+
   it("explains how to read the data instead of presenting bare numbers", () => {
     render(<LlmBenchmarksPage />);
     expect(
@@ -118,6 +175,30 @@ describe("LlmBenchmarksPage Component & Interactive View", () => {
     expect(
       screen.getByText(/この指標の公表値が確認できないモデル/),
     ).toBeInTheDocument();
+  });
+
+  it("shows the cost per task in the chart view", () => {
+    render(<LlmBenchmarksPage />);
+    expect(screen.getAllByText(/コスト\/タスク:/).length).toBeGreaterThan(0);
+    expect(screen.getByText(/\$0\.03 USD/)).toBeInTheDocument();
+  });
+
+  it("sorts the table by cost per task, cheapest first", () => {
+    render(<LlmBenchmarksPage />);
+    fireEvent.click(screen.getByText("データ表 (Table)"));
+    fireEvent.click(
+      screen.getByRole("button", { name: /コスト\/タスク \(USD\)/ }),
+    );
+
+    const rows = screen.getAllByRole("row").slice(1);
+    const topRow = within(rows[0]).getAllByRole("rowheader")[0];
+
+    const cheapest = [...LLM_BENCHMARK_SCORES].sort(
+      (a, b) =>
+        (a.pricing?.value ?? Infinity) - (b.pricing?.value ?? Infinity),
+    )[0];
+
+    expect(topRow).toHaveTextContent(cheapest.modelName);
   });
 
   it("sorts the table by a metric column, pushing N/A rows to the end", () => {
