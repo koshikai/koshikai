@@ -47,6 +47,17 @@ function SourceLink({ score }: { score: BenchmarkScore }) {
   );
 }
 
+/** モデルのイメージカラーのドット（凡例・行頭に使う） */
+function ColorDot({ color }: { color: string }) {
+  return (
+    <span
+      aria-hidden="true"
+      className="inline-block h-2 w-2 shrink-0 rounded-full"
+      style={{ backgroundColor: color }}
+    />
+  );
+}
+
 /** 値の再現条件を1行で表す（テーブルの title 属性などに使う） */
 function provenanceText(score: BenchmarkScore): string {
   return `${score.configuration} / 出典: ${score.source.label} / 確認: ${score.measuredAt}`;
@@ -181,7 +192,8 @@ function ScatterChart({
               style={{ left: `${x}%`, top: `${y}%` }}
             >
               <div
-                className="h-3 w-3 rounded-full bg-accent border border-background shadow-sm transition-transform group-hover:scale-125 hover:scale-125"
+                className="h-3 w-3 rounded-full border border-background shadow-sm transition-transform group-hover:scale-125 hover:scale-125"
+                style={{ backgroundColor: model.color }}
                 title={`${model.modelName} — ${metric.name}: ${formatValue(
                   score,
                   metric,
@@ -399,6 +411,7 @@ export function BenchmarkView() {
                         <span className="w-5 shrink-0 text-[11px] text-muted text-right font-mono">
                           #{index + 1}
                         </span>
+                        <ColorDot color={model.color} />
                         <span className="font-sans font-medium text-foreground group-hover:text-accent transition-colors">
                           {model.modelName}
                         </span>
@@ -413,9 +426,10 @@ export function BenchmarkView() {
 
                     <div className="h-3.5 w-full bg-subtle/40 rounded-sm overflow-hidden border border-border/50">
                       <div
-                        className="h-full bg-foreground/80 group-hover:bg-accent transition-all duration-300 ease-out"
+                        className="h-full transition-all duration-300 ease-out group-hover:brightness-110"
                         style={{
                           width: `${barWidthPercent(score, selectedMetric)}%`,
+                          backgroundColor: model.color,
                         }}
                       />
                     </div>
@@ -537,7 +551,10 @@ export function BenchmarkView() {
                     scope="row"
                     className="px-4 py-3.5 text-left font-sans font-medium text-foreground"
                   >
-                    {model.modelName}
+                    <span className="inline-flex items-center gap-2">
+                      <ColorDot color={model.color} />
+                      {model.modelName}
+                    </span>
                   </th>
                   <td className="px-4 py-3.5 text-muted">{model.developer}</td>
                   <td className="px-4 py-3.5 text-muted">
