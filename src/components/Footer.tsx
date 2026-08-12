@@ -1,32 +1,47 @@
 import Link from "next/link";
 
+const iconLinkClass =
+    "flex h-11 w-11 items-center justify-center text-muted transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
+
+const textLinkClass =
+    "font-mono text-xs text-muted transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent";
+
 export function Footer() {
     return (
         <footer className="mt-24 w-full border-t border-border bg-background py-12">
             <div className="mx-auto flex max-w-5xl flex-col items-center gap-6 px-6 sm:flex-row sm:justify-between">
 
                 <div className="flex flex-col items-center gap-1 sm:items-start">
-                    <span className="font-mono text-sm tracking-tight text-foreground">
+                    <Link
+                        href="/"
+                        className="font-mono text-sm tracking-tight text-foreground transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+                    >
                         koshikai.dev
-                    </span>
+                    </Link>
                     <p className="font-mono text-[11px] text-muted">
                         © {new Date().getFullYear()} All rights reserved.
                     </p>
                 </div>
 
-                <div className="flex items-center gap-4">
-                    <Link
-                        href="/llm-benchmarks"
-                        className="font-mono text-xs text-muted transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
-                    >
+                <nav
+                    className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1"
+                    aria-label="フッターナビゲーション"
+                >
+                    <Link href="/cases" className={textLinkClass}>
+                        Case Studies
+                    </Link>
+                    <Link href="/llm-benchmarks" className={textLinkClass}>
                         LLM Benchmarks
                     </Link>
+
+                    <span className="h-4 w-px bg-border" aria-hidden="true" />
+
                     <a
                         href="https://github.com/koshikai"
                         target="_blank"
                         rel="noopener noreferrer"
-                        aria-label="GitHub"
-                        className="flex items-center justify-center p-2 text-muted transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+                        aria-label="GitHub (@koshikai) を開く"
+                        className={iconLinkClass}
                     >
                         <svg
                             className="h-5 w-5"
@@ -41,7 +56,24 @@ export function Footer() {
                             />
                         </svg>
                     </a>
-                </div>
+
+                    <a
+                        href="https://x.com/siywyk"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="X (@siywyk) を開く"
+                        className={iconLinkClass}
+                    >
+                        <svg
+                            className="h-[18px] w-[18px]"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                    </a>
+                </nav>
             </div>
         </footer>
     );
