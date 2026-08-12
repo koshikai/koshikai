@@ -38,7 +38,9 @@ export function Reveal({
   return (
     <div
       ref={ref}
-      className={`transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none ${
+      // reveal-root は JS 無効時に中身を見せるための目印（layout の noscript 参照）。
+      // これが無いと opacity-0 のまま固定され、トップの全セクションが消える。
+      className={`reveal-root transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none ${
         revealed ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
       } ${className}`}
     >

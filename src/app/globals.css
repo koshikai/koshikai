@@ -57,6 +57,15 @@ body {
 }
 
 @layer components {
+  /* サイト共通のフォーカスリング。個別に focus-visible:outline-* を書くと
+     付け忘れた要素だけ既定のリングになり、見え方が場所ごとに変わるため
+     1箇所に寄せる。 */
+  .focus-ring:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
   .case-article-shell {
     border-top: 1px solid var(--border);
     padding-block: calc(var(--spacing) * 10);
