@@ -107,6 +107,13 @@ function provenanceText(score: BenchmarkScore): string {
   return `${score.configuration} / 出典: ${score.source.label} / 確認: ${score.measuredAt}`;
 }
 
+/**
+ * 固定列の右端に引く境界線。border-collapse: collapse だと sticky セルの
+ * border がスクロール時に消える既知の挙動があるため、疑似要素で描く。
+ */
+const STICKY_EDGE =
+  "after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-border after:content-['']";
+
 /** プロット領域の余白（%）。軸ラベルと重ならないためのマージン */
 const PLOT = { left: 7, right: 4, top: 5, bottom: 16 };
 
@@ -552,15 +559,22 @@ export function BenchmarkView() {
         </div>
       )}
 
-      {/* データテーブル表示モード */}
+      {/* データテーブル表示モード。11 列あり必ず横スクロールになるので、
+          キーボードでもスクロールできる領域として公開する */}
       {viewMode === "table" && (
-        <div className="overflow-x-auto border border-border">
+        <div
+          role="region"
+          aria-label="モデル別ベンチマークスコア表（横スクロール可能）"
+          tabIndex={0}
+          className="overflow-x-auto border border-border focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
           <table className="w-full text-left font-mono text-xs whitespace-nowrap">
             <caption className="sr-only">
               モデル別ベンチマークスコア一覧（列見出しのボタンで並べ替え可能。N/A
-              は公表値が確認できないことを示す）
+              は公表値が確認できないことを示す。モデル名の列は横スクロールしても
+              左端に固定される）
             </caption>
-            <thead className="border-b border-border bg-subtle/50 text-foreground">
+            <thead className="border-b border-border bg-surface text-foreground">
               <tr>
                 {(
                   [
@@ -574,7 +588,9 @@ export function BenchmarkView() {
                     key={key}
                     scope="col"
                     aria-sort={ariaSortFor(key)}
-                    className="px-4 py-3 font-medium"
+                    className={`px-4 py-3 font-medium ${
+                      key === "modelName" ? `sticky left-0 z-20 bg-surface ${STICKY_EDGE}` : ""
+                    }`}
                   >
                     <button
                       type="button"
@@ -614,11 +630,13 @@ export function BenchmarkView() {
               {tableRows.map((model) => (
                 <tr
                   key={model.modelId}
-                  className="hover:bg-subtle/30 transition-colors"
+                  className="group transition-colors hover:bg-surface"
                 >
+                  {/* 固定列は不透明でないと裏の列が透けるため、行の hover 色も
+                      group-hover で個別に追従させる */}
                   <th
                     scope="row"
-                    className="px-4 py-3.5 text-left font-sans font-medium text-foreground"
+                    className={`sticky left-0 z-10 bg-background px-4 py-3.5 text-left font-sans font-medium text-foreground transition-colors group-hover:bg-surface ${STICKY_EDGE}`}
                   >
                     <span className="inline-flex items-center gap-2">
                       <ColorDot color={model.color} />
