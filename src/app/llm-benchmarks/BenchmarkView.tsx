@@ -24,14 +24,58 @@ function formatValue(
     : `${score.value} ${metric.unit}`;
 }
 
-/** バー幅は指標ごとの最大値で正規化し、0-100 にクランプする */
+/**
+ * 描画レンジ。0 起点ではなく実測値の範囲を使う。
+ *
+ * 0-scaleMax で正規化すると差が潰れて読めなくなる（例: GPQA Diamond は
+ * 全モデルが 91.0-94.1% に収まり、全長の 3% しか違わない）。代わりに実測の
+ * min-max に余白を足した範囲へ引き伸ばす。ただし 0 起点をやめた以上、
+ * 基準レンジを併記しないと差を過大に見せることになるので、UI 側で必ず
+ * min / max を明示すること。
+ */
+interface MetricDomain {
+  min: number;
+  max: number;
+}
+
+/** 与えたモデル群の実測値からレンジを決める。値が無い場合は 0-scaleMax に退避 */
+function metricDomain(
+  models: ModelBenchmarkScore[],
+  metric: BenchmarkMetric,
+): MetricDomain {
+  const values = models
+    .map((model) => model.scores[metric.id]?.value)
+    .filter((value): value is number => typeof value === "number" && !Number.isNaN(value));
+
+  if (values.length === 0) return { min: 0, max: metric.scaleMax };
+
+  const dataMin = Math.min(...values);
+  const dataMax = Math.max(...values);
+  const spread = dataMax - dataMin;
+  // 全モデルが同値だとレンジが潰れるため、値を中央に置ける幅を作る
+  const pad = spread > 0 ? spread * 0.18 : Math.max(Math.abs(dataMax) * 0.05, 1);
+
+  return { min: Math.max(0, dataMin - pad), max: dataMax + pad };
+}
+
+/** バー幅はレンジ内の相対位置。0-100 にクランプする */
 function barWidthPercent(
   score: BenchmarkScore | null | undefined,
-  metric: BenchmarkMetric,
+  domain: MetricDomain,
 ): number {
   if (!score || Number.isNaN(score.value)) return 0;
-  const ratio = (score.value / metric.scaleMax) * 100;
+  const span = domain.max - domain.min;
+  if (span <= 0) return 0;
+  const ratio = ((score.value - domain.min) / span) * 100;
   return Math.min(100, Math.max(0, ratio));
+}
+
+/**
+ * 軸端・目盛りの数値表示。% は小数1桁、それ以外（Elo 等）は整数に丸める。
+ * 単位は軸ラベル側に出すので、ここでは付けない（軸の文字幅を詰めるため）。
+ */
+function formatScaleValue(value: number, metric: BenchmarkMetric): string {
+  return metric.unit === "%" ? value.toFixed(1) : `${Math.round(value)}`;
 }
 
 function SourceLink({ score }: { score: BenchmarkScore }) {
@@ -102,9 +146,13 @@ function ScatterChart({
       (100 - PLOT.left - PLOT.right) +
     PLOT.left;
 
+  // 縦軸もプロット対象の実測レンジに合わせる（0 起点だと点が上端に固まる）
+  const domain = metricDomain(plotted, metric);
+  const ySpan = domain.max - domain.min || 1;
+
   const yPct = (score: number) =>
     PLOT.top +
-    (1 - score / metric.scaleMax) * (100 - PLOT.top - PLOT.bottom);
+    (1 - (score - domain.min) / ySpan) * (100 - PLOT.top - PLOT.bottom);
 
   // 対数軸の目盛り: 10 のべき乗と 3×10 のべき乗の系列から範囲内を拾う
   const xTicks: number[] = [];
@@ -120,7 +168,9 @@ function ScatterChart({
   const formatTick = (v: number) =>
     v >= 1 ? `$${v.toFixed(0)}` : `$${v.toFixed(2)}`;
 
-  const yTicks = [0, 0.25, 0.5, 0.75, 1].map((r) => r * metric.scaleMax);
+  const yTicks = [0, 0.25, 0.5, 0.75, 1].map(
+    (r) => domain.min + r * ySpan,
+  );
 
   return (
     <div>
@@ -174,7 +224,7 @@ function ScatterChart({
               className="absolute -translate-y-1/2 text-right"
               style={{ right: "100%", marginRight: 8 }}
             >
-              {tick}
+              {formatScaleValue(tick, metric)}
             </span>
           </div>
         ))}
@@ -210,7 +260,9 @@ function ScatterChart({
       </div>
 
       <p className="mt-2 text-right font-mono text-[10px] leading-relaxed text-muted">
-        横軸: コスト/タスク (USD, 対数スケール) / 縦軸: {metric.name}
+        横軸: コスト/タスク (USD, 対数スケール) / 縦軸: {metric.name}（
+        {formatScaleValue(domain.min, metric)}–
+        {formatScaleValue(domain.max, metric)} {metric.unit}／0 起点ではありません）
       </p>
 
       {missing.length > 0 && (
@@ -245,6 +297,12 @@ export function BenchmarkView() {
             (a.scores[selectedMetric.id]?.value ?? 0),
         ),
     [selectedMetric.id],
+  );
+
+  // バー長の基準レンジ。表示中のモデルの実測値から決める
+  const chartDomain = useMemo(
+    () => metricDomain(ranked, selectedMetric),
+    [ranked, selectedMetric],
   );
 
   // 公表値が確認できないモデル（N/A）は順位表に混ぜず、別枠で明示する
@@ -428,7 +486,7 @@ export function BenchmarkView() {
                       <div
                         className="h-full transition-all duration-300 ease-out group-hover:brightness-110"
                         style={{
-                          width: `${barWidthPercent(score, selectedMetric)}%`,
+                          width: `${barWidthPercent(score, chartDomain)}%`,
                           backgroundColor: model.color,
                         }}
                       />
@@ -450,6 +508,17 @@ export function BenchmarkView() {
                 );
               })}
             </div>
+
+            {/* 0 起点をやめた以上、基準レンジを併記しないと差を過大に見せてしまう */}
+            {ranked.length > 0 && (
+              <div className="mt-4 flex items-baseline justify-between gap-3 border-t border-border pt-2 font-mono text-[10px] text-muted">
+                <span>{formatScaleValue(chartDomain.min, selectedMetric)}</span>
+                <span className="text-center leading-relaxed">
+                  バー長は実測レンジ基準（0 起点ではありません）
+                </span>
+                <span>{formatScaleValue(chartDomain.max, selectedMetric)}</span>
+              </div>
+            )}
 
             {missing.length > 0 && (
               <p className="mt-6 border-t border-border pt-4 font-mono text-[11px] leading-[1.8] text-muted">

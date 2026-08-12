@@ -9,6 +9,7 @@
 
   --color-background: var(--background);
   --color-surface: var(--surface);
+  --color-subtle: var(--subtle);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-border: var(--border);
@@ -22,6 +23,9 @@
   color-scheme: light;
   --background: #fafaf7;
   --surface: #f3f2ec;
+  /* surface より一段深い塗り。テーブル見出し・行 hover・バーのトラックなど、
+     alpha 30-50% で重ねて使う前提なので surface より濃く取る。 */
+  --subtle: #d8d6ca;
   --foreground: #17171a;
   --muted: #6b6b71;
   --border: #e4e3dc;
@@ -33,6 +37,7 @@
   color-scheme: dark;
   --background: #131315;
   --surface: #1a1a1d;
+  --subtle: #33333a;
   --foreground: #ecebe7;
   --muted: #8e8e88;
   --border: #2a2a2c;
