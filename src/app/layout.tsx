@@ -120,6 +120,16 @@ export default function RootLayout({
     <html lang="ja" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        {/* Reveal は初期状態が opacity-0 で、可視化を IntersectionObserver に
+            依存している。JS が無効だとトップの全セクションが空白になるため、
+            その場合だけ CSS で見せる。 */}
+        <noscript>
+          <style
+            dangerouslySetInnerHTML={{
+              __html: ".reveal-root{opacity:1!important;transform:none!important}",
+            }}
+          />
+        </noscript>
       </head>
       <body className="antialiased">
         <script

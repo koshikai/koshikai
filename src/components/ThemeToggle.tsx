@@ -1,67 +1,105 @@
 "use client";
 
 import { useCallback, useEffect, useSyncExternalStore } from "react";
-import { Moon, Sun } from "lucide-react";
+import { Monitor, Moon, Sun } from "lucide-react";
 
+/**
+ * テーマの「設定」。解決後の見た目（dark クラス）とは別物であることに注意。
+ * system は localStorage にキーを持たない状態で表す（layout の初期化スクリプトが
+ * storedTheme === null をシステム追従として扱うのに合わせる）。
+ */
+type ThemePreference = "system" | "light" | "dark";
+
+const ORDER: ThemePreference[] = ["system", "light", "dark"];
+const STORAGE_KEY = "theme";
 const themeQuery = "(prefers-color-scheme: dark)";
 
+/** 同一タブ内の変更は storage イベントが飛ばないので、自前で購読者に通知する */
+const listeners = new Set<() => void>();
+
 function subscribe(callback: () => void) {
-  const observer = new MutationObserver(callback);
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ["class"],
-  });
-  return () => observer.disconnect();
+  listeners.add(callback);
+  const onStorage = (event: StorageEvent) => {
+    if (event.key === STORAGE_KEY) callback();
+  };
+  window.addEventListener("storage", onStorage);
+  return () => {
+    listeners.delete(callback);
+    window.removeEventListener("storage", onStorage);
+  };
 }
 
-function getSnapshot() {
-  return document.documentElement.classList.contains("dark");
+function getSnapshot(): ThemePreference {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored === "light" || stored === "dark" ? stored : "system";
+  } catch {
+    return "system";
+  }
 }
 
-function getServerSnapshot() {
-  return false;
+function getServerSnapshot(): ThemePreference {
+  return "system";
 }
+
+function applyPreference(preference: ThemePreference) {
+  const dark =
+    preference === "dark" ||
+    (preference === "system" && window.matchMedia(themeQuery).matches);
+  document.documentElement.classList.toggle("dark", dark);
+}
+
+const LABELS: Record<ThemePreference, string> = {
+  system: "テーマ: システム設定に追従（クリックでライトモード）",
+  light: "テーマ: ライトモード（クリックでダークモード）",
+  dark: "テーマ: ダークモード（クリックでシステム設定に戻す）",
+};
 
 export function ThemeToggle() {
-  const isDark = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const preference = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    getServerSnapshot,
+  );
 
+  // system のときだけ OS 側の変更に追従する
   useEffect(() => {
     const media = window.matchMedia(themeQuery);
-    const applySystemTheme = (event: MediaQueryListEvent | MediaQueryList) => {
-      if (localStorage.getItem("theme") === null) {
-        document.documentElement.classList.toggle("dark", event.matches);
-      }
+    const onChange = () => {
+      if (getSnapshot() === "system") applyPreference("system");
     };
-    const applyStoredTheme = (event: StorageEvent) => {
-      if (event.key !== "theme") return;
-      document.documentElement.classList.toggle(
-        "dark",
-        event.newValue === "dark" || (event.newValue === null && media.matches),
-      );
-    };
-
-    applySystemTheme(media);
-    media.addEventListener("change", applySystemTheme);
-    window.addEventListener("storage", applyStoredTheme);
-    return () => {
-      media.removeEventListener("change", applySystemTheme);
-      window.removeEventListener("storage", applyStoredTheme);
-    };
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
   }, []);
 
-  const toggle = useCallback(() => {
-    const next = !isDark;
-    document.documentElement.classList.toggle("dark", next);
-    localStorage.setItem("theme", next ? "dark" : "light");
-  }, [isDark]);
+  // 別タブでの変更を含め、設定が変わったら見た目へ反映する
+  useEffect(() => {
+    applyPreference(preference);
+  }, [preference]);
+
+  const cycle = useCallback(() => {
+    const next = ORDER[(ORDER.indexOf(getSnapshot()) + 1) % ORDER.length];
+    try {
+      if (next === "system") localStorage.removeItem(STORAGE_KEY);
+      else localStorage.setItem(STORAGE_KEY, next);
+    } catch {
+      // localStorage が使えない環境では、その場の見た目だけ切り替える
+      applyPreference(next);
+    }
+    for (const listener of listeners) listener();
+  }, []);
+
+  const Icon =
+    preference === "system" ? Monitor : preference === "dark" ? Moon : Sun;
 
   return (
     <button
-      onClick={toggle}
-      aria-label={isDark ? "ライトモードに切り替え" : "ダークモードに切り替え"}
-      className="fixed bottom-6 right-6 z-50 flex h-10 w-10 items-center justify-center border border-border bg-background text-muted transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      onClick={cycle}
+      aria-label={LABELS[preference]}
+      title={LABELS[preference]}
+      className="focus-ring fixed bottom-6 right-6 z-50 flex h-11 w-11 items-center justify-center border border-border bg-background text-muted transition-colors hover:text-accent"
     >
-      {isDark ? <Sun className="h-4 w-4" aria-hidden="true" /> : <Moon className="h-4 w-4" aria-hidden="true" />}
+      <Icon className="h-4 w-4" aria-hidden="true" />
     </button>
   );
 }
