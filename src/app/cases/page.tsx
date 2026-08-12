@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { caseItems } from "@/lib/cases";
+import { tagClassName } from "@/lib/typography";
 
 export const metadata: Metadata = {
   title: "Case Studies",
@@ -18,7 +19,7 @@ export default function CasesPage() {
         <div className="mb-12">
           <Link
             href="/"
-            className="group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-muted transition-colors hover:text-accent"
+            className="focus-ring group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-muted transition-colors hover:text-accent"
           >
             <ArrowLeft
               className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5 motion-reduce:transition-none"
@@ -46,7 +47,7 @@ export default function CasesPage() {
             <article key={item.slug} className="border-t border-border last:border-b">
               <Link
                 href={`/cases/${item.slug}`}
-                className="group grid gap-4 py-8 transition-colors sm:grid-cols-[8rem_1fr] sm:gap-8"
+                className="focus-ring group grid gap-4 py-8 transition-colors sm:grid-cols-[8rem_1fr] sm:gap-8"
               >
                 <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-muted">
                   {item.publishedAt}
@@ -64,10 +65,7 @@ export default function CasesPage() {
                   </p>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {item.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-sm border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.15em] text-muted"
-                      >
+                      <span key={tag} className={tagClassName(tag)}>
                         {tag}
                       </span>
                     ))}

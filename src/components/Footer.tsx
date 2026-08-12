@@ -1,20 +1,22 @@
 import Link from "next/link";
 
 const iconLinkClass =
-    "flex h-11 w-11 items-center justify-center text-muted transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
+    "focus-ring flex h-11 w-11 items-center justify-center text-muted transition-colors hover:text-accent";
 
 const textLinkClass =
-    "font-mono text-xs text-muted transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent";
+    "focus-ring font-mono text-xs text-muted transition-colors hover:text-accent";
 
 export function Footer() {
+    // pb は ThemeToggle（fixed bottom-6 / 高さ 44px）の逃げ。これが無いと
+    // 画面下部に固定されたボタンがフッターの内容に重なる。
     return (
-        <footer className="mt-24 w-full border-t border-border bg-background py-12">
+        <footer className="mt-24 w-full border-t border-border bg-background pt-12 pb-24">
             <div className="mx-auto flex max-w-5xl flex-col items-center gap-6 px-6 sm:flex-row sm:justify-between">
 
                 <div className="flex flex-col items-center gap-1 sm:items-start">
                     <Link
                         href="/"
-                        className="font-mono text-sm tracking-tight text-foreground transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+                        className="focus-ring font-mono text-sm tracking-tight text-foreground transition-colors hover:text-accent"
                     >
                         koshikai.dev
                     </Link>

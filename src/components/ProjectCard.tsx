@@ -1,5 +1,6 @@
 import { ExternalLink } from "lucide-react";
 import Image from "next/image";
+import { tagClassName } from "@/lib/typography";
 
 interface ProjectCardProps {
   title: string;
@@ -28,7 +29,7 @@ export function ProjectCard({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group relative block border-b border-border py-8 pr-10 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+      className="focus-ring group relative block border-b border-border py-8 pr-10 transition-colors"
     >
       <div className="flex flex-col items-start gap-6 sm:flex-row sm:gap-8">
         <div className="min-w-0 flex-1">
@@ -45,10 +46,7 @@ export function ProjectCard({
 
           <ul role="list" className="mt-5 flex flex-wrap gap-2 list-none">
             {features.map((feature) => (
-              <li
-                key={feature}
-                className="rounded-sm border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.15em] text-muted"
-              >
+              <li key={feature} className={tagClassName(feature)}>
                 {feature}
               </li>
             ))}
