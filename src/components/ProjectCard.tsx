@@ -30,7 +30,7 @@ export function ProjectCard({
       rel="noopener noreferrer"
       className="group relative block border-b border-border py-8 pr-10 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
     >
-      <div className="flex items-start gap-8">
+      <div className="flex flex-col items-start gap-6 sm:flex-row sm:gap-8">
         <div className="min-w-0 flex-1">
           <h3 className="font-serif text-xl font-semibold tracking-tight text-foreground transition-colors group-hover:text-accent sm:text-2xl">
             {title}
@@ -56,15 +56,18 @@ export function ProjectCard({
         </div>
 
         {/* Screenshots range from phone portrait to desktop landscape, so the
-            frame follows each image instead of cropping it to a shared shape. */}
+            frame follows each image instead of cropping it to a shared shape.
+            On phones the shot stacks under the copy at a larger cap — hiding it
+            there dropped the most persuasive part of the card for the readers
+            most likely to see it. */}
         {image && (
           <Image
             src={image.src}
             alt={image.alt}
             width={image.width}
             height={image.height}
-            sizes="240px"
-            className="hidden h-auto max-h-52 w-auto max-w-60 shrink-0 border border-border bg-surface sm:block"
+            sizes="(min-width: 640px) 240px, 100vw"
+            className="h-auto max-h-80 w-auto max-w-full self-center border border-border bg-surface sm:max-h-52 sm:max-w-60 sm:shrink-0 sm:self-start"
           />
         )}
       </div>
