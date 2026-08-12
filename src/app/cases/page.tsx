@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function CasesPage() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="bg-background text-foreground">
       <main
         id="main-content"
         className="mx-auto w-full max-w-5xl px-6 py-12 sm:py-16 lg:py-20"

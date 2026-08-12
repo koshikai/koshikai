@@ -10,6 +10,7 @@ import "@fontsource/jetbrains-mono/500.css";
 import "@fontsource/jetbrains-mono/700.css";
 import "./globals.css";
 import { getSiteConfig } from "@/lib/site-config";
+import { Footer } from "@/components/Footer";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const viewport: Viewport = {
@@ -54,7 +55,7 @@ export function generateMetadata(): Metadata {
       card: "summary_large_image",
       title: site.twitterTitle,
       description: site.description,
-      creator: "@koshikai",
+      creator: "@siywyk",
     },
     robots: {
       index: true,
@@ -131,7 +132,12 @@ export default function RootLayout({
         >
           メインコンテンツへスキップ
         </a>
-        {children}
+        {/* Footer は全ページ共通。下層ページや 404 / error が
+            「戻る」リンク1本だけの行き止まりにならないようにする。 */}
+        <div className="flex min-h-dvh flex-col">
+          <div className="flex flex-1 flex-col">{children}</div>
+          <Footer />
+        </div>
         <ThemeToggle />
       </body>
     </html>

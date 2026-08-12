@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { ArrowRight, Menu, X } from "lucide-react";
 import Link from "next/link";
-import { Footer } from "@/components/Footer";
 import { ProjectCard } from "@/components/ProjectCard";
 import { Reveal } from "@/components/Reveal";
 import { ResearchSection } from "@/components/ResearchSection";
@@ -240,7 +239,7 @@ export function PortfolioHome() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-background font-sans text-foreground">
+    <div className="relative bg-background font-sans text-foreground">
       <Header activeSection={activeSection} />
       <SideNav activeSection={activeSection} />
 
@@ -458,8 +457,6 @@ export function PortfolioHome() {
           </Reveal>
         </section>
       </main>
-
-      <Footer />
     </div>
   );
 }
