@@ -16,7 +16,7 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
     >
       <section role="alert" className="w-full max-w-2xl border-t border-border pt-10 text-center">
         <div className="mx-auto flex h-12 w-12 items-center justify-center border border-border text-accent">
-          <RefreshCw className="h-6 w-6" />
+          <RefreshCw className="h-6 w-6" aria-hidden="true" />
         </div>
 
         <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.3em] text-accent">
@@ -41,17 +41,18 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
         <div className="mt-8 flex justify-center gap-6">
           <button
             onClick={reset}
-            className="inline-flex items-center gap-2 border border-accent bg-accent px-4 py-2 font-mono text-xs uppercase tracking-[0.16em] text-background transition-opacity hover:opacity-90"
+            className="focus-ring inline-flex min-h-11 items-center gap-2 border border-accent bg-accent px-4 py-2 font-mono text-xs uppercase tracking-[0.16em] text-background transition-opacity hover:opacity-90"
           >
-            <RefreshCw className="h-3.5 w-3.5" />
+            <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
             再試行
           </button>
           <Link
             href="/"
-            className="group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-foreground transition-colors hover:text-accent"
+            className="focus-ring group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-foreground transition-colors hover:text-accent"
           >
             <ArrowLeft
               className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5 motion-reduce:transition-none"
+              aria-hidden="true"
             />
             トップへ戻る
           </Link>

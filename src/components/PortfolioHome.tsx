@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowRight, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { ProjectCard } from "@/components/ProjectCard";
@@ -30,7 +30,7 @@ function SideNav({ activeSection }: { activeSection: string }) {
           <a
             key={section.id}
             href={`#${section.id}`}
-            className="group flex items-center justify-end gap-3 text-right rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+            className="focus-ring group flex items-center justify-end gap-3 text-right"
             aria-label={`Jump to ${section.label}`}
           >
             <span
@@ -59,14 +59,45 @@ function SideNav({ activeSection }: { activeSection: string }) {
 function Header({ activeSection }: { activeSection: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  /** 閉じたらトリガーにフォーカスを戻す（開閉で行き先を見失わないため） */
+  const closeAndRestoreFocus = useCallback(() => {
+    setIsOpen(false);
+    buttonRef.current?.focus();
+  }, []);
+
+  // Escape と外側クリックで閉じる。開いたあとの出口がボタンの再タップしか
+  // 無い状態だと、開いてやめたいときに逃げ場がない。
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeAndRestoreFocus();
+    };
+    const onPointerDown = (event: PointerEvent) => {
+      const target = event.target as Node;
+      if (drawerRef.current?.contains(target)) return;
+      if (buttonRef.current?.contains(target)) return;
+      setIsOpen(false);
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("pointerdown", onPointerDown);
+    };
+  }, [isOpen, closeAndRestoreFocus]);
 
   const navSections = sections.filter((s) => s.id !== "hero");
 
@@ -81,7 +112,7 @@ function Header({ activeSection }: { activeSection: string }) {
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6">
         <Link
           href="/"
-          className="font-mono text-sm tracking-tight text-foreground transition-colors hover:text-accent"
+          className="focus-ring font-mono text-sm tracking-tight text-foreground transition-colors hover:text-accent"
         >
           koshikai.dev
         </Link>
@@ -94,7 +125,7 @@ function Header({ activeSection }: { activeSection: string }) {
               <a
                 key={section.id}
                 href={`#${section.id}`}
-                className={`font-mono text-[11px] uppercase tracking-[0.16em] transition-colors ${
+                className={`focus-ring font-mono text-[11px] uppercase tracking-[0.16em] transition-colors ${
                   isActive
                     ? "text-accent"
                     : "text-muted hover:text-foreground"
@@ -106,7 +137,7 @@ function Header({ activeSection }: { activeSection: string }) {
           })}
           <Link
             href="/cases"
-            className="border-l border-border pl-4 font-mono text-[11px] uppercase tracking-[0.16em] text-muted transition-colors hover:text-foreground"
+            className="focus-ring border-l border-border pl-4 font-mono text-[11px] uppercase tracking-[0.16em] text-muted transition-colors hover:text-foreground"
           >
             Cases
           </Link>
@@ -114,10 +145,12 @@ function Header({ activeSection }: { activeSection: string }) {
 
         {/* Mobile Menu Button */}
         <button
+          ref={buttonRef}
           onClick={() => setIsOpen(!isOpen)}
-          className="flex h-9 w-9 items-center justify-center border border-border text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent lg:hidden"
+          className="focus-ring flex h-11 w-11 items-center justify-center border border-border text-foreground lg:hidden"
           aria-label={isOpen ? "メニューを閉じる" : "メニューを開く"}
           aria-expanded={isOpen}
+          aria-controls="mobile-nav"
         >
           {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
@@ -125,7 +158,11 @@ function Header({ activeSection }: { activeSection: string }) {
 
       {/* Mobile Drawer */}
       {isOpen && (
-        <div className="absolute left-0 right-0 top-full border-b border-border bg-background px-6 py-6 lg:hidden">
+        <div
+          ref={drawerRef}
+          id="mobile-nav"
+          className="absolute left-0 right-0 top-full border-b border-border bg-background px-6 py-6 lg:hidden"
+        >
           <nav className="flex flex-col gap-4" aria-label="モバイルナビゲーション">
             {navSections.map((section) => {
               const isActive = activeSection === section.id;
@@ -134,7 +171,7 @@ function Header({ activeSection }: { activeSection: string }) {
                   key={section.id}
                   href={`#${section.id}`}
                   onClick={() => setIsOpen(false)}
-                  className={`flex items-baseline gap-3 font-mono text-sm uppercase tracking-[0.16em] transition-colors ${
+                  className={`focus-ring flex min-h-11 items-center gap-3 font-mono text-sm uppercase tracking-[0.16em] transition-colors ${
                     isActive ? "text-accent" : "text-muted hover:text-foreground"
                   }`}
                 >
@@ -147,7 +184,7 @@ function Header({ activeSection }: { activeSection: string }) {
             <Link
               href="/cases"
               onClick={() => setIsOpen(false)}
-              className="font-mono text-sm uppercase tracking-[0.16em] text-muted transition-colors hover:text-foreground"
+              className="focus-ring flex min-h-11 items-center font-mono text-sm uppercase tracking-[0.16em] text-muted transition-colors hover:text-foreground"
             >
               Case Studies
             </Link>
@@ -215,12 +252,19 @@ export function PortfolioHome() {
       threshold: 0,
     };
 
+    // 交差中のセクションを保持し、そのうち文書順で最初のもの（＝画面上で
+    // 一番上）を active にする。entries を順に代入すると配列の最後が勝つため、
+    // 帯に複数セクションが入る上スクロール時にハイライトがずれていた。
+    const intersecting = new Set<string>();
+
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
-        }
+        if (entry.isIntersecting) intersecting.add(entry.target.id);
+        else intersecting.delete(entry.target.id);
       });
+
+      const topmost = sections.find((section) => intersecting.has(section.id));
+      if (topmost) setActiveSection(topmost.id);
     };
 
     const observer = new IntersectionObserver(observerCallback, observerOptions);
@@ -266,7 +310,7 @@ export function PortfolioHome() {
                 {credentials.map((item) => (
                   <li
                     key={item}
-                    className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted"
+                    className="text-xs leading-relaxed text-muted"
                   >
                     {item}
                   </li>
@@ -282,7 +326,7 @@ export function PortfolioHome() {
                     <a
                       key={section.id}
                       href={`#${section.id}`}
-                      className="group inline-flex items-baseline gap-1.5 font-mono text-xs text-muted transition-colors hover:text-accent"
+                      className="focus-ring group inline-flex items-baseline gap-1.5 font-mono text-xs text-muted transition-colors hover:text-accent"
                     >
                       <span className="text-accent">{section.index}</span>
                       <span className="tracking-[0.1em] group-hover:underline">
@@ -379,7 +423,7 @@ export function PortfolioHome() {
             <div className="mt-8">
               <Link
                 href="/cases"
-                className="group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-foreground transition-colors hover:text-accent"
+                className="focus-ring group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-foreground transition-colors hover:text-accent"
               >
                 <span className="border-b border-border pb-0.5 transition-colors group-hover:border-accent">
                   他の事例を見る
@@ -410,7 +454,7 @@ export function PortfolioHome() {
                     <Link
                       key={caseStudy.slug}
                       href={`/cases/${caseStudy.slug}`}
-                      className="group flex items-center justify-between border-t border-border py-4 text-sm text-foreground transition-colors last:border-b hover:text-accent"
+                      className="focus-ring group flex items-center justify-between border-t border-border py-4 text-sm text-foreground transition-colors last:border-b hover:text-accent"
                     >
                       <span>{caseStudy.title}</span>
                       <ArrowRight

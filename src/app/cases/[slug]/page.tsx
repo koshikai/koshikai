@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { AlertCircle, ArrowLeft, CheckCircle, Lightbulb, Wrench } from "lucide-react";
 import { getCaseBySlug, getCaseContentComponent, caseItems } from "@/lib/cases";
 import { getSiteConfig } from "@/lib/site-config";
+import { tagClassName } from "@/lib/typography";
 
 interface CaseDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -63,7 +64,7 @@ export default async function CaseDetailPage({ params }: CaseDetailPageProps) {
       >
         <Link
           href="/cases"
-          className="group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-muted transition-colors hover:text-accent"
+          className="focus-ring group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-muted transition-colors hover:text-accent"
         >
           <ArrowLeft
             className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5 motion-reduce:transition-none"
@@ -84,10 +85,7 @@ export default async function CaseDetailPage({ params }: CaseDetailPageProps) {
           </p>
           <div className="mt-5 flex flex-wrap gap-2">
             {item.tags.map((tag) => (
-              <span
-                key={tag}
-                className="rounded-sm border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.15em] text-muted"
-              >
+              <span key={tag} className={tagClassName(tag)}>
                 {tag}
               </span>
             ))}
