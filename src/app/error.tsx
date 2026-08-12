@@ -12,7 +12,7 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
   return (
     <main
       id="main-content"
-      className="flex min-h-screen items-center justify-center bg-background px-6 py-12 text-foreground"
+      className="flex flex-1 items-center justify-center bg-background px-6 py-12 text-foreground"
     >
       <section role="alert" className="w-full max-w-2xl border-t border-border pt-10 text-center">
         <div className="mx-auto flex h-12 w-12 items-center justify-center border border-border text-accent">

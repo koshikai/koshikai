@@ -56,7 +56,7 @@ export default async function CaseDetailPage({ params }: CaseDetailPageProps) {
   ].filter((d) => d.key);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="bg-background text-foreground">
       <main
         id="main-content"
         className="mx-auto w-full max-w-3xl px-6 py-12 sm:py-16 lg:py-20"
