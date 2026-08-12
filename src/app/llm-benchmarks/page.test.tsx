@@ -236,6 +236,24 @@ describe("LlmBenchmarksPage Component & Interactive View", () => {
     expect(topRow).toHaveTextContent(cheapest.modelName);
   });
 
+  // 11 列あるため必ず横スクロールになる。1列目が流れると行の識別子が消える。
+  it("pins the model name column and exposes the table as a scrollable region", () => {
+    render(<LlmBenchmarksPage />);
+    fireEvent.click(screen.getByText("データ表 (Table)"));
+
+    const region = screen.getByRole("region", { name: /横スクロール可能/ });
+    expect(region).toHaveAttribute("tabindex", "0");
+
+    const firstRowHeader = within(
+      screen.getAllByRole("row")[1],
+    ).getAllByRole("rowheader")[0];
+
+    expect(firstRowHeader.className).toMatch(/\bsticky\b/);
+    expect(firstRowHeader.className).toMatch(/\bleft-0\b/);
+    // 半透明だと固定列の裏を他の列が透けるので、不透明色であること
+    expect(firstRowHeader.className).toMatch(/\bbg-background\b/);
+  });
+
   it("sorts the table by a metric column, pushing N/A rows to the end", () => {
     render(<LlmBenchmarksPage />);
     fireEvent.click(screen.getByText("データ表 (Table)"));
