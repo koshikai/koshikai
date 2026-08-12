@@ -192,6 +192,32 @@ describe("LlmBenchmarksPage Component & Interactive View", () => {
     expect(screen.getByText(/\$0\.03 USD/)).toBeInTheDocument();
   });
 
+  // 0-scaleMax で正規化すると GPQA のように差が全長の 3% しかない指標で
+  // バーが横並びに見えてしまう。実測レンジ基準になっているかを固定する。
+  it("stretches bar widths across the measured range, not from zero", () => {
+    const { container } = render(<LlmBenchmarksPage />);
+    fireEvent.click(screen.getByRole("button", { name: "GPQA Diamond" }));
+
+    const widths = [...container.querySelectorAll<HTMLElement>("[style*='width']")]
+      .map((el) => Number.parseFloat(el.style.width))
+      .filter((w) => !Number.isNaN(w));
+
+    const ranked = LLM_BENCHMARK_SCORES.filter((m) => m.scores.gpqa_diamond);
+    expect(widths).toHaveLength(ranked.length);
+
+    // 実測は 91.0-94.1% なので、0 起点だと全バーが 91% 超で並んでしまう
+    expect(Math.min(...widths)).toBeLessThan(25);
+    expect(Math.max(...widths)).toBeGreaterThan(80);
+  });
+
+  // 0 起点をやめた以上、基準レンジの明示は差を過大に見せないための必須要件
+  it("discloses the bar baseline range so the truncation is not misleading", () => {
+    render(<LlmBenchmarksPage />);
+    expect(
+      screen.getByText(/バー長は実測レンジ基準（0 起点ではありません）/),
+    ).toBeInTheDocument();
+  });
+
   it("sorts the table by cost per task, cheapest first", () => {
     render(<LlmBenchmarksPage />);
     fireEvent.click(screen.getByText("データ表 (Table)"));
