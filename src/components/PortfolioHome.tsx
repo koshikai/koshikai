@@ -227,11 +227,8 @@ const infraCases = [
   { slug: "deploy-automation", title: "デプロイ作業の自動化" },
 ];
 
-const credentials = [
-  "北海道大学大学院 情報科学院 M1",
-  "SCI'26 学生発表賞",
-  "松尾研 修了 ×3",
-];
+// 所属は h1 直下の行に出しているので、ここでは繰り返さない
+const credentials = ["SCI'26 学生発表賞", "松尾研 修了 ×3"];
 
 const toolboxByUse = [
   { use: "Front-end", tools: "Next.js, React 19, TypeScript, Tailwind CSS, Framer Motion" },
@@ -294,16 +291,22 @@ export function PortfolioHome() {
           className="flex min-h-dvh w-full flex-col justify-center px-6 pb-16 pt-28 scroll-mt-24"
         >
           <div className="mx-auto w-full max-w-5xl">
-            <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-muted">
+            {/* 識別子はハンドルで通す。ドメイン・GitHub・構造化データの
+                Person.name もすべて koshikai なので、本名を足すと識別子が
+                2つに割れる。 */}
+            <h1 className="font-mono text-4xl font-medium tracking-tight text-foreground sm:text-5xl">
+              koshikai
+            </h1>
+            <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.24em] text-muted">
               Hokkaido University · Graduate School of Information Science · M1
             </p>
 
-            <h1 className="mt-8 max-w-2xl text-pretty font-serif text-2xl font-semibold leading-[1.7] tracking-tight text-foreground sm:text-3xl">
+            <p className="mt-10 max-w-2xl text-pretty font-serif text-xl font-semibold leading-[1.8] tracking-tight text-foreground sm:text-2xl">
               生活や運用の課題を見つけて、実装し、改善を続けることを大切にしています。
               特定の職種に寄せるより、必要なツールを組み合わせて
               <span className="text-accent">問題を前に進める</span>
               ことに取り組んでいます。
-            </h1>
+            </p>
 
             <div className="mt-12 border-t border-border pt-6">
               <ul className="flex flex-wrap gap-x-6 gap-y-2 list-none">
