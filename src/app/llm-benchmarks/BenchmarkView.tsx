@@ -84,7 +84,7 @@ function SourceLink({ score }: { score: BenchmarkScore }) {
       href={score.source.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="underline underline-offset-2 hover:text-accent"
+      className="focus-ring underline underline-offset-2 hover:text-accent"
     >
       {score.source.label}
     </a>
@@ -273,7 +273,7 @@ function ScatterChart({
       </p>
 
       {missing.length > 0 && (
-        <p className="mt-4 border-t border-border pt-3 font-mono text-[11px] leading-[1.8] text-muted">
+        <p className="mt-4 border-t border-border pt-3 text-xs leading-[1.8] text-muted">
           スコアかコストが確認できないためプロットしていないモデル:{" "}
           {missing.map((m) => m.modelName).join(" / ")}
         </p>
@@ -383,7 +383,7 @@ export function BenchmarkView() {
             type="button"
             aria-pressed={viewMode === "chart"}
             onClick={() => setViewMode("chart")}
-            className={`px-3 py-1.5 font-mono text-xs font-medium rounded-sm transition-colors ${
+            className={`focus-ring rounded-sm px-3 py-2 font-mono text-xs font-medium transition-colors ${
               viewMode === "chart"
                 ? "bg-foreground text-background"
                 : "text-muted hover:text-foreground"
@@ -395,7 +395,7 @@ export function BenchmarkView() {
             type="button"
             aria-pressed={viewMode === "scatter"}
             onClick={() => setViewMode("scatter")}
-            className={`px-3 py-1.5 font-mono text-xs font-medium rounded-sm transition-colors ${
+            className={`focus-ring rounded-sm px-3 py-2 font-mono text-xs font-medium transition-colors ${
               viewMode === "scatter"
                 ? "bg-foreground text-background"
                 : "text-muted hover:text-foreground"
@@ -407,7 +407,7 @@ export function BenchmarkView() {
             type="button"
             aria-pressed={viewMode === "table"}
             onClick={() => setViewMode("table")}
-            className={`px-3 py-1.5 font-mono text-xs font-medium rounded-sm transition-colors ${
+            className={`focus-ring rounded-sm px-3 py-2 font-mono text-xs font-medium transition-colors ${
               viewMode === "table"
                 ? "bg-foreground text-background"
                 : "text-muted hover:text-foreground"
@@ -419,16 +419,14 @@ export function BenchmarkView() {
 
         {viewMode !== "table" && (
           <div className="flex flex-wrap items-center gap-1.5 font-mono text-xs">
-            <span className="text-muted mr-1 text-[11px] uppercase tracking-wider hidden md:inline">
-              指標選択:
-            </span>
+            <span className="mr-1 text-xs text-muted">指標選択:</span>
             {BENCHMARK_METRICS.map((metric) => (
               <button
                 key={metric.id}
                 type="button"
                 aria-pressed={selectedMetricId === metric.id}
                 onClick={() => setSelectedMetricId(metric.id)}
-                className={`px-2.5 py-1 rounded-sm border transition-colors ${
+                className={`focus-ring rounded-sm border px-3 py-2 transition-colors ${
                   selectedMetricId === metric.id
                     ? "border-accent text-accent font-semibold bg-accent/5"
                     : "border-border text-muted hover:border-foreground/40 hover:text-foreground"
@@ -456,7 +454,7 @@ export function BenchmarkView() {
                 <p className="mt-1 text-xs leading-[1.8] text-muted">
                   {selectedMetric.description}
                 </p>
-                <p className="mt-1 font-mono text-[11px] leading-[1.7] text-muted">
+                <p className="mt-1 text-[11px] leading-[1.7] text-muted">
                   出典方針: {selectedMetric.sourcePolicy}
                 </p>
               </div>
@@ -499,13 +497,13 @@ export function BenchmarkView() {
                       />
                     </div>
 
-                    <p className="pl-7 font-mono text-[10px] leading-relaxed text-muted">
+                    <p className="pl-7 text-[11px] leading-relaxed text-muted">
                       条件: {score.configuration} / 出典:{" "}
                       <SourceLink score={score} /> / 確認: {score.measuredAt}
                     </p>
 
                     {model.pricing && (
-                      <p className="pl-7 font-mono text-[10px] leading-relaxed text-muted">
+                      <p className="pl-7 text-[11px] leading-relaxed text-muted">
                         コスト/タスク: ${model.pricing.value.toFixed(2)} USD /{" "}
                         出典: <SourceLink score={model.pricing} /> / 確認:{" "}
                         {model.pricing.measuredAt}
@@ -520,7 +518,7 @@ export function BenchmarkView() {
             {ranked.length > 0 && (
               <div className="mt-4 flex items-baseline justify-between gap-3 border-t border-border pt-2 font-mono text-[10px] text-muted">
                 <span>{formatScaleValue(chartDomain.min, selectedMetric)}</span>
-                <span className="text-center leading-relaxed">
+                <span className="text-center font-sans text-[11px] leading-relaxed">
                   バー長は実測レンジ基準（0 起点ではありません）
                 </span>
                 <span>{formatScaleValue(chartDomain.max, selectedMetric)}</span>
@@ -528,7 +526,7 @@ export function BenchmarkView() {
             )}
 
             {missing.length > 0 && (
-              <p className="mt-6 border-t border-border pt-4 font-mono text-[11px] leading-[1.8] text-muted">
+              <p className="mt-6 border-t border-border pt-4 text-xs leading-[1.8] text-muted">
                 この指標の公表値が確認できないモデル（N/A）:{" "}
                 {missing.map((m) => m.modelName).join(" / ")}
               </p>
@@ -566,7 +564,7 @@ export function BenchmarkView() {
           role="region"
           aria-label="モデル別ベンチマークスコア表（横スクロール可能）"
           tabIndex={0}
-          className="overflow-x-auto border border-border focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="focus-ring overflow-x-auto border border-border"
         >
           <table className="w-full text-left font-mono text-xs whitespace-nowrap">
             <caption className="sr-only">
@@ -595,7 +593,7 @@ export function BenchmarkView() {
                     <button
                       type="button"
                       onClick={() => handleSort(key)}
-                      className="inline-flex items-center gap-1 hover:text-accent transition-colors"
+                      className="focus-ring inline-flex min-h-9 items-center gap-1 transition-colors hover:text-accent"
                     >
                       {label}
                       <span aria-hidden="true" className="text-[9px]">
@@ -615,7 +613,7 @@ export function BenchmarkView() {
                       type="button"
                       onClick={() => handleSort(metric.id)}
                       title={metric.sourcePolicy}
-                      className="inline-flex items-center gap-1 hover:text-accent transition-colors"
+                      className="focus-ring inline-flex min-h-9 items-center gap-1 transition-colors hover:text-accent"
                     >
                       {metric.name}
                       <span aria-hidden="true" className="text-[9px]">
@@ -702,7 +700,7 @@ export function BenchmarkView() {
               <p className="mt-3 text-xs leading-[1.8] text-muted">
                 {metric.description}
               </p>
-              <p className="mt-2 font-mono text-[10px] leading-[1.7] text-muted">
+              <p className="mt-2 text-[11px] leading-[1.7] text-muted">
                 出典方針: {metric.sourcePolicy}
               </p>
             </div>

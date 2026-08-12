@@ -1,5 +1,6 @@
 import { Trophy } from "lucide-react";
 import Image from "next/image";
+import { tagClassName } from "@/lib/typography";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeading } from "@/components/SectionHeading";
 
@@ -173,10 +174,7 @@ export function ResearchSection({
                 </p>
                 <ul role="list" className="mt-4 flex flex-wrap gap-2 list-none">
                   {item.features.map((feature) => (
-                    <li
-                      key={feature}
-                      className="rounded-sm border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.15em] text-muted"
-                    >
+                    <li key={feature} className={tagClassName(feature)}>
                       {feature}
                     </li>
                   ))}
@@ -202,20 +200,18 @@ export function ResearchSection({
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex flex-wrap gap-1.5">
-                      <span className="rounded-sm border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.15em] text-muted">
+                      <span className={tagClassName(pres.isInternational ? "International" : "Domestic")}>
                         {pres.isInternational ? "International" : "Domestic"}
                       </span>
-                      <span className="rounded-sm border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.15em] text-muted">
-                        {pres.style}
-                      </span>
+                      <span className={tagClassName(pres.style)}>{pres.style}</span>
                       {pres.isFuture && (
-                        <span className="rounded-sm border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.15em] text-muted">
+                        <span className={tagClassName("Forthcoming")}>
                           Forthcoming
                         </span>
                       )}
                       {hasAward && (
-                        <span className="inline-flex items-center gap-1 rounded-sm bg-accent px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.15em] text-background">
-                          <Trophy className="h-2.5 w-2.5" aria-hidden="true" />
+                        <span className="inline-flex items-center gap-1 rounded-sm bg-accent px-2 py-0.5 font-sans text-xs text-background">
+                          <Trophy className="h-3 w-3" aria-hidden="true" />
                           {pres.award}
                         </span>
                       )}
@@ -261,8 +257,11 @@ export function ResearchSection({
                     {course.highlight}
                   </p>
                 </div>
-                <time className="font-mono text-[11px] uppercase tracking-[0.15em] text-muted sm:text-right">
-                  修了 {course.completedAt}
+                <time className="text-xs text-muted sm:text-right">
+                  <span className="font-sans">修了</span>{" "}
+                  <span className="font-mono tracking-[0.08em]">
+                    {course.completedAt}
+                  </span>
                 </time>
               </div>
             ))}
