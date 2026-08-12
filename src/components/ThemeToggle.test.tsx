@@ -36,7 +36,7 @@ describe("ThemeToggle", () => {
     render(<ThemeToggle />);
 
     await waitFor(() => expect(document.documentElement).toHaveClass("dark"));
-    expect(screen.getByRole("button")).toHaveAccessibleName("ライトモードに切り替え");
+    expect(screen.getByRole("button")).toHaveAccessibleName(/システム設定に追従/);
   });
 
   it("keeps a stored light preference even when the system prefers dark", async () => {
@@ -48,10 +48,45 @@ describe("ThemeToggle", () => {
   });
 
   it("persists the selected theme", async () => {
+    localStorage.setItem("theme", "light");
     render(<ThemeToggle />);
-    fireEvent.click(screen.getByRole("button", { name: "ダークモードに切り替え" }));
+
+    fireEvent.click(screen.getByRole("button"));
 
     await waitFor(() => expect(document.documentElement).toHaveClass("dark"));
     expect(localStorage.getItem("theme")).toBe("dark");
+  });
+
+  // 一度でも切り替えると localStorage に固定され、OS 設定へ戻す手段が無かった
+  it("cycles back to following the system preference", async () => {
+    render(<ThemeToggle />);
+    const button = screen.getByRole("button");
+
+    expect(localStorage.getItem("theme")).toBeNull();
+
+    fireEvent.click(button); // system -> light
+    expect(localStorage.getItem("theme")).toBe("light");
+
+    fireEvent.click(button); // light -> dark
+    expect(localStorage.getItem("theme")).toBe("dark");
+
+    fireEvent.click(button); // dark -> system
+    await waitFor(() => expect(localStorage.getItem("theme")).toBeNull());
+    expect(button).toHaveAccessibleName(/システム設定に追従/);
+  });
+
+  it("follows the system preference again once it is back to system", async () => {
+    localStorage.setItem("theme", "dark");
+    render(<ThemeToggle />);
+    await waitFor(() => expect(document.documentElement).toHaveClass("dark"));
+
+    fireEvent.click(screen.getByRole("button")); // dark -> system
+    await waitFor(() => expect(document.documentElement).not.toHaveClass("dark"));
+
+    prefersDark = true;
+    for (const listener of listeners) {
+      listener({ matches: true } as MediaQueryListEvent);
+    }
+    await waitFor(() => expect(document.documentElement).toHaveClass("dark"));
   });
 });
