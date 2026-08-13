@@ -4,87 +4,70 @@
 
 ## 技術スタック
 
-- Next.js 16（App Router）、React 19、React Compiler
-- TypeScript（strict）
-- Bun 1.0 以上（ローカル、MCP、依存管理）
-- Node.js 22（Web アプリの Docker build / runtime）
-- Tailwind CSS v4
-- Vitest、Testing Library、happy-dom
-- ESLint 9、eslint-config-next
-- Zod v4
-- MDX（ケーススタディ）
-- PostgreSQL、pgvector（MathKB MCP）
+- **フレームワーク**: Next.js 16 (App Router)
+- **言語**: TypeScript
+- **ランタイム**: Bun >= 1.0.0（ローカル開発）
+- **Node.js**: 22（Docker ビルド時）
+- **スタイリング**: Tailwind CSS v4
+- **テスト**: Vitest + @testing-library/react + happy-dom
+- **Lint**: ESLint (eslint-config-next)
+- **MDX**: @next/mdx（コンテンツ管理用）
 
-## 現行プロダクト構成
-
-- Web アプリは公開ポートフォリオ専用です。
-- Web variant 切り替えはありません。復活を前提にした分岐を追加しないでください。
-- MathKB は PostgreSQL データ層と独立 MCP サーバーとして残っています。
-
-## 重要なパス
+## 重要なファイル・ディレクトリ
 
 | パス | 用途 |
-|---|---|
-| `src/app/` | ポートフォリオの App Router ページ |
-| `src/app/llm-benchmarks/` | LLM ベンチマーク比較ページ |
+|------|------|
+| `src/app/` | Next.js App Router ページ |
 | `src/components/` | React コンポーネント |
-| `src/content/cases/` | MDX ケーススタディ |
-| `src/lib/site-config.ts` | サイト metadata 設定 |
-| `src/lib/cases.ts` | MDX ケースの読み込みと一覧生成 |
-| `src/lib/benchmarks-data.ts` | ベンチマークページのデータ |
-| `src/mcp/server.ts` | MathKB MCP サーバー |
-| `src/lib/mathkb/` | DB、リポジトリ、embedding |
-| `src/test/setup.ts` | Vitest 共通セットアップ |
-| `db/` | PostgreSQL schema、role、seed |
-| `db/migrations/` | 適用済みスキーマ変更 |
+| `src/content/cases/` | MDX ケーススタディコンテンツ |
 | `scripts/` | 運用スクリプト |
-| `Dockerfile` | ポートフォリオ image |
-| `Dockerfile.mcp` | MCP image |
+| `docker-compose.prod.yaml` | 本番 Docker Compose 構成 |
+| `Dockerfile` | アプリ用 Docker イメージ |
 
-## 必須検証
+## ビルド・テスト・検証
+
+必ず以下のコマンドで検証してください：
 
 ```bash
+# Lint
 bun run lint
+
+# テスト
 bun run test -- --run
+
+# ビルド（DB 接続不要）
 bun run build
 ```
 
-依存関係を変更した場合は `bun audit` も実行してください。ポートフォリオ build に DB 接続は不要です。
-
 ## コーディング規約
 
-- TypeScript strict mode を維持する
-- Next.js の page / layout は default export を使う
-- テストは対象と同じディレクトリに `*.test.ts` / `*.test.tsx` で配置する
-- MDX component の拡張は `mdx-components.tsx` で行う
-- ユーザー向け秘密情報や実接続情報を commit しない
-- 既存の未コミット変更を上書きしない
+- TypeScript の `strict` モード有効
+- React 19 + React Compiler 有効
+- コンポーネントはデフォルトエクスポート（Next.js ページ要件）
+- テストファイルは対象ファイルと同じディレクトリに配置（`*.test.ts` / `*.test.tsx`）
+- MDX コンポーネントは `mdx-components.tsx` で拡張
 
-## 主要な環境変数
+## 環境変数
 
-- Web: `SITE_URL`
-- DB: `MATHKB_DATABASE_URL`（`DATABASE_URL` fallback）、`MATHKB_DATABASE_SSL`、`MATHKB_POOL_MAX`
-- Embedding: `MATHKB_ENABLE_EMBEDDINGS`
-- MCP: `MCP_BIND_HOST`、`MCP_PORT`、`MCP_PATH`、`MCP_ALLOWED_HOSTS`、`MCP_TRANSPORT`
-- Compose 内部接続: `MCP_DATABASE_URL`
+主要な変数は以下です。詳細は `README.md` を参照してください。
 
-詳細は `.env.example`、`README.md`、`docs/mcp.md` を参照してください。
+```bash
+SITE_URL=https://koshikai.dev  # canonical / metadata 用 URL
+```
 
 ## 開発フロー
 
-1. `bun run dev` でポートフォリオを開発
-2. lint、test、build を実行
-3. 必要に応じて MCP を HTTP または stdio で検証
-4. `main` への push で GitHub Actions が自動デプロイ
+1. `bun run dev` でローカル開発
+2. `bun run lint` / `bun run test` で検証
+3. `bun run build` でビルド確認
+4. `main` ブランチへの push で GitHub Actions 経由で自動デプロイ（Proxmox self-hosted runner）
 
 ## ドキュメント
 
-- `README.md`: 概要とクイックスタート
-- `docs/README.md`: docs の索引
-- `docs/architecture.md`: 現行アーキテクチャ
-- `docs/deployment.md`: CI/CD と Docker 運用
-- `docs/mcp.md`: MCP と DB の仕様
-- `docs/image-assets.md`: デザインシステムと画像アセット要件
-- `docs/ci-optimization-plan.md`: CI 最適化の履歴と残課題
+- `README.md`: プロジェクト概要・クイックスタート
+- `docs/deployment.md`: デプロイ構成の詳細
+- `docs/architecture.md`: アーキテクチャ概要
 
-構成やパスを変更したときは、`README.md`、`AGENTS.md`、該当する `docs/` を同じ commit で更新してください。
+## 関連リポジトリ
+
+- **`koshikai/mathkb`**（private）: 数学ナレッジベースの MCP サーバーと DB スキーマ。2026-08 に本リポジトリから分離。数学KB 関連の作業はそちらで行うこと。
