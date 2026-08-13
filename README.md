@@ -1,25 +1,64 @@
+# 越海 斗 (KOSHI Kaito)
+
+こんにちは 👋 ウェブアプリと深層学習が好きな大学生です。  
+ポートフォリオ: **[koshikai.dev](https://koshikai.dev)**
+
+自宅サーバー（Proxmox）の運用を楽しみながら、生活や運用の課題を発見して実装し、改善するのが好きです。
+
+## 🚀 作っているもの
+
+| プロジェクト | 説明 | 状態 |
+|---|---|---|
+| [koshikai.dev](https://koshikai.dev) | ポートフォリオサイト（このリポジトリ） | 公開中 |
+| **Smoke it.** | 喫煙記録 PWA。AI コーチ・週間レポート・バッジ・Web Push 付き | 🔒 非公開 |
+| **KariGallery** | アート作品の管理・閲覧アプリ（モダンプレミアムな UI） | 🔒 非公開 |
+| **mathkb** | 数学ナレッジベースの MCP サーバー（pgvector によるセマンティック検索対応） | 🔒 非公開 |
+| **sunny-room** | PLATEAU 3D 都市モデルを使った日照シミュレーション Web アプリ | 🔒 非公開 |
+| [bn-edge-removal-public](https://github.com/koshikai/bn-edge-removal-public) | BatchNorm の構造削除に関する研究 | 公開 |
+
+## 🛠️ スキル
+
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white)
+![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=flat-square&logo=prisma&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+![Bun](https://img.shields.io/badge/Bun-f9f9f9?style=flat-square&logo=bun&logoColor=black)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
+![Proxmox](https://img.shields.io/badge/Proxmox-E57000?style=flat-square&logo=proxmox&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
+
+## 🔬 研究
+
+深層学習の構造学習・モデル解釈を研究中。研究関連のリポジトリは [research-template](https://github.com/koshikai/research-template) からたどれます。
+
+## 📫 連絡先
+
+- ポートフォリオ: <https://koshikai.dev>
+- GitHub: [@koshikai](https://github.com/koshikai)
+
+---
+
+<!-- 以下はこのリポジトリのドキュメント -->
+
 # koshikai.dev
 
-Next.js で構築した公開ポートフォリオと、数学ノートを操作する独立した MCP サーバーを同じリポジトリで管理しています。
-
-Web アプリは `koshikai.dev` 向けのポートフォリオ専用です。MathKB は PostgreSQL データ層と MCP サーバーとして独立運用します。
+Next.js で構築した公開ポートフォリオサイトです。数学ナレッジベースと MCP サーバーは [`koshikai/mathkb`](https://github.com/koshikai/mathkb)（private）に分離しています。
 
 ## 構成
 
-- `src/app/`: ポートフォリオの App Router ページ、メタデータ、ヘルスチェック
+- `src/app/`: App Router ページ、メタデータ、ヘルスチェック
 - `src/components/`: ポートフォリオ UI
 - `src/content/cases/`: MDX ケーススタディ
 - `src/lib/`: サイト設定（`site-config.ts`）、ケース読み込み（`cases.ts`）、ベンチマークデータ
-- `src/mcp/server.ts`: MathKB MCP サーバー（Streamable HTTP / stdio）
-- `src/lib/mathkb/`: PostgreSQL リポジトリ、型、embedding 生成
 - `src/test/setup.ts`: Vitest の共通セットアップ
-- `db/`: MathKB のスキーマ、ロール、サンプルデータ
-- `db/migrations/`: 適用済みスキーマ変更
-- `docs/`: 詳細ドキュメント（[`docs/README.md`](./docs/README.md) が索引）
-- `scripts/`: サーバー準備とスキーマ適用のスクリプト
+- `docs/`: 詳細ドキュメント
+- `scripts/`: サーバー準備スクリプト
 - `public/images/`: 図版とスクリーンショット
-- `docker-compose.prod.yaml`: 公開ポートフォリオ
-- `docker-compose.internal.yaml`: MathKB MCP の内部スタック定義
+- `docker-compose.prod.yaml`: 本番デプロイ構成
 
 主な route は `/`、`/cases`、`/cases/[slug]`、`/llm-benchmarks`、`/healthz` です。詳細は [`docs/architecture.md`](./docs/architecture.md) を参照してください。
 
@@ -35,57 +74,11 @@ bun run dev
 
 ポートフォリオはデータベース接続なしで起動・ビルドできます。`SITE_URL` を省略した場合、canonical URL には `https://koshikai.dev` が使われます。
 
-### MCP サーバー
-
-HTTP:
-
-```bash
-MATHKB_DATABASE_URL="postgresql://mcp_reader:change-me@localhost:5432/mathkb" bun run mcp:http
-```
-
-stdio:
-
-```bash
-MATHKB_DATABASE_URL="postgresql://mcp_reader:change-me@localhost:5432/mathkb" bun run mcp:stdio
-```
-
-詳細は [`docs/mcp.md`](./docs/mcp.md) を参照してください。
-
 ## 環境変数
-
-### Web アプリ
 
 | 変数 | 必須 | 既定値 | 用途 |
 |---|---:|---|---|
 | `SITE_URL` | いいえ | `https://koshikai.dev` | metadata、canonical、sitemap のベース URL |
-
-### MathKB / MCP
-
-| 変数 | 必須 | 既定値 | 用途 |
-|---|---:|---|---|
-| `MATHKB_DATABASE_URL` | MCP 利用時 | `DATABASE_URL` にフォールバック | PostgreSQL 接続文字列 |
-| `MATHKB_DATABASE_SSL` | いいえ | `disable` | `disable` または `require` |
-| `MATHKB_POOL_MAX` | いいえ | `10` | DB 接続プール上限 |
-| `MATHKB_ENABLE_EMBEDDINGS` | いいえ | 有効 | `false` の場合、embedding生成とセマンティック検索を無効化 |
-| `MCP_BIND_HOST` | いいえ | `0.0.0.0` | HTTP bind host |
-| `MCP_PORT` | いいえ | `3004` | HTTP port |
-| `MCP_PATH` | いいえ | `/mcp` | Streamable HTTP endpoint |
-| `MCP_ALLOWED_HOSTS` | production HTTP時 | 未設定 | 許可する Host のカンマ区切り一覧 |
-| `MCP_TRANSPORT` | いいえ | `http` | CLI 引数を使わない場合の `http` / `stdio` 切り替え |
-
-Docker Compose では `.env.mathkb` 内の `MCP_DATABASE_URL` を `MATHKB_DATABASE_URL` に渡します。本番HTTP起動では `MCP_ALLOWED_HOSTS` が必須です。内部スタック用のテンプレートは [`.env.mathkb.example`](./.env.mathkb.example) にあります。
-
-## MathKB データベース
-
-PostgreSQL に `pg_trgm` と `vector`（pgvector）が必要です。管理者接続を設定して、次を実行します。
-
-```bash
-export MATHKB_ADMIN_DATABASE_URL="postgresql://postgres:change-me@localhost:5432/mathkb"
-export MATHKB_APPLY_SEED=false
-./scripts/apply_mathkb_schema.sh
-```
-
-スキーマは `notes`、`tags`、`note_tags` で構成され、全文検索用 GIN index、trigram index、384次元 embedding 用 HNSW index を作成します。ロール定義のプレースホルダーパスワードは、適用前に必ず変更してください。
 
 ## デプロイ
 
