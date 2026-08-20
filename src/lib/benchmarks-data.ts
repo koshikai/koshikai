@@ -140,6 +140,11 @@ const DEEPSEEK_API_CHANGELOG: BenchmarkSource = {
   url: "https://api-docs.deepseek.com/updates/",
 };
 
+const GOOGLE_GEMINI_37_FLASH: BenchmarkSource = {
+  label: "Google — Gemini 3.7 Flash 発表",
+  url: "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-3-7-flash/",
+};
+
 const CURSORBENCH_32: BenchmarkSource = {
   label: "Cursor — CursorBench 3.2",
   url: "https://cursor.com/cursorbench",
@@ -446,6 +451,57 @@ export const LLM_BENCHMARK_SCORES: ModelBenchmarkScore[] = [
     pricing: {
       value: 0.86,
       configuration: "max effort",
+      source: AA_LEADERBOARD,
+      measuredAt: "2026-08",
+      verification: "verified",
+    },
+  },
+  {
+    modelId: "gemini-3-7-flash",
+    modelName: "Gemini 3.7 Flash",
+    developer: "Google",
+    color: "#1A73E8",
+    releaseDate: "2026-08-13",
+    releaseDateSource: GOOGLE_GEMINI_37_FLASH,
+    scores: {
+      aa_intelligence_index: {
+        value: 56,
+        configuration: "high effort",
+        source: AA_LEADERBOARD,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
+      gpqa_diamond: {
+        value: 94.5,
+        configuration: "high effort / Artificial Analysis 計測",
+        source: AA_GPQA,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
+      // AA-HLE のリーダーボードに Gemini 3.7 Flash のエントリなし
+      hle: null,
+      gdpval_aa_v2: {
+        value: 1532,
+        configuration: "high effort",
+        source: AA_GDPVAL_V2,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
+      // ベンダー未公表・リーダーボードは「—」のまま
+      swe_bench_pro: null,
+      // Terminal-Bench 公式リーダーボード未掲載
+      terminal_bench_21: null,
+      cursorbench_32: {
+        value: 61.6,
+        configuration: "Cursor エージェント / High effort",
+        source: CURSORBENCH_32,
+        measuredAt: "2026-08",
+        verification: "verified",
+      },
+    },
+    pricing: {
+      value: 0.4,
+      configuration: "high effort",
       source: AA_LEADERBOARD,
       measuredAt: "2026-08",
       verification: "verified",
