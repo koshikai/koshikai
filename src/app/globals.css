@@ -92,6 +92,26 @@ body {
   :root.dark .case-article-content img {
     color-scheme: dark;
   }
+
+  /* 限定共有のコード閲覧ページ。行番号は ::before で描くので、
+     範囲選択してもコピー結果に混ざらない。コピーボタンと
+     手動選択で結果が変わらないようにするため。 */
+  .code-block {
+    counter-reset: code-line;
+    tab-size: 4;
+  }
+
+  .code-block .code-line::before {
+    content: attr(data-line-number);
+    display: inline-block;
+    width: 3.5ch;
+    margin-right: 1.25ch;
+    text-align: right;
+    color: var(--muted);
+    opacity: 0.55;
+    user-select: none;
+    -webkit-user-select: none;
+  }
 }
 
 @keyframes reveal {
