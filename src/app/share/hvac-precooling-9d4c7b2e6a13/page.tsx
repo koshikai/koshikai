@@ -28,14 +28,14 @@ const SETUP_STEPS = [
   },
   {
     title: "2. ダミーデータを作る",
-    body: "実データが手元にないうちは、生成スクリプトで 1 分粒度の室温・外気温・消費電力を作って動作を確認する。",
+    body: "手書きメモ確定仕様（チラー2台の30分差起動・4方位外気湿度・通年/詳細2層データ）を生成。",
     command: "uv run scripts/generate_dummy_data.py",
   },
   {
-    title: "3. ノートブックを開く",
-    body: "起動時刻の分析と、任意の CSV を眺める汎用ビューアの 2 つがある。",
+    title: "3. ノートブック・アプリを開く",
+    body: "01〜07の番号順分析ノートブック、およびBM向け意思決定支援アプリ（決定版）を起動。",
     command:
-      "uv run marimo edit notebooks/hvac_startup_analysis.py\nuv run marimo edit notebooks/csv_explorer.py",
+      "uv run marimo edit notebooks/01_startup_trend_analysis.py\nuv run marimo run notebooks/07_risk_guaranteed_decision_app.py",
   },
 ];
 
@@ -51,12 +51,12 @@ export default function HvacPrecoolingCodePage() {
             Unlisted — URL を知っている人だけが見られるページ
           </p>
           <h1 className="mt-3 text-balance font-serif text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-            オフィスビル空調の最適起動時刻
+            オフィスビル空調の最適起動時刻 — 分析・意思決定支援システム
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-[1.9] text-muted">
-            始業時刻に室温を設定温度へ到達させるには、朝の何時に熱源を起動すればよいか。
-            室温・外気温・消費電力の時系列から起動時刻を検出し、
-            到達したかどうかと、そのために使った電力量を突き合わせて調べる。
+            始業時刻（8:00）に室温を設定温度へ到達させるには、朝の何時に熱源（チラー）を起動すればよいか。
+            室温・外気温・外気湿度・消費電力の時系列から起動時刻を検出し、
+            過剰予冷電力の削減試算、熱力学エンタルピー回帰モデル、およびBM（ビルメンテナンス）向けの安心保証型意思決定アプリ一式。
           </p>
           <p className="mt-4 font-mono text-[11px] text-muted">
             エクスポート: {hvacCode.generatedAt}
@@ -72,30 +72,36 @@ export default function HvacPrecoolingCodePage() {
             id="overview-heading"
             className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-foreground"
           >
-            このコードで扱っていること
+            このコードで扱っていること（01〜07シリーズ）
           </h2>
           <ul className="mt-3 space-y-2 text-sm leading-[1.9] text-muted">
             <li>
-              <strong className="text-foreground">起動時刻は記録されていない。</strong>{" "}
-              消費電力の立ち上がりから検出する。日中にサーモが切れて再起動した箇所を
-              拾わないよう、探索範囲を始業時刻より前に限っている。
+              <strong className="text-foreground">① 起動時刻検出とチラー固定インターバル:</strong>{" "}
+              消費電力の立ち上がりから起動時刻を自動検出。チラーAとチラーBの30分固定インターバル制御や、月曜早朝（3:14）の蓄熱負荷を捉える。
             </li>
             <li>
-              <strong className="text-foreground">朝の室温は外気より高い。</strong>{" "}
-              躯体が日中の熱を蓄えて夜間に放出するためで、ダミーデータもこれを再現するよう
-              室内空気と躯体の 2 質点モデルにしてある。最適起動制御が扱う現象そのもの。
+              <strong className="text-foreground">② 室温降下と予冷時間（所要時間）:</strong>{" "}
+              FCU 4系統（NE/NW/SE/SW）のプルダウン降温速度を解析し、設定温度到達までに必要な予冷時間を算出。
             </li>
             <li>
-              <strong className="text-foreground">列名は決め打ちにしない。</strong>{" "}
-              現場ごとにヘッダーの表記が違うため、時刻列・方位・設定温度・電力を
-              中身から推定する。日本語ヘッダーや Shift-JIS、欠測行があっても読める。
+              <strong className="text-foreground">③ 過剰予冷電力とコスト削減額の試算:</strong>{" "}
+              8:00到達差分（タイムマージン）から無駄な維持運転消費電力を算出し、省エネ効果を可視化。
             </li>
             <li>
-              <strong className="text-foreground">起動を早めるほど電力量は増える。</strong>{" "}
-              到達したかどうかと消費電力量を並べ、条件の近い日どうしで比べる。
+              <strong className="text-foreground">④ 予熱時間回帰モデル:</strong>{" "}
+              起動時室温差（ΔT）と外気温から最適起動時刻を逆算する重回帰モデルを構築。
+            </li>
+            <li>
+              <strong className="text-foreground">⑥ 外気湿度・エンタルピー（潜熱負荷）解析:</strong>{" "}
+              湿球温度 Twb と比エンタルピー h を熱力学計算し、夏場の多湿・除湿負荷による予冷遅れを定量化。
+            </li>
+            <li>
+              <strong className="text-foreground">⑦ BM向け意思決定支援アプリ（決定版）:</strong>{" "}
+              クレーム安心保証レベル（90%/95%/99%）と安心帯バンド付きタイムラインシミュレーションを提供。
             </li>
           </ul>
         </section>
+
 
         <section aria-labelledby="setup-heading" className="mt-12">
           <h2
