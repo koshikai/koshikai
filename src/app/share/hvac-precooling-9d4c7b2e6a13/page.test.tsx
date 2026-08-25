@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import HvacPrecoolingCodePage, { metadata } from "./page";
 import {
   buildCombinedSource,
+  buildUnpackScript,
   hvacCode,
   hvacCodeTotalLines,
 } from "@/lib/hvac-code";
@@ -36,6 +37,14 @@ describe("hvac code bundle", () => {
       expect(combined).toContain(file.code.replace(/\n+$/, ""));
     }
   });
+
+  it("generates a valid unpack script that includes all files", () => {
+    const script = buildUnpackScript(hvacCode);
+    expect(script).toContain("FILES = json.loads(");
+    for (const file of hvacCode.files) {
+      expect(script).toContain(file.path);
+    }
+  });
 });
 
 describe("HvacPrecoolingCodePage", () => {
@@ -67,14 +76,21 @@ describe("HvacPrecoolingCodePage", () => {
     expect(screen.getByText(first.description)).toBeInTheDocument();
   });
 
-  it("offers a copy-everything action", () => {
+  it("offers setup actions including unpack script copy and download", () => {
     render(<HvacPrecoolingCodePage />);
 
     expect(
-      screen.getByRole("button", { name: /全ファイルをコピー/ }),
+      screen.getByRole("button", { name: /unpack.py をダウンロード/ }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /復元スクリプトをコピー/ }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /全コードを結合コピー/ }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: /このファイルをコピー/ }),
     ).toBeInTheDocument();
   });
 });
+

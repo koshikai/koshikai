@@ -22,14 +22,14 @@ export const metadata: Metadata = {
 
 const SETUP_STEPS = [
   {
-    title: "1. 依存をそろえる",
-    body: "uv でプロジェクトを作り、numpy / pandas / matplotlib / marimo を入れる。",
-    command: "uv init\nuv add numpy pandas matplotlib marimo",
+    title: "1. ファイルを展開して依存を解決",
+    body: "unpack.py をダウンロード・実行して全ファイルを展開し、uv sync で仮想環境とパッケージを一括導入。",
+    command: "python unpack.py\nuv sync",
   },
   {
-    title: "2. ダミーデータを作る",
-    body: "手書きメモ確定仕様（チラー2台の30分差起動・4方位外気湿度・通年/詳細2層データ）を生成。",
-    command: "uv run scripts/generate_dummy_data.py",
+    title: "2. データを準備・モデル学習",
+    body: "手書きメモ確定仕様のダミーデータを生成し、回帰モデルを一括学習。",
+    command: "uv run scripts/generate_dummy_data.py\nuv run scripts/fit_models.py",
   },
   {
     title: "3. ノートブック・アプリを開く",
@@ -38,6 +38,7 @@ const SETUP_STEPS = [
       "uv run marimo edit notebooks/01_startup_trend_analysis.py\nuv run marimo run notebooks/07_risk_guaranteed_decision_app.py",
   },
 ];
+
 
 export default function HvacPrecoolingCodePage() {
   return (

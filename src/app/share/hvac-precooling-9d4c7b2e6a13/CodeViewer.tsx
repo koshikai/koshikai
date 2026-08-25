@@ -1,9 +1,11 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { Check, Copy, FileCode2 } from "lucide-react";
+
+import { Check, Copy, Download, FileCode2, Terminal } from "lucide-react";
 import {
   buildCombinedSource,
+  buildUnpackScript,
   hvacCode,
   hvacCodeTotalLines,
   type HvacCodeFile,
@@ -46,9 +48,15 @@ interface CopyButtonProps {
   label: string;
   text: string;
   variant?: "primary" | "ghost";
+  icon?: React.ReactNode;
 }
 
-function CopyButton({ label, text, variant = "ghost" }: CopyButtonProps) {
+function CopyButton({
+  label,
+  text,
+  variant = "ghost",
+  icon,
+}: CopyButtonProps) {
   const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
 
   const handleCopy = useCallback(async () => {
@@ -58,7 +66,7 @@ function CopyButton({ label, text, variant = "ghost" }: CopyButtonProps) {
   }, [text]);
 
   const base =
-    "focus-ring inline-flex items-center gap-2 rounded-sm px-3 py-2 font-mono text-xs tracking-[0.08em] transition-colors";
+    "focus-ring inline-flex items-center gap-2 rounded-sm px-3 py-2 font-mono text-xs tracking-[0.08em] transition-colors cursor-pointer";
   const styles =
     variant === "primary"
       ? "border border-accent bg-accent-weak text-accent hover:bg-accent hover:text-background"
@@ -68,10 +76,45 @@ function CopyButton({ label, text, variant = "ghost" }: CopyButtonProps) {
     <button type="button" onClick={handleCopy} className={`${base} ${styles}`}>
       {state === "copied" ? (
         <Check className="h-3.5 w-3.5" aria-hidden="true" />
+      ) : icon ? (
+        icon
       ) : (
         <Copy className="h-3.5 w-3.5" aria-hidden="true" />
       )}
       {state === "copied" ? "コピーした" : state === "failed" ? "失敗した" : label}
+    </button>
+  );
+}
+
+function DownloadButton({
+  filename,
+  content,
+  label,
+}: {
+  filename: string;
+  content: string;
+  label: string;
+}) {
+  const handleDownload = useCallback(() => {
+    const blob = new Blob([content], { type: "text/x-python;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, [content, filename]);
+
+  return (
+    <button
+      type="button"
+      onClick={handleDownload}
+      className="focus-ring inline-flex items-center gap-2 rounded-sm border border-accent bg-accent-weak px-3 py-2 font-mono text-xs tracking-[0.08em] text-accent transition-colors hover:bg-accent hover:text-background cursor-pointer"
+    >
+      <Download className="h-3.5 w-3.5" aria-hidden="true" />
+      {label}
     </button>
   );
 }
@@ -114,24 +157,50 @@ export function CodeViewer() {
     return <p className="text-sm text-muted">表示できるファイルがない。</p>;
   }
 
+  const unpackScript = buildUnpackScript(hvacCode);
+
   return (
     <section aria-label="ソースコード">
-      {/* まとめてコピー。git が使えない環境へ移すときはこちらを使う。 */}
-      <div className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-sm border border-border bg-subtle/20 p-4">
-        <div>
-          <p className="font-mono text-xs uppercase tracking-[0.14em] text-foreground">
-            全 {hvacCode.files.length} ファイル / {hvacCodeTotalLines.toLocaleString()} 行
-          </p>
-          <p className="mt-1 text-sm text-muted">
-            ファイル区切りを含めて 1 つのテキストにまとめてコピーする。
-          </p>
+      {/* 別のPCへのセットアップ・一括取得エリア */}
+      <div className="mb-8 rounded-sm border border-border bg-subtle/20 p-5">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-foreground">
+              別PCでのセットアップ用ファイル一式（全 {hvacCode.files.length} ファイル / {hvacCodeTotalLines.toLocaleString()} 行）
+            </p>
+            <p className="mt-1 max-w-2xl text-sm leading-[1.8] text-muted">
+              別のパソコンで動かすには、以下のいずれかの方法で全ファイルを一括取得・展開できます。
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <DownloadButton
+              filename="unpack.py"
+              content={unpackScript}
+              label="unpack.py をダウンロード"
+            />
+            <CopyButton
+              label="復元スクリプトをコピー"
+              text={unpackScript}
+              icon={<Terminal className="h-3.5 w-3.5" aria-hidden="true" />}
+              variant="primary"
+            />
+            <CopyButton
+              label="全コードを結合コピー"
+              text={buildCombinedSource(hvacCode)}
+            />
+          </div>
         </div>
-        <CopyButton
-          label="全ファイルをコピー"
-          text={buildCombinedSource(hvacCode)}
-          variant="primary"
-        />
+
+        <div className="mt-4 rounded-sm border border-border/60 bg-background/80 p-3 font-mono text-[11px] leading-[1.7] text-muted">
+          <p className="font-semibold text-foreground">💡 別のパソコンでの3ステップ・最短セットアップ:</p>
+          <ol className="mt-1 list-decimal pl-5 space-y-0.5">
+            <li>空フォルダを作成し、ダウンロードした <code className="text-foreground">unpack.py</code> を配置して実行: <code className="text-foreground">python unpack.py</code>（全ディレクトリ・26ファイルが自動生成されます）</li>
+            <li>依存ライブラリをインストール: <code className="text-foreground">uv sync</code></li>
+            <li>ダミーデータ生成 & アプリ起動: <code className="text-foreground">uv run scripts/generate_dummy_data.py && uv run marimo run notebooks/07_risk_guaranteed_decision_app.py</code></li>
+          </ol>
+        </div>
       </div>
+
 
       {/* ファイル切り替え */}
       <div

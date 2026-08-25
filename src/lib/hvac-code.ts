@@ -53,3 +53,55 @@ export function buildCombinedSource(bundle: HvacCodeBundle): string {
 
   return `${header}\n\n${body}`;
 }
+
+/**
+ * 別のPCで全ファイルを一発復元・展開できる Python スクリプトを生成する。
+ *
+ * 実行方法:
+ *   1. このスクリプトを unpack.py として保存（または標準入力から実行）
+ *   2. python unpack.py を実行すると、全26ファイルがディレクトリ構造ごと自動展開される。
+ */
+export function buildUnpackScript(bundle: HvacCodeBundle): string {
+  const filesObj: Record<string, string> = {};
+  for (const f of bundle.files) {
+    filesObj[f.path] = f.code;
+  }
+
+  const jsonStr = JSON.stringify(filesObj);
+
+  return `# ==============================================================================
+# オフィスビル空調 最適起動分析システム — 自動展開・復元スクリプト
+#
+# 【使い方】
+# 1. 任意の空フォルダ（例: hvac-precooling）を作成し、ターミナルを開く
+# 2. このスクリプトを unpack.py として保存し、実行:
+#      python unpack.py
+# 3. 依存ライブラリのインストールと起動:
+#      uv sync
+#      uv run scripts/generate_dummy_data.py
+#      uv run marimo run notebooks/07_risk_guaranteed_decision_app.py
+# ==============================================================================
+import json
+import os
+
+FILES = json.loads(${JSON.stringify(jsonStr)})
+
+print("=== 空調最適起動分析プロジェクトのファイル復元を開始します ===")
+for path, code in FILES.items():
+    dirname = os.path.dirname(path)
+    if dirname:
+        os.makedirs(dirname, exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(code)
+    print(f"  [復元] {path}")
+
+print(f"\\n合計 {len(FILES)} ファイルの復元が完了しました！")
+print("-" * 60)
+print("次のコマンドで環境セットアップとアプリ起動が可能です:")
+print("  uv sync")
+print("  uv run scripts/generate_dummy_data.py")
+print("  uv run marimo run notebooks/07_risk_guaranteed_decision_app.py")
+print("-" * 60)
+`;
+}
+
