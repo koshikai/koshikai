@@ -59,7 +59,7 @@ export function buildCombinedSource(bundle: HvacCodeBundle): string {
  *
  * 実行方法:
  *   1. このスクリプトを unpack.py として保存（または標準入力から実行）
- *   2. python unpack.py を実行すると、全26ファイルがディレクトリ構造ごと自動展開される。
+ *   2. python unpack.py を実行すると、全ファイルがディレクトリ構造ごと自動展開される。
  */
 export function buildUnpackScript(bundle: HvacCodeBundle): string {
   const filesObj: Record<string, string> = {};
@@ -79,7 +79,8 @@ export function buildUnpackScript(bundle: HvacCodeBundle): string {
 # 3. 依存ライブラリのインストールと起動:
 #      uv sync
 #      uv run scripts/generate_dummy_data.py
-#      uv run marimo run notebooks/07_risk_guaranteed_decision_app.py
+#      uv run scripts/fit_models.py
+#      uv run streamlit run app.py
 # ==============================================================================
 import json
 import os
@@ -95,12 +96,13 @@ for path, code in FILES.items():
         f.write(code)
     print(f"  [復元] {path}")
 
-print(f"\\n合計 {len(FILES)} ファイルの復元が完了しました！")
+print(f"\\n合計 {len(FILES)} ファイルの復元が完了しました。")
 print("-" * 60)
-print("次のコマンドで環境セットアップとアプリ起動が可能です:")
+print("次のコマンドで環境セットアップとアプリ起動ができます:")
 print("  uv sync")
 print("  uv run scripts/generate_dummy_data.py")
-print("  uv run marimo run notebooks/07_risk_guaranteed_decision_app.py")
+print("  uv run scripts/fit_models.py")
+print("  uv run streamlit run app.py")
 print("-" * 60)
 `;
 }

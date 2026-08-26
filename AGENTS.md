@@ -62,6 +62,39 @@ SITE_URL=https://koshikai.dev  # canonical / metadata 用 URL
 3. `bun run build` でビルド確認
 4. `main` ブランチへの push で GitHub Actions 経由で自動デプロイ（Proxmox self-hosted runner）
 
+**`main` への push は公開である。** `.github/workflows/deploy.yml` の `paths-ignore` は
+`docs/**` と `**.md` だけなので、`src/` 配下を触った push はビルドとデプロイまで自動で進む。
+「置いただけ」では止まらない。
+
+## 限定共有ページ
+
+`src/app/share/hvac-precooling-9d4c7b2e6a13/` は、空調の最適起動分析コードを
+限定共有するページ。`robots: noindex, nofollow` を設定し sitemap にも載せていないが、
+**認証はない。URL を知れば誰でも見られる。**
+
+| パス | 役割 |
+| :--- | :--- |
+| `src/content/hvac-code.json` | **手で編集しない。** 別リポジトリから生成される |
+| `src/lib/hvac-code.ts` | 上記JSONの読み込みと、結合ソース・展開スクリプトの生成 |
+| `src/app/share/hvac-precooling-9d4c7b2e6a13/` | ページ本体とコードビューア |
+
+`hvac-code.json` は `koshikai/panasonic-ew` リポジトリで次を実行すると更新される。
+
+```bash
+uv run scripts/export_for_web.py --out <このリポジトリ>/src/content/hvac-code.json
+```
+
+### 更新するときの注意
+
+**コードだけ新しくなり、説明文が古いまま残りやすい。** JSON を差し替えたら、
+次の3つに書かれたノートブック名・コマンド・分析内容が実態と合っているか必ず確認する。
+
+- `page.tsx` の冒頭説明と「このコードで扱っていること」「動かし方」
+- `CodeViewer.tsx` のセットアップ手順
+- `hvac-code.ts` の `buildUnpackScript` が出力する案内
+
+過去に、削除済みのノートブックを起動するコマンドが案内に残っていたことがある。
+
 ## ドキュメント
 
 - `README.md`: プロジェクト概要・クイックスタート

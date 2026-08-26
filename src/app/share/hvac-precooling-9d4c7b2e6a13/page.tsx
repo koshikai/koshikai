@@ -28,14 +28,14 @@ const SETUP_STEPS = [
   },
   {
     title: "2. データを準備・モデル学習",
-    body: "手書きメモ確定仕様のダミーデータを生成し、回帰モデルを一括学習。",
+    body: "ダミーデータを生成し、アプリが読む回帰モデルを学習して models/ へ書き出す。",
     command: "uv run scripts/generate_dummy_data.py\nuv run scripts/fit_models.py",
   },
   {
-    title: "3. ノートブック・アプリを開く",
-    body: "01〜07の番号順分析ノートブック、およびBM向け意思決定支援アプリ（決定版）を起動。",
+    title: "3. アプリ・ノートブックを開く",
+    body: "翌日の気温予報から起動時刻を決める運用画面と、番号順の分析ノートブック。",
     command:
-      "uv run marimo edit notebooks/01_startup_trend_analysis.py\nuv run marimo run notebooks/07_risk_guaranteed_decision_app.py",
+      "uv run streamlit run app.py\nuv run marimo edit notebooks/01_startup_trend_analysis.py",
   },
 ];
 
@@ -56,8 +56,10 @@ export default function HvacPrecoolingCodePage() {
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-[1.9] text-muted">
             始業時刻（8:00）に室温を設定温度へ到達させるには、朝の何時に熱源（チラー）を起動すればよいか。
-            室温・外気温・外気湿度・消費電力の時系列から起動時刻を検出し、
-            過剰予冷電力の削減試算、熱力学エンタルピー回帰モデル、およびBM（ビルメンテナンス）向けの安心保証型意思決定アプリ一式。
+            起動時刻は前日のうちに人が決めるため、決定時点では翌朝の室温が分からない。
+            そこで室温を経由せず、翌日の気温予報から必要な予冷時間を直接読む。
+            消費電力・室温・外気温の時系列からの起動時刻検出、過剰予冷電力の削減試算、
+            モデルの比較・選定、およびBM（ビルメンテナンス）向けの意思決定アプリ一式。
           </p>
           <p className="mt-4 font-mono text-[11px] text-muted">
             エクスポート: {hvacCode.generatedAt}
@@ -73,32 +75,36 @@ export default function HvacPrecoolingCodePage() {
             id="overview-heading"
             className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-foreground"
           >
-            このコードで扱っていること（01〜07シリーズ）
+            このコードで扱っていること
           </h2>
           <ul className="mt-3 space-y-2 text-sm leading-[1.9] text-muted">
             <li>
-              <strong className="text-foreground">① 起動時刻検出とチラー固定インターバル:</strong>{" "}
-              消費電力の立ち上がりから起動時刻を自動検出。チラーAとチラーBの30分固定インターバル制御や、月曜早朝（3:14）の蓄熱負荷を捉える。
+              <strong className="text-foreground">① 起動時刻の検出:</strong>{" "}
+              消費電力の立ち上がりから日別の起動時刻を検出。チラー2台の固定インターバル制御や、非稼働日の切り分けを扱う。
             </li>
             <li>
-              <strong className="text-foreground">② 室温降下と予冷時間（所要時間）:</strong>{" "}
-              FCU 4系統（NE/NW/SE/SW）のプルダウン降温速度を解析し、設定温度到達までに必要な予冷時間を算出。
+              <strong className="text-foreground">② 室温降下と予冷時間:</strong>{" "}
+              FCU 4系統のプルダウン降温挙動を解析し、設定温度に到達するまでの所要時間を算出。読み込んだデータの点検もここで行う。
             </li>
             <li>
-              <strong className="text-foreground">③ 過剰予冷電力とコスト削減額の試算:</strong>{" "}
-              8:00到達差分（タイムマージン）から無駄な維持運転消費電力を算出し、省エネ効果を可視化。
+              <strong className="text-foreground">③ 過剰予冷電力の試算:</strong>{" "}
+              到達時刻と 8:00 の差から、誰もいない部屋を冷やし続けている分の電力量を算出。
             </li>
             <li>
-              <strong className="text-foreground">④ 予熱時間回帰モデル:</strong>{" "}
-              起動時室温差（ΔT）と外気温から最適起動時刻を逆算する重回帰モデルを構築。
+              <strong className="text-foreground">④ モデルの比較と選定:</strong>{" "}
+              「外気温のみ」「室温差のみ」「両方の重回帰」を比較。重回帰は多重共線性で外気温の係数が負に振れるため、室温差のみを採用した。
             </li>
             <li>
-              <strong className="text-foreground">⑥ 外気湿度・エンタルピー（潜熱負荷）解析:</strong>{" "}
-              湿球温度 Twb と比エンタルピー h を熱力学計算し、夏場の多湿・除湿負荷による予冷遅れを定量化。
+              <strong className="text-foreground">⑥ 湿度・エンタルピーの検証:</strong>{" "}
+              湿球温度と比エンタルピーを熱力学計算して比較。精度がほとんど変わらないため不採用とした、その判断の記録。
             </li>
             <li>
-              <strong className="text-foreground">⑦ BM向け意思決定支援アプリ（決定版）:</strong>{" "}
-              クレーム安心保証レベル（90%/95%/99%）と安心帯バンド付きタイムラインシミュレーションを提供。
+              <strong className="text-foreground">⑧ 通年データと年間外挿:</strong>{" "}
+              月別の消費実態から、冷房期2週間の削減量を年間へ引き伸ばしてよい日数を確かめる。
+            </li>
+            <li>
+              <strong className="text-foreground">⑨ 気温予報からの起動時刻決定:</strong>{" "}
+              翌日の1時間ごとの気温予報から、8:00 に間に合う範囲で最も遅い起動時刻を求める運用画面。Streamlit 版（app.py）と marimo 版がある。
             </li>
           </ul>
         </section>

@@ -192,11 +192,12 @@ export function CodeViewer() {
         </div>
 
         <div className="mt-4 rounded-sm border border-border/60 bg-background/80 p-3 font-mono text-[11px] leading-[1.7] text-muted">
-          <p className="font-semibold text-foreground">💡 別のパソコンでの3ステップ・最短セットアップ:</p>
+          <p className="font-semibold text-foreground">別のパソコンでの最短セットアップ:</p>
           <ol className="mt-1 list-decimal pl-5 space-y-0.5">
-            <li>空フォルダを作成し、ダウンロードした <code className="text-foreground">unpack.py</code> を配置して実行: <code className="text-foreground">python unpack.py</code>（全ディレクトリ・26ファイルが自動生成されます）</li>
+            <li>空フォルダを作成し、ダウンロードした <code className="text-foreground">unpack.py</code> を配置して実行: <code className="text-foreground">python unpack.py</code>（全ディレクトリ・{hvacCode.files.length}ファイルが自動生成されます）</li>
             <li>依存ライブラリをインストール: <code className="text-foreground">uv sync</code></li>
-            <li>ダミーデータ生成 & アプリ起動: <code className="text-foreground">uv run scripts/generate_dummy_data.py && uv run marimo run notebooks/07_risk_guaranteed_decision_app.py</code></li>
+            <li>データ生成とモデル学習: <code className="text-foreground">uv run scripts/generate_dummy_data.py && uv run scripts/fit_models.py</code></li>
+            <li>アプリ起動: <code className="text-foreground">uv run streamlit run app.py</code></li>
           </ol>
         </div>
       </div>
