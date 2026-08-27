@@ -79,32 +79,24 @@ export default function HvacPrecoolingCodePage() {
           </h2>
           <ul className="mt-3 space-y-2 text-sm leading-[1.9] text-muted">
             <li>
-              <strong className="text-foreground">① 起動時刻の検出:</strong>{" "}
-              消費電力の立ち上がりから日別の起動時刻を検出。チラー2台の固定インターバル制御や、非稼働日の切り分けを扱う。
+              <strong className="text-foreground">① 熱源起動時間と現状運用の分析:</strong>{" "}
+              消費電力の立ち上がりから日別の起動時刻を自動検出。チラー2台の起動インターバル（30分差）と固定5:05運用の現状、室温降温挙動と過剰予冷課題を可視化。
             </li>
             <li>
-              <strong className="text-foreground">② 室温降下と予冷時間:</strong>{" "}
-              FCU 4系統のプルダウン降温挙動を解析し、設定温度に到達するまでの所要時間を算出。読み込んだデータの点検もここで行う。
+              <strong className="text-foreground">② 冷却時間算出モデルの学習:</strong>{" "}
+              起動から設定温度到達までに要する予冷時間モデル（PrecoolCurveModel）を学習。休日明けの躯体蓄熱影響の分離（+2.0℃上乗せ）と交差検証（LOO-MAE）、安心保証レベル（95%安全余裕）の算出。
             </li>
             <li>
-              <strong className="text-foreground">③ 過剰予冷電力の試算:</strong>{" "}
-              到達時刻と 8:00 の差から、誰もいない部屋を冷やし続けている分の電力量を算出。
+              <strong className="text-foreground">③ 削減電力量・電気代シミュレーション:</strong>{" "}
+              学習した最適起動モデルを平日実稼働データに適用し、現行固定起動と比較した削減電力量（kWh）・電気代削減額・CO2削減効果を日別および累計で定量化。
             </li>
             <li>
-              <strong className="text-foreground">④ モデルの比較と選定:</strong>{" "}
-              「外気温のみ」「室温差のみ」「両方の重回帰」を比較。重回帰は多重共線性で外気温の係数が負に振れるため、室温差のみを採用した。
+              <strong className="text-foreground">⓽ 発表スライド用グラフ生成ツール:</strong>{" "}
+              成果発表会用のタイムライン比較、日別削減、累計推移、二軸トレードオフグラフなどの一括エクスポート。
             </li>
             <li>
-              <strong className="text-foreground">⑥ 湿度・エンタルピーの検証:</strong>{" "}
-              湿球温度と比エンタルピーを熱力学計算して比較。精度がほとんど変わらないため不採用とした、その判断の記録。
-            </li>
-            <li>
-              <strong className="text-foreground">⑧ 通年データと年間外挿:</strong>{" "}
-              月別の消費実態から、冷房期2週間の削減量を年間へ引き伸ばしてよい日数を確かめる。
-            </li>
-            <li>
-              <strong className="text-foreground">⑨ 気温予報からの起動時刻決定:</strong>{" "}
-              翌日の1時間ごとの気温予報から、8:00 に間に合う範囲で最も遅い起動時刻を求める運用画面。Streamlit 版（app.py）と marimo 版がある。
+              <strong className="text-foreground">運用画面（Streamlit / app.py）:</strong>{" "}
+              前日夕方に翌日の気温予報から、8:00 に間に合う範囲で最も遅い起動時刻を提示するBM向け意思決定支援システム。二軸トレードオフグラフ（始業前消費電力量 vs 到達リスク）とデバッグ機能付き。
             </li>
           </ul>
         </section>
