@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 const SETUP_STEPS = [
   {
     title: "1. ファイルを展開して依存を解決",
-    body: "unpack.py をダウンロード・実行して全ファイルを展開し、uv sync で仮想環境とパッケージを一括導入。",
+    body: "unpack.py をダウンロード・実行して公開対象ファイルを展開し、uv sync で仮想環境とパッケージを一括導入。",
     command: "python unpack.py\nuv sync",
   },
   {
@@ -89,10 +89,6 @@ export default function HvacPrecoolingCodePage() {
             <li>
               <strong className="text-foreground">③ 削減電力量・電気代シミュレーション:</strong>{" "}
               学習した最適起動モデルを平日実稼働データに適用し、現行固定起動と比較した削減電力量（kWh）・電気代削減額・CO2削減効果を日別および累計で定量化。
-            </li>
-            <li>
-              <strong className="text-foreground">⓽ 発表スライド用グラフ生成ツール:</strong>{" "}
-              成果発表会用のタイムライン比較、日別削減、累計推移、二軸トレードオフグラフなどの一括エクスポート。
             </li>
             <li>
               <strong className="text-foreground">運用画面（Streamlit / app.py）:</strong>{" "}

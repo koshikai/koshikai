@@ -28,7 +28,7 @@ export const hvacCodeTotalLines: number = hvacCode.files.reduce(
 );
 
 /**
- * 全ファイルを 1 つのテキストにまとめる。
+ * 公開対象ファイルを 1 つのテキストにまとめる。
  *
  * git が使えない環境へコードを移すのがこのページの目的なので、
  * 貼り付けた先でファイルを復元できるよう、区切りにパスを明示する。
@@ -55,11 +55,11 @@ export function buildCombinedSource(bundle: HvacCodeBundle): string {
 }
 
 /**
- * 別のPCで全ファイルを一発復元・展開できる Python スクリプトを生成する。
+ * 別のPCで公開対象ファイルを一発復元・展開できる Python スクリプトを生成する。
  *
  * 実行方法:
  *   1. このスクリプトを unpack.py として保存（または標準入力から実行）
- *   2. python unpack.py を実行すると、全ファイルがディレクトリ構造ごと自動展開される。
+ *   2. python unpack.py を実行すると、公開対象ファイルがディレクトリ構造ごと自動展開される。
  */
 export function buildUnpackScript(bundle: HvacCodeBundle): string {
   const filesObj: Record<string, string> = {};
@@ -70,7 +70,7 @@ export function buildUnpackScript(bundle: HvacCodeBundle): string {
   const jsonStr = JSON.stringify(filesObj);
 
   return `# ==============================================================================
-# オフィスビル空調 最適起動分析システム — 自動展開・復元スクリプト
+# オフィスビル空調 最適起動分析システム — 公開対象ファイルの自動展開・復元スクリプト
 #
 # 【使い方】
 # 1. 任意の空フォルダ（例: hvac-precooling）を作成し、ターミナルを開く
@@ -106,4 +106,3 @@ print("  uv run streamlit run app.py")
 print("-" * 60)
 `;
 }
-
