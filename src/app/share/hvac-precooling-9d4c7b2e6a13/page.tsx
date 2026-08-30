@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { hvacCode } from "@/lib/hvac-code";
+import { hvacSlideCount, hvacSlides } from "@/lib/hvac-slides";
 import { CodeViewer } from "./CodeViewer";
+import { SlideViewer } from "./SlideViewer";
 
 /**
  * 限定共有ページ。
@@ -9,9 +11,9 @@ import { CodeViewer } from "./CodeViewer";
  * sitemap.xml にも載せない。robots.txt にパスを書くと逆に露出するため書かない。
  */
 export const metadata: Metadata = {
-  title: "オフィスビル空調の最適起動時刻 — 分析コード",
+  title: "オフィスビル空調の最適起動時刻 — 成果発表資料と分析コード",
   description:
-    "始業時刻に室温を設定温度へ到達させるための起動時刻を、消費電力と室温の時系列から求める分析コード一式。",
+    "始業時刻に室温を設定温度へ到達させるための起動時刻を、消費電力と室温の時系列から求める。成果発表スライドと分析コード一式。",
   robots: {
     index: false,
     follow: false,
@@ -97,6 +99,30 @@ export default function HvacPrecoolingCodePage() {
           </ul>
         </section>
 
+
+        <section aria-labelledby="slides-heading" className="mt-12">
+          <div className="flex flex-wrap items-baseline justify-between gap-3">
+            <h2
+              id="slides-heading"
+              className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-foreground"
+            >
+              成果発表資料（全 {hvacSlideCount} ページ）
+            </h2>
+            <p className="font-mono text-[11px] text-muted">
+              エクスポート: {hvacSlides.generatedAt}
+              {hvacSlides.revision ? ` / rev ${hvacSlides.revision}` : ""}
+            </p>
+          </div>
+          <p className="mt-3 max-w-2xl text-sm leading-[1.9] text-muted">
+            現場の状況、設計上の制約、モデルの作り方、検証結果、そして
+            まだ確かめていないことまでを一続きで扱った発表資料。
+            起動時刻と稼働日カレンダーと実測外気温レンジは実測、
+            電力量・削減額・到達時刻のシミュレーションは合成データによる試算。
+          </p>
+          <div className="mt-6">
+            <SlideViewer />
+          </div>
+        </section>
 
         <section aria-labelledby="setup-heading" className="mt-12">
           <h2

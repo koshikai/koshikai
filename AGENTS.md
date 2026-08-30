@@ -72,17 +72,34 @@ SITE_URL=https://koshikai.dev  # canonical / metadata 用 URL
 限定共有するページ。`robots: noindex, nofollow` を設定し sitemap にも載せていないが、
 **認証はない。URL を知れば誰でも見られる。**
 
+同じページに成果発表スライドも載せている。
+
 | パス | 役割 |
 | :--- | :--- |
 | `src/content/hvac-code.json` | **手で編集しない。** 別リポジトリから生成される |
-| `src/lib/hvac-code.ts` | 上記JSONの読み込みと、結合ソース・展開スクリプトの生成 |
-| `src/app/share/hvac-precooling-9d4c7b2e6a13/` | ページ本体とコードビューア |
+| `src/content/hvac-slides.json` | **手で編集しない。** 同上。発表スライドのSVGとノート |
+| `public/slides/hvac-precooling-slides.pptx` | **手で編集しない。** 同上。配布用PPTX |
+| `src/lib/hvac-code.ts` | コードJSONの読み込みと、結合ソース・展開スクリプトの生成 |
+| `src/lib/hvac-slides.ts` | スライドJSONの読み込みと、ノート結合・PPTXパスの解決 |
+| `src/app/share/hvac-precooling-9d4c7b2e6a13/` | ページ本体、コードビューア、スライドビューア |
 
-`hvac-code.json` は `koshikai/panasonic-ew` リポジトリで次を実行すると更新される。
+どちらも `koshikai/panasonic-ew` リポジトリで次を実行すると更新される。
 
 ```bash
 uv run scripts/export_for_web.py --out <このリポジトリ>/src/content/hvac-code.json
+uv run scripts/export_slides_for_web.py \
+  --out <このリポジトリ>/src/content/hvac-slides.json \
+  --pptx-out <このリポジトリ>/public/slides
 ```
+
+スライドは自己完結SVGをインラインで埋め込んでいる。`img` にすると中の文字が
+選択・検索できず、拡大したときの見え方も落ちるため。埋め込む文字列はビルド時に
+取り込む自前の生成物で、利用者の入力は通らない。エクスポート側と
+`slides.test.tsx` の両方で、`<script>`・`<foreignObject>`・`on*=`・`javascript:`
+が混ざっていないことと、外部参照が無いことを確かめている。
+
+PPTX の公開名 `hvac-precooling-slides.pptx` は固定である。リンクを変えないための
+固定名なので、リネームしない。
 
 ### 更新するときの注意
 
@@ -94,6 +111,11 @@ uv run scripts/export_for_web.py --out <このリポジトリ>/src/content/hvac-
 - `hvac-code.ts` の `buildUnpackScript` が出力する案内
 
 過去に、削除済みのノートブックを起動するコマンドが案内に残っていたことがある。
+
+スライドを差し替えたときは、`page.tsx` の「成果発表資料」節に書いた
+実測と合成の切り分けが、スライドの脚注と食い違っていないかも確認する。
+起動時刻と稼働日カレンダーと実測外気温レンジは**実測**、電力量・削減額・
+到達時刻シミュレーションは**合成データによる試算**である。
 
 ## ドキュメント
 
