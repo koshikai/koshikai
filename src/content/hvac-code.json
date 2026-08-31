@@ -1,7 +1,7 @@
 {
   "generatedAt": "2026-08-31",
-  "generated_at": "2026-08-31T14:54:57.778809+00:00",
-  "revision": "0c87b93",
+  "generated_at": "2026-08-31T23:11:23.946337+00:00",
+  "revision": "0c87b93+dirty",
   "files": [
     {
       "path": "pyproject.toml",
