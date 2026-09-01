@@ -197,7 +197,8 @@ export function CodeViewer() {
             <li>空フォルダを作成し、ダウンロードした <code className="text-foreground">unpack.py</code> を配置して実行: <code className="text-foreground">python unpack.py</code>（全ディレクトリ・{hvacCode.files.length}ファイルが自動生成されます）</li>
             <li>依存ライブラリをインストール: <code className="text-foreground">uv sync</code></li>
             <li>データ生成とモデル学習: <code className="text-foreground">uv run scripts/generate_dummy_data.py && uv run scripts/fit_models.py</code></li>
-            <li>アプリ起動: <code className="text-foreground">uv run streamlit run app.py</code></li>
+            <li>標準アプリ起動: <code className="text-foreground">uv run streamlit run app.py</code></li>
+            <li>地点選択対応の拡張アプリ起動: <code className="text-foreground">uv run streamlit run app2.py</code></li>
           </ol>
         </div>
       </div>

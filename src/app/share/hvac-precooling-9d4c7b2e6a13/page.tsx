@@ -35,9 +35,9 @@ const SETUP_STEPS = [
   },
   {
     title: "3. アプリ・ノートブックを開く",
-    body: "翌日の気温予報から起動時刻を決める運用画面と、番号順の分析ノートブック。",
+    body: "固定地点の標準アプリ、地点選択に対応した拡張アプリ、および番号順の分析ノートブック。",
     command:
-      "uv run streamlit run app.py\nuv run marimo edit notebooks/01_startup_trend_analysis.py",
+      "uv run streamlit run app.py\nuv run streamlit run app2.py\nuv run marimo edit notebooks/01_startup_trend_analysis.py",
   },
 ];
 
@@ -93,8 +93,8 @@ export default function HvacPrecoolingCodePage() {
               学習した最適起動モデルを平日実稼働データに適用し、現行固定起動と比較した削減電力量（kWh）・電気代削減額・CO2削減効果を日別および累計で定量化。
             </li>
             <li>
-              <strong className="text-foreground">運用画面（Streamlit / app.py）:</strong>{" "}
-              前日夕方に翌日の気温予報から、8:00 に間に合う範囲で最も遅い起動時刻を提示するBM向け意思決定支援システム。二軸トレードオフグラフ（始業前消費電力量 vs 到達リスク）とデバッグ機能付き。
+              <strong className="text-foreground">運用画面（Streamlit / app.py・app2.py）:</strong>{" "}
+              固定地点の標準版と地点選択に対応した拡張版を収録。前日夕方に翌日の気温予報から、8:00 に間に合う範囲で最も遅い起動時刻を提示するBM向け意思決定支援システム。二軸トレードオフグラフ（始業前消費電力量 vs 到達リスク）とデバッグ機能付き。
             </li>
           </ul>
         </section>

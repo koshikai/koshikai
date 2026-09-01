@@ -81,6 +81,7 @@ export function buildUnpackScript(bundle: HvacCodeBundle): string {
 #      uv run scripts/generate_dummy_data.py
 #      uv run scripts/fit_models.py
 #      uv run streamlit run app.py
+#      uv run streamlit run app2.py
 # ==============================================================================
 import json
 import os
@@ -103,6 +104,7 @@ print("  uv sync")
 print("  uv run scripts/generate_dummy_data.py")
 print("  uv run scripts/fit_models.py")
 print("  uv run streamlit run app.py")
+print("  uv run streamlit run app2.py")
 print("-" * 60)
 `;
 }
