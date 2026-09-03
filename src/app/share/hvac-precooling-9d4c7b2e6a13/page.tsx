@@ -30,14 +30,14 @@ const SETUP_STEPS = [
   },
   {
     title: "2. データを準備・モデル学習",
-    body: "ダミーデータを生成し、アプリが読む回帰モデルを学習して models/ へ書き出す。",
+    body: "初期検証用データを準備し、アプリが読む回帰モデルを学習して models/ へ書き出す。",
     command: "uv run scripts/generate_dummy_data.py\nuv run scripts/fit_models.py",
   },
   {
     title: "3. アプリ・ノートブックを開く",
-    body: "固定地点の標準アプリ、地点選択に対応した拡張アプリ、および番号順の分析ノートブック。",
+    body: "運転モード・地点選択に対応した意思決定支援アプリ、および番号順の分析ノートブック。",
     command:
-      "uv run streamlit run app.py\nuv run streamlit run app2.py\nuv run marimo edit notebooks/01_startup_trend_analysis.py",
+      "uv run streamlit run app.py\nuv run marimo edit notebooks/01_startup_trend_analysis.py",
   },
 ];
 
@@ -117,7 +117,7 @@ export default function HvacPrecoolingCodePage() {
             現場の状況、設計上の制約、モデルの作り方、検証結果、そして
             まだ確かめていないことまでを一続きで扱った発表資料。
             起動時刻と稼働日カレンダーと実測外気温レンジは実測、
-            電力量・削減額・到達時刻のシミュレーションは合成データによる試算。
+            電力量・削減額・到達時刻のシミュレーションは最適起動モデルによる試算。
           </p>
           <div className="mt-6">
             <SlideViewer />
