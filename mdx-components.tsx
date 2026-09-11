@@ -5,19 +5,19 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     h1: (props) => (
       <h1
-        className="mt-12 mb-4 font-serif text-2xl font-semibold tracking-tight text-foreground sm:text-3xl"
+        className="mt-12 mb-4 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl"
         {...props}
       />
     ),
     h2: (props) => (
       <h2
-        className="mt-10 mb-3 font-serif text-xl font-semibold tracking-tight text-foreground sm:mt-12 sm:mb-4 sm:text-2xl"
+        className="mt-10 mb-3 text-xl font-semibold tracking-tight text-foreground sm:mt-12 sm:mb-4 sm:text-2xl"
         {...props}
       />
     ),
     h3: (props) => (
       <h3
-        className="mt-7 mb-2.5 font-serif text-lg font-semibold tracking-tight text-foreground sm:mt-8 sm:mb-3 sm:text-xl"
+        className="mt-7 mb-2.5 text-lg font-semibold tracking-tight text-foreground sm:mt-8 sm:mb-3 sm:text-xl"
         {...props}
       />
     ),

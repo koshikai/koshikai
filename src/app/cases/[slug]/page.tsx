@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AlertCircle, ArrowLeft, CheckCircle, Lightbulb, Wrench } from "lucide-react";
-import { getCaseBySlug, getCaseContentComponent, caseItems } from "@/lib/cases";
+import { ArrowLeft } from "lucide-react";
+import { Container, Tags } from "@/components/ui";
+import { AXES, getCaseBySlug, getCaseContentComponent, caseItems } from "@/lib/cases";
 import { getSiteConfig } from "@/lib/site-config";
-import { tagClassName } from "@/lib/typography";
 
 interface CaseDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -49,75 +49,56 @@ export default async function CaseDetailPage({ params }: CaseDetailPageProps) {
     notFound();
   }
 
-  const dashboard = [
-    { key: item.challenge, icon: AlertCircle, label: "Challenge / 課題" },
-    { key: item.action, icon: Wrench, label: "Action / 解決策" },
-    { key: item.result, icon: CheckCircle, label: "Result / 結果", accent: true },
-    { key: item.learning, icon: Lightbulb, label: "Learning / 学び" },
-  ].filter((d) => d.key);
+  const axis = AXES[item.axis];
+  const summary = [
+    { label: "Challenge", body: item.challenge },
+    { label: "Action", body: item.action },
+    { label: "Result", body: item.result, accent: true },
+    { label: "Learning", body: item.learning },
+  ].filter((d) => d.body);
 
   return (
-    <div className="bg-background text-foreground">
-      <main
-        id="main-content"
-        className="mx-auto w-full max-w-3xl px-6 py-12 sm:py-16 lg:py-20"
-      >
-        <Link
-          href="/cases"
-          className="focus-ring group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-muted transition-colors hover:text-accent"
-        >
-          <ArrowLeft
-            className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5 motion-reduce:transition-none"
-            aria-hidden="true"
-          />
-          Back to cases
-        </Link>
+    <main id="main-content">
+      <Container size="narrow">
+        <nav aria-label="パンくずリスト" className="pt-10 sm:pt-14">
+          <Link
+            href={axis.href}
+            className="focus-ring group inline-flex min-h-11 items-center gap-2 text-sm text-muted transition-colors hover:text-foreground"
+          >
+            <ArrowLeft
+              className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5 motion-reduce:transition-none"
+              aria-hidden="true"
+            />
+            {axis.section}
+          </Link>
+        </nav>
 
-        <article className="case-article-shell mt-8">
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
-            {item.publishedAt}
+        <article className="case-article-shell mt-4">
+          <p className="font-mono text-xs text-muted">
+            {axis.label.toLowerCase()} — case study · {item.publishedAt}
           </p>
-          <h1 className="mt-3 text-balance font-serif text-3xl font-semibold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+          <h1 className="mt-3 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
             {item.title}
           </h1>
-          <p className="mt-6 text-base leading-[1.9] text-muted">
-            {item.summary}
-          </p>
-          <div className="mt-5 flex flex-wrap gap-2">
-            {item.tags.map((tag) => (
-              <span key={tag} className={tagClassName(tag)}>
-                {tag}
-              </span>
-            ))}
-          </div>
+          <p className="mt-5 text-pretty text-base leading-[1.9] text-muted">{item.summary}</p>
+          <Tags items={item.tags} className="mt-5" />
 
-          {/* Summary Dashboard Grid */}
-          {dashboard.length > 0 && (
-            <div className="mt-10 grid gap-px overflow-hidden border border-border bg-border sm:grid-cols-2">
-              {dashboard.map((d) => {
-                const Icon = d.icon;
-                return (
-                  <div key={d.label} className="flex flex-col gap-2 bg-background p-6">
-                    <div
-                      className={`flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] ${
-                        d.accent ? "text-accent" : "text-muted"
-                      }`}
-                    >
-                      <Icon className="h-4 w-4" aria-hidden="true" />
-                      <span>{d.label}</span>
-                    </div>
-                    <p className="text-sm leading-[1.9] text-foreground">{d.key}</p>
-                  </div>
-                );
-              })}
-            </div>
+          {summary.length > 0 && (
+            <dl className="mt-10 grid gap-px overflow-hidden rounded border border-border bg-border sm:grid-cols-2">
+              {summary.map((d) => (
+                <div key={d.label} className="bg-background p-5 sm:p-6">
+                  <dt className={`font-mono text-xs ${d.accent ? "text-accent" : "text-muted"}`}>{d.label}</dt>
+                  <dd className="mt-2 text-sm leading-[1.85] text-foreground">{d.body}</dd>
+                </div>
+              ))}
+            </dl>
           )}
 
           <div className="case-article-content mt-12">
             <Content />
           </div>
         </article>
-      </main>
-    </div>
+      </Container>
+    </main>
   );
 }

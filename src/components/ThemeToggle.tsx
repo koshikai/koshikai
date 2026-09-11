@@ -1,18 +1,16 @@
 "use client";
 
 import { useCallback, useEffect, useSyncExternalStore } from "react";
-import { Monitor, Moon, Sun } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 
 /**
- * テーマの「設定」。解決後の見た目（dark クラス）とは別物であることに注意。
- * system は localStorage にキーを持たない状態で表す（layout の初期化スクリプトが
- * storedTheme === null をシステム追従として扱うのに合わせる）。
+ * ライトが既定。OS のダーク設定には追従せず、明示的に選んだときだけダークにする。
+ * デザインの判断をライト基準で行うため、初見の人は必ずライトで見る。
+ * layout の初期化スクリプトも stored === "dark" のときだけ dark クラスを付ける。
  */
-type ThemePreference = "system" | "light" | "dark";
+type Theme = "light" | "dark";
 
-const ORDER: ThemePreference[] = ["system", "light", "dark"];
 const STORAGE_KEY = "theme";
-const themeQuery = "(prefers-color-scheme: dark)";
 
 /** 同一タブ内の変更は storage イベントが飛ばないので、自前で購読者に通知する */
 const listeners = new Set<() => void>();
@@ -29,75 +27,54 @@ function subscribe(callback: () => void) {
   };
 }
 
-function getSnapshot(): ThemePreference {
+function getSnapshot(): Theme {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored === "light" || stored === "dark" ? stored : "system";
+    return localStorage.getItem(STORAGE_KEY) === "dark" ? "dark" : "light";
   } catch {
-    return "system";
+    return "light";
   }
 }
 
-function getServerSnapshot(): ThemePreference {
-  return "system";
+function getServerSnapshot(): Theme {
+  return "light";
 }
 
-function applyPreference(preference: ThemePreference) {
-  const dark =
-    preference === "dark" ||
-    (preference === "system" && window.matchMedia(themeQuery).matches);
-  document.documentElement.classList.toggle("dark", dark);
+function applyTheme(theme: Theme) {
+  document.documentElement.classList.toggle("dark", theme === "dark");
 }
-
-const LABELS: Record<ThemePreference, string> = {
-  system: "テーマ: システム設定に追従（クリックでライトモード）",
-  light: "テーマ: ライトモード（クリックでダークモード）",
-  dark: "テーマ: ダークモード（クリックでシステム設定に戻す）",
-};
 
 export function ThemeToggle() {
-  const preference = useSyncExternalStore(
-    subscribe,
-    getSnapshot,
-    getServerSnapshot,
-  );
+  const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
-  // system のときだけ OS 側の変更に追従する
+  // 別タブでの変更を含め、設定が変わったら見た目へ反映する。
+  // ハイドレーション中の theme はサーバー値（light）なので、それをそのまま
+  // 当てると初期化スクリプトが付けた dark が一瞬外れる。実際の保存値を読む。
   useEffect(() => {
-    const media = window.matchMedia(themeQuery);
-    const onChange = () => {
-      if (getSnapshot() === "system") applyPreference("system");
-    };
-    media.addEventListener("change", onChange);
-    return () => media.removeEventListener("change", onChange);
-  }, []);
+    applyTheme(getSnapshot());
+  }, [theme]);
 
-  // 別タブでの変更を含め、設定が変わったら見た目へ反映する
-  useEffect(() => {
-    applyPreference(preference);
-  }, [preference]);
-
-  const cycle = useCallback(() => {
-    const next = ORDER[(ORDER.indexOf(getSnapshot()) + 1) % ORDER.length];
+  const toggle = useCallback(() => {
+    const next: Theme = getSnapshot() === "dark" ? "light" : "dark";
     try {
-      if (next === "system") localStorage.removeItem(STORAGE_KEY);
+      if (next === "light") localStorage.removeItem(STORAGE_KEY);
       else localStorage.setItem(STORAGE_KEY, next);
     } catch {
       // localStorage が使えない環境では、その場の見た目だけ切り替える
-      applyPreference(next);
+      applyTheme(next);
     }
     for (const listener of listeners) listener();
   }, []);
 
-  const Icon =
-    preference === "system" ? Monitor : preference === "dark" ? Moon : Sun;
+  const label = theme === "dark" ? "ライトモードに切り替える" : "ダークモードに切り替える";
+  const Icon = theme === "dark" ? Sun : Moon;
 
   return (
     <button
-      onClick={cycle}
-      aria-label={LABELS[preference]}
-      title={LABELS[preference]}
-      className="focus-ring fixed bottom-6 right-6 z-50 flex h-11 w-11 items-center justify-center border border-border bg-background text-muted transition-colors hover:text-accent"
+      type="button"
+      onClick={toggle}
+      aria-label={label}
+      title={label}
+      className="focus-ring -mr-2 flex h-11 w-11 items-center justify-center rounded text-muted transition-colors hover:text-foreground"
     >
       <Icon className="h-4 w-4" aria-hidden="true" />
     </button>

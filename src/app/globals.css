@@ -3,8 +3,9 @@
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: "Noto Sans JP", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Zen Old Mincho", "Noto Serif JP", Georgia, serif;
+  /* 欧文は Inter、和文は Noto Sans JP に落とす。Inter は日本語グリフを
+     持たないので、並べるだけで文字ごとに書体が振り分けられる。 */
+  --font-sans: "Inter Variable", "Noto Sans JP", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 
   --color-background: var(--background);
@@ -15,10 +16,10 @@
   --color-border: var(--border);
   --color-accent: var(--accent);
   --color-accent-weak: var(--accent-weak);
-
-  --animate-reveal: reveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* デザインはライトを基準に決める。ダークは同じトークンの差し替えだけで
+   成立させ、ダーク専用の UI 分岐は作らない。 */
 :root {
   color-scheme: light;
   --background: #fafaf7;
@@ -27,10 +28,10 @@
      alpha 30-50% で重ねて使う前提なので surface より濃く取る。 */
   --subtle: #d8d6ca;
   --foreground: #17171a;
-  --muted: #6b6b71;
+  --muted: #62626a;
   --border: #e4e3dc;
-  --accent: #b23a32;
-  --accent-weak: rgba(178, 58, 50, 0.08);
+  --accent: #c0392b;
+  --accent-weak: rgba(192, 57, 43, 0.08);
 }
 
 :root.dark {
@@ -49,6 +50,18 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+}
+
+html {
+  scroll-padding-top: 5rem;
+}
+
+/* 日本語の見出しを文節で折り返す（「使 / える」のような単語途中の改行を防ぐ）。
+   未対応ブラウザでは通常の折り返しに戻るだけ。 */
+h1,
+h2,
+h3 {
+  word-break: auto-phrase;
 }
 
 ::selection {
@@ -91,36 +104,5 @@ body {
 
   :root.dark .case-article-content img {
     color-scheme: dark;
-  }
-
-  /* 限定共有のコード閲覧ページ。行番号は ::before で描くので、
-     範囲選択してもコピー結果に混ざらない。コピーボタンと
-     手動選択で結果が変わらないようにするため。 */
-  .code-block {
-    counter-reset: code-line;
-    tab-size: 4;
-  }
-
-  .code-block .code-line::before {
-    content: attr(data-line-number);
-    display: inline-block;
-    width: 3.5ch;
-    margin-right: 1.25ch;
-    text-align: right;
-    color: var(--muted);
-    opacity: 0.55;
-    user-select: none;
-    -webkit-user-select: none;
-  }
-}
-
-@keyframes reveal {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }

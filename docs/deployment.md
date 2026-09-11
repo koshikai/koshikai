@@ -78,7 +78,7 @@ env ファイルは手動で配置する必要があります。
 ## 監視
 
 - `GET /healthz` on `koshikai-app`
-- Docker healthcheck により自動復旧
+- Docker healthcheck でコンテナの状態（healthy / unhealthy）を確認する。unhealthy になっても自動では再起動されない（`restart: always` が効くのはプロセスが終了したときだけ）
 
 ## トラブルシューティング
 

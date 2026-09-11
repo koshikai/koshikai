@@ -14,7 +14,7 @@
 | **KariGallery** | アート作品の管理・閲覧アプリ（モダンプレミアムな UI） | 🔒 非公開 |
 | **mathkb** | 数学ナレッジベースの MCP サーバー（pgvector によるセマンティック検索対応） | 🔒 非公開 |
 | **sunny-room** | PLATEAU 3D 都市モデルを使った日照シミュレーション Web アプリ | 🔒 非公開 |
-| [bn-edge-removal-public](https://github.com/koshikai/bn-edge-removal-public) | BatchNorm の構造削除に関する研究 | 公開 |
+| [bn-edge-removal-public](https://github.com/koshikai/bn-edge-removal-public) | ブーリアンネットワークのエッジ除去制御（強化学習）の研究コード | 公開 |
 
 ## 🛠️ スキル
 
@@ -53,14 +53,14 @@ Next.js で構築した公開ポートフォリオサイトです。数学ナレ
 - `src/app/`: App Router ページ、メタデータ、ヘルスチェック
 - `src/components/`: ポートフォリオ UI
 - `src/content/cases/`: MDX ケーススタディ
-- `src/lib/`: サイト設定（`site-config.ts`）、ケース読み込み（`cases.ts`）、ベンチマークデータ
+- `src/lib/`: 表示データ（`profile.ts` / `works.ts` / `engineering.ts` / `research.ts` / `cases.ts`）、サイト設定、ベンチマークデータ
 - `src/test/setup.ts`: Vitest の共通セットアップ
 - `docs/`: 詳細ドキュメント
 - `scripts/`: サーバー準備スクリプト
 - `public/images/`: 図版とスクリーンショット
 - `docker-compose.prod.yaml`: 本番デプロイ構成
 
-主な route は `/`、`/cases`、`/cases/[slug]`、`/llm-benchmarks`、`/healthz` です。詳細は [`docs/architecture.md`](./docs/architecture.md) を参照してください。
+主な route は `/`、`/works`、`/engineering`、`/research`、`/about`、`/cases`、`/cases/[slug]`、`/llm-benchmarks`、`/healthz` です。詳細は [`docs/architecture.md`](./docs/architecture.md) を参照してください。
 
 ## ローカル開発
 

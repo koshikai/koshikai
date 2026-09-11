@@ -16,7 +16,7 @@ export default function NotFound() {
           404
         </p>
 
-        <h1 className="mt-3 font-serif text-3xl font-semibold tracking-tight text-foreground">
+        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-foreground">
           ページが見つかりません
         </h1>
 

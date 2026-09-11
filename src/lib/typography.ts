@@ -20,8 +20,8 @@ export function hasJapanese(text: string): boolean {
  * ラベル単位で判定する。
  */
 export function tagClassName(label: string): string {
-  const base = "rounded-sm border border-border px-2 py-0.5 text-muted";
+  const base = "inline-flex items-center rounded border border-border bg-background px-2 py-0.5 text-muted";
   return hasJapanese(label)
     ? `${base} font-sans text-xs leading-relaxed`
-    : `${base} font-mono text-[10px] uppercase tracking-[0.15em]`;
+    : `${base} font-mono text-[11px] tracking-[0.02em]`;
 }
