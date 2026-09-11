@@ -32,18 +32,18 @@ export default function LlmBenchmarksPage() {
     <div className="bg-background text-foreground">
       <main
         id="main-content"
-        className="mx-auto w-full max-w-5xl px-6 py-12 sm:py-16 lg:py-20"
+        className="mx-auto w-full max-w-6xl px-5 py-12 sm:px-8 sm:py-16 lg:py-20"
       >
         <div className="mb-12">
           <Link
-            href="/"
-            className="focus-ring group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-muted transition-colors hover:text-accent"
+            href="/research"
+            className="focus-ring group inline-flex min-h-11 items-center gap-2 text-sm text-muted transition-colors hover:text-foreground"
           >
             <ArrowLeft
               className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5 motion-reduce:transition-none"
               aria-hidden="true"
             />
-            Back to top
+            Research
           </Link>
         </div>
 
@@ -51,7 +51,7 @@ export default function LlmBenchmarksPage() {
           <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
             Evaluation Data (2026 Mid-Year Snapshot)
           </p>
-          <h1 className="mt-3 text-balance font-serif text-3xl font-semibold tracking-tight text-foreground sm:text-5xl">
+          <h1 className="mt-3 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
             最新 LLM ベンチマーク測定比較
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-[1.9] text-muted">

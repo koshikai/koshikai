@@ -445,7 +445,7 @@ export function BenchmarkView() {
           <div className="border border-border p-6 rounded-sm bg-background">
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 border-b border-border pb-4 mb-6">
               <div>
-                <h2 className="font-serif text-xl font-semibold text-foreground flex flex-wrap items-center gap-2">
+                <h2 className="text-xl font-semibold text-foreground flex flex-wrap items-center gap-2">
                   <span>{selectedMetric.name}</span>
                   <span className="rounded-sm border border-border px-2 py-0.5 font-mono text-[10px] text-muted">
                     {selectedMetric.category}
@@ -540,7 +540,7 @@ export function BenchmarkView() {
         <div className="border border-border p-6 rounded-sm bg-background">
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 border-b border-border pb-4 mb-6">
             <div>
-              <h2 className="font-serif text-xl font-semibold text-foreground flex flex-wrap items-center gap-2">
+              <h2 className="text-xl font-semibold text-foreground flex flex-wrap items-center gap-2">
                 <span>コスト vs {selectedMetric.name}</span>
                 <span className="rounded-sm border border-border px-2 py-0.5 font-mono text-[10px] text-muted">
                   {selectedMetric.category}
@@ -680,7 +680,7 @@ export function BenchmarkView() {
 
       {/* 指標の定義と出典 */}
       <section className="mt-16 border-t border-border pt-8">
-        <h2 className="font-serif text-xl font-semibold text-foreground">
+        <h2 className="text-xl font-semibold text-foreground">
           評価指標の定義と出典
         </h2>
         <div className="mt-6 grid gap-4 sm:grid-cols-2">

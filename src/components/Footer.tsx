@@ -1,82 +1,91 @@
 import Link from "next/link";
+import { Container } from "@/components/ui";
+import { AvailabilityNote } from "@/components/AvailabilityNote";
+import { primaryNav } from "@/lib/navigation";
+import { profile } from "@/lib/profile";
 
-const iconLinkClass =
-    "focus-ring flex h-11 w-11 items-center justify-center text-muted transition-colors hover:text-accent";
+const linkClass =
+  "focus-ring inline-flex min-h-9 items-center text-sm text-muted transition-colors hover:text-foreground";
 
-const textLinkClass =
-    "focus-ring font-mono text-xs text-muted transition-colors hover:text-accent";
+function Column({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <p className="font-mono text-xs text-muted">{title}</p>
+      <ul role="list" className="mt-3 list-none space-y-0.5">
+        {children}
+      </ul>
+    </div>
+  );
+}
 
 export function Footer() {
-    // pb は ThemeToggle（fixed bottom-6 / 高さ 44px）の逃げ。これが無いと
-    // 画面下部に固定されたボタンがフッターの内容に重なる。
-    return (
-        <footer className="mt-24 w-full border-t border-border bg-background pt-12 pb-24">
-            <div className="mx-auto flex max-w-5xl flex-col items-center gap-6 px-6 sm:flex-row sm:justify-between">
+  const { email, links } = profile.contact;
 
-                <div className="flex flex-col items-center gap-1 sm:items-start">
-                    <Link
-                        href="/"
-                        className="focus-ring font-mono text-sm tracking-tight text-foreground transition-colors hover:text-accent"
-                    >
-                        koshikai.dev
-                    </Link>
-                    <p className="font-mono text-[11px] text-muted">
-                        © {new Date().getFullYear()} All rights reserved.
-                    </p>
-                </div>
+  return (
+    <footer className="mt-24 border-t border-border bg-surface/60">
+      <Container className="grid grid-cols-12 gap-x-6 gap-y-10 py-12 sm:py-14">
+        <div className="col-span-12 md:col-span-5">
+          <Link
+            href="/"
+            className="focus-ring font-mono text-sm font-medium text-foreground transition-colors hover:text-accent"
+          >
+            koshikai<span className="text-muted">.dev</span>
+          </Link>
+          <p className="mt-2 font-mono text-xs text-muted">build · operate · research</p>
+          <AvailabilityNote className="mt-6" />
+        </div>
 
-                <nav
-                    className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1"
-                    aria-label="フッターナビゲーション"
-                >
-                    <Link href="/cases" className={textLinkClass}>
-                        Case Studies
-                    </Link>
-                    <Link href="/llm-benchmarks" className={textLinkClass}>
-                        LLM Benchmarks
-                    </Link>
+        <nav aria-label="フッターナビゲーション" className="col-span-12 grid grid-cols-2 gap-6 sm:grid-cols-3 md:col-span-7">
+          <Column title="Site">
+            {primaryNav.map((item) => (
+              <li key={item.href}>
+                <Link href={item.href} className={linkClass}>
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </Column>
+          <Column title="More">
+            <li>
+              <Link href="/cases" className={linkClass}>
+                All case studies
+              </Link>
+            </li>
+            <li>
+              <Link href="/llm-benchmarks" className={linkClass}>
+                LLM Benchmarks
+              </Link>
+            </li>
+          </Column>
+          <Column title="Contact">
+            {email && (
+              <li>
+                <a href={`mailto:${email}`} className={linkClass}>
+                  Email
+                </a>
+              </li>
+            )}
+            {links.map((link) => (
+              <li key={link.href}>
+                <a href={link.href} target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  {link.label}
+                  <span className="sr-only">（{link.handle}、新しいタブで開く）</span>
+                </a>
+              </li>
+            ))}
+          </Column>
+        </nav>
 
-                    <span className="h-4 w-px bg-border" aria-hidden="true" />
-
-                    <a
-                        href="https://github.com/koshikai"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="GitHub (@koshikai) を開く"
-                        className={iconLinkClass}
-                    >
-                        <svg
-                            className="h-5 w-5"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                        >
-                            <path
-                                fillRule="evenodd"
-                                d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                                clipRule="evenodd"
-                            />
-                        </svg>
-                    </a>
-
-                    <a
-                        href="https://x.com/siywyk"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="X (@siywyk) を開く"
-                        className={iconLinkClass}
-                    >
-                        <svg
-                            className="h-[18px] w-[18px]"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                        >
-                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                        </svg>
-                    </a>
-                </nav>
-            </div>
-        </footer>
-    );
+        <div className="col-span-12 flex flex-col gap-1 border-t border-border pt-6 text-xs text-muted sm:flex-row sm:justify-between">
+          <p>© {new Date().getFullYear()} koshikai</p>
+          <p>
+            Next.js ·{" "}
+            <Link href="/engineering#pipeline" className="focus-ring underline decoration-border underline-offset-4 transition-colors hover:text-foreground hover:decoration-foreground">
+              自宅の Proxmox から配信
+            </Link>
+          </p>
+        </div>
+      </Container>
+    </footer>
+  );
 }

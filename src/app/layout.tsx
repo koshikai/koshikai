@@ -1,25 +1,22 @@
 import type { Metadata, Viewport } from "next";
-import "@fontsource/noto-sans-jp/japanese-400.css";
-import "@fontsource/noto-sans-jp/japanese-500.css";
-import "@fontsource/noto-sans-jp/japanese-700.css";
-import "@fontsource/zen-old-mincho/japanese-400.css";
-import "@fontsource/zen-old-mincho/japanese-600.css";
-import "@fontsource/zen-old-mincho/japanese-700.css";
+// Inter は可変フォント1本で全ウェイトを賄う。Noto Sans JP は unicode-range で
+// 分割された版を使い、ページに出る文字を含む断片だけを読み込ませる
+// （japanese-*.css は分割なしの1ファイル約1MBで、全ページがそれを落としていた）。
+import "@fontsource-variable/inter/wght.css";
+import "@fontsource/noto-sans-jp/400.css";
+import "@fontsource/noto-sans-jp/500.css";
+import "@fontsource/noto-sans-jp/700.css";
 import "@fontsource/jetbrains-mono/400.css";
 import "@fontsource/jetbrains-mono/500.css";
-import "@fontsource/jetbrains-mono/700.css";
 import "./globals.css";
 import { getSiteConfig } from "@/lib/site-config";
 import { Footer } from "@/components/Footer";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { SiteHeader } from "@/components/SiteHeader";
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fafaf7" },
-    { media: "(prefers-color-scheme: dark)", color: "#131315" },
-  ],
+  themeColor: "#fafaf7",
 };
 
 export function generateMetadata(): Metadata {
@@ -29,7 +26,7 @@ export function generateMetadata(): Metadata {
     metadataBase: new URL(site.baseUrl),
     title: {
       default: site.title,
-      template: "%s | koshikai.dev",
+      template: "%s | koshikai",
     },
     description: site.description,
     keywords: site.keywords,
@@ -71,14 +68,12 @@ export function generateMetadata(): Metadata {
   };
 }
 
+// ライトが既定。明示的にダークを選んだ人だけ、描画前に dark クラスを付ける。
 const themeInitScript = `
 try {
-  const storedTheme = localStorage.getItem("theme");
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  document.documentElement.classList.toggle(
-    "dark",
-    storedTheme === "dark" || (storedTheme === null && prefersDark),
-  );
+  if (localStorage.getItem("theme") === "dark") {
+    document.documentElement.classList.add("dark");
+  }
 } catch {}
 `;
 
@@ -101,17 +96,21 @@ export default function RootLayout({
       "@type": "Person",
       name: "koshikai",
       url: site.baseUrl,
-      jobTitle: "Software Developer",
+      jobTitle: "Software Engineer",
       description: site.description,
-      sameAs: ["https://github.com/koshikai"],
+      sameAs: ["https://github.com/koshikai", "https://x.com/siywyk"],
       knowsAbout: [
-        "Next.js",
-        "React",
         "TypeScript",
+        "React",
+        "Next.js",
         "Python",
-        "AI Agents",
-        "LLMs",
+        "PostgreSQL",
+        "Docker",
+        "Proxmox",
+        "CI/CD",
+        "LLM",
         "MCP",
+        "Reinforcement Learning",
       ],
     },
   ];
@@ -120,16 +119,6 @@ export default function RootLayout({
     <html lang="ja" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-        {/* Reveal は初期状態が opacity-0 で、可視化を IntersectionObserver に
-            依存している。JS が無効だとトップの全セクションが空白になるため、
-            その場合だけ CSS で見せる。 */}
-        <noscript>
-          <style
-            dangerouslySetInnerHTML={{
-              __html: ".reveal-root{opacity:1!important;transform:none!important}",
-            }}
-          />
-        </noscript>
       </head>
       <body className="antialiased">
         <script
@@ -138,17 +127,17 @@ export default function RootLayout({
         />
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:border focus:border-border focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-foreground focus:outline-2 focus:outline-accent"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded focus:border focus:border-border focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-foreground focus:outline-2 focus:outline-accent"
         >
           メインコンテンツへスキップ
         </a>
-        {/* Footer は全ページ共通。下層ページや 404 / error が
+        {/* ヘッダーとフッターは全ページ共通。下層ページや 404 / error が
             「戻る」リンク1本だけの行き止まりにならないようにする。 */}
         <div className="flex min-h-dvh flex-col">
+          <SiteHeader />
           <div className="flex flex-1 flex-col">{children}</div>
           <Footer />
         </div>
-        <ThemeToggle />
       </body>
     </html>
   );

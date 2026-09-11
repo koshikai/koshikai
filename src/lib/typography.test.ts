@@ -26,9 +26,11 @@ describe("tagClassName", () => {
     expect(jp).not.toContain("text-[10px]");
   });
 
-  it("keeps the mono label styling for latin labels", () => {
-    const en = tagClassName("Transfer Learning");
+  // タグの大半は "Next.js" "pgvector" のような固有の表記を持つ技術名なので、
+  // 大文字化すると正しい綴りが崩れる。
+  it("keeps the mono styling for latin labels without changing their case", () => {
+    const en = tagClassName("pgvector");
     expect(en).toContain("font-mono");
-    expect(en).toContain("uppercase");
+    expect(en).not.toContain("uppercase");
   });
 });

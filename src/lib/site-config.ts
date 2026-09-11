@@ -15,21 +15,22 @@ export function getSiteConfig(): SiteConfig {
   return {
     baseUrl: BASE_URL,
     name: "koshikai.dev",
-    title: "koshikai.dev | Solving everyday problems with systems",
-    twitterTitle: "koshikai.dev | Solving everyday problems with systems",
-    headline: "Solving everyday problems with systems",
+    title: "koshikai — build · operate · research",
+    twitterTitle: "koshikai — build · operate · research",
+    headline: "build · operate · research",
     description:
-      "個人開発者 koshikai のポートフォリオ。自宅サーバー運用やアプリ開発を通して、生活や運用の課題を発見し、実装し、改善する取り組みをまとめています。",
+      "ソフトウェアエンジニア koshikai のポートフォリオ。Web・AI のプロダクトを自分で作り、自宅のインフラで運用し、研究とデータ分析で検証しています。",
     locale: "ja_JP",
     keywords: [
       "koshikai",
-      "個人開発",
       "ポートフォリオ",
-      "課題解決",
-      "自宅サーバー",
-      "運用改善",
+      "ソフトウェアエンジニア",
       "Next.js",
+      "TypeScript",
       "Proxmox",
+      "self-hosting",
+      "MCP",
+      "強化学習",
     ],
   };
 }

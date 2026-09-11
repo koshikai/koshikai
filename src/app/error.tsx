@@ -23,7 +23,7 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
           Error
         </p>
 
-        <h1 className="mt-3 font-serif text-3xl font-semibold tracking-tight text-foreground">
+        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-foreground">
           問題が発生しました
         </h1>
 

@@ -1,7 +1,11 @@
 import type { ComponentType } from "react";
 
+export type Axis = "build" | "operate" | "research";
+
 export interface CaseItem {
   slug: string;
+  /** どの軸の事例か。Works / Engineering / Research の各ページがこれで絞り込む */
+  axis: Axis;
   title: string;
   summary: string;
   tags: string[];
@@ -15,6 +19,7 @@ export interface CaseItem {
 export const caseItems: CaseItem[] = [
   {
     slug: "immich-distributed",
+    axis: "operate",
     title: "分散インフラ基盤の構築と運用",
     summary:
       "自宅サーバー上で Proxmox と LXC により 10 以上のサービスを統合運用。GPU オフロードによる Immich 分散処理と IaC 自動化で、低コストなインフラを実現。",
@@ -25,31 +30,33 @@ export const caseItems: CaseItem[] = [
     action:
       "Proxmox + LXC でサービスを統合し、Windows GPU へ ML 処理をオフロード。IaC と MCP で運用を自動化。",
     result:
-      "低消費電力なサーバーで快適なセルフホスト環境を実現。運用の自動化率が大幅に向上。",
+      "機械学習処理を GPU 側へ逃がしたことで、数日かかっていた初期スキャンが数時間に短縮。常時稼働の省電力サーバーと処理性能を両立。",
     learning:
       "リソースの適切な配置と、運用ルールの自動化が継続可能なインフラには不可欠。",
   },
   {
     slug: "smoke-it",
-    title: "Smoke it.: 洗練された PWA 支援アプリ",
+    axis: "build",
+    title: "Smoke it.: 喫煙習慣を記録し、改善を支援する AI コーチ付き PWA",
     summary:
-      "Next.js 16.2 + PWA + Optimistic UI によるネイティブ級の禁煙記録アプリ。AI コーチ（OpenRouter）と 3D バッジ（Three.js）で継続を支援。",
-    tags: ["Next.js", "PWA", "AI Coach", "Three.js", "Recharts"],
+      "ワンタップ記録・傾向の可視化・記録データを踏まえた AI コーチで、喫煙習慣を客観的に振り返り、改善を考えられるようにした PWA。",
+    tags: ["Next.js", "PWA", "AI Coach", "PostgreSQL", "Web Push"],
     publishedAt: "2026-04-21",
     challenge:
-      "既存の禁煙アプリが複雑すぎたり、オフライン時の挙動が不安定だったりした。",
+      "既存アプリは登録が面倒で続かず、見た目が医療的すぎ、自分のデータも手元に残らなかった。",
     action:
-      "Next.js と PWA を組み合わせ、オフライン優先の UI を構築。グラフによる可視化を統合。",
+      "オフラインでも記録できる PWA とワンタップ記録（Optimistic UI）を実装し、傾向の可視化と、直近の記録を文脈に渡す AI コーチを組み込んだ。",
     result:
-      "自身の禁煙継続に成功し、軽量かつ信頼性の高いツールとしての実用性を証明。",
+      "記録の手間を最小化し、タイムラインとグラフで自分のパターンを把握できるようになった。記録だけでなく相談できる相手がいる形にした。",
     learning:
-      "ユーザーの心理的な障壁を下げるための、徹底的にスムーズな UI 操作感の追求。",
+      "AI 連携では、どのデータをどの粒度で渡すかが回答の質を左右する。全履歴ではなく直近 4 週間の集計に絞った。",
   },
   {
     slug: "karigallery",
-    title: "KariGallery: ダミーデータ検証ギャラリー",
+    axis: "build",
+    title: "KariGallery: 決済フローまで実装したイラストギャラリー",
     summary:
-      "友人のイラスト販売用に制作したが、現在は偽名によるダミーデータを表示。Stripe 決済は技術検証済み。",
+      "友人のイラストを管理・公開するギャラリー。Stripe Checkout の決済フローまで実装・検証し、法的手続きの負荷を踏まえて本番決済は行わない判断をした。",
     tags: ["Auth.js", "Stripe", "Prisma v7.7", "Image Processing"],
     publishedAt: "2026-04-21",
     challenge:
@@ -63,6 +70,7 @@ export const caseItems: CaseItem[] = [
   },
   {
     slug: "home-backup",
+    axis: "operate",
     title: "自宅バックアップ基盤の構築",
     summary:
       "スマホ故障をきっかけに、写真と動画を守るための自宅バックアップ運用を設計・継続したケース。",
@@ -73,12 +81,13 @@ export const caseItems: CaseItem[] = [
     action:
       "Proxmox 上に自動バックアップを再設計し、定期的な世代バックアップ保持と復旧手順のドキュメント化を実施。",
     result:
-      "バックアップ運用が日常に溶け込み、障害時のリスクを排除。「保存されているはず」の曖昧さを解消。",
+      "バックアップが日常の運用に組み込まれ、障害時の対処手順が明確になった。「保存されているはず」という曖昧さを減らせた。",
     learning:
       "システムの信頼性は高度な技術選定だけでなく、手順の明文化と運用のセット設計で担保されること。",
   },
   {
     slug: "deploy-automation",
+    axis: "operate",
     title: "デプロイ作業の自動化",
     summary:
       "手動更新で発生していた再現性の課題を、CI/CD と運用手順の整備で改善したケース。",
@@ -95,6 +104,7 @@ export const caseItems: CaseItem[] = [
   },
   {
     slug: "jr-hokkaido-pbl",
+    axis: "research",
     title: "JR北海道 冬期運行リスクのデータ分析",
     summary:
       "大学院PBLとして、JR北海道の冬期ポイント不転換リスクをデータで定量化。データ品質の修復から多重共線性の解消まで、現場活用を前提とした統計分析を実施し、JR社員から実際の業務計画への活用を検討するフィードバックを得た。",
@@ -111,6 +121,7 @@ export const caseItems: CaseItem[] = [
   },
   {
     slug: "research-workflow",
+    axis: "research",
     title: "研究ワークフローの実装",
     summary:
       "検証条件の明確化と記録を徹底し、研究プロセスの再現性を高めたケース。",
@@ -121,7 +132,7 @@ export const caseItems: CaseItem[] = [
     action:
       "探索速度よりも再現性を優先し、条件固定と記録ルールを先に整備。知識基盤と連携した再現実験環境の構築。",
     result:
-      "同一条件での再検証が容易になり、Cortical Development (32/32) や Wnt5a (96/96) での再現性を実証。",
+      "実験の実行から図・論文のビルドまでを CLI で再実行できるようにし、再検証の時間を約 80% 削減。提案手法の結果（32/32・96/96）を同じ条件で再現できる状態にした。",
     learning:
       "再現性の高い研究ワークフローは、結論の信頼性を高めるだけでなく、結果的に次のアプローチへの改善速度を高めること。",
   },
@@ -138,6 +149,17 @@ const caseMdxModules: Record<string, () => Promise<{ default: ComponentType }>> 
 export function getCaseBySlug(slug: string) {
   return caseItems.find((item) => item.slug === slug);
 }
+
+export function getCasesByAxis(axis: Axis) {
+  return caseItems.filter((item) => item.axis === axis);
+}
+
+/** 軸ごとの表示名と、その軸を扱うトップレベルページ */
+export const AXES: Record<Axis, { label: string; section: string; href: string }> = {
+  build: { label: "Build", section: "Works", href: "/works" },
+  operate: { label: "Operate", section: "Engineering", href: "/engineering" },
+  research: { label: "Research", section: "Research", href: "/research" },
+};
 
 export async function getCaseContentComponent(slug: string) {
   const loader = caseMdxModules[slug];
