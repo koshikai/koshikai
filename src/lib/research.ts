@@ -103,7 +103,7 @@ export const publications: Publication[] = [
     venue: "ITC-CSCC 2026",
     date: "2026.07",
     format: "口頭発表",
-    status: "accepted",
+    status: "presented",
     international: true,
   },
   {
