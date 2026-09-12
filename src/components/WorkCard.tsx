@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { getImageProps } from "next/image";
 import { ArrowLink, Tags } from "@/components/ui";
 import { STATUS_LABELS, type Work } from "@/lib/works";
 
@@ -23,22 +23,49 @@ export function StatusBadge({ work }: { work: Work }) {
  */
 export function WorkThumb({ work, sizes }: { work: Work; sizes: string }) {
   if (work.image) {
-    const portrait = work.image.height > work.image.width;
+    const { alt, desktop, mobile } = work.image;
+
+    // 画面幅で別の絵を出す (art direction)。1 枚を横長の枠に contain すると
+    // 縦長スクショの左右が大きく空き、枠幅の 1/4 しか使えない。
+    // 通常の <Image> は 1 枚しか出せないので、getImageProps で最適化 URL を
+    // 保ったまま srcSet を組み、<picture> で切り替える。
+    const {
+      props: { srcSet: desktopSrcSet },
+    } = getImageProps({
+      alt,
+      sizes,
+      src: desktop.src,
+      width: desktop.width,
+      height: desktop.height,
+    });
+    const {
+      props: { srcSet: mobileSrcSet, ...mobileProps },
+    } = getImageProps({
+      alt,
+      sizes,
+      src: mobile.src,
+      width: mobile.width,
+      height: mobile.height,
+    });
+
     return (
-      <div className="card-thumb relative aspect-[16/10] overflow-hidden rounded border border-border bg-surface">
-        <Image
-          src={work.image.src}
-          alt={work.image.alt}
-          fill
-          sizes={sizes}
-          className={portrait ? "object-contain p-4" : "object-cover object-top"}
-        />
+      <div className="card-thumb relative aspect-[390/844] overflow-hidden rounded border border-border bg-surface sm:aspect-[1424/900]">
+        <picture>
+          <source media="(min-width: 40rem)" srcSet={desktopSrcSet} />
+          {/* getImageProps が最適化 URL を生成しているため next/image は使わない */}
+          <img
+            {...mobileProps}
+            srcSet={mobileSrcSet}
+            alt={alt}
+            className="absolute inset-0 h-full w-full object-cover object-top"
+          />
+        </picture>
       </div>
     );
   }
 
   return (
-    <div className="card-thumb flex aspect-[16/10] flex-col justify-center rounded border border-border bg-surface px-5 py-4">
+    <div className="card-thumb flex aspect-[390/844] flex-col justify-center rounded border border-border bg-surface px-5 py-4 sm:aspect-[1424/900]">
       <p className="font-mono text-[11px] text-muted">architecture</p>
       <ol role="list" className="mt-3 list-none space-y-1.5">
         {work.architecture?.map((step, i) => (
