@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, Info } from "lucide-react";
+import { SplitHeading } from "@/components/SplitHeading";
 import { getSiteConfig } from "@/lib/site-config";
 import { BENCHMARK_DATASET_VERIFIED_AT } from "@/lib/benchmarks-data";
+import { splitIntoChunks } from "@/lib/chunks";
 import { BenchmarkView } from "./BenchmarkView";
 
 const site = getSiteConfig();
@@ -51,9 +53,14 @@ export default function LlmBenchmarksPage() {
           <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
             Evaluation Data (2026 Mid-Year Snapshot)
           </p>
-          <h1 className="mt-3 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-            最新 LLM ベンチマーク測定比較
-          </h1>
+          <SplitHeading
+            as="h1"
+            text="最新 LLM ベンチマーク測定比較"
+            chunks={splitIntoChunks("最新 LLM ベンチマーク測定比較")}
+            delayStart={60}
+            delayStep={24}
+            className="mt-3 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
+          />
           <p className="mt-6 max-w-2xl text-base leading-[1.9] text-muted">
             2026年に発表された最新世代フロンティアモデル（Claude Opus 5 / Fable 5 / Sonnet 5, GPT-5.6 Sol, Gemini 3.6 Flash / 3.1 Pro, Kimi K3, Qwen 3.7 Max, DeepSeek V4 Pro / V4 Flash）の評価スナップショットです。
             掲載しているのは各開発元の公表値または明示した第三者リーダーボードに実在する値のみで、推定値による穴埋めは行っていません。

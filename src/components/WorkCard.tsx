@@ -37,6 +37,8 @@ export function WorkThumb({ work, sizes }: { work: Work; sizes: string }) {
       src: desktop.src,
       width: desktop.width,
       height: desktop.height,
+      // スクリーンショットは文字が細かい。既定の 75 だと再圧縮で甘くなる
+      quality: 90,
     });
     const {
       props: { srcSet: mobileSrcSet, ...mobileProps },
@@ -46,6 +48,7 @@ export function WorkThumb({ work, sizes }: { work: Work; sizes: string }) {
       src: mobile.src,
       width: mobile.width,
       height: mobile.height,
+      quality: 90,
     });
 
     return (
