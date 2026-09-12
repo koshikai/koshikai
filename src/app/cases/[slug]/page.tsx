@@ -3,7 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { Container, Tags } from "@/components/ui";
+import { SplitHeading } from "@/components/SplitHeading";
 import { AXES, getCaseBySlug, getCaseContentComponent, caseItems } from "@/lib/cases";
+import { splitIntoChunks } from "@/lib/chunks";
 import { getSiteConfig } from "@/lib/site-config";
 
 interface CaseDetailPageProps {
@@ -77,9 +79,14 @@ export default async function CaseDetailPage({ params }: CaseDetailPageProps) {
           <p className="font-mono text-xs text-muted">
             {axis.label.toLowerCase()} — case study · {item.publishedAt}
           </p>
-          <h1 className="mt-3 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-            {item.title}
-          </h1>
+          <SplitHeading
+            as="h1"
+            text={item.title}
+            chunks={splitIntoChunks(item.title)}
+            delayStart={60}
+            delayStep={24}
+            className="mt-3 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
+          />
           <p className="mt-5 text-pretty text-base leading-[1.9] text-muted">{item.summary}</p>
           <Tags items={item.tags} className="mt-5" />
 

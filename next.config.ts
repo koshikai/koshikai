@@ -56,6 +56,9 @@ const nextConfig: NextConfig = {
   output: process.env.DOCKER_BUILD === "true" ? "standalone" : undefined,
   images: {
     remotePatterns: [],
+    // Next.js 16 は許可した品質値しか受け付けない (既定は 75 のみ)。
+    // スクリーンショットは文字が細かいので 90 も使えるようにする。
+    qualities: [75, 90],
   },
   async headers() {
     return [
