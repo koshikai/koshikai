@@ -39,7 +39,7 @@ export const profile = {
    * null の間は画面に出さない。
    */
   contact: {
-    email: null as string | null,
+    email: "contact@koshikai.dev" as string | null,
     links: [
       { label: "GitHub", href: "https://github.com/koshikai", handle: "@koshikai" },
       { label: "X", href: "https://x.com/siywyk", handle: "@siywyk" },
