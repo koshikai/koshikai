@@ -17,7 +17,7 @@ export function CapabilityTable() {
         {capabilities.map((capability) => (
           <div
             key={capability.area}
-            className="grid grid-cols-12 gap-x-6 gap-y-1.5 border-b border-border px-5 py-4 last:border-b-0"
+            className="row-hover grid grid-cols-12 gap-x-6 gap-y-1.5 border-b border-border px-5 py-4 last:border-b-0"
           >
             <dt className="col-span-12 font-mono text-xs text-muted md:col-span-2 md:leading-6">
               {capability.area}

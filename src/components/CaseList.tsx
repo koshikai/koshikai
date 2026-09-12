@@ -7,7 +7,7 @@ export function CaseList({ items }: { items: CaseItem[] }) {
   return (
     <ul role="list" className="list-none border-t border-border">
       {items.map((item) => (
-        <li key={item.slug} className="border-b border-border">
+        <li key={item.slug} className="row-hover border-b border-border">
           <Link
             href={`/cases/${item.slug}`}
             className="focus-ring group grid grid-cols-12 gap-x-6 gap-y-2 py-5 sm:py-6"

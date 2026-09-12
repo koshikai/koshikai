@@ -25,7 +25,7 @@ export function WorkThumb({ work, sizes }: { work: Work; sizes: string }) {
   if (work.image) {
     const portrait = work.image.height > work.image.width;
     return (
-      <div className="relative aspect-[16/10] overflow-hidden rounded border border-border bg-surface">
+      <div className="card-thumb relative aspect-[16/10] overflow-hidden rounded border border-border bg-surface">
         <Image
           src={work.image.src}
           alt={work.image.alt}
@@ -38,7 +38,7 @@ export function WorkThumb({ work, sizes }: { work: Work; sizes: string }) {
   }
 
   return (
-    <div className="flex aspect-[16/10] flex-col justify-center rounded border border-border bg-surface px-5 py-4">
+    <div className="card-thumb flex aspect-[16/10] flex-col justify-center rounded border border-border bg-surface px-5 py-4">
       <p className="font-mono text-[11px] text-muted">architecture</p>
       <ol role="list" className="mt-3 list-none space-y-1.5">
         {work.architecture?.map((step, i) => (
@@ -57,10 +57,10 @@ export function WorkThumb({ work, sizes }: { work: Work; sizes: string }) {
 /** トップの Featured Works 用。1 枚で「何を・どこまで・今どうなっているか」を伝える */
 export function WorkCard({ work }: { work: Work }) {
   return (
-    <article id={work.slug} className="flex h-full flex-col">
+    <article id={work.slug} className="work-card flex h-full flex-col">
       <WorkThumb work={work} sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw" />
       <div className="mt-5 flex items-baseline justify-between gap-3">
-        <h3 className="text-lg font-semibold tracking-tight text-foreground">{work.name}</h3>
+        <h3 className="work-title text-lg font-semibold tracking-tight text-foreground">{work.name}</h3>
         <StatusBadge work={work} />
       </div>
       <p className="mt-2 text-pretty text-sm leading-[1.8] text-foreground">{work.tagline}</p>
