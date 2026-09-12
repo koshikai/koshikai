@@ -32,6 +32,15 @@
   --border: #e4e3dc;
   --accent: #c0392b;
   --accent-weak: rgba(192, 57, 43, 0.08);
+
+  /* モーションの共通トークン。個別の transition に独自のイージングを書くと
+     場所ごとに着地の感触が変わり「設計された」印象が崩れるため、ここに寄せる。
+     --e-out: 着地が柔らかい（既定）。--e-sym: 対称的で、戻りやループ向き。 */
+  --e-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --e-sym: cubic-bezier(0.37, 0, 0.63, 1);
+  --t-fast: 0.3s;
+  --t-base: 0.55s;
+  --t-slow: 0.9s;
 }
 
 :root.dark {
@@ -104,5 +113,267 @@ h3 {
 
   :root.dark .case-article-content img {
     color-scheme: dark;
+  }
+
+  /* ============================================
+     SplitHeading — 文字分割リフトアップ
+     JS 起動後に .rev が付き、各文字がクリップ内で下に隠れる。
+     ビューポート進入で .in が付き、1 文字ずつ上に立ち上がる。
+     JS 無効時は .rev が付かないので、そのまま表示される。
+     ============================================ */
+  .split-heading {
+    display: block;
+  }
+
+  .split-heading .sh {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    white-space: pre;
+    /* descender (g, p, 濁点) がクリップされないよう上下に逃がして相殺する */
+    padding: 0.08em 0;
+    margin: -0.08em 0;
+  }
+
+  .split-heading .sh-i {
+    display: inline-block;
+    will-change: transform;
+    transform: translateY(115%);
+    transition: transform var(--t-slow) var(--e-out);
+  }
+
+  .split-heading.rev .sh-i {
+    transition-delay: var(--ci, 40ms);
+  }
+
+  /* 英字用: わずかなスキュー＋伸縮を伴う立ち上がり */
+  .split-heading.rev .sh-skew .sh-i {
+    transform: translateY(118%) skewY(6deg) scaleY(1.04);
+  }
+
+  .split-heading.rev.in .sh-i,
+  .split-heading.rev.in .sh-skew .sh-i {
+    transform: none;
+  }
+
+  .split-heading .sh-gap {
+    white-space: pre;
+    display: inline-block;
+  }
+
+  /* 語のまとまり。この境界でだけ改行させ、「確かめる」のような語が割れない
+     ようにする。行頭に読点が来るのも防げる。 */
+  .split-heading .sh-chunk {
+    display: inline-block;
+  }
+
+  /* ============================================
+     Marquee — 無限に流れる行
+     track に同じ内容を 2 セット置き、translateX(-50%) でループさせる。
+     アイテム側は gap ではなく水平 padding で間隔を取る（gap だと
+     -50% の折り返し点でズレて継ぎ目が見える）。hover で停止。
+     ============================================ */
+  .marquee {
+    overflow: hidden;
+    -webkit-user-select: none;
+    user-select: none;
+    /* 左右の端をぼかす。流れている途中であることが伝わり、
+       画面端で文字が不意に切れて見えない。
+       幅は画面幅に対する割合と上限の小さい方に取り、広い画面でも
+       ぼけすぎず、狭い画面でも文字が消えないようにする。 */
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      black min(120px, 12%),
+      black calc(100% - min(120px, 12%)),
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      black min(120px, 12%),
+      black calc(100% - min(120px, 12%)),
+      transparent 100%
+    );
+  }
+
+  .marquee-track {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    animation: marquee-drift var(--m-d, 44s) linear infinite;
+    will-change: transform;
+  }
+
+  .marquee-track.rev {
+    animation-name: marquee-drift-rev;
+  }
+
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+
+  /* ============================================
+     LiquidButton — hover でアクセント色が染み広がる CTA
+     一点のドットが拡大してボタンを満たし、ラベルが上下スライドで入れ替わる。
+     ============================================ */
+  .liquid-btn {
+    --lb-fill: var(--accent);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    transition: background-color 0.18s ease, border-color 0.3s ease;
+  }
+
+  /* z-index は 0。負の値にすると親の背景より後ろに描画され、
+     bg-foreground を持つボタンでは拡大するドットが見えなくなる。 */
+  .liquid-btn .lb-dot {
+    position: absolute;
+    z-index: 0;
+    top: calc(50% - 5px);
+    left: 20px;
+    width: 10px;
+    height: 10px;
+    border-radius: 9999px;
+    background: var(--lb-fill);
+    transform: scale(0);
+    transform-origin: 50%;
+    pointer-events: none;
+    transition: transform 0.65s var(--e-out);
+  }
+
+  .liquid-btn:hover .lb-dot {
+    transform: scale(64);
+  }
+
+  /* ラベル2枚を同じグリッドセルに重ねる。幅は広い方に合わせて決まるので、
+     hover で入れ替わるラベルが overflow:hidden で切られない。 */
+  .liquid-btn .lb-txt {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: max-content;
+    justify-items: center;
+    overflow: hidden;
+  }
+
+  .liquid-btn .lb-line {
+    grid-area: 1 / 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    white-space: nowrap;
+    transition: transform 0.5s var(--e-out);
+    will-change: transform;
+  }
+
+  .liquid-btn .lb-nxt {
+    transform: translateY(112%);
+  }
+
+  .liquid-btn:hover .lb-cur {
+    transform: translateY(-112%);
+  }
+
+  .liquid-btn:hover .lb-nxt {
+    transform: translateY(0);
+    transition-delay: 60ms;
+  }
+
+  .liquid-btn .lb-arw {
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.25s ease 0.14s, transform 0.45s var(--e-out) 0.14s;
+  }
+
+  .liquid-btn:hover .lb-arw {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* ============================================
+     Reveal — セクションのスクロール進入
+     初期状態の opacity:1 がキモ。JS 無効時は .rev が付かず、
+     そのままの状態で読める（JS 前提で中身を隠さない）。
+     ============================================ */
+  .reveal.rev {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  .reveal.rev.in {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity var(--t-base) var(--e-out),
+      transform var(--t-base) var(--e-out);
+    transition-delay: var(--rd, 0ms);
+  }
+}
+
+/* hover の塗りは @layer の外に置く。Tailwind v4 は utilities レイヤーを
+   components レイヤーより優先するため、レイヤー内に書くと bg-foreground などの
+   ユーティリティに負けて、押しても色が変わらない。 */
+.liquid-btn:hover {
+  background-color: var(--lb-fill);
+  border-color: transparent;
+}
+
+@keyframes marquee-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-drift-rev {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* 動きを減らす設定では、途中の状態を経由せず最終状態にする。
+   レイヤーの外に置き、ユーティリティより確実に効かせる。 */
+@media (prefers-reduced-motion: reduce) {
+  .split-heading.rev .sh-i,
+  .split-heading.rev .sh-skew .sh-i {
+    transform: none;
+    transition: none;
+  }
+
+  .marquee-track,
+  .marquee-track.rev {
+    animation: none;
+  }
+
+  .reveal.rev {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .liquid-btn .lb-dot {
+    display: none;
+  }
+
+  .liquid-btn .lb-cur,
+  .liquid-btn .lb-nxt,
+  .liquid-btn:hover .lb-cur,
+  .liquid-btn:hover .lb-nxt {
+    transform: none;
+    transition: none;
+  }
+
+  .liquid-btn .lb-arw,
+  .liquid-btn:hover .lb-arw {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
