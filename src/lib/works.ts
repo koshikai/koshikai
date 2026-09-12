@@ -29,8 +29,19 @@ export interface Work {
     live?: string;
     caseSlug?: string;
   };
-  /** スクリーンショットが無い作品は構成の要約を代わりに出す */
-  image?: { src: string; alt: string; width: number; height: number };
+  /**
+   * スクリーンショット。画面幅ごとに別の絵を持つ。
+   * スマホで見る人には縦長の実機画面を、広い画面では横長の画面を見せる
+   * （1 枚を横長枠に収めると、縦長のスクショが枠幅の 1/4 しか使えず
+   * 左右が大きな空白になる）。画像が無い作品は構成の要約を代わりに出す。
+   */
+  image?: {
+    alt: string;
+    /** 横長。デスクトップの画面比に合わせる */
+    desktop: { src: string; width: number; height: number };
+    /** 縦長。実機の画面比に合わせる */
+    mobile: { src: string; width: number; height: number };
+  };
   architecture?: string[];
   featured: boolean;
 }
@@ -49,10 +60,9 @@ export const works: Work[] = [
     stack: ["Next.js", "PWA", "PostgreSQL / Prisma", "OpenRouter"],
     links: { live: "https://smoke-it.koshikai.dev", caseSlug: "smoke-it" },
     image: {
-      src: "/images/projects/smoke-it.webp",
-      alt: "Smoke it. のダッシュボード画面",
-      width: 780,
-      height: 1688,
+      alt: "Smoke it. のランディングページ",
+      desktop: { src: "/images/projects/smoke-it-desktop.webp", width: 1424, height: 900 },
+      mobile: { src: "/images/projects/smoke-it-mobile.webp", width: 780, height: 1688 },
     },
     featured: true,
   },
@@ -70,10 +80,9 @@ export const works: Work[] = [
     stack: ["Next.js", "Auth.js", "Stripe", "Prisma"],
     links: { live: "https://gallery.koshikai.dev", caseSlug: "karigallery" },
     image: {
-      src: "/images/projects/karigallery.webp",
-      alt: "KariGallery のギャラリー画面",
-      width: 1920,
-      height: 1200,
+      alt: "KariGallery のランディングページ",
+      desktop: { src: "/images/projects/karigallery-desktop.webp", width: 1424, height: 900 },
+      mobile: { src: "/images/projects/karigallery-mobile.webp", width: 780, height: 1688 },
     },
     featured: true,
   },
