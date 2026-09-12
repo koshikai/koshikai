@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   BENCHMARK_METRICS,
   LLM_BENCHMARK_SCORES,
@@ -290,6 +290,31 @@ export function BenchmarkView() {
   const [sortKey, setSortKey] = useState<SortKey>("modelName");
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
 
+  // バーは幅を実測値のまま描き、グラフが視界に入った瞬間に scaleX(0) から
+  // 伸ばす。width を 0 から動かす方式にすると、幅そのものを検証する
+  // テスト（実測レンジ基準かどうか）と噛み合わなくなる。
+  const barsRef = useRef<HTMLDivElement>(null);
+  const [barsInView, setBarsInView] = useState(false);
+
+  useEffect(() => {
+    const el = barsRef.current;
+    if (!el || barsInView) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setBarsInView(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -10% 0px" },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+    // viewMode を戻したときにも観測し直す（chart 以外では要素が無い）
+  }, [barsInView, viewMode]);
+
   const selectedMetric =
     BENCHMARK_METRICS.find((m) => m.id === selectedMetricId) ||
     BENCHMARK_METRICS[0];
@@ -463,7 +488,7 @@ export function BenchmarkView() {
               </span>
             </div>
 
-            <div className="space-y-4">
+            <div ref={barsRef} className="space-y-4">
               {ranked.map((model, index) => {
                 const score = model.scores[selectedMetric.id]!;
 
@@ -489,10 +514,14 @@ export function BenchmarkView() {
 
                     <div className="h-3.5 w-full bg-subtle/40 rounded-sm overflow-hidden border border-border/50">
                       <div
-                        className="h-full transition-all duration-300 ease-out group-hover:brightness-110"
+                        className={`h-full origin-left transition-all duration-300 ease-out group-hover:brightness-110${
+                          barsInView ? " bar-grow" : ""
+                        }`}
                         style={{
                           width: `${barWidthPercent(score, chartDomain)}%`,
                           backgroundColor: model.color,
+                          // 上から順に伸びるよう、行ごとに少しずらす
+                          animationDelay: `${index * 45}ms`,
                         }}
                       />
                     </div>

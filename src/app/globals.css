@@ -310,6 +310,154 @@ h3 {
       transform var(--t-base) var(--e-out);
     transition-delay: var(--rd, 0ms);
   }
+
+  /* ============================================
+     DeployPipeline — 上から順に点灯する経路図
+     スクロールで図に入ると、各ステップの丸が順にアクセント色を帯び、
+     次のステップへ伸びる縦ラインが繋がっていく。
+     ============================================ */
+  .pipeline-dot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 1.375rem;
+    width: 1.375rem;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+    border-radius: 9999px;
+    background: var(--background);
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    /* 背景色のフチで、縦ラインが丸を貫通して見えるのを防ぐ */
+    box-shadow: 0 0 0 3px var(--background);
+    transition:
+      background-color var(--t-fast) var(--e-out),
+      border-color var(--t-fast) var(--e-out),
+      color var(--t-fast) var(--e-out);
+    transition-delay: var(--pi, 0ms);
+  }
+
+  /* 点灯 = 塗りつぶし。accent-weak の薄い塗りでは「点いた」と読めず、
+     6 行が並んだときに未点灯と区別できなかった。 */
+  .pipeline.rev.in .pipeline-dot:not(.pipeline-dot-goal) {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--background);
+  }
+
+  /* 到達点 (/healthz) は点灯後も見分けがつくよう、外側にもう 1 周リングを足す */
+  .pipeline-dot-goal {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--background);
+    box-shadow:
+      0 0 0 3px var(--background),
+      0 0 0 5px var(--accent);
+  }
+
+  .pipeline-line {
+    background: var(--border);
+    transform-origin: top;
+    transition:
+      transform var(--t-base) var(--e-out),
+      background-color var(--t-fast) var(--e-out);
+    transition-delay: var(--pi, 0ms);
+  }
+
+  /* 点灯前はラインを畳んでおく (JS 無効時はこの .rev が付かないので伸びた状態) */
+  .pipeline.rev .pipeline-line {
+    transform: scaleY(0);
+  }
+
+  /* 点灯と同時にラインもアクセント色になり、上から経路が繋がっていく */
+  .pipeline.rev.in .pipeline-line {
+    transform: scaleY(1);
+    background-color: var(--accent);
+  }
+
+  /* ============================================
+     一覧の行 — hover / フォーカスで左端からアクセントのバーが伸びる
+     表や一覧は行数が多く、色を変えるだけだと反応が分かりにくい。
+     ============================================ */
+  .row-hover {
+    position: relative;
+    transition: background-color var(--t-fast) var(--e-out);
+  }
+
+  .row-hover::before {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    width: 2px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform var(--t-base) var(--e-out);
+  }
+
+  .row-hover:hover,
+  .row-hover:focus-within {
+    background-color: var(--accent-weak);
+  }
+
+  .row-hover:hover::before,
+  .row-hover:focus-within::before {
+    transform: scaleY(1);
+  }
+
+  /* ============================================
+     作品カード — hover でサムネイルがわずかに寄り、枠と見出しが反応する
+     ============================================ */
+  .card-thumb {
+    transition: border-color var(--t-fast) var(--e-out);
+  }
+
+  .card-thumb img {
+    transition: transform var(--t-base) var(--e-out);
+  }
+
+  .work-card:hover .card-thumb img {
+    transform: scale(1.03);
+  }
+
+  .work-title {
+    position: relative;
+    display: inline-block;
+  }
+
+  .work-title::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -0.15em;
+    height: 1px;
+    width: 100%;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--t-base) var(--e-out);
+  }
+
+  .work-card:hover .work-title::after {
+    transform: scaleX(1);
+  }
+
+  /* ============================================
+     ベンチマークのバー — グラフが見えた瞬間に左端から伸びる
+     幅は実測値のまま描き、transform だけで見せる。width を 0 から
+     動かす方式にすると「実測レンジ基準か」を検証するテストと両立しない。
+     ============================================ */
+  .bar-grow {
+    animation: bar-grow var(--t-base) var(--e-out) backwards;
+  }
+}
+
+@keyframes bar-grow {
+  from {
+    transform: scaleX(0);
+  }
 }
 
 /* hover の塗りは @layer の外に置く。Tailwind v4 は utilities レイヤーを
@@ -318,6 +466,11 @@ h3 {
 .liquid-btn:hover {
   background-color: var(--lb-fill);
   border-color: transparent;
+}
+
+/* 枠の色も同じ理由でレイヤー外。border-border ユーティリティに勝たせる */
+.work-card:hover .card-thumb {
+  border-color: var(--accent);
 }
 
 @keyframes marquee-drift {
@@ -375,5 +528,28 @@ h3 {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  /* 移動を伴う演出は、途中の状態を飛ばして最終状態で固定する */
+  .pipeline-dot {
+    transition: none;
+  }
+
+  .pipeline.rev .pipeline-line,
+  .pipeline.rev.in .pipeline-line {
+    transform: none;
+    transition: none;
+  }
+
+  .row-hover,
+  .row-hover::before,
+  .card-thumb,
+  .card-thumb img,
+  .work-title::after {
+    transition: none;
+  }
+
+  .bar-grow {
+    animation: none;
   }
 }

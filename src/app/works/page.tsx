@@ -26,14 +26,14 @@ export default function WorksPage() {
             <li
               key={work.slug}
               id={work.slug}
-              className="grid scroll-mt-24 grid-cols-12 gap-x-6 gap-y-6 border-t border-border py-10 sm:py-12"
+              className="work-card grid scroll-mt-24 grid-cols-12 gap-x-6 gap-y-6 border-t border-border py-10 sm:py-12"
             >
               <div className="col-span-12 md:col-span-5">
                 <WorkThumb work={work} sizes="(min-width: 768px) 440px, 100vw" />
               </div>
               <article className="col-span-12 md:col-span-7">
                 <div className="flex flex-wrap items-baseline justify-between gap-3">
-                  <h2 className="text-xl font-semibold tracking-tight text-foreground">{work.name}</h2>
+                  <h2 className="work-title text-xl font-semibold tracking-tight text-foreground">{work.name}</h2>
                   <StatusBadge work={work} />
                 </div>
                 <p className="mt-2 text-pretty text-[0.9375rem] leading-[1.8] text-foreground">{work.tagline}</p>
