@@ -452,6 +452,41 @@ h3 {
   .bar-grow {
     animation: bar-grow var(--t-base) var(--e-out) backwards;
   }
+
+  /* ============================================
+     404 — コンパスがゆっくり回る
+     行き先を探している、というページの役割を動きで補う。
+     ============================================ */
+  .notfound-compass {
+    animation: compass-spin 26s linear infinite;
+  }
+
+  /* ============================================
+     公開中のドット — ゆっくり脈打つ
+     止まっている印より、生きている印の方が「いま動いている」と伝わる。
+     live の作品にだけ付ける。
+     ============================================ */
+  .status-pulse {
+    animation: status-pulse 2.8s var(--e-sym) infinite;
+  }
+}
+
+@keyframes compass-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes status-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.4);
+  }
 }
 
 @keyframes bar-grow {
@@ -550,6 +585,11 @@ h3 {
   }
 
   .bar-grow {
+    animation: none;
+  }
+
+  .notfound-compass,
+  .status-pulse {
     animation: none;
   }
 }

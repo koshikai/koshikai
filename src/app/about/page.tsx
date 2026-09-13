@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AvailabilityNote } from "@/components/AvailabilityNote";
+import { Reveal } from "@/components/Reveal";
 import { ArrowLink, Container, PageHeader, SectionHeader } from "@/components/ui";
 import { profile } from "@/lib/profile";
 import { courses, publications } from "@/lib/research";
@@ -79,17 +80,23 @@ export default function AboutPage() {
         <section aria-labelledby="background-heading" className="mt-20">
           <SectionHeader id="background-heading" label="background" title="経歴" />
           <dl className="border-t border-border">
-            {profile.education.map((item) => (
-              <Row key={item.title} term={item.period}>
-                <p className="text-[0.9375rem] font-medium text-foreground">{item.title}</p>
-                {item.detail && <p className="mt-1 text-sm text-muted">{item.detail}</p>}
-              </Row>
+            {/* 経歴は上から順に現れる。まとめて出すと「いつ何をしたか」の
+                順序が読み取りにくいので、行ごとに 70ms ずらす。 */}
+            {profile.education.map((item, i) => (
+              <Reveal key={item.title} delay={i * 70}>
+                <Row term={item.period}>
+                  <p className="text-[0.9375rem] font-medium text-foreground">{item.title}</p>
+                  {item.detail && <p className="mt-1 text-sm text-muted">{item.detail}</p>}
+                </Row>
+              </Reveal>
             ))}
-            {timeline.map((entry) => (
-              <Row key={entry.title} term={entry.date}>
-                <p className="text-[0.9375rem] font-medium text-foreground">{entry.title}</p>
-                <p className="mt-1 text-sm text-muted">{entry.detail}</p>
-              </Row>
+            {timeline.map((entry, i) => (
+              <Reveal key={entry.title} delay={(profile.education.length + i) * 70}>
+                <Row term={entry.date}>
+                  <p className="text-[0.9375rem] font-medium text-foreground">{entry.title}</p>
+                  <p className="mt-1 text-sm text-muted">{entry.detail}</p>
+                </Row>
+              </Reveal>
             ))}
           </dl>
           <ArrowLink href="/research#publications-heading" className="mt-3">
