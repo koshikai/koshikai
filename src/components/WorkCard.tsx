@@ -11,7 +11,7 @@ export function StatusBadge({ work }: { work: Work }) {
         : "border border-muted bg-transparent";
   return (
     <span className="inline-flex items-center gap-1.5 whitespace-nowrap font-mono text-xs text-muted">
-      <span aria-hidden="true" className={`h-1.5 w-1.5 rounded-full ${dot}`} />
+      <span aria-hidden="true" className={`h-1.5 w-1.5 rounded-full ${dot}${work.status === "live" ? " status-pulse" : ""}`} />
       {STATUS_LABELS[work.status]}
     </span>
   );
