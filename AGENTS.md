@@ -87,7 +87,3 @@ SITE_URL=https://koshikai.dev  # canonical / metadata 用 URL
 - `README.md`: プロジェクト概要・クイックスタート
 - `docs/deployment.md`: デプロイ構成の詳細
 - `docs/architecture.md`: アーキテクチャ概要
-
-## 関連リポジトリ
-
-- **`koshikai/notes`**（private）: 数学ナレッジベースの MCP サーバーと DB スキーマ。2026-08 に本リポジトリから分離。数学KB 関連の作業はそちらで行うこと。
