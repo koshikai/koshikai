@@ -93,7 +93,3 @@ Missing .env.prod. Place it in /opt/home/.env.prod or $DEPLOY_DIR/.env.prod befo
 ### レガシーコンテナの移行
 
 workflow 内で古いプロジェクト名のコンテナを検出・削除するロジックがあります。`koshikai-app` などのコンテナ名が競合する場合は自動的にクリーンアップされます。
-
-## 関連リポジトリ
-
-内部の数学ナレッジベース / MCP サーバーは **`koshikai/notes`**（private）に分離されました。そちらのデプロイは `koshikai/notes` の `docker-compose.yml`（notes-mcp サービス、`3104:3004`）を参照してください。

@@ -12,7 +12,6 @@
 | [koshikai.dev](https://koshikai.dev) | ポートフォリオサイト（このリポジトリ） | 公開中 |
 | **Smoke it.** | 喫煙記録 PWA。AI コーチ・週間レポート・バッジ・Web Push 付き | 🔒 非公開 |
 | **KariGallery** | アート作品の管理・閲覧アプリ（モダンプレミアムな UI） | 🔒 非公開 |
-| **notes** | 数学ナレッジベースの MCP サーバー（pgvector によるセマンティック検索対応） | 🔒 非公開 |
 | **sunny-room** | PLATEAU 3D 都市モデルを使った日照シミュレーション Web アプリ | 🔒 非公開 |
 | [bn-edge-removal-public](https://github.com/koshikai/bn-edge-removal-public) | ブーリアンネットワークのエッジ除去制御（強化学習）の研究コード | 公開 |
 
@@ -46,7 +45,7 @@
 
 # koshikai.dev
 
-Next.js で構築した公開ポートフォリオサイトです。数学ナレッジベースと MCP サーバーは [`koshikai/notes`](https://github.com/koshikai/notes)（private）に分離しています。
+Next.js で構築した公開ポートフォリオサイトです。
 
 ## 構成
 

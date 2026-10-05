@@ -100,7 +100,3 @@ bun run build      # standalone 出力（Docker 時）
 6. **PWA**: `manifest.ts` で Web App Manifest を動的生成
 7. **テーマ**: ライトが既定。ダークは手動切り替えのみ（localStorage 永続化、`@variant dark`）。デザイン判断はライト基準で行う
 8. **フォント**: Inter（可変）+ Noto Sans JP（unicode-range 分割版）+ JetBrains Mono。明朝体は使わない
-
-## 関連リポジトリ
-
-数学ナレッジベースと MCP サーバーは **`koshikai/notes`**（private）に分離されています。DB スキーマ・MCP ツール・内部デプロイ構成はそちらを参照してください。
