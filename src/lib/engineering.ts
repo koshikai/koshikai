@@ -19,7 +19,7 @@ export interface Capability {
 
 const SMOKE_IT: Evidence = { label: "Smoke it.", href: "/cases/smoke-it" };
 const KARIGALLERY: Evidence = { label: "KariGallery", href: "/cases/karigallery" };
-const RESEARCH_AGENT: Evidence = { label: "研究エージェント", href: "/cases/research-workflow" };
+const RESEARCH_AGENT: Evidence = { label: "研究エージェント", href: "/cases/ai-research-agent" };
 const THIS_SITE: Evidence = { label: "このサイト", href: "/engineering#pipeline" };
 const HOMELAB: Evidence = { label: "分散インフラ基盤", href: "/cases/immich-distributed" };
 const DEPLOY: Evidence = { label: "デプロイ自動化", href: "/cases/deploy-automation" };
