@@ -87,26 +87,6 @@ export const works: Work[] = [
     featured: true,
   },
   {
-    slug: "notes",
-    name: "notes",
-    tagline: "数学ノートを AI エージェントから検索・参照できる MCP サーバー",
-    summary:
-      "Markdown の数学ノートを PostgreSQL に蓄積し、MCP 経由で AI エージェントがキーワード検索・意味検索・参照・追記できるようにした。",
-    status: "private",
-    since: "2026.03",
-    scope: "設計・実装・デプロイ（単独開発）",
-    operation: "GitHub Actions でビルドし、自宅サーバーの Docker にデプロイ",
-    stack: ["MCP", "TypeScript", "PostgreSQL", "pgvector"],
-    links: {},
-    architecture: [
-      "AI agent",
-      "MCP server（Streamable HTTP / stdio）",
-      "全文検索 pg_trgm ・ 意味検索 pgvector",
-      "PostgreSQL",
-    ],
-    featured: true,
-  },
-  {
     slug: "sunny-room",
     name: "ひだまりマップ",
     tagline: "部屋の窓に日が当たる時間帯を 3D 都市モデル上で確かめる Web アプリ",
@@ -123,7 +103,7 @@ export const works: Work[] = [
       "太陽位置（SunCalc）＋ 遮蔽判定",
       "日照タイムライン",
     ],
-    featured: false,
+    featured: true,
   },
 ];
 

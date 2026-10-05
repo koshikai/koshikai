@@ -19,7 +19,7 @@ export interface Capability {
 
 const SMOKE_IT: Evidence = { label: "Smoke it.", href: "/cases/smoke-it" };
 const KARIGALLERY: Evidence = { label: "KariGallery", href: "/cases/karigallery" };
-const notes: Evidence = { label: "notes", href: "/works#notes" };
+const RESEARCH_AGENT: Evidence = { label: "研究エージェント", href: "/cases/research-workflow" };
 const THIS_SITE: Evidence = { label: "このサイト", href: "/engineering#pipeline" };
 const HOMELAB: Evidence = { label: "分散インフラ基盤", href: "/cases/immich-distributed" };
 const DEPLOY: Evidence = { label: "デプロイ自動化", href: "/cases/deploy-automation" };
@@ -33,12 +33,12 @@ export const capabilities: Capability[] = [
   {
     area: "Backend",
     tools: ["Node.js", "Python", "FastAPI", "Auth.js"],
-    evidence: [notes, SMOKE_IT],
+    evidence: [SMOKE_IT, KARIGALLERY],
   },
   {
     area: "Database",
-    tools: ["PostgreSQL", "Prisma", "pgvector"],
-    evidence: [SMOKE_IT, KARIGALLERY, notes],
+    tools: ["PostgreSQL", "Prisma"],
+    evidence: [SMOKE_IT, KARIGALLERY],
   },
   {
     area: "Infrastructure",
@@ -52,8 +52,8 @@ export const capabilities: Capability[] = [
   },
   {
     area: "AI",
-    tools: ["LLM", "RAG", "MCP", "pgvector"],
-    evidence: [notes, SMOKE_IT],
+    tools: ["LLM", "AI エージェント", "MCP"],
+    evidence: [SMOKE_IT, RESEARCH_AGENT, HOMELAB],
   },
 ];
 
@@ -61,7 +61,7 @@ export const capabilities: Capability[] = [
 export const operationFacts = [
   {
     title: "自分のプロダクトは自分の基盤で動かす",
-    body: "このサイト・Smoke it.・KariGallery・notes は、GitHub Actions でビルドしたイメージを自宅サーバー上の self-hosted runner が Docker Compose でデプロイしています。",
+    body: "このサイト・Smoke it.・KariGallery は、GitHub Actions でビルドしたイメージを自宅サーバー上の self-hosted runner が Docker Compose でデプロイしています。",
   },
   {
     title: "Proxmox で 10 以上のサービスを運用",
@@ -84,7 +84,7 @@ export const operationFacts = [
 export const homelabLayers = [
   { layer: "公開経路", items: ["Cloudflare Tunnel"] },
   { layer: "プロキシ / DNS", items: ["Nginx Proxy Manager", "AdGuard Home"] },
-  { layer: "アプリ", items: ["koshikai.dev", "Smoke it.", "KariGallery", "notes"] },
+  { layer: "アプリ", items: ["koshikai.dev", "Smoke it.", "KariGallery"] },
   { layer: "データ", items: ["PostgreSQL", "Immich（写真・動画）"] },
   { layer: "オフロード", items: ["機械学習処理 → GPU マシン"] },
   { layer: "基盤", items: ["Proxmox VE", "LXC", "Docker"] },

@@ -132,6 +132,12 @@ export const courses: Course[] = [
 /** Research 配下の独立コンテンツ */
 export const researchNotes = [
   {
+    title: "AI 研究アシスタント",
+    description:
+      "研究用に設定した AI エージェント。実験の再現実行、記録値との突き合わせ、選定規則の再計算、実装の read-only 監査を担当し、結果を見る前に条件を固定してハッシュを記録します。",
+    href: "/cases/research-workflow",
+  },
+  {
     title: "LLM Benchmarks",
     description: "主要 LLM の公表ベンチマークを、出典と測定条件をそろえて比較したスナップショット。",
     href: "/llm-benchmarks",

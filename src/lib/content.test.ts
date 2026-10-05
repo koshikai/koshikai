@@ -10,8 +10,8 @@ import { featuredWorks, works } from "./works";
  * トップに肩書きを出さない）からのずれをビルド前に検出する。
  */
 describe("content data", () => {
-  it("features exactly Smoke it., KariGallery and notes on the home page", () => {
-    expect(featuredWorks.map((work) => work.slug)).toEqual(["smoke-it", "karigallery", "notes"]);
+  it("features exactly Smoke it., KariGallery and ひだまりマップ on the home page", () => {
+    expect(featuredWorks.map((work) => work.slug)).toEqual(["smoke-it", "karigallery", "sunny-room"]);
   });
 
   it("links works and research topics only to case studies that exist", () => {
