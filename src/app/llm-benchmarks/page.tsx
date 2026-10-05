@@ -9,9 +9,9 @@ import { BenchmarkView } from "./BenchmarkView";
 
 const site = getSiteConfig();
 
-const title = "LLM Benchmarks Comparison (2026 Snapshot)";
+const title = "LLM Benchmarks Comparison (Oct 2026 Snapshot)";
 const description =
-  "2026年最新世代フロンティアモデル（Claude 5, GPT-5.6 Sol, Gemini 3.6 Flash/3.1 Pro, Qwen 3.7 Max, Kimi K3, DeepSeek V4 Flash等）の定量的ベンチマーク比較グラフ。出典未確定の参考値を含みます。";
+  "2026年最新世代フロンティアモデル（Claude Opus 5.5 / Fable 5.1 / Sonnet 5.5, GPT-6 Astra / GPT-6.1 Sol, Gemini 4 Argon / 3.8 Flash, Qwen3.8 Max, Kimi K3, DeepSeek V4.1 Flash等）の定量的ベンチマーク比較グラフ。掲載は一次情報または明示した第三者リーダーボードに実在する値のみです。";
 
 export const metadata: Metadata = {
   title,
@@ -51,7 +51,7 @@ export default function LlmBenchmarksPage() {
 
         <header className="border-t border-border pt-6 mb-8">
           <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
-            Evaluation Data (2026 Mid-Year Snapshot)
+            Evaluation Data (Oct 2026 Snapshot)
           </p>
           <SplitHeading
             as="h1"
@@ -62,7 +62,7 @@ export default function LlmBenchmarksPage() {
             className="mt-3 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
           />
           <p className="mt-6 max-w-2xl text-base leading-[1.9] text-muted">
-            2026年に発表された最新世代フロンティアモデル（Claude Opus 5 / Fable 5 / Sonnet 5, GPT-5.6 Sol, Gemini 3.6 Flash / 3.1 Pro, Kimi K3, Qwen 3.7 Max, DeepSeek V4 Pro / V4 Flash）の評価スナップショットです。
+            2026年に発表された最新世代フロンティアモデル（Claude Opus 5.5 / Fable 5.1 / Sonnet 5.5, GPT-6 Astra / GPT-6.1 Sol, Gemini 4 Argon / 3.8 Flash, Kimi K3, Qwen3.8 Max, DeepSeek V4.1 Flash / V4 Pro）の評価スナップショットです。
             掲載しているのは各開発元の公表値または明示した第三者リーダーボードに実在する値のみで、推定値による穴埋めは行っていません。
             コストは Artificial Analysis の Cost per Task（同一タスク1回の API 実行コスト）で全モデル横並びに比較できます。
           </p>
@@ -89,11 +89,11 @@ export default function LlmBenchmarksPage() {
               <ul className="mt-3 space-y-2 text-sm leading-[1.9] text-muted">
                 <li>
                   <strong className="text-foreground">N/A は「未公表」を意味します。</strong>{" "}
-                  各社が公表する指標は揃っておらず（例: OpenAI は GPT-5.6 で SWE-bench 系を公表していない）、全モデル×全指標の表は一次情報では埋まりません。空欄を推定値で埋めるより N/A のまま示す方針です。
+                  各社が公表する指標は揃っておらず（例: OpenAI は GPT-6 系で SWE-bench Pro を公表していない）、全モデル×全指標の表は一次情報では埋まりません。空欄を推定値で埋めるより N/A のまま示す方針です。
                 </li>
                 <li>
                   <strong className="text-foreground">同じ指標でも実行条件で数値が変わります。</strong>{" "}
-                  Terminal-Bench 2.1 の Claude Fable 5 は Claude Code (xhigh) で 83.8%、Terminus 2 (high) で 80.4% です。各スコアには条件と出典を併記しています。
+                  Terminal-Bench 4.0 の GPT-6 Astra は Codex (max) で 58.2%、Claude Fable 5.1 は Claude Code (max) で 57.9% です。各スコアには条件と出典を併記しています。
                 </li>
                 <li>
                   <strong className="text-foreground">列をまたいだ比較はできません。</strong>{" "}

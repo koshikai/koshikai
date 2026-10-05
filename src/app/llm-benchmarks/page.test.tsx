@@ -85,9 +85,9 @@ describe("LLM Benchmarks Data", () => {
     }
   });
 
-  // HLE と GDPval-AA v2 は AA の同一ハーネス計測に列を固定する（index と同じ方針）
+  // HLE と GDPval-AA v2.1 は AA の同一ハーネス計測に列を固定する（index と同じ方針）
   it("keeps AA-measured metrics on a single Artificial Analysis source", () => {
-    for (const metricId of ["hle", "gdpval_aa_v2"] as const) {
+    for (const metricId of ["hle", "gdpval_aa_v21"] as const) {
       const scores = LLM_BENCHMARK_SCORES.flatMap((model) =>
         model.scores[metricId] !== null ? [model.scores[metricId]!] : [],
       );
@@ -118,7 +118,7 @@ describe("LlmBenchmarksPage Component & Interactive View", () => {
     expect(
       screen.getByRole("heading", { name: "最新 LLM ベンチマーク測定比較" }),
     ).toBeInTheDocument();
-    expect(screen.getAllByText("Claude Opus 5").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Claude Opus 5.5").length).toBeGreaterThan(0);
 
     fireEvent.click(screen.getByText("データ表 (Table)"));
     expect(screen.getByText("発表日")).toBeInTheDocument();
@@ -142,7 +142,7 @@ describe("LlmBenchmarksPage Component & Interactive View", () => {
 
     expect(
       screen.getByRole("heading", {
-        name: /コスト vs AA Intelligence Index v4\.1/,
+        name: /コスト vs AA Intelligence Index v4\.3\.2/,
       }),
     ).toBeInTheDocument();
     expect(screen.getByText(/横軸: コスト\/タスク/)).toBeInTheDocument();
@@ -189,7 +189,7 @@ describe("LlmBenchmarksPage Component & Interactive View", () => {
   it("shows the cost per task in the chart view", () => {
     render(<LlmBenchmarksPage />);
     expect(screen.getAllByText(/コスト\/タスク:/).length).toBeGreaterThan(0);
-    expect(screen.getByText(/\$0\.03 USD/)).toBeInTheDocument();
+    expect(screen.getByText(/\$0\.27 USD/)).toBeInTheDocument();
   });
 
   // 0-scaleMax で正規化すると GPQA のように差が全長の 3% しかない指標で
@@ -205,7 +205,7 @@ describe("LlmBenchmarksPage Component & Interactive View", () => {
     const ranked = LLM_BENCHMARK_SCORES.filter((m) => m.scores.gpqa_diamond);
     expect(widths).toHaveLength(ranked.length);
 
-    // 実測は 91.0-94.1% なので、0 起点だと全バーが 91% 超で並んでしまう
+    // 実測は 92.8-96.1% なので、0 起点だと全バーが 92% 超で並んでしまう
     expect(Math.min(...widths)).toBeLessThan(25);
     expect(Math.max(...widths)).toBeGreaterThan(80);
   });
