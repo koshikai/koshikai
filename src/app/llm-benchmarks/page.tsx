@@ -11,7 +11,7 @@ const site = getSiteConfig();
 
 const title = "LLM Benchmarks Comparison (Oct 2026 Snapshot)";
 const description =
-  "2026年最新世代フロンティアモデル（Claude Opus 5.5 / Fable 5.1 / Sonnet 5.5, GPT-6 Astra / GPT-6.1 Sol, Gemini 4 Argon / 3.8 Flash, Qwen3.8 Max, Kimi K3, DeepSeek V4.1 Flash等）の定量的ベンチマーク比較グラフ。掲載は一次情報または明示した第三者リーダーボードに実在する値のみです。";
+  "2026年最新世代フロンティアモデル（Claude Opus 5.5 / Fable 5.1 / Sonnet 5.5, GPT-6 Astra / GPT-6.1 Sol, Gemini 4 Argon / 3.8 Flash, Grok 4.7, GLM-5.3, Muse Spark 1.3, Qwen3.8 Max, Kimi K3, DeepSeek V4.1 Flash等）の定量的ベンチマーク比較グラフ。掲載は一次情報または明示した第三者リーダーボードに実在する値のみです。";
 
 export const metadata: Metadata = {
   title,
@@ -62,7 +62,7 @@ export default function LlmBenchmarksPage() {
             className="mt-3 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
           />
           <p className="mt-6 max-w-2xl text-base leading-[1.9] text-muted">
-            2026年に発表された最新世代フロンティアモデル（Claude Opus 5.5 / Fable 5.1 / Sonnet 5.5, GPT-6 Astra / GPT-6.1 Sol, Gemini 4 Argon / 3.8 Flash, Kimi K3, Qwen3.8 Max, DeepSeek V4.1 Flash / V4 Pro）の評価スナップショットです。
+            2026年に発表された最新世代フロンティアモデル（Claude Opus 5.5 / Fable 5.1 / Sonnet 5.5, GPT-6 Astra / GPT-6.1 Sol, Gemini 4 Argon / 3.8 Flash, Grok 4.7, GLM-5.3, Muse Spark 1.3, Kimi K3, Qwen3.8 Max, DeepSeek V4.1 Flash / V4 Pro）の評価スナップショットです。
             掲載しているのは各開発元の公表値または明示した第三者リーダーボードに実在する値のみで、推定値による穴埋めは行っていません。
             コストは Artificial Analysis の Cost per Task（同一タスク1回の API 実行コスト）で全モデル横並びに比較できます。
           </p>

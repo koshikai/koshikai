@@ -205,7 +205,7 @@ describe("LlmBenchmarksPage Component & Interactive View", () => {
     const ranked = LLM_BENCHMARK_SCORES.filter((m) => m.scores.gpqa_diamond);
     expect(widths).toHaveLength(ranked.length);
 
-    // 実測は 92.8-96.1% なので、0 起点だと全バーが 92% 超で並んでしまう
+    // 実測は 91.7-96.1% なので、0 起点だと全バーが 91% 超で並んでしまう
     expect(Math.min(...widths)).toBeLessThan(25);
     expect(Math.max(...widths)).toBeGreaterThan(80);
   });
