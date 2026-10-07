@@ -16,7 +16,7 @@ concurrency:
 
 env:
   REGISTRY: ghcr.io
-  APP_IMAGE_NAME: ${{ github.repository }}
+  APP_IMAGE_NAME: ${{ github.repository }}-app
 
 jobs:
   # lint/test/audit
