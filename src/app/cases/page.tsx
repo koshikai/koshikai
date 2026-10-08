@@ -17,7 +17,6 @@ export default function CasesPage() {
     <main id="main-content">
       <Container>
         <PageHeader
-          label="case studies"
           title="すべての事例"
           description="課題をどう切り分け、何を選び、どう運用・検証したかを事例ごとにまとめています。"
         />
@@ -26,7 +25,6 @@ export default function CasesPage() {
             <section key={axis} aria-labelledby={`cases-${axis}`}>
               <SectionHeader
                 id={`cases-${axis}`}
-                label={AXES[axis].label.toLowerCase()}
                 title={AXES[axis].section}
                 action={{ label: `${AXES[axis].section} へ`, href: AXES[axis].href }}
               />

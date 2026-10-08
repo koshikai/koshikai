@@ -23,7 +23,6 @@ export default function ResearchPage() {
     <main id="main-content">
       <Container>
         <PageHeader
-          label="research — Research"
           title="研究とデータ分析"
           description="ブーリアンネットワークの制御を中心に、強化学習と形式手法を組み合わせた研究をしています。データ分析の実務的なプロジェクトも含め、問題設定・手法・検証結果を分けてまとめています。"
         />
@@ -65,7 +64,7 @@ export default function ResearchPage() {
         </figure>
 
         <section aria-labelledby="publications-heading" className="mt-20">
-          <SectionHeader id="publications-heading" label="publications" title="発表" />
+          <SectionHeader id="publications-heading" title="発表" />
           <ul role="list" className="list-none border-t border-border">
             {publications.map((pub) => (
               <li key={pub.title} className="grid grid-cols-12 gap-x-6 gap-y-2 border-b border-border py-5">
@@ -83,7 +82,7 @@ export default function ResearchPage() {
         </section>
 
         <section aria-labelledby="notes-heading" className="mt-20">
-          <SectionHeader id="notes-heading" label="notes & code" title="関連コンテンツ" />
+          <SectionHeader id="notes-heading" title="関連コンテンツ" />
           <ul role="list" className="grid list-none grid-cols-1 gap-6 md:grid-cols-2">
             {researchNotes.map((note) => (
               <li key={note.href} className="rounded border border-border p-5">
@@ -107,7 +106,7 @@ export default function ResearchPage() {
         </section>
 
         <section aria-labelledby="research-cases" className="mt-20">
-          <SectionHeader id="research-cases" label="case studies" title="研究・分析の事例" />
+          <SectionHeader id="research-cases" title="研究・分析の事例" />
           <CaseList items={getCasesByAxis("research")} />
         </section>
       </Container>

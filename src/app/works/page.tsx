@@ -16,7 +16,6 @@ export default function WorksPage() {
     <main id="main-content">
       <Container>
         <PageHeader
-          label="build — Works"
           title="作ったもの"
           description="課題を見つけて、作り、公開できる状態にするまでを 1 人で担当した作品です。公開中のものは自宅のサーバーで動かしています。"
         />
@@ -70,7 +69,7 @@ export default function WorksPage() {
         </ul>
 
         <section aria-labelledby="build-cases" className="mt-16">
-          <SectionHeader id="build-cases" label="case studies" title="作品の事例" />
+          <SectionHeader id="build-cases" title="作品の事例" />
           <CaseList items={getCasesByAxis("build")} />
         </section>
       </Container>

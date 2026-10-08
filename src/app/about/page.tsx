@@ -39,7 +39,7 @@ export default function AboutPage() {
   return (
     <main id="main-content">
       <Container>
-        <PageHeader label="about" title={profile.name} description={profile.role}>
+        <PageHeader title={profile.name} description={profile.role}>
           <AvailabilityNote className="mt-6" />
         </PageHeader>
 
@@ -78,7 +78,7 @@ export default function AboutPage() {
         </div>
 
         <section aria-labelledby="background-heading" className="mt-20">
-          <SectionHeader id="background-heading" label="background" title="経歴" />
+          <SectionHeader id="background-heading" title="経歴" />
           <dl className="border-t border-border">
             {/* 経歴は上から順に現れる。まとめて出すと「いつ何をしたか」の
                 順序が読み取りにくいので、行ごとに 70ms ずらす。 */}
@@ -107,7 +107,6 @@ export default function AboutPage() {
         <section id="contact" aria-labelledby="contact-heading" className="mt-20 scroll-mt-24">
           <SectionHeader
             id="contact-heading"
-            label="contact"
             title="連絡先"
             description="お仕事・インターンのご相談や、作品・研究についての質問は、以下からご連絡ください。"
           />

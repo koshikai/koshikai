@@ -48,7 +48,7 @@ describe("content data", () => {
   });
 
   it("keeps affiliations and awards out of the hero copy", () => {
-    const hero = [profile.role, profile.lead].join(" ");
+    const hero = [profile.name, profile.lead].join(" ");
     expect(hero).not.toMatch(/大学|研究室|学会|賞|松尾|SCI/);
   });
 

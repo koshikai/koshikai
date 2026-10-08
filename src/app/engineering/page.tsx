@@ -19,7 +19,6 @@ export default function EngineeringPage() {
     <main id="main-content">
       <Container>
         <PageHeader
-          label="operate — Engineering"
           title="動かし続ける基盤"
           description="自宅の Proxmox を基盤に、自分のプロダクトのデプロイ・構成・復旧までを自分で回しています。ここに載せているのは、実際に使って運用している技術だけです。"
         />
@@ -36,7 +35,6 @@ export default function EngineeringPage() {
         <section aria-labelledby="architecture-heading" className="mt-20">
           <SectionHeader
             id="architecture-heading"
-            label="architecture"
             title="デプロイ経路と自宅基盤"
             description="このサイトが push からブラウザに届くまでの経路と、各サービスが載っている自宅基盤の構成です。"
           />
@@ -53,7 +51,6 @@ export default function EngineeringPage() {
         <section aria-labelledby="capabilities-heading" className="mt-20">
           <SectionHeader
             id="capabilities-heading"
-            label="capabilities"
             title="使っている技術と、使った場所"
             description="技術名だけを並べず、どの作品・事例で使ったかを添えています。"
           />
@@ -61,7 +58,7 @@ export default function EngineeringPage() {
         </section>
 
         <section aria-labelledby="operate-cases" className="mt-20">
-          <SectionHeader id="operate-cases" label="case studies" title="運用の事例" />
+          <SectionHeader id="operate-cases" title="運用の事例" />
           <CaseList items={getCasesByAxis("operate")} />
         </section>
       </Container>

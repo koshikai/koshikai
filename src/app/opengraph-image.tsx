@@ -31,16 +31,13 @@ export default async function Image() {
         </span>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 26, color: OG_COLORS.muted }}>
-            Software Engineer / Graduate Student
-          </span>
           <h1
             style={{
               fontFamily: '"JetBrains Mono", monospace',
               fontSize: 110,
               color: OG_COLORS.foreground,
               lineHeight: 1.1,
-              margin: "16px 0 0 0",
+              margin: "0",
             }}
           >
             koshikai

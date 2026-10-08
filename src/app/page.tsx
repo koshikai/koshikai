@@ -54,7 +54,6 @@ export default function Home() {
           className="grid grid-cols-12 gap-x-6 pb-14 pt-16 sm:pb-20 sm:pt-24"
         >
           <div className="col-span-12 lg:col-span-9">
-            <p className="font-mono text-sm text-muted">{profile.role}</p>
             {/* ハンドルは 1 語の欧文なので、傾きを伴う立ち上がりで主役にする */}
             <SplitHeading
               as="h1"
@@ -63,7 +62,7 @@ export default function Home() {
               skew
               delayStart={160}
               delayStep={70}
-              className="mt-3 font-mono text-5xl font-medium tracking-tight text-foreground sm:text-6xl"
+              className="font-mono text-5xl font-medium tracking-tight text-foreground sm:text-6xl"
             />
             {/* 見出しの立ち上がりに続けて、本文は少し遅れて現れる */}
             <Reveal delay={620}>
@@ -150,7 +149,6 @@ export default function Home() {
           <section id="works" aria-labelledby="works-heading">
             <SectionHeader
               id="works-heading"
-              label="build — Works"
               title="作ったもの"
               description="どれも企画から実装・デプロイまで 1 人で担当しています。"
               action={{ label: "すべての作品", href: "/works" }}
@@ -173,7 +171,6 @@ export default function Home() {
           <section id="engineering" aria-labelledby="engineering-heading">
             <SectionHeader
               id="engineering-heading"
-              label="operate — Engineering"
               title="動かし続ける基盤"
               description="デプロイ・構成・復旧までを自分の基盤で回しています。"
               action={{ label: "構成と技術の詳細", href: "/engineering" }}
@@ -202,7 +199,6 @@ export default function Home() {
           <section id="research" aria-labelledby="research-heading">
             <SectionHeader
               id="research-heading"
-              label="research — Research"
               title="研究とデータ分析"
               description="問題設定・手法・検証結果を分けて書いています。"
               action={{ label: "研究の詳細", href: "/research" }}
