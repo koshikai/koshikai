@@ -25,21 +25,21 @@ const axes = [
     keyword: "build",
     section: "Works",
     href: "#works",
-    summary: "Web・AI のプロダクトを、設計からデプロイまで自分で作る。",
+    summary: "Web・AI のプロダクトを設計からデプロイまで自分で作る",
     proof: "3 つの個人プロダクトを単独で開発",
   },
   {
     keyword: "operate",
     section: "Engineering",
     href: "#engineering",
-    summary: "作ったものを、自宅のインフラで動かし続ける。",
+    summary: "作ったものを自宅のインフラで動かし続ける",
     proof: "Proxmox 上で 10 以上のサービスを運用",
   },
   {
     keyword: "research",
     section: "Research",
     href: "#research",
-    summary: "問題を定式化し、実験とデータで検証する。",
+    summary: "実験とデータで仮説を確かめる",
     proof: "強化学習・統計分析による検証",
   },
 ];
@@ -151,7 +151,7 @@ export default function Home() {
             <SectionHeader
               id="works-heading"
               label="build — Works"
-              title="作って、公開して、使える状態にしたもの"
+              title="作ったもの"
               description="どれも企画から実装・デプロイまで 1 人で担当しています。"
               action={{ label: "すべての作品", href: "/works" }}
             />
@@ -174,8 +174,8 @@ export default function Home() {
             <SectionHeader
               id="engineering-heading"
               label="operate — Engineering"
-              title="作るだけでなく、自分で動かし続ける"
-              description="コードを書くところで終わらせず、デプロイ・構成・復旧までを自分の基盤で回しています。"
+              title="動かし続ける基盤"
+              description="デプロイ・構成・復旧までを自分の基盤で回しています。"
               action={{ label: "構成と技術の詳細", href: "/engineering" }}
             />
             <div className="grid grid-cols-12 gap-x-6 gap-y-8">
@@ -203,8 +203,8 @@ export default function Home() {
             <SectionHeader
               id="research-heading"
               label="research — Research"
-              title="問いを立て、データと実験で確かめる"
-              description="研究とデータ分析では、問題設定・手法・検証結果を分けて考えることを大切にしています。"
+              title="研究とデータ分析"
+              description="問題設定・手法・検証結果を分けて書いています。"
               action={{ label: "研究の詳細", href: "/research" }}
             />
             <ul role="list" className="grid list-none grid-cols-1 gap-6 md:grid-cols-2">

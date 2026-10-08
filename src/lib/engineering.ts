@@ -57,7 +57,7 @@ export const capabilities: Capability[] = [
   },
 ];
 
-/** 「作るだけでなく、自分で動かす」を支える運用上の事実 */
+/** 「動かし続ける基盤」を支える運用上の事実 */
 export const operationFacts = [
   {
     title: "自分のプロダクトは自分の基盤で動かす",

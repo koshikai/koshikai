@@ -24,7 +24,7 @@ export default function ResearchPage() {
       <Container>
         <PageHeader
           label="research — Research"
-          title="問いを立て、データと実験で確かめる"
+          title="研究とデータ分析"
           description="ブーリアンネットワークの制御を中心に、強化学習と形式手法を組み合わせた研究をしています。データ分析の実務的なプロジェクトも含め、問題設定・手法・検証結果を分けてまとめています。"
         />
 

@@ -10,7 +10,7 @@ import { operationFacts } from "@/lib/engineering";
 export const metadata: Metadata = {
   title: "Engineering",
   description:
-    "作るだけでなく、自分で動かして運用する。自宅の Proxmox を基盤にしたデプロイ・構成・復旧の仕組みと、実際に使っている技術。",
+    "自宅の Proxmox でデプロイ・構成・復旧まで自分で回しています。実際に使って運用している技術だけを載せています。",
   alternates: { canonical: "/engineering" },
 };
 
@@ -20,7 +20,7 @@ export default function EngineeringPage() {
       <Container>
         <PageHeader
           label="operate — Engineering"
-          title="作るだけでなく、自分で動かし続ける"
+          title="動かし続ける基盤"
           description="自宅の Proxmox を基盤に、自分のプロダクトのデプロイ・構成・復旧までを自分で回しています。ここに載せているのは、実際に使って運用している技術だけです。"
         />
 
