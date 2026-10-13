@@ -115,7 +115,9 @@ export function WorkCard({ work }: { work: Work }) {
         {work.links.live && (
           <ArrowLink href={work.links.live}>{work.status === "demo" ? "デモ" : "サイト"}</ArrowLink>
         )}
-        {!work.links.caseSlug && !work.links.live && (
+        {work.links.download && <ArrowLink href={work.links.download}>ダウンロード</ArrowLink>}
+        {work.links.repo && <ArrowLink href={work.links.repo}>リポジトリ</ArrowLink>}
+        {!work.links.caseSlug && !work.links.live && !work.links.download && !work.links.repo && (
           <ArrowLink href={`/works#${work.slug}`}>詳細</ArrowLink>
         )}
       </div>

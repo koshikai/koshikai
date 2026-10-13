@@ -13,10 +13,10 @@ import { operationFacts } from "@/lib/engineering";
 import { marqueeStack, marqueeWork } from "@/lib/motion";
 import { profile } from "@/lib/profile";
 import { featuredResearch } from "@/lib/research";
-import { featuredWorks } from "@/lib/works";
+import { featuredWorks, works } from "@/lib/works";
 
 /**
- * 30 秒で「Web/AI のプロダクトを作れる」「インフラまで運用できる」
+ * 30 秒で「Web/AI/ゲームのプロダクトを作れる」「インフラまで運用できる」
  * 「研究・データ分析もできる」の3点が伝わることを最優先にした構成。
  * 所属・学会名・受賞はトップに出さない（About と Research に置く）。
  */
@@ -25,8 +25,8 @@ const axes = [
     keyword: "build",
     section: "Works",
     href: "#works",
-    summary: "Web・AI のプロダクトを設計からデプロイまで自分で作る",
-    proof: "3 つの個人プロダクトを単独で開発",
+    summary: "Web・AI・ゲームを、設計から公開まで自分で作る",
+    proof: `${works.length} つの個人プロダクトを単独で開発`,
   },
   {
     keyword: "operate",
@@ -150,7 +150,7 @@ export default function Home() {
             <SectionHeader
               id="works-heading"
               title="作ったもの"
-              description="どれも企画から実装・デプロイまで 1 人で担当しています。"
+              description="どれも企画から実装・公開まで 1 人で担当しています。"
               action={{ label: "すべての作品", href: "/works" }}
             />
             <ul

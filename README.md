@@ -13,6 +13,7 @@
 | **Smoke it.** | 喫煙記録 PWA。AI コーチ・週間レポート・バッジ・Web Push 付き | 🔒 非公開 |
 | **KariGallery** | アート作品の管理・閲覧アプリ（モダンプレミアムな UI） | 🔒 非公開 |
 | **sunny-room** | PLATEAU 3D 都市モデルを使った日照シミュレーション Web アプリ | 🔒 非公開 |
+| [TurboCircuit](https://github.com/koshikai/TurboCircuit) | Unity 製の 3D カートレーシングゲーム（6 コース・アイテム・2P 対戦・オンライン対戦） | 公開 |
 | [bn-edge-removal-public](https://github.com/koshikai/bn-edge-removal-public) | ブーリアンネットワークのエッジ除去制御（強化学習）の研究コード | 公開 |
 
 ## 🛠️ スキル

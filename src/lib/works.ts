@@ -27,6 +27,10 @@ export interface Work {
   stack: string[];
   links: {
     live?: string;
+    /** 配布物の公開先。ゲームのように Web サイトを持たない作品で使う */
+    download?: string;
+    /** ソースを公開している作品のリポジトリ */
+    repo?: string;
     caseSlug?: string;
   };
   /**
@@ -103,6 +107,29 @@ export const works: Work[] = [
       "太陽位置（SunCalc）＋ 遮蔽判定",
       "日照タイムライン",
     ],
+    featured: false,
+  },
+  {
+    slug: "turbo-circuit",
+    name: "Turbo Circuit",
+    tagline: "ドリフトとアイテムで競う 3D カートレーシングゲーム",
+    summary:
+      "ドリフトでブーストを貯め、4 種のアイテムで順位が入れ替わるアーケードレース。6 コース・ドライバー 10 人・カート 8 種に加え、画面分割 2P と最大 8 人のオンライン対戦まで実装した。",
+    status: "live",
+    statusNote: "Windows 64-bit 版を GitHub Releases で配布",
+    since: "2026.10",
+    scope: "企画・設計・実装（単独開発）",
+    operation: "オンライン対戦は Unity Relay 経由（サーバーの常時運用なし）",
+    stack: ["Unity", "C#", "URP", "Unity Relay"],
+    links: {
+      download: "https://github.com/koshikai/TurboCircuit/releases/latest",
+      repo: "https://github.com/koshikai/TurboCircuit",
+    },
+    image: {
+      alt: "Turbo Circuit のレース画面",
+      desktop: { src: "/images/projects/turbo-circuit-desktop.webp", width: 1020, height: 645 },
+      mobile: { src: "/images/projects/turbo-circuit-mobile.webp", width: 780, height: 1688 },
+    },
     featured: true,
   },
 ];

@@ -7,7 +7,7 @@ import { works } from "@/lib/works";
 
 export const metadata: Metadata = {
   title: "Works",
-  description: "koshikai が企画から実装・デプロイまで単独で手がけた Web・AI プロダクト。",
+  description: "koshikai が企画から実装・公開まで単独で手がけた Web アプリ・AI プロダクト・ゲーム。",
   alternates: { canonical: "/works" },
 };
 
@@ -17,7 +17,7 @@ export default function WorksPage() {
       <Container>
         <PageHeader
           title="作ったもの"
-          description="課題を見つけて、作り、公開できる状態にするまでを 1 人で担当した作品です。公開中のものは自宅のサーバーで動かしています。"
+          description="課題を見つけて、作り、公開できる状態にするまでを 1 人で担当した作品です。公開中の Web アプリは自宅のサーバーで動かし、配布物は GitHub Releases で公開しています。"
         />
 
         <ul role="list" className="list-none">
@@ -62,6 +62,10 @@ export default function WorksPage() {
                   {work.links.live && (
                     <ArrowLink href={work.links.live}>{work.status === "demo" ? "デモを見る" : "サイトを開く"}</ArrowLink>
                   )}
+                  {work.links.download && (
+                    <ArrowLink href={work.links.download}>ダウンロード（Windows）</ArrowLink>
+                  )}
+                  {work.links.repo && <ArrowLink href={work.links.repo}>GitHub リポジトリ</ArrowLink>}
                 </div>
               </article>
             </li>
