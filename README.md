@@ -1,4 +1,4 @@
-# 越海 斗 (KOSHI Kaito)
+# 越 海斗 (KOSHI Kaito)
 
 こんにちは 👋 ウェブアプリと深層学習が好きな大学生です。  
 ポートフォリオ: **[koshikai.dev](https://koshikai.dev)**
