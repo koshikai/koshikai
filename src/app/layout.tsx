@@ -70,6 +70,10 @@ export function generateMetadata(): Metadata {
 
 // ライトが既定。明示的にダークを選んだ人だけ、描画前に dark クラスを付ける。
 const themeInitScript = `
+// レンダリング前に html.js を付ける。演出の初期状態（隠す）は
+// このクラスの下だけに定義してあるので、SSR の HTML が一瞬見えてから
+// 隠れるちらつきが出ない。JS 無効なら付かないので中身は最初から見える。
+document.documentElement.classList.add("js");
 try {
   if (localStorage.getItem("theme") === "dark") {
     document.documentElement.classList.add("dark");

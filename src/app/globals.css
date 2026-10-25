@@ -138,21 +138,24 @@ h3 {
   .split-heading .sh-i {
     display: inline-block;
     will-change: transform;
-    transform: translateY(115%);
     transition: transform var(--t-slow) var(--e-out);
   }
 
-  .split-heading.rev .sh-i {
+  /* 隠す初期状態は html.js の下にだけ置く。.js は描画前に付くので、
+     SSR の HTML が一瞬見えてから隠れるちらつきが出ない。JS 無効時は
+     このブロックごと効かず、文字は最初から見えている。 */
+  .js .split-heading.rev .sh-i {
+    transform: translateY(115%);
     transition-delay: var(--ci, 40ms);
   }
 
   /* 英字用: わずかなスキュー＋伸縮を伴う立ち上がり */
-  .split-heading.rev .sh-skew .sh-i {
+  .js .split-heading.rev .sh-skew .sh-i {
     transform: translateY(118%) skewY(6deg) scaleY(1.04);
   }
 
-  .split-heading.rev.in .sh-i,
-  .split-heading.rev.in .sh-skew .sh-i {
+  .js .split-heading.rev.in .sh-i,
+  .js .split-heading.rev.in .sh-skew .sh-i {
     transform: none;
   }
 
@@ -302,15 +305,16 @@ h3 {
 
   /* ============================================
      Reveal — セクションのスクロール進入
-     初期状態の opacity:1 がキモ。JS 無効時は .rev が付かず、
-     そのままの状態で読める（JS 前提で中身を隠さない）。
+     隠す初期状態は html.js 配下にだけ置く。.js は描画前に付くので、
+     SSR の HTML が見えてから隠れるちらつきが出ない。JS 無効時は
+     このブロックごと効かず、中身はそのまま読める。
      ============================================ */
-  .reveal.rev {
+  .js .reveal.rev {
     opacity: 0;
     transform: translateY(18px);
   }
 
-  .reveal.rev.in {
+  .js .reveal.rev.in {
     opacity: 1;
     transform: none;
     transition:

@@ -95,14 +95,14 @@ describe("SplitHeading", () => {
     expect(container.querySelector(".sr-only")).toHaveTextContent("koshikai");
   });
 
-  // .rev が付いて初めて文字が隠れる。JS が動かない環境では付かないので
-  // 中身は表示されたままになる。
-  it("arms the reveal after mount", async () => {
+  // .rev は SSR の時点で付く。隠す初期状態は CSS の html.js 配下だけなので、
+  // 描画直後に隠れる（ちらつく）ことがなく、JS 無効時は何も隠れない。
+  it("renders the armed state from the start", () => {
     const { container } = render(<SplitHeading as="h2" text="koshikai" />);
     const heading = container.querySelector(".split-heading")!;
 
-    expect(heading).not.toHaveClass("rev");
-    await waitFor(() => expect(heading).toHaveClass("rev"));
+    expect(heading).toHaveClass("rev");
+    expect(heading).not.toHaveClass("in");
   });
 
   it("plays once the heading scrolls into view", async () => {

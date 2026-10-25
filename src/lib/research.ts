@@ -94,7 +94,7 @@ export const publications: Publication[] = [
     venue: "SICE FES 2026",
     date: "2026.09",
     format: "ポスター発表",
-    status: "accepted",
+    status: "presented",
     international: true,
   },
   {

@@ -12,13 +12,13 @@ export function ResearchCard({ topic, headingLevel = "h3" }: { topic: ResearchTo
   const Heading = headingLevel;
   return (
     <article id={topic.slug} className="flex h-full flex-col rounded border border-border bg-background p-5 sm:p-6">
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <p className="font-mono text-xs text-muted">{topic.context}</p>
+      <Heading className="text-lg font-semibold tracking-tight text-foreground">{topic.title}</Heading>
+      <div className="mt-2 flex flex-wrap items-baseline justify-between gap-2">
+        <p className="text-xs text-muted">{topic.context}</p>
         {topic.status === "in-progress" && (
           <span className="rounded border border-border px-1.5 py-0.5 font-mono text-[11px] text-muted">in progress</span>
         )}
       </div>
-      <Heading className="mt-2 text-lg font-semibold tracking-tight text-foreground">{topic.title}</Heading>
 
       <dl className="mt-5 space-y-4">
         {ROWS.map((row) => (

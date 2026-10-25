@@ -5,12 +5,10 @@ import { useEffect, useRef, useState, type CSSProperties, type ElementType } fro
 /**
  * SplitHeading — 1 文字ずつ立ち上がる見出し。
  *
- * 1. マウント直後の次フレームで .rev を付与 → 各文字がクリップ内に隠れる
+ * 1. .rev は最初から付ける。隠す初期状態は CSS の `html.js` 配下だけに
+ *    置いてあるので、SSR の HTML が一瞬見えてから隠れるちらつきが出ず、
+ *    JS が動かない環境では文字はそのまま見える（.js は描画前に付く）
  * 2. ビューポート進入で .in → 1 文字ずつ (既定 26ms 刻み) 上に立ち上がる
- *
- * 状態を同期 setState で立てないのは、React 19 の lint
- * (react-hooks/set-state-in-effect) に引っかかるうえ、SSR/JS 無効時に
- * 中身が隠れたままになるのを避けるため。.rev が付かない限り通常表示。
  *
  * 日本語は skew=false (垂直リフト)、欧文は skew=true (わずかな傾き付き)。
  */
@@ -52,13 +50,7 @@ export function SplitHeading({
   threshold = 0.15,
 }: SplitHeadingProps) {
   const ref = useRef<HTMLElement | null>(null);
-  const [reveal, setReveal] = useState(false);
   const [inView, setInView] = useState(false);
-
-  useEffect(() => {
-    const rid = requestAnimationFrame(() => setReveal(true));
-    return () => cancelAnimationFrame(rid);
-  }, []);
 
   useEffect(() => {
     const el = ref.current;
@@ -96,7 +88,7 @@ export function SplitHeading({
     <Tag
       ref={ref}
       id={id}
-      className={`split-heading ${reveal ? "rev" : ""} ${inView ? "in" : ""} ${className}`.trim()}
+      className={`split-heading rev ${inView ? "in" : ""} ${className}`.trim()}
       aria-label={content}
     >
       {/* 読み上げは素のテキストで 1 回だけ。装飾用の分割側は aria-hidden */}

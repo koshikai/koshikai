@@ -87,8 +87,7 @@ export default function ResearchPage() {
           <ul role="list" className="grid list-none grid-cols-1 gap-6 md:grid-cols-2">
             {researchNotes.map((note) => (
               <li key={note.href} className="rounded border border-border p-5">
-                <p className="font-mono text-xs text-muted">note</p>
-                <p className="mt-1.5 text-base font-semibold text-foreground">{note.title}</p>
+                <p className="text-base font-semibold text-foreground">{note.title}</p>
                 <p className="mt-1.5 text-sm leading-[1.8] text-muted">{note.description}</p>
                 <ArrowLink href={note.href} className="mt-2">
                   {note.title} を開く
@@ -96,8 +95,7 @@ export default function ResearchPage() {
               </li>
             ))}
             <li className="rounded border border-border p-5">
-              <p className="font-mono text-xs text-muted">code</p>
-              <p className="mt-1.5 text-base font-semibold text-foreground">{researchCode.label}</p>
+              <p className="text-base font-semibold text-foreground">{researchCode.label}</p>
               <p className="mt-1.5 text-sm leading-[1.8] text-muted">{researchCode.description}</p>
               <ArrowLink href={researchCode.href} className="mt-2">
                 GitHub で見る

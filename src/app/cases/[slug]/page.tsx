@@ -76,9 +76,7 @@ export default async function CaseDetailPage({ params }: CaseDetailPageProps) {
         </nav>
 
         <article className="case-article-shell mt-4">
-          <p className="font-mono text-xs text-muted">
-            {axis.label.toLowerCase()} — case study · {item.publishedAt}
-          </p>
+          <p className="font-mono text-xs text-muted">{item.publishedAt} 公開</p>
           <SplitHeading
             as="h1"
             text={item.title}
