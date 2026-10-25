@@ -6,13 +6,14 @@ import { HomelabStack } from "@/components/HomelabStack";
 import { Container, PageHeader, SectionHeader } from "@/components/ui";
 import { getCasesByAxis } from "@/lib/cases";
 import { operationFacts } from "@/lib/engineering";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Engineering",
   description:
     "自宅の Proxmox でデプロイ・構成・復旧まで自分で回しています。実際に使って運用している技術だけを載せています。",
-  alternates: { canonical: "/engineering" },
-};
+  path: "/engineering",
+});
 
 export default function EngineeringPage() {
   return (

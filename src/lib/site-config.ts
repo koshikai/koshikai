@@ -8,6 +8,7 @@ export interface SiteConfig {
   locale: string;
   name: string;
   title: string;
+  twitterHandle: string;
   twitterTitle: string;
 }
 
@@ -16,6 +17,7 @@ export function getSiteConfig(): SiteConfig {
     baseUrl: BASE_URL,
     name: "koshikai.dev",
     title: "koshikai — build · operate · research",
+    twitterHandle: "@siywyk",
     twitterTitle: "koshikai — build · operate · research",
     headline: "build · operate · research",
     description:

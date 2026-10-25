@@ -2,14 +2,15 @@ import type { Metadata } from "next";
 import { AvailabilityNote } from "@/components/AvailabilityNote";
 import { Reveal } from "@/components/Reveal";
 import { ArrowLink, Container, PageHeader, SectionHeader } from "@/components/ui";
+import { pageMetadata } from "@/lib/metadata";
 import { profile } from "@/lib/profile";
 import { courses, publications } from "@/lib/research";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "About",
   description: "koshikai の経歴・大切にしていること・連絡先。",
-  alternates: { canonical: "/about" },
-};
+  path: "/about",
+});
 
 const principles = [
   {

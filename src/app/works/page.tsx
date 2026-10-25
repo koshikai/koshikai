@@ -3,13 +3,14 @@ import { CaseList } from "@/components/CaseList";
 import { ArrowLink, Container, PageHeader, SectionHeader, Tags } from "@/components/ui";
 import { StatusBadge, WorkThumb } from "@/components/WorkCard";
 import { getCasesByAxis } from "@/lib/cases";
+import { pageMetadata } from "@/lib/metadata";
 import { works } from "@/lib/works";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Works",
   description: "koshikai が企画から実装・公開まで単独で手がけた Web アプリ・AI プロダクト・ゲーム。",
-  alternates: { canonical: "/works" },
-};
+  path: "/works",
+});
 
 export default function WorksPage() {
   return (

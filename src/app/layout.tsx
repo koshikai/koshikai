@@ -52,7 +52,7 @@ export function generateMetadata(): Metadata {
       card: "summary_large_image",
       title: site.twitterTitle,
       description: site.description,
-      creator: "@siywyk",
+      creator: site.twitterHandle,
     },
     robots: {
       index: true,

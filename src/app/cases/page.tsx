@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import { CaseList } from "@/components/CaseList";
 import { Container, PageHeader, SectionHeader } from "@/components/ui";
 import { AXES, getCasesByAxis, type Axis } from "@/lib/cases";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Case Studies",
   description: "課題の切り分けから実装・運用・検証までをまとめた事例の一覧。",
-  alternates: { canonical: "/cases" },
-};
+  path: "/cases",
+});
 
 const ORDER: Axis[] = ["build", "operate", "research"];
 

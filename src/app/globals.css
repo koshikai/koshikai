@@ -242,8 +242,12 @@ h3 {
     transition: transform 0.65s var(--e-out);
   }
 
-  .liquid-btn:hover .lb-dot {
-    transform: scale(64);
+  /* hover 系はポインタのある端末だけで有効にする。タッチ端末ではタップ後に
+     hover が残り、触っていない要素が強調されたままになる。 */
+  @media (hover: hover) {
+    .liquid-btn:hover .lb-dot {
+      transform: scale(64);
+    }
   }
 
   /* ラベル2枚を同じグリッドセルに重ねる。幅は広い方に合わせて決まるので、
@@ -272,13 +276,15 @@ h3 {
     transform: translateY(112%);
   }
 
-  .liquid-btn:hover .lb-cur {
-    transform: translateY(-112%);
-  }
+  @media (hover: hover) {
+    .liquid-btn:hover .lb-cur {
+      transform: translateY(-112%);
+    }
 
-  .liquid-btn:hover .lb-nxt {
-    transform: translateY(0);
-    transition-delay: 60ms;
+    .liquid-btn:hover .lb-nxt {
+      transform: translateY(0);
+      transition-delay: 60ms;
+    }
   }
 
   .liquid-btn .lb-arw {
@@ -287,9 +293,11 @@ h3 {
     transition: opacity 0.25s ease 0.14s, transform 0.45s var(--e-out) 0.14s;
   }
 
-  .liquid-btn:hover .lb-arw {
-    opacity: 1;
-    transform: translateX(0);
+  @media (hover: hover) {
+    .liquid-btn:hover .lb-arw {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
 
   /* ============================================
@@ -397,14 +405,22 @@ h3 {
     transition: transform var(--t-base) var(--e-out);
   }
 
-  .row-hover:hover,
   .row-hover:focus-within {
     background-color: var(--accent-weak);
   }
 
-  .row-hover:hover::before,
   .row-hover:focus-within::before {
     transform: scaleY(1);
+  }
+
+  @media (hover: hover) {
+    .row-hover:hover {
+      background-color: var(--accent-weak);
+    }
+
+    .row-hover:hover::before {
+      transform: scaleY(1);
+    }
   }
 
   /* ============================================
@@ -418,8 +434,10 @@ h3 {
     transition: transform var(--t-base) var(--e-out);
   }
 
-  .work-card:hover .card-thumb img {
-    transform: scale(1.03);
+  @media (hover: hover) {
+    .work-card:hover .card-thumb img {
+      transform: scale(1.03);
+    }
   }
 
   .work-title {
@@ -440,8 +458,10 @@ h3 {
     transition: transform var(--t-base) var(--e-out);
   }
 
-  .work-card:hover .work-title::after {
-    transform: scaleX(1);
+  @media (hover: hover) {
+    .work-card:hover .work-title::after {
+      transform: scaleX(1);
+    }
   }
 
   /* ============================================
@@ -498,14 +518,18 @@ h3 {
 /* hover の塗りは @layer の外に置く。Tailwind v4 は utilities レイヤーを
    components レイヤーより優先するため、レイヤー内に書くと bg-foreground などの
    ユーティリティに負けて、押しても色が変わらない。 */
-.liquid-btn:hover {
-  background-color: var(--lb-fill);
-  border-color: transparent;
+@media (hover: hover) {
+  .liquid-btn:hover {
+    background-color: var(--lb-fill);
+    border-color: transparent;
+  }
 }
 
 /* 枠の色も同じ理由でレイヤー外。border-border ユーティリティに勝たせる */
-.work-card:hover .card-thumb {
-  border-color: var(--accent);
+@media (hover: hover) {
+  .work-card:hover .card-thumb {
+    border-color: var(--accent);
+  }
 }
 
 @keyframes marquee-drift {

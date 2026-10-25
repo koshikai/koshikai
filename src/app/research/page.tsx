@@ -4,14 +4,15 @@ import { CaseList } from "@/components/CaseList";
 import { ResearchCard } from "@/components/ResearchCard";
 import { ArrowLink, Container, PageHeader, SectionHeader } from "@/components/ui";
 import { getCasesByAxis } from "@/lib/cases";
+import { pageMetadata } from "@/lib/metadata";
 import { publications, researchCode, researchNotes, researchTopics } from "@/lib/research";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Research",
   description:
     "強化学習によるネットワーク制御と、データ分析の取り組み。問題設定・手法・検証結果を分けてまとめています。",
-  alternates: { canonical: "/research" },
-};
+  path: "/research",
+});
 
 const figureAlt =
   "Wnt5a モデルの制御結果。上段は目標集合へのハミング距離が時刻 2 で 0 に到達し以後維持される様子、下段は各時刻に除去したエッジを示すヒートマップ。";
