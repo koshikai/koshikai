@@ -53,16 +53,49 @@ export function ThemeToggle() {
     applyTheme(getSnapshot());
   }, [theme]);
 
-  const toggle = useCallback(() => {
+  const toggle = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
     const next: Theme = getSnapshot() === "dark" ? "light" : "dark";
-    try {
-      if (next === "light") localStorage.removeItem(STORAGE_KEY);
-      else localStorage.setItem(STORAGE_KEY, next);
-    } catch {
-      // localStorage が使えない環境では、その場の見た目だけ切り替える
+    const commit = () => {
+      try {
+        if (next === "light") localStorage.removeItem(STORAGE_KEY);
+        else localStorage.setItem(STORAGE_KEY, next);
+      } catch {
+        // localStorage が使えない環境では、その場の見た目だけ切り替える
+      }
+      // View Transition は更新後の DOM を同期的に撮るので、クラスはここで直接切り替える
       applyTheme(next);
+      for (const listener of listeners) listener();
+    };
+
+    const canAnimate =
+      typeof document.startViewTransition === "function" &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!canAnimate) {
+      commit();
+      return;
     }
-    for (const listener of listeners) listener();
+
+    // ボタンの位置を中心に、新しいテーマが円形に広がる
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    const radius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y),
+    );
+    const transition = document.startViewTransition(commit);
+    transition.ready
+      .then(() => {
+        document.documentElement.animate(
+          { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+          {
+            duration: 650,
+            easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+            pseudoElement: "::view-transition-new(root)",
+          },
+        );
+      })
+      .catch(() => {});
   }, []);
 
   const label = theme === "dark" ? "ライトモードに切り替える" : "ダークモードに切り替える";

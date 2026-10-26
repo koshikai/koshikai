@@ -1,4 +1,5 @@
 import { getImageProps } from "next/image";
+import { Tilt } from "@/components/Tilt";
 import { ArrowLink, Tags } from "@/components/ui";
 import { STATUS_LABELS, type Work } from "@/lib/works";
 
@@ -52,35 +53,39 @@ export function WorkThumb({ work, sizes }: { work: Work; sizes: string }) {
     });
 
     return (
-      <div className="card-thumb relative aspect-[390/844] overflow-hidden rounded border border-border bg-surface sm:aspect-[1424/900]">
-        <picture>
-          <source media="(min-width: 40rem)" srcSet={desktopSrcSet} />
-          {/* getImageProps が最適化 URL を生成しているため next/image は使わない */}
-          <img
-            {...mobileProps}
-            srcSet={mobileSrcSet}
-            alt={alt}
-            className="absolute inset-0 h-full w-full object-cover object-top"
-          />
-        </picture>
-      </div>
+      <Tilt>
+        <div className="card-thumb relative aspect-[390/844] overflow-hidden rounded border border-border bg-surface sm:aspect-[1424/900]">
+          <picture>
+            <source media="(min-width: 40rem)" srcSet={desktopSrcSet} />
+            {/* getImageProps が最適化 URL を生成しているため next/image は使わない */}
+            <img
+              {...mobileProps}
+              srcSet={mobileSrcSet}
+              alt={alt}
+              className="absolute inset-0 h-full w-full object-cover object-top"
+            />
+          </picture>
+        </div>
+      </Tilt>
     );
   }
 
   return (
-    <div className="card-thumb flex aspect-[390/844] flex-col justify-center rounded border border-border bg-surface px-5 py-4 sm:aspect-[1424/900]">
-      <p className="font-mono text-[11px] text-muted">architecture</p>
-      <ol role="list" className="mt-3 list-none space-y-1.5">
-        {work.architecture?.map((step, i) => (
-          <li key={step} className="flex items-baseline gap-2 font-mono text-xs text-foreground">
-            <span className="text-accent" aria-hidden="true">
-              {i === 0 ? "›" : "↓"}
-            </span>
-            {step}
-          </li>
-        ))}
-      </ol>
-    </div>
+    <Tilt>
+      <div className="card-thumb flex aspect-[390/844] flex-col justify-center rounded border border-border bg-surface px-5 py-4 sm:aspect-[1424/900]">
+        <p className="font-mono text-[11px] text-muted">architecture</p>
+        <ol role="list" className="mt-3 list-none space-y-1.5">
+          {work.architecture?.map((step, i) => (
+            <li key={step} className="flex items-baseline gap-2 font-mono text-xs text-foreground">
+              <span className="text-accent" aria-hidden="true">
+                {i === 0 ? "›" : "↓"}
+              </span>
+              {step}
+            </li>
+          ))}
+        </ol>
+      </div>
+    </Tilt>
   );
 }
 

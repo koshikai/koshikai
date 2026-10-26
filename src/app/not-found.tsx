@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ArrowLeft, Compass } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { CursorCompass } from "@/components/CursorCompass";
 import { SplitHeading } from "@/components/SplitHeading";
 import { splitIntoChunks } from "@/lib/chunks";
 
@@ -11,8 +12,8 @@ export default function NotFound() {
     >
       <section className="w-full max-w-2xl border-t border-border pt-10 text-center">
         <div className="mx-auto flex h-12 w-12 items-center justify-center border border-border text-accent">
-          {/* 行き先を探している、というページの役割を動きで補う */}
-          <Compass className="notfound-compass h-6 w-6" aria-hidden="true" />
+          {/* 行き先を探している、というページの役割を動きで補う。カーソルを指す */}
+          <CursorCompass className="h-6 w-6" />
         </div>
 
         <SplitHeading

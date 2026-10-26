@@ -440,6 +440,18 @@ h3 {
     }
   }
 
+  /* サムネイルが、ポインタの方へわずかに傾く。マウス操作の環境だけ */
+  @media (hover: hover) {
+    .tilt {
+      transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+      transition: transform var(--t-fast) var(--e-out);
+    }
+  }
+
+  .compass-track {
+    transition: transform var(--t-fast) var(--e-out);
+  }
+
   .work-title {
     position: relative;
     display: inline-block;
@@ -509,6 +521,26 @@ h3 {
   }
 }
 
+.loading-dot {
+  animation: loading-hop 0.9s var(--e-sym) infinite;
+}
+
+@keyframes loading-hop {
+  0%,
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+  40% {
+    transform: translateY(-18px) scale(0.9, 1.1);
+  }
+  60% {
+    transform: translateY(-18px) scale(0.9, 1.1);
+  }
+  90% {
+    transform: translateY(0) scale(1.25, 0.75);
+  }
+}
+
 @keyframes bar-grow {
   from {
     transform: scaleX(0);
@@ -550,6 +582,21 @@ h3 {
   }
 }
 
+/* テーマ切り替えは JS が円形 clip-path で見せる。既定のクロスフェードは切る */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 0;
+}
+
+::view-transition-new(root) {
+  z-index: 1;
+}
+
 /* 動きを減らす設定では、途中の状態を経由せず最終状態にする。
    レイヤーの外に置き、ユーティリティより確実に効かせる。 */
 @media (prefers-reduced-motion: reduce) {
@@ -560,7 +607,8 @@ h3 {
   }
 
   .marquee-track,
-  .marquee-track.rev {
+  .marquee-track.rev,
+  .loading-dot {
     animation: none;
   }
 
@@ -604,7 +652,13 @@ h3 {
   .row-hover::before,
   .card-thumb,
   .card-thumb img,
-  .work-title::after {
+  .work-title::after,
+  .compass-track {
+    transition: none;
+  }
+
+  .tilt {
+    transform: none;
     transition: none;
   }
 
