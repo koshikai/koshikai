@@ -252,14 +252,14 @@ export default function Home() {
                 id="contact-heading"
                 className="text-2xl font-semibold tracking-tight text-foreground"
               >
-                話を聞かせてください
+                Contact
               </h2>
               <p className="mt-3 max-w-2xl text-pretty text-sm leading-[1.8] text-muted">
-                「自分が不便だと思うことを自分で直したい」から始まり、アプリ・インフラ・研究を行き来しながら課題を形にしています。作品や運用について聞きたいことがあれば、気軽に連絡してください。
+                作品や運用について、気軽に連絡してください。
               </p>
             </div>
             <div className="col-span-12 flex flex-wrap items-center gap-x-6 gap-y-2 md:col-span-4 md:justify-end">
-              <LiquidButton href="/about#contact" label="連絡する" labelNext="Get in touch" />
+              <LiquidButton href="/about#contact" label="Contact" labelNext="Get in touch" />
               <ArrowLink href="/about">経歴を見る</ArrowLink>
             </div>
           </section>
