@@ -81,7 +81,7 @@ export default function Home() {
               <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2">
                 <LiquidButton href="/works" label="Works を見る" labelNext="View Works" />
                 <ArrowLink href="https://github.com/koshikai">GitHub</ArrowLink>
-                <ArrowLink href="/about#contact">連絡先</ArrowLink>
+                <ArrowLink href="/about#contact">Contact</ArrowLink>
               </div>
             </Reveal>
           </div>
