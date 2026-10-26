@@ -9,7 +9,6 @@ import { Reveal } from "@/components/Reveal";
 import { SplitHeading } from "@/components/SplitHeading";
 import { ArrowLink, Container, SectionHeader } from "@/components/ui";
 import { WorkCard } from "@/components/WorkCard";
-import { splitIntoChunks } from "@/lib/chunks";
 import { operationFacts } from "@/lib/engineering";
 import { marqueeStack, marqueeWork } from "@/lib/motion";
 import { profile } from "@/lib/profile";
@@ -61,15 +60,15 @@ export default function Home() {
           className="grid grid-cols-12 items-center gap-x-6 gap-y-10 pb-12 pt-16 sm:pb-20 sm:pt-24"
         >
           <div className="col-span-12 lg:col-span-7">
-            {/* 見出しは「何ができる人か」を成果で言い切る。ハンドルはヘッダーに出ている */}
+            {/* ハンドルは 1 語の欧文なので、傾きを伴う立ち上がりで主役にする */}
             <SplitHeading
               as="h1"
               id="hero-heading"
-              text={profile.headline}
-              chunks={splitIntoChunks(profile.headline)}
+              text={profile.name}
+              skew
               delayStart={160}
-              delayStep={50}
-              className="max-w-2xl text-4xl font-semibold tracking-tight text-foreground sm:text-5xl"
+              delayStep={70}
+              className="font-mono text-5xl font-medium tracking-tight text-foreground sm:text-6xl"
             />
             {/* 見出しの立ち上がりに続けて、本文は少し遅れて現れる */}
             <Reveal delay={620}>
