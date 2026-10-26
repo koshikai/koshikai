@@ -10,10 +10,10 @@
 | プロジェクト | 説明 | 状態 |
 |---|---|---|
 | [koshikai.dev](https://koshikai.dev) | ポートフォリオサイト（このリポジトリ） | 公開中 |
-| **Smoke it.** | 喫煙記録 PWA。AI コーチ・週間レポート・バッジ・Web Push 付き | 🔒 非公開 |
-| **KariGallery** | アート作品の管理・閲覧アプリ（モダンプレミアムな UI） | 🔒 非公開 |
-| **sunny-room** | PLATEAU 3D 都市モデルを使った日照シミュレーション Web アプリ | 🔒 非公開 |
-| [TurboCircuit](https://github.com/koshikai/TurboCircuit) | Unity 製の 3D カートレーシングゲーム（6 コース・アイテム・2P 対戦・オンライン対戦） | 公開 |
+| [Smoke it.](https://smoke-it.koshikai.dev) | 喫煙記録 PWA。AI コーチ・週間レポート・バッジ・Web Push 付き | 公開中 |
+| [KariGallery](https://gallery.koshikai.dev) | アート作品の管理・閲覧アプリ（決済機能を無効化したデモとして公開） | デモ公開 |
+| **ひだまりマップ**（sunny-room） | PLATEAU 3D 都市モデルを使った日照シミュレーション Web アプリ | 🔒 非公開 |
+| [TurboCircuit](https://github.com/koshikai/TurboCircuit) | Unity 製の 3D カートレーシングゲーム（6 コース・アイテム・2P 対戦・オンライン対戦）。Windows 64-bit 版を [GitHub Releases](https://github.com/koshikai/TurboCircuit/releases/latest) で配布 | 公開 |
 | [bn-edge-removal-public](https://github.com/koshikai/bn-edge-removal-public) | ブーリアンネットワークのエッジ除去制御（強化学習）の研究コード | 公開 |
 
 ## 🛠️ スキル

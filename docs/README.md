@@ -7,7 +7,6 @@
 | [`architecture.md`](./architecture.md) | ポートフォリオの全体構成、route 一覧、データモデル、セキュリティ、Docker image | 全体像を把握したいとき |
 | [`deployment.md`](./deployment.md) | GitHub Actions の job 構成、Compose 定義、必要なサーバー環境、Troubleshooting | デプロイやサーバー設定を触るとき |
 | [`image-assets.md`](./image-assets.md) | デザインシステム（配色・タイポグラフィ）と画像アセットの要件 | 画像やビジュアルを追加するとき |
-| [`ci-optimization-plan.md`](./ci-optimization-plan.md) | CI/CD 改善の履歴と残課題 | CI を最適化するとき |
 
 ## 設定ファイルのテンプレート
 
