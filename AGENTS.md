@@ -82,6 +82,12 @@ SITE_URL=https://koshikai.dev  # canonical / metadata 用 URL
 - 実際に使っていない技術は載せない。技術を載せるときは使用例（作品・事例）へのリンクを添える
 - トップの Hero 周辺に所属・学会名・受賞・講座名は出さない（About / Research に置く）
 
+## スキル
+
+- `.agents/skills/landing-page-design/` は **ランディングページ（LP）を新規に作るときだけ** 使う。
+  このポートフォリオサイト本体（`src/app/` `src/components/` の既存ページ・UI）の修正・レビューには適用しない。
+  フォント（Inter / Noto Sans JP / JetBrains Mono）、背景、構成などがスキルのルールと食い違うため
+
 ## ドキュメント
 
 - `README.md`: プロジェクト概要・クイックスタート
