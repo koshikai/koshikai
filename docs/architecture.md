@@ -99,4 +99,4 @@ bun run build      # standalone 出力（Docker 時）
 5. **OGP 画像**: `next/og` の `ImageResponse` で動的生成（1200x630）
 6. **PWA**: `manifest.ts` で Web App Manifest を動的生成
 7. **テーマ**: ライトが既定。ダークは手動切り替えのみ（localStorage 永続化、`@variant dark`）。デザイン判断はライト基準で行う
-8. **フォント**: Inter（可変）+ Noto Sans JP（unicode-range 分割版）+ JetBrains Mono。明朝体は使わない
+8. **フォント**: Geist（可変）+ Noto Sans JP（unicode-range 分割版）+ Geist Mono。明朝体は使わない

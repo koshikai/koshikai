@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { getImageProps } from "next/image";
 import { ArrowRight } from "lucide-react";
 import { CapabilityTable } from "@/components/CapabilityTable";
@@ -10,6 +9,7 @@ import { Reveal } from "@/components/Reveal";
 import { SplitHeading } from "@/components/SplitHeading";
 import { ArrowLink, Container, SectionHeader } from "@/components/ui";
 import { WorkCard } from "@/components/WorkCard";
+import { splitIntoChunks } from "@/lib/chunks";
 import { operationFacts } from "@/lib/engineering";
 import { marqueeStack, marqueeWork } from "@/lib/motion";
 import { profile } from "@/lib/profile";
@@ -45,6 +45,8 @@ const axes = [
   },
 ];
 
+const heroProof = axes[1].proof;
+
 export default function Home() {
   // ファーストビューに出す実物。文字だけでは「何を作れる人か」が伝わらないので、
   // 公開中のプロダクトの画面をデータから引いて置く。
@@ -56,46 +58,31 @@ export default function Home() {
       <Container>
         <section
           aria-labelledby="hero-heading"
-          className="grid grid-cols-12 items-center gap-x-6 gap-y-10 pb-14 pt-16 sm:pb-20 sm:pt-24"
+          className="grid grid-cols-12 items-center gap-x-6 gap-y-10 pb-12 pt-16 sm:pb-20 sm:pt-24"
         >
           <div className="col-span-12 lg:col-span-7">
-            {/* ハンドルは 1 語の欧文なので、傾きを伴う立ち上がりで主役にする */}
+            {/* 見出しは「何ができる人か」を成果で言い切る。ハンドルはヘッダーに出ている */}
             <SplitHeading
               as="h1"
               id="hero-heading"
-              text={profile.name}
-              skew
+              text={profile.headline}
+              chunks={splitIntoChunks(profile.headline)}
               delayStart={160}
-              delayStep={70}
-              className="font-mono text-5xl font-medium tracking-tight text-foreground sm:text-6xl"
+              delayStep={50}
+              className="max-w-2xl text-4xl font-semibold tracking-tight text-foreground sm:text-5xl"
             />
             {/* 見出しの立ち上がりに続けて、本文は少し遅れて現れる */}
             <Reveal delay={620}>
               <p className="mt-6 max-w-2xl text-pretty text-lg leading-[1.8] text-foreground sm:text-xl sm:leading-[1.8]">
                 {profile.lead}
               </p>
-              <p className="mt-5 font-mono text-sm text-muted" aria-label="build, operate, research">
-                {profile.keywords.map((keyword, i) => (
-                  <span key={keyword}>
-                    {i > 0 && <span className="px-2 text-accent">·</span>}
-                    {keyword}
-                  </span>
-                ))}
-              </p>
-              <div className="mt-9 flex flex-wrap gap-3">
+              {/* 根拠は 1 つだけ。数字は軸カードの proof と同じ事実を使う */}
+              <p className="mt-4 font-mono text-sm text-muted">{heroProof}</p>
+              {/* 主 CTA は 1 つ。GitHub と連絡先は文字リンクに下げる */}
+              <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2">
                 <LiquidButton href="/works" label="Works を見る" labelNext="View Works" />
-                <LiquidButton
-                  href="https://github.com/koshikai"
-                  label="GitHub"
-                  labelNext="Open GitHub"
-                  variant="outline"
-                />
-                <LiquidButton
-                  href="/about#contact"
-                  label="Contact"
-                  labelNext="Get in touch"
-                  variant="outline"
-                />
+                <ArrowLink href="https://github.com/koshikai">GitHub</ArrowLink>
+                <ArrowLink href="/about#contact">連絡先</ArrowLink>
               </div>
             </Reveal>
           </div>
@@ -141,7 +128,7 @@ export default function Home() {
       </Container>
 
       {/* --- 使っている技術と、手の動きを流す。境界を挟んで本文と分ける --- */}
-      <div className="border-y border-border py-5 sm:py-6">
+      <div className="border-y border-border py-4 sm:py-6">
         <Marquee items={marqueeStack} duration={58} className="font-mono text-sm text-foreground" />
         <Marquee
           items={marqueeWork}
@@ -187,7 +174,7 @@ export default function Home() {
         </nav>
 
         {/* --- Works --- */}
-        <Reveal className="mt-24 sm:mt-28">
+        <Reveal className="mt-24">
           <section id="works" aria-labelledby="works-heading">
             <SectionHeader
               id="works-heading"
@@ -209,7 +196,7 @@ export default function Home() {
         </Reveal>
 
         {/* --- Engineering --- */}
-        <Reveal className="mt-24 sm:mt-28">
+        <Reveal className="mt-24">
           <section id="engineering" aria-labelledby="engineering-heading">
             <SectionHeader
               id="engineering-heading"
@@ -220,9 +207,9 @@ export default function Home() {
             <div className="grid grid-cols-12 gap-x-6 gap-y-8">
               <ul role="list" className="col-span-12 list-none space-y-6 lg:col-span-6">
                 {operationFacts.slice(0, 3).map((fact) => (
-                  <li key={fact.title} className="border-l-2 border-border pl-4">
-                    <p className="text-[0.9375rem] font-semibold text-foreground">{fact.title}</p>
-                    <p className="mt-1.5 text-sm leading-[1.8] text-muted">{fact.body}</p>
+                  <li key={fact.title}>
+                    <p className="text-sm font-semibold text-foreground">{fact.title}</p>
+                    <p className="mt-2 text-sm leading-[1.8] text-muted">{fact.body}</p>
                   </li>
                 ))}
               </ul>
@@ -237,7 +224,7 @@ export default function Home() {
         </Reveal>
 
         {/* --- Research --- */}
-        <Reveal className="mt-24 sm:mt-28">
+        <Reveal className="mt-24">
           <section id="research" aria-labelledby="research-heading">
             <SectionHeader
               id="research-heading"
@@ -255,31 +242,26 @@ export default function Home() {
           </section>
         </Reveal>
 
-        {/* --- About への導線 --- */}
-        <Reveal className="mt-24 sm:mt-28">
+        {/* --- 最後の CTA。Hero の主 CTA が作品への導線、ここは連絡への導線 --- */}
+        <Reveal className="mt-24">
           <section
-            aria-labelledby="about-heading"
-            className="grid grid-cols-12 gap-x-6 gap-y-4 rounded border border-border bg-surface/60 p-6 sm:p-8"
+            aria-labelledby="contact-heading"
+            className="grid grid-cols-12 gap-x-6 gap-y-6 rounded border border-border bg-surface/60 p-6 sm:p-8"
           >
             <div className="col-span-12 md:col-span-8">
               <h2
-                id="about-heading"
-                className="text-lg font-semibold tracking-tight text-foreground"
+                id="contact-heading"
+                className="text-2xl font-semibold tracking-tight text-foreground"
               >
-                About
+                話を聞かせてください
               </h2>
-              <p className="mt-2 max-w-2xl text-pretty text-sm leading-[1.8] text-muted">
-                「自分が不便だと思うことを自分で直したい」から始まり、アプリ・インフラ・研究を行き来しながら課題を形にしています。経歴と連絡先は About にまとめています。
+              <p className="mt-3 max-w-2xl text-pretty text-sm leading-[1.8] text-muted">
+                「自分が不便だと思うことを自分で直したい」から始まり、アプリ・インフラ・研究を行き来しながら課題を形にしています。作品や運用について聞きたいことがあれば、気軽に連絡してください。
               </p>
             </div>
-            <div className="col-span-12 flex flex-wrap items-center gap-x-5 md:col-span-4 md:justify-end">
+            <div className="col-span-12 flex flex-wrap items-center gap-x-6 gap-y-2 md:col-span-4 md:justify-end">
+              <LiquidButton href="/about#contact" label="連絡する" labelNext="Get in touch" />
               <ArrowLink href="/about">経歴を見る</ArrowLink>
-              <Link
-                href="/about#contact"
-                className="focus-ring inline-flex min-h-11 items-center text-sm text-muted underline decoration-border underline-offset-4 transition-colors hover:text-foreground"
-              >
-                連絡先
-              </Link>
             </div>
           </section>
         </Reveal>

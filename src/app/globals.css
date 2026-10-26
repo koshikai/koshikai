@@ -3,10 +3,10 @@
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* 欧文は Inter、和文は Noto Sans JP に落とす。Inter は日本語グリフを
+  /* 欧文は Geist、和文は Noto Sans JP に落とす。Geist は日本語グリフを
      持たないので、並べるだけで文字ごとに書体が振り分けられる。 */
-  --font-sans: "Inter Variable", "Noto Sans JP", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-sans: "Geist Variable", "Noto Sans JP", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 
   --color-background: var(--background);
   --color-surface: var(--surface);

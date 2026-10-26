@@ -32,7 +32,7 @@ export default async function Image({
           fontFamily: '"Noto Sans JP", sans-serif',
         }}
       >
-        <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 24, color: OG_COLORS.muted }}>
+        <span style={{ fontFamily: '"Geist Mono", monospace', fontSize: 24, color: OG_COLORS.muted }}>
           koshikai.dev / {AXES[item.axis].label.toLowerCase()} — case study
         </span>
 
@@ -55,7 +55,7 @@ export default async function Image({
             <span
               key={tag}
               style={{
-                fontFamily: '"JetBrains Mono", monospace',
+                fontFamily: '"Geist Mono", monospace',
                 fontSize: 18,
                 color: OG_COLORS.foreground,
                 border: `1px solid ${OG_COLORS.border}`,

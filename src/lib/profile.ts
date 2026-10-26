@@ -31,6 +31,8 @@ export interface EducationItem {
 export const profile = {
   name: "koshikai",
   role: "Software Engineer / Graduate Student",
+  /** Hero の見出し。ハンドルはヘッダーに出ているので、ここは成果で書く */
+  headline: "作って、動かして、確かめる。",
   lead: "Web・AI のプロダクトを自分で作り、自宅のインフラで動かし続け、研究とデータで検証しています。",
   keywords: ["build", "operate", "research"] as const,
 

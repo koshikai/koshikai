@@ -11,12 +11,12 @@ export async function loadOgFonts() {
   const [sansJa, sansLatin, mono] = await Promise.all([
     readFile(join(fontsDir, "noto-sans-jp", "files", "noto-sans-jp-japanese-700-normal.woff")),
     readFile(join(fontsDir, "noto-sans-jp", "files", "noto-sans-jp-latin-700-normal.woff")),
-    readFile(join(fontsDir, "jetbrains-mono", "files", "jetbrains-mono-latin-400-normal.woff")),
+    readFile(join(fontsDir, "geist-mono", "files", "geist-mono-latin-400-normal.woff")),
   ]);
   return [
     { name: "Noto Sans JP", data: sansLatin, style: "normal" as const, weight: 700 as const },
     { name: "Noto Sans JP", data: sansJa, style: "normal" as const, weight: 700 as const },
-    { name: "JetBrains Mono", data: mono, style: "normal" as const, weight: 400 as const },
+    { name: "Geist Mono", data: mono, style: "normal" as const, weight: 400 as const },
   ];
 }
 

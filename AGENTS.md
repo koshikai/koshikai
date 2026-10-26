@@ -84,9 +84,12 @@ SITE_URL=https://koshikai.dev  # canonical / metadata 用 URL
 
 ## スキル
 
-- `.agents/skills/landing-page-design/` は **ランディングページ（LP）を新規に作るときだけ** 使う。
-  このポートフォリオサイト本体（`src/app/` `src/components/` の既存ページ・UI）の修正・レビューには適用しない。
-  フォント（Inter / Noto Sans JP / JetBrains Mono）、背景、構成などがスキルのルールと食い違うため
+- `.agents/skills/landing-page-design/` は **トップページ（`/`）と、新規に作る LP だけ** に使う。
+  `/works` `/engineering` `/research` `/about` `/cases` など下層ページの修正・レビューには適用しない。
+  日本語本文の行間（1.8）や、日本語見出しの構成などがスキルのルールと食い違うため
+- スキルの値は「一部だけ採用」している。フォントは Geist / Geist Mono + Noto Sans JP（和文の代替）、
+  アイコンは lucide、ダークの背景色はスキルの 6 色に限らない。
+  推薦文・顧客名など実在しないものをスキルの「content realism」に従って作ることはしない
 
 ## ドキュメント
 
