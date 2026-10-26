@@ -26,14 +26,14 @@ export default async function Image() {
           fontFamily: '"Noto Sans JP", sans-serif',
         }}
       >
-        <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 24, color: OG_COLORS.muted }}>
+        <span style={{ fontFamily: '"Geist Mono", monospace', fontSize: 24, color: OG_COLORS.muted }}>
           koshikai.dev
         </span>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <h1
             style={{
-              fontFamily: '"JetBrains Mono", monospace',
+              fontFamily: '"Geist Mono", monospace',
               fontSize: 110,
               color: OG_COLORS.foreground,
               lineHeight: 1.1,
@@ -50,7 +50,7 @@ export default async function Image() {
         <div style={{ display: "flex", borderTop: `1px solid ${OG_COLORS.border}`, paddingTop: 28, gap: 56 }}>
           {axes.map((axis) => (
             <div key={axis.keyword} style={{ display: "flex", alignItems: "baseline", gap: 14 }}>
-              <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 22, color: OG_COLORS.accent }}>
+              <span style={{ fontFamily: '"Geist Mono", monospace', fontSize: 22, color: OG_COLORS.accent }}>
                 {axis.keyword}
               </span>
               <span style={{ fontSize: 26, color: OG_COLORS.foreground }}>{axis.label}</span>

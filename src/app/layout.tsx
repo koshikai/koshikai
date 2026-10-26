@@ -1,13 +1,13 @@
 import type { Metadata, Viewport } from "next";
-// Inter は可変フォント1本で全ウェイトを賄う。Noto Sans JP は unicode-range で
+// Geist は可変フォント1本で全ウェイトを賄う。Noto Sans JP は unicode-range で
 // 分割された版を使い、ページに出る文字を含む断片だけを読み込ませる
 // （japanese-*.css は分割なしの1ファイル約1MBで、全ページがそれを落としていた）。
-import "@fontsource-variable/inter/wght.css";
+import "@fontsource-variable/geist/wght.css";
 import "@fontsource/noto-sans-jp/400.css";
 import "@fontsource/noto-sans-jp/500.css";
 import "@fontsource/noto-sans-jp/700.css";
-import "@fontsource/jetbrains-mono/400.css";
-import "@fontsource/jetbrains-mono/500.css";
+import "@fontsource/geist-mono/400.css";
+import "@fontsource/geist-mono/500.css";
 import "./globals.css";
 import { getSiteConfig } from "@/lib/site-config";
 import { Footer } from "@/components/Footer";

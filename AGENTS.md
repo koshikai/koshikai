@@ -84,12 +84,25 @@ SITE_URL=https://koshikai.dev  # canonical / metadata 用 URL
 
 ## スキル
 
-- `.agents/skills/landing-page-design/` は **ランディングページ（LP）を新規に作るときだけ** 使う。
-  このポートフォリオサイト本体（`src/app/` `src/components/` の既存ページ・UI）の修正・レビューには適用しない。
-  フォント（Inter / Noto Sans JP / JetBrains Mono）、背景、構成などがスキルのルールと食い違うため
+- `.agents/skills/landing-page-design/` は **トップページ（`/`）と、新規に作る LP だけ** に使う。
+  `/works` `/engineering` `/research` `/about` `/cases` など下層ページの修正・レビューには適用しない。
+  日本語本文の行間（1.8）や、日本語見出しの構成などがスキルのルールと食い違うため
+- スキルの値は「一部だけ採用」している。フォントは Geist / Geist Mono + Noto Sans JP（和文の代替）、
+  アイコンは lucide、ダークの背景色はスキルの 6 色に限らない。
+  推薦文・顧客名など実在しないものをスキルの「content realism」に従って作ることはしない
 
 ## ドキュメント
 
 - `README.md`: プロジェクト概要・クイックスタート
 - `docs/deployment.md`: デプロイ構成の詳細
 - `docs/architecture.md`: アーキテクチャ概要
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+## This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
