@@ -16,14 +16,13 @@ export const marqueeStack: string[] = [
 ].filter((tool) => !OMIT.has(tool));
 
 /**
- * 逆方向に流す 2 行目。build / operate / research を実際の手の動きに開いたもの。
- * 肩書きではなく作業を並べ、Hero の主張を言い換えずに補強する。
+ * 逆方向に流す 2 行目。build / operate / research の具体的な領域。
  */
 export const marqueeWork: string[] = [
-  "作る",
-  "公開する",
-  "動かし続ける",
-  "壊れたら直す",
-  "計測する",
-  "確かめる",
+  "設計・実装",
+  "CI/CD 自動化",
+  "自宅サーバー運用",
+  "バックアップ・復旧",
+  "数理モデリング",
+  "データ分析・検証",
 ];

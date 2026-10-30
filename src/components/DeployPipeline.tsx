@@ -2,8 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { pipelineSteps } from "@/lib/engineering";
 
 /**
- * このサイト自体のデプロイ経路。「運用できる」を文章で主張する代わりに、
- * いま見ているページがどう届いているかをそのまま見せる。
+ * このサイト自体のデプロイ経路。
  * 縦並びにしておけば、スマホでも横スクロールなしで同じ図が読める。
  *
  * スクロールで図に入ると、上から順にステップが点灯し、次のステップへ
@@ -46,7 +45,7 @@ export function DeployPipeline() {
   return (
     <figure id="pipeline" ref={ref} className={`pipeline rounded border border-border bg-background ${stateClass}`}>
       <figcaption className="flex flex-wrap items-baseline justify-between gap-2 border-b border-border px-5 py-3">
-        <span className="text-sm font-medium text-foreground">このサイトが届くまで</span>
+        <span className="text-sm font-medium text-foreground">デプロイパイプライン</span>
         <span className="font-mono text-[11px] text-muted">.github/workflows/deploy.yml</span>
       </figcaption>
       <ol role="list" className="list-none px-5 py-4">

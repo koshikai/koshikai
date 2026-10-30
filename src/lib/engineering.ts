@@ -57,23 +57,23 @@ export const capabilities: Capability[] = [
   },
 ];
 
-/** 「動かし続ける基盤」を支える運用上の事実 */
+/** インフラ・運用の概要 */
 export const operationFacts = [
   {
-    title: "自分のプロダクトは自分の基盤で動かす",
-    body: "このサイト・Smoke it.・KariGallery は、GitHub Actions でビルドしたイメージを自宅サーバー上の self-hosted runner が Docker Compose でデプロイしています。",
+    title: "自宅サーバーへの自動デプロイ",
+    body: "このサイト・Smoke it.・KariGallery は、GitHub Actions でビルドしたコンテナイメージを自宅サーバー上の self-hosted runner が Docker Compose でデプロイしています。",
   },
   {
     title: "Proxmox で 10 以上のサービスを運用",
-    body: "Proxmox VE と LXC の上で、リバースプロキシ（Nginx Proxy Manager）・DNS フィルタ・写真管理などを一貫した手順で管理しています。",
+    body: "Proxmox VE と LXC 上で、リバースプロキシ（Nginx Proxy Manager）・DNS フィルタ・写真管理などを共通の手順で管理しています。",
   },
   {
-    title: "資源が足りなければ構成で解く",
-    body: "写真管理の機械学習処理だけを GPU のある別マシンへオフロードし、常時稼働の省電力サーバーと処理性能を両立しました。",
+    title: "機械学習処理の GPU オフロード",
+    body: "写真管理の機械学習処理だけを GPU のある別マシンへオフロードし、常時稼働サーバーの省電力性と処理性能を両立しました。",
   },
   {
-    title: "壊れたときに戻せるようにする",
-    body: "写真・動画の定期バックアップと保持方針を決め、復旧手順を文書にしています。",
+    title: "バックアップと復旧手順の整備",
+    body: "写真・動画データの定期バックアップと世代保持方針を定め、障害時の復元手順を文書化しています。",
   },
 ];
 

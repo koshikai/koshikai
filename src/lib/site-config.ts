@@ -21,7 +21,7 @@ export function getSiteConfig(): SiteConfig {
     twitterTitle: "koshikai — build · operate · research",
     headline: "build · operate · research",
     description:
-      "ソフトウェアエンジニア koshikai のポートフォリオ。Web・AI のプロダクトを自分で作り、自宅のインフラで運用し、研究とデータ分析で検証しています。",
+      "ソフトウェアエンジニア koshikai のポートフォリオ。Web・AI のプロダクト開発、自宅サーバーでのインフラ運用、強化学習・統計モデルの研究を掲載しています。",
     locale: "ja_JP",
     keywords: [
       "koshikai",

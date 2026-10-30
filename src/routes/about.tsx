@@ -10,7 +10,7 @@ export const Route = createFileRoute("/about")({
   head: () =>
     pageHead({
       title: "About",
-      description: "koshikai の経歴・大切にしていること・連絡先。",
+      description: "koshikai の経歴・開発方針・連絡先。",
       path: "/about",
     }),
   component: AboutPage,
@@ -18,16 +18,16 @@ export const Route = createFileRoute("/about")({
 
 const principles = [
   {
-    title: "生活の不便を仕組みに置き換える",
-    body: "日常で繰り返す手間を見つけ、続けて使える仕組みとして設計・実装します。",
+    title: "日常の課題をツール化する",
+    body: "手作業や不便なフローを見つけ、継続して使えるソフトウェアとして設計・実装します。",
   },
   {
-    title: "作って終わりにしない",
-    body: "デプロイ・バックアップ・復旧手順まで含めて、動かし続けられる状態を目指します。",
+    title: "運用・保守まで含めて設計する",
+    body: "自動デプロイ・バックアップ・復旧手順まで整備し、長期稼働できる構成にします。",
   },
   {
-    title: "データの価値を保つ",
-    body: "年月が経っても参照でき、移行や拡張に耐えるデータ構造を考えます。",
+    title: "移行しやすいデータ構造を保つ",
+    body: "長期運用でも参照・移行・拡張しやすいスキーマと保存形式を選びます。",
   },
 ];
 
@@ -55,18 +55,18 @@ function AboutPage() {
             </h2>
             <div className="max-w-2xl space-y-5 text-[0.9375rem] leading-[1.95] text-foreground">
               <p>
-                不便に感じたことを、自分の手で仕組みに置き換えて解決したい。その思いがものづくりの原点です。日常を便利にする小さなスクリプトから始まり、自宅サーバーでインフラを整え、論文を読みながら数理モデルの検証を行うようになりました。
+                日常の不便や手作業をソフトウェアで解決することから開発を始めました。小さな自動化スクリプトからスタートし、現在は Web アプリケーションの開発、自宅サーバーでのインフラ構築・運用、大学院での数理モデル研究に取り組んでいます。
               </p>
               <p>
-                Web アプリの開発、自宅サーバーの運用、大学院での研究と触れる領域は広いですが、根底にあるのは「目の前の課題をコードと仕組みで解く」という一貫した姿勢です。
+                Web 開発、インフラ運用、数理モデル・統計分析と複数の領域を扱っていますが、いずれも「課題を定義し、再現可能なコードと構成で解決する」ことを軸にしています。
               </p>
-              <p>最近は、LLM やエージェント技術を机上の検証にとどめず、実際の運用や日々の開発環境にどう定着させられるかに関心を持っています。</p>
+              <p>最近は、LLM やエージェント技術を単発の検証にとどめず、実際のサービス運用や研究ワークフローに組み込む設計に関心を持っています。</p>
             </div>
           </section>
 
           <section aria-labelledby="principles-heading" className="col-span-12 lg:col-span-5">
             <h2 id="principles-heading" className="font-mono text-xs text-muted">
-              大切にしていること
+              開発・運用の方針
             </h2>
             <ol role="list" className="mt-4 list-none border-t border-border">
               {principles.map((item, i) => (
@@ -85,8 +85,6 @@ function AboutPage() {
         <section aria-labelledby="background-heading" className="mt-20">
           <SectionHeader id="background-heading" title="経歴" />
           <dl className="border-t border-border">
-            {/* 経歴は上から順に現れる。まとめて出すと「いつ何をしたか」の
-                順序が読み取りにくいので、行ごとに 70ms ずらす。 */}
             {profile.education.map((item, i) => (
               <Reveal key={item.title} delay={i * 70}>
                 <Row term={item.period}>

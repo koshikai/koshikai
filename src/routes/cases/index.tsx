@@ -8,7 +8,7 @@ export const Route = createFileRoute("/cases/")({
   head: () =>
     pageHead({
       title: "Case Studies",
-      description: "課題の切り分けから実装・運用・検証までをまとめた事例の一覧。",
+      description: "開発・インフラ運用・研究の各プロジェクトにおける課題と実装・検証の記録。",
       path: "/cases",
     }),
   component: CasesPage,
@@ -21,8 +21,8 @@ function CasesPage() {
     <main id="main-content">
       <Container>
         <PageHeader
-          title="すべての事例"
-          description="課題をどう切り分け、何を選び、どう運用・検証したかを事例ごとにまとめています。"
+          title="事例一覧"
+          description="開発・インフラ運用・研究の各プロジェクトにおける課題と実装・検証の記録です。"
         />
         <div className="space-y-16">
           {ORDER.map((axis) => (

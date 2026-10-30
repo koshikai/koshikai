@@ -27,8 +27,8 @@ export const Route = createFileRoute("/")({
 });
 
 /**
- * 30 秒で「Web/AI/ゲームのプロダクトを作れる」「インフラまで運用できる」
- * 「研究・データ分析もできる」の3点が伝わることを最優先にした構成。
+ * 30 秒で「Web/AI/ゲームのプロダクト開発」「インフラ運用」
+ * 「研究・データ分析」の3点が伝わる構成。
  * 所属・学会名・受賞はトップに出さない（About と Research に置く）。
  */
 const axes = [
@@ -36,21 +36,21 @@ const axes = [
     keyword: "build",
     section: "Works",
     href: "#works",
-    summary: "Web・AI・ゲームを、設計から公開まで自分で作る",
+    summary: "Web・AI・ゲームの個人開発",
     proof: `${works.length} つの個人プロダクトを単独で開発`,
   },
   {
     keyword: "operate",
     section: "Engineering",
     href: "#engineering",
-    summary: "作ったものを自宅のインフラで動かし続ける",
+    summary: "自宅サーバーと CI/CD によるインフラ運用",
     proof: "Proxmox 上で 10 以上のサービスを運用",
   },
   {
     keyword: "research",
     section: "Research",
     href: "#research",
-    summary: "実験とデータで仮説を確かめる",
+    summary: "強化学習と統計モデルによる検証",
     proof: "強化学習・統計分析による検証",
   },
 ];
@@ -58,8 +58,6 @@ const axes = [
 const heroProof = axes[1].proof;
 
 function Home() {
-  // ファーストビューに出す実物。文字だけでは「何を作れる人か」が伝わらないので、
-  // 公開中のプロダクトの画面をデータから引いて置く。
   const heroWork = works.find((work) => work.slug === "smoke-it");
 
   return (
@@ -71,7 +69,6 @@ function Home() {
           className="grid grid-cols-12 items-center gap-x-6 gap-y-10 pb-12 pt-16 sm:pb-20 sm:pt-24"
         >
           <div className="col-span-12 lg:col-span-7">
-            {/* ハンドルは 1 語の欧文なので、傾きを伴う立ち上がりで主役にする */}
             <SplitHeading
               as="h1"
               id="hero-heading"
@@ -81,14 +78,11 @@ function Home() {
               delayStep={70}
               className="font-mono text-5xl font-medium tracking-tight text-foreground sm:text-6xl"
             />
-            {/* 見出しの立ち上がりに続けて、本文は少し遅れて現れる */}
             <Reveal delay={620}>
               <p className="mt-6 max-w-2xl text-pretty text-lg leading-[1.8] text-foreground sm:text-xl sm:leading-[1.8]">
                 {profile.lead}
               </p>
-              {/* 根拠は 1 つだけ。数字は軸カードの proof と同じ事実を使う */}
               <p className="mt-4 font-mono text-sm text-muted">{heroProof}</p>
-              {/* 主 CTA は 1 つ。GitHub と連絡先は文字リンクに下げる */}
               <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2">
                 <LiquidButton href="/works" label="Works を見る" labelNext="View Works" />
                 <ArrowLink href="https://github.com/koshikai">GitHub</ArrowLink>
@@ -101,12 +95,8 @@ function Home() {
             <div className="col-span-12 lg:col-span-5">
               <Reveal delay={240}>
                 <figure>
-                  {/* 枠は「実際に開いている画面」に見える程度に留める。
-                      装飾を足すより、UI の文字が読める大きさで置く方が伝わる。 */}
                   <div className="w-[68%] max-w-[260px] sm:w-auto sm:max-w-none">
                     <div className="overflow-hidden rounded border border-border bg-surface shadow-[0_1px_2px_rgba(0,0,0,0.05),0_18px_40px_-24px_rgba(0,0,0,0.35)] sm:rounded-md">
-                      {/* ブラウザ枠は横長のときだけ。縦長の実機比で出す画面に
-                          URL バーを付けると、何の画面か分からなくなる */}
                       <div className="hidden items-center gap-2 border-b border-border px-3 py-2 sm:flex">
                         <span aria-hidden="true" className="flex justify-center gap-1">
                           <span className="h-1.5 w-1.5 rounded-full bg-border" />
@@ -137,7 +127,7 @@ function Home() {
         </section>
       </Container>
 
-      {/* --- 使っている技術と、手の動きを流す。境界を挟んで本文と分ける --- */}
+      {/* --- 使用技術と担当領域 --- */}
       <div className="border-y border-border py-4 sm:py-6">
         <Marquee items={marqueeStack} duration={58} className="font-mono text-sm text-foreground" />
         <Marquee
@@ -149,7 +139,7 @@ function Home() {
       </div>
 
       <Container className="mt-16 sm:mt-20">
-        {/* --- 3 軸の概要。数字を並べるより先に「何ができる人か」を伝える --- */}
+        {/* --- 3 軸の概要 --- */}
         <nav aria-label="3つの軸">
           <ul
             role="list"
@@ -188,9 +178,9 @@ function Home() {
           <section id="works" aria-labelledby="works-heading">
             <SectionHeader
               id="works-heading"
-              title="作ったもの"
-              description="どれも企画から実装・公開まで 1 人で担当しています。"
-              action={{ label: "すべての作品", href: "/works" }}
+              title="開発プロダクト"
+              description="企画から設計・実装・公開まで単独で開発したプロダクトです。"
+              action={{ label: "作品一覧", href: "/works" }}
             />
             <ul
               role="list"
@@ -210,8 +200,8 @@ function Home() {
           <section id="engineering" aria-labelledby="engineering-heading">
             <SectionHeader
               id="engineering-heading"
-              title="動かし続ける基盤"
-              description="デプロイ・構成・復旧までを自分の基盤で回しています。"
+              title="インフラと運用"
+              description="自宅の Proxmox 基盤で、デプロイ自動化・構成管理・バックアップを運用しています。"
               action={{ label: "構成と技術の詳細", href: "/engineering" }}
             />
             <div className="grid grid-cols-12 gap-x-6 gap-y-8">
@@ -239,7 +229,7 @@ function Home() {
             <SectionHeader
               id="research-heading"
               title="研究とデータ分析"
-              description="問題設定・手法・検証結果を分けて書いています。"
+              description="強化学習によるネットワーク制御と、実データを用いた統計分析の取り組みです。"
               action={{ label: "研究の詳細", href: "/research" }}
             />
             <ul role="list" className="grid list-none grid-cols-1 gap-6 md:grid-cols-2">
@@ -252,7 +242,7 @@ function Home() {
           </section>
         </Reveal>
 
-        {/* --- 最後の CTA。Hero の主 CTA が作品への導線、ここは連絡への導線 --- */}
+        {/* --- Contact CTA --- */}
         <Reveal className="mt-24">
           <section
             aria-labelledby="contact-heading"

@@ -22,8 +22,8 @@ function WorksPage() {
     <main id="main-content">
       <Container>
         <PageHeader
-          title="作ったもの"
-          description="課題を見つけて、作り、公開できる状態にするまでを 1 人で担当した作品です。公開中の Web アプリは自宅のサーバーで動かし、配布物は GitHub Releases で公開しています。"
+          title="開発プロダクト"
+          description="企画・設計・実装・公開まで単独で開発したプロダクトです。公開中の Web アプリは自宅サーバーで運用し、配布物は GitHub Releases で公開しています。"
         />
 
         <ul role="list" className="list-none">
@@ -79,7 +79,7 @@ function WorksPage() {
         </ul>
 
         <section aria-labelledby="build-cases" className="mt-16">
-          <SectionHeader id="build-cases" title="作品の事例" />
+          <SectionHeader id="build-cases" title="開発の事例" />
           <CaseList items={getCasesByAxis("build")} />
         </section>
       </Container>

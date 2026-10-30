@@ -13,7 +13,7 @@ export const Route = createFileRoute("/engineering")({
     pageHead({
       title: "Engineering",
       description:
-        "自宅の Proxmox でデプロイ・構成・復旧まで自分で回しています。実際に使って運用している技術だけを載せています。",
+        "自宅の Proxmox を基盤に、開発プロダクトの自動デプロイ・構成管理・バックアップを運用しています。",
       path: "/engineering",
     }),
   component: EngineeringPage,
@@ -24,8 +24,8 @@ function EngineeringPage() {
     <main id="main-content">
       <Container>
         <PageHeader
-          title="動かし続ける基盤"
-          description="自宅の Proxmox を基盤に、自分のプロダクトのデプロイ・構成・復旧までを自分で回しています。ここに載せているのは、実際に使って運用している技術だけです。"
+          title="インフラと運用"
+          description="自宅の Proxmox VE を基盤に、個人プロダクトの自動デプロイ・構成管理・バックアップを運用しています。実際に運用で使用している技術のみを掲載しています。"
         />
 
         <ul role="list" className="grid list-none grid-cols-1 gap-px overflow-hidden rounded border border-border bg-border sm:grid-cols-2">
@@ -40,8 +40,8 @@ function EngineeringPage() {
         <section aria-labelledby="architecture-heading" className="mt-20">
           <SectionHeader
             id="architecture-heading"
-            title="デプロイ経路と自宅基盤"
-            description="このサイトが push からブラウザに届くまでの経路と、各サービスが載っている自宅基盤の構成です。"
+            title="デプロイ構成と自宅サーバー"
+            description="main ブランチへの push から本番反映までのパイプラインと、自宅基盤のレイヤー構成です。"
           />
           <div className="grid grid-cols-12 gap-x-6 gap-y-8">
             <div className="col-span-12 lg:col-span-5">
@@ -56,8 +56,8 @@ function EngineeringPage() {
         <section aria-labelledby="capabilities-heading" className="mt-20">
           <SectionHeader
             id="capabilities-heading"
-            title="使っている技術と、使った場所"
-            description="技術名だけを並べず、どの作品・事例で使ったかを添えています。"
+            title="使用技術と適用先"
+            description="各技術と、それを使用しているプロダクト・事例の対応一覧です。"
           />
           <CapabilityTable />
         </section>
