@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import type { CaseItem } from "@/lib/cases";
 import { Tags } from "@/components/ui";
@@ -9,7 +9,8 @@ export function CaseList({ items }: { items: CaseItem[] }) {
       {items.map((item) => (
         <li key={item.slug} className="row-hover border-b border-border">
           <Link
-            href={`/cases/${item.slug}`}
+            to="/cases/$slug"
+            params={{ slug: item.slug }}
             className="focus-ring group grid grid-cols-12 gap-x-6 gap-y-2 py-5 sm:py-6"
           >
             <div className="col-span-12 md:col-span-8">

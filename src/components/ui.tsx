@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { SplitHeading } from "@/components/SplitHeading";
 import { splitIntoChunks } from "@/lib/chunks";
@@ -128,7 +128,7 @@ export function ArrowLink({
     );
   }
   return (
-    <Link href={href} className={`${arrowLinkClass} ${className}`}>
+    <Link to={href} className={`${arrowLinkClass} ${className}`}>
       <span>{children}</span>
       <ArrowRight
         className="h-3.5 w-3.5 text-muted transition-[transform,color] group-hover:translate-x-0.5 group-hover:text-accent motion-reduce:transition-none"
@@ -165,7 +165,7 @@ export function ButtonLink({
       {content}
     </a>
   ) : (
-    <Link href={href} className={className}>
+    <Link to={href} className={className}>
       {content}
     </Link>
   );

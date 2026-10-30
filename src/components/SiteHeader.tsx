@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 import { Container } from "@/components/ui";
 import { PrimaryNav } from "@/components/PrimaryNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -8,7 +8,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-border bg-background">
       <Container className="flex flex-wrap items-center justify-between gap-x-6">
         <Link
-          href="/"
+          to="/"
           className="focus-ring inline-flex min-h-14 items-center font-mono text-sm font-medium tracking-tight text-foreground transition-colors hover:text-accent"
         >
           koshikai<span className="text-muted">.dev</span>

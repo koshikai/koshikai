@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 import { Container } from "@/components/ui";
 import { AvailabilityNote } from "@/components/AvailabilityNote";
 import { primaryNav } from "@/lib/navigation";
@@ -26,7 +26,7 @@ export function Footer() {
       <Container className="grid grid-cols-12 gap-x-6 gap-y-10 py-12 sm:py-14">
         <div className="col-span-12 md:col-span-5">
           <Link
-            href="/"
+            to="/"
             className="focus-ring font-mono text-sm font-medium text-foreground transition-colors hover:text-accent"
           >
             koshikai<span className="text-muted">.dev</span>
@@ -39,7 +39,7 @@ export function Footer() {
           <Column title="Site">
             {primaryNav.map((item) => (
               <li key={item.href}>
-                <Link href={item.href} className={linkClass}>
+                <Link to={item.href} className={linkClass}>
                   {item.label}
                 </Link>
               </li>
@@ -47,12 +47,12 @@ export function Footer() {
           </Column>
           <Column title="More">
             <li>
-              <Link href="/cases" className={linkClass}>
+              <Link to="/cases" className={linkClass}>
                 All case studies
               </Link>
             </li>
             <li>
-              <Link href="/llm-benchmarks" className={linkClass}>
+              <Link to="/llm-benchmarks" className={linkClass}>
                 LLM Benchmarks
               </Link>
             </li>
@@ -79,8 +79,8 @@ export function Footer() {
         <div className="col-span-12 flex flex-col gap-1 border-t border-border pt-6 text-xs text-muted sm:flex-row sm:justify-between">
           <p>© {new Date().getFullYear()} koshikai</p>
           <p>
-            Next.js ·{" "}
-            <Link href="/engineering#pipeline" className="focus-ring underline decoration-border underline-offset-4 transition-colors hover:text-foreground hover:decoration-foreground">
+            TanStack Start ·{" "}
+            <Link to="/engineering" hash="pipeline" className="focus-ring underline decoration-border underline-offset-4 transition-colors hover:text-foreground hover:decoration-foreground">
               自宅の Proxmox から配信
             </Link>
           </p>

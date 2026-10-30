@@ -1,7 +1,4 @@
-"use client";
-
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, useLocation } from "@tanstack/react-router";
 import { isNavActive, primaryNav } from "@/lib/navigation";
 
 /**
@@ -9,7 +6,7 @@ import { isNavActive, primaryNav } from "@/lib/navigation";
  * 開閉のための JS と、開かないと行き先が見えない状態の両方を避けられる。
  */
 export function PrimaryNav() {
-  const pathname = usePathname();
+  const pathname = useLocation({ select: (location) => location.pathname });
 
   return (
     <nav aria-label="グローバルナビゲーション">
@@ -19,7 +16,7 @@ export function PrimaryNav() {
           return (
             <li key={item.href}>
               <Link
-                href={item.href}
+                to={item.href}
                 aria-current={active ? "page" : undefined}
                 className={`focus-ring relative inline-flex min-h-11 items-center px-2 text-sm transition-colors sm:px-3 ${
                   active ? "font-medium text-foreground" : "text-muted hover:text-foreground"

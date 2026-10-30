@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 
 /**
@@ -63,7 +63,7 @@ export function LiquidButton({
       {content}
     </a>
   ) : (
-    <Link href={href} className={className_}>
+    <Link to={href} className={className_}>
       {content}
     </Link>
   );

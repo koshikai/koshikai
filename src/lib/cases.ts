@@ -155,11 +155,13 @@ export const caseItems: CaseItem[] = [
   },
 ];
 
+const mdxFiles = import.meta.glob<{ default: ComponentType }>("../content/cases/*.mdx");
+
 const caseMdxModules: Record<string, () => Promise<{ default: ComponentType }>> =
   Object.fromEntries(
     caseItems.map((item) => [
       item.slug,
-      () => import(`@/content/cases/${item.slug}.mdx`),
+      mdxFiles[`../content/cases/${item.slug}.mdx`] ?? (() => import(`@/content/cases/${item.slug}.mdx`)),
     ]),
   );
 
