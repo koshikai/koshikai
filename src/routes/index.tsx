@@ -14,7 +14,7 @@ import { marqueeStack, marqueeWork } from "@/lib/motion";
 import { profile } from "@/lib/profile";
 import { featuredResearch } from "@/lib/research";
 import { getSiteConfig } from "@/lib/site-config";
-import { featuredWorks, works, STATUS_LABELS, type Work } from "@/lib/works";
+import { featuredWorks, works } from "@/lib/works";
 
 export const Route = createFileRoute("/")({
   head: () => {
@@ -27,8 +27,8 @@ export const Route = createFileRoute("/")({
 });
 
 /**
- * 30 秒で「Web/AI/ゲームのプロダクト開発」「インフラ運用」
- * 「研究・データ分析」の3点が伝わる構成。
+ * ファーストビューで「Web/AI/ゲームのプロダクト開発」「インフラ運用」
+ * 「研究・データ分析」の3軸が伝わる構成。
  * 所属・学会名・受賞はトップに出さない（About と Research に置く）。
  */
 const axes = [
@@ -55,75 +55,67 @@ const axes = [
   },
 ];
 
-const heroProof = axes[1].proof;
-
 function Home() {
-  const heroWork = works.find((work) => work.slug === "smoke-it");
-
   return (
     <main id="main-content">
-      {/* --- Hero --- */}
+      {/* --- Hero + 3軸サマリ --- */}
       <Container>
-        <section
-          aria-labelledby="hero-heading"
-          className="grid grid-cols-12 items-center gap-x-6 gap-y-10 pb-12 pt-16 sm:pb-20 sm:pt-24"
-        >
-          <div className="col-span-12 lg:col-span-7">
-            <SplitHeading
-              as="h1"
-              id="hero-heading"
-              text={profile.name}
-              skew
-              delayStart={160}
-              delayStep={70}
-              className="font-mono text-5xl font-medium tracking-tight text-foreground sm:text-6xl"
-            />
-            <Reveal delay={620}>
-              <p className="mt-6 max-w-2xl text-pretty text-lg leading-[1.8] text-foreground sm:text-xl sm:leading-[1.8]">
-                {profile.lead}
-              </p>
-              <p className="mt-4 font-mono text-sm text-muted">{heroProof}</p>
-              <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2">
-                <LiquidButton href="/works" label="Works を見る" labelNext="View Works" />
-                <ArrowLink href="https://github.com/koshikai">GitHub</ArrowLink>
-                <ArrowLink href="/about#contact">Contact</ArrowLink>
-              </div>
-            </Reveal>
-          </div>
-
-          {heroWork?.image && (
-            <div className="col-span-12 lg:col-span-5">
-              <Reveal delay={240}>
-                <figure>
-                  <div className="w-[68%] max-w-[260px] sm:w-auto sm:max-w-none">
-                    <div className="overflow-hidden rounded border border-border bg-surface shadow-[0_1px_2px_rgba(0,0,0,0.05),0_18px_40px_-24px_rgba(0,0,0,0.35)] sm:rounded-md">
-                      <div className="hidden items-center gap-2 border-b border-border px-3 py-2 sm:flex">
-                        <span aria-hidden="true" className="flex justify-center gap-1">
-                          <span className="h-1.5 w-1.5 rounded-full bg-border" />
-                          <span className="h-1.5 w-1.5 rounded-full bg-border" />
-                          <span className="h-1.5 w-1.5 rounded-full bg-border" />
-                        </span>
-                        <span className="truncate font-mono text-[11px] text-muted">
-                          smoke-it.koshikai.dev
-                        </span>
-                      </div>
-                      <HeroShot image={heroWork.image} />
-                    </div>
-                  </div>
-                  <figcaption className="mt-4 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 sm:mt-3">
-                    <span className="text-sm text-foreground">
-                      {heroWork.name}
-                      <span className="text-muted">
-                        {" "}
-                        — {heroWork.since} から{STATUS_LABELS[heroWork.status]}
-                      </span>
-                    </span>
-                    <ArrowLink href={`/works#${heroWork.slug}`}>事例を読む</ArrowLink>
-                  </figcaption>
-                </figure>
-              </Reveal>
+        <section aria-labelledby="hero-heading" className="pb-12 pt-16 sm:pb-16 sm:pt-24">
+          <SplitHeading
+            as="h1"
+            id="hero-heading"
+            text={profile.name}
+            skew
+            delayStart={160}
+            delayStep={70}
+            className="font-mono text-5xl font-medium tracking-tight text-foreground sm:text-6xl"
+          />
+          <Reveal delay={620}>
+            <p className="mt-6 max-w-2xl text-pretty text-lg leading-[1.8] text-foreground sm:text-xl sm:leading-[1.8]">
+              {profile.lead}
+            </p>
+            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2">
+              <LiquidButton href="/works" label="Works を見る" labelNext="View Works" />
+              <ArrowLink href="https://github.com/koshikai">GitHub</ArrowLink>
+              <ArrowLink href="/about#contact">Contact</ArrowLink>
             </div>
-          )}
+          </Reveal>
+
+          <Reveal delay={760} className="mt-12 sm:mt-14">
+            <nav aria-label="3つの軸">
+              <ul
+                role="list"
+                className="grid list-none grid-cols-1 overflow-hidden rounded border border-border md:grid-cols-3"
+              >
+                {axes.map((axis, i) => (
+                  <li
+                    key={axis.keyword}
+                    className={`border-border ${i > 0 ? "border-t md:border-l md:border-t-0" : ""}`}
+                  >
+                    <a
+                      href={axis.href}
+                      className="focus-ring group flex h-full flex-col bg-background px-5 py-4 transition-colors hover:bg-surface sm:p-6"
+                    >
+                      <span className="flex items-center justify-between">
+                        <span className="font-mono text-xs text-muted">{axis.keyword}</span>
+                        <ArrowRight
+                          className="h-4 w-4 text-muted transition-[transform,color] group-hover:translate-x-0.5 group-hover:text-accent motion-reduce:transition-none"
+                          aria-hidden="true"
+                        />
+                      </span>
+                      <span className="mt-2 text-lg font-semibold tracking-tight text-foreground sm:text-xl">
+                        {axis.section}
+                      </span>
+                      <span className="mt-1 text-sm leading-[1.8] text-foreground sm:mt-2">
+                        {axis.summary}
+                      </span>
+                      <span className="mt-2 text-xs text-muted sm:mt-3">{axis.proof}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </Reveal>
         </section>
       </Container>
 
@@ -138,43 +130,9 @@ function Home() {
         />
       </div>
 
-      <Container className="mt-16 sm:mt-20">
-        {/* --- 3 軸の概要 --- */}
-        <nav aria-label="3つの軸">
-          <ul
-            role="list"
-            className="grid list-none grid-cols-1 overflow-hidden rounded border border-border md:grid-cols-3"
-          >
-            {axes.map((axis, i) => (
-              <li
-                key={axis.keyword}
-                className={`border-border ${i > 0 ? "border-t md:border-l md:border-t-0" : ""}`}
-              >
-                <a
-                  href={axis.href}
-                  className="focus-ring group flex h-full flex-col bg-background px-5 py-4 transition-colors hover:bg-surface sm:p-6"
-                >
-                  <span className="flex items-baseline justify-end">
-                    <ArrowRight
-                      className="h-4 w-4 text-muted transition-[transform,color] group-hover:translate-x-0.5 group-hover:text-accent motion-reduce:transition-none"
-                      aria-hidden="true"
-                    />
-                  </span>
-                  <span className="mt-1 text-lg font-semibold tracking-tight text-foreground sm:mt-2 sm:text-xl">
-                    {axis.section}
-                  </span>
-                  <span className="mt-1 text-sm leading-[1.8] text-foreground sm:mt-2">
-                    {axis.summary}
-                  </span>
-                  <span className="mt-2 text-xs text-muted sm:mt-3">{axis.proof}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
+      <Container className="mt-20 sm:mt-24">
         {/* --- Works --- */}
-        <Reveal className="mt-24">
+        <Reveal>
           <section id="works" aria-labelledby="works-heading">
             <SectionHeader
               id="works-heading"
@@ -267,34 +225,5 @@ function Home() {
         </Reveal>
       </Container>
     </main>
-  );
-}
-
-/**
- * ヒーローに置く実物の画面。スマホは縦長の実機比、PC は横長を出す。
- */
-function HeroShot({ image }: { image: NonNullable<Work["image"]> }) {
-  const { alt, desktop, mobile } = image;
-
-  return (
-    <picture>
-      <source
-        media="(min-width: 40rem)"
-        srcSet={desktop.src}
-        width={desktop.width}
-        height={desktop.height}
-      />
-      <img
-        src={mobile.src}
-        width={mobile.width}
-        height={mobile.height}
-        alt={alt}
-        sizes="(min-width: 1024px) 440px, (min-width: 640px) 60vw, 260px"
-        className="block h-auto w-full"
-        loading="eager"
-        fetchPriority="high"
-        decoding="async"
-      />
-    </picture>
   );
 }
