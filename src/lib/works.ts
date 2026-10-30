@@ -61,7 +61,7 @@ export const works: Work[] = [
     since: "2025.12",
     scope: "企画・設計・実装・デプロイ（単独開発）",
     operation: "GitHub Actions でビルドし、自宅 Proxmox 上の Docker にデプロイ",
-    stack: ["Next.js", "PWA", "PostgreSQL / Prisma", "OpenRouter"],
+    stack: ["TanStack Start", "PWA", "PostgreSQL / Prisma", "OpenRouter"],
     links: { live: "https://smoke-it.koshikai.dev", caseSlug: "smoke-it" },
     image: {
       alt: "Smoke it. のランディングページ",
@@ -81,7 +81,7 @@ export const works: Work[] = [
     since: "2025.10",
     scope: "設計・実装・デプロイ（単独開発）",
     operation: "GitHub Actions でビルドし、自宅 Proxmox 上の Docker にデプロイ",
-    stack: ["Next.js", "Auth.js", "Stripe", "Prisma"],
+    stack: ["TanStack Start", "Auth.js", "Stripe", "Prisma"],
     links: { live: "https://gallery.koshikai.dev", caseSlug: "karigallery" },
     image: {
       alt: "KariGallery のランディングページ",

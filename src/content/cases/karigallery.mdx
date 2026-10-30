@@ -10,9 +10,9 @@
 
 ## 技術選定と操作感の作り込み
 
-基盤には Next.js (App Router) と Prisma を選びました。認証は Auth.js、決済は Stripe Checkout です。
+基盤には TanStack Start（Vite + SSR + TanStack Router）と Prisma を選びました。認証は Auth.js、決済は Stripe Checkout です。
 
-操作感で重視したのは、絵を細部まで観察できる体験です。`react-zoom-pan-pinch` によるピンチイン・ズームと Framer Motion のアニメーションを組み合わせ、触れていて引っかかりのない滑らかな動きを目指しました。画像はすべて WebP 変換と Next.js の最適化を通して配信し、読み込みの待ち時間を削っています。
+操作感で重視したのは、絵を細部まで観察できる体験です。`react-zoom-pan-pinch` によるピンチイン・ズームと Framer Motion のアニメーションを組み合わせ、触れていて引っかかりのない滑らかな動きを目指しました。画像はすべて WebP 変換を通して配信し、読み込みの待ち時間を削っています。
 
 ## 決済は組んだが、本番の運用は止めた
 

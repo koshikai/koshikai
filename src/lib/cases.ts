@@ -38,7 +38,7 @@ export const caseItems: CaseItem[] = [
     title: "Smoke it.: 喫煙習慣を記録し、改善を支援する AI コーチ付き PWA",
     summary:
       "ワンタップ記録・傾向の可視化・記録データを踏まえた AI コーチで、喫煙習慣を客観的に振り返り、改善を考えられるようにした PWA。",
-    tags: ["Next.js", "PWA", "AI Coach", "PostgreSQL", "Web Push"],
+    tags: ["TanStack Start", "PWA", "AI Coach", "PostgreSQL", "Web Push"],
     publishedAt: "2026-04-21",
     challenge:
       "既存アプリは初期登録が面倒で続かず、見た目が医療的すぎ、自分のデータも手元に残らなかった。",
@@ -60,7 +60,7 @@ export const caseItems: CaseItem[] = [
     challenge:
       "友人のイラストを一箇所でまとめて展示したい。あわせて将来の通販を見据えた決済技術の検証も行いたい。",
     action:
-      "Next.js と Prisma、Auth.js で基盤を構築。Stripe Checkout を組み込み、サンドボックス環境で決済フローを検証。",
+      "TanStack Start と Prisma、Auth.js で基盤を構築。Stripe Checkout を組み込み、サンドボックス環境で決済フローを検証。",
     result:
       "技術的には販売可能な状態を整えた上で、法的手続きの運用負荷を考慮して決済機能を停止。ダミーデータによるギャラリーとして公開。",
     learning:

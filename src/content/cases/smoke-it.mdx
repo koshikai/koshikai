@@ -11,9 +11,9 @@
 - スマホ片手・親指一本で確実に記録できる UI と、誤タップ時の手戻りの少なさ
 - 記録をためるだけでなく、吸いたくなったときに状況を整理できる対話機能
 
-## 技術選定: Next.js 16 と Serwist による PWA 化
+## 技術選定: TanStack Start と Serwist による PWA 化
 
-フロントエンドとバックエンドの境界を減らすため、Next.js (App Router) と React 19、Tailwind CSS v4 を採用しました。ランタイムには Bun を選んでいます。
+フロントエンドとバックエンドの境界を減らすため、TanStack Start（Vite + SSR + TanStack Router）と React 19、Tailwind CSS v4 を採用しました。ランタイムにはローカルで Bun、本番で Node.js を選んでいます。
 
 認証には Auth.js、データ永続化には PostgreSQL と Prisma を組み合わせ、ユーザーごとの記録と設定を型安全に管理しています。
 
