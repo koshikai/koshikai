@@ -102,6 +102,41 @@ export function Tags({ items, className = "" }: { items: readonly string[]; clas
   );
 }
 
+export function isExternalHref(href: string): boolean {
+  return /^https?:\/\//.test(href);
+}
+
+/**
+ * 外部 URL は別タブ `<a>`、内部パス（`#hash` 付きを含む）は TanStack Router の `<Link>` で描画する。
+ * `/about#contact` のようなハッシュ付きパスは `to` と `hash` に分割して渡すことで、
+ * クライアント遷移でもルート解決とアンカースクロールが正しく動くようにする。
+ */
+export function AppLink({
+  href,
+  external,
+  className,
+  children,
+}: {
+  href: string;
+  external?: boolean;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  if (external || isExternalHref(href)) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
+        {children}
+      </a>
+    );
+  }
+  const [path, hash] = href.split("#", 2);
+  return (
+    <Link to={path || "/"} hash={hash} className={className}>
+      {children}
+    </Link>
+  );
+}
+
 const arrowLinkClass =
   "focus-ring group inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-foreground transition-colors hover:text-accent";
 
@@ -115,58 +150,19 @@ export function ArrowLink({
   children: React.ReactNode;
   className?: string;
 }) {
-  const external = /^https?:\/\//.test(href);
-  if (external) {
-    return (
-      <a href={href} target="_blank" rel="noopener noreferrer" className={`${arrowLinkClass} ${className}`}>
-        <span>{children}</span>
-        <ArrowUpRight
-          className="h-3.5 w-3.5 text-muted transition-[transform,color] group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent motion-reduce:transition-none"
-          aria-hidden="true"
-        />
-      </a>
-    );
-  }
+  const external = isExternalHref(href);
+  const Icon = external ? ArrowUpRight : ArrowRight;
+  const iconMotion = external
+    ? "group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+    : "group-hover:translate-x-0.5";
+
   return (
-    <Link to={href} className={`${arrowLinkClass} ${className}`}>
+    <AppLink href={href} external={external} className={`${arrowLinkClass} ${className}`.trim()}>
       <span>{children}</span>
-      <ArrowRight
-        className="h-3.5 w-3.5 text-muted transition-[transform,color] group-hover:translate-x-0.5 group-hover:text-accent motion-reduce:transition-none"
+      <Icon
+        className={`h-3.5 w-3.5 text-muted transition-[transform,color] ${iconMotion} group-hover:text-accent motion-reduce:transition-none`}
         aria-hidden="true"
       />
-    </Link>
-  );
-}
-
-export function ButtonLink({
-  href,
-  children,
-  variant = "secondary",
-}: {
-  href: string;
-  children: React.ReactNode;
-  variant?: "primary" | "secondary";
-}) {
-  const external = /^https?:\/\//.test(href);
-  const className = `focus-ring inline-flex min-h-11 items-center gap-2 rounded border px-4 text-sm font-medium transition-colors ${
-    variant === "primary"
-      ? "border-foreground bg-foreground text-background hover:border-accent hover:bg-accent"
-      : "border-border bg-background text-foreground hover:border-foreground"
-  }`;
-  const Icon = external ? ArrowUpRight : ArrowRight;
-  const content = (
-    <>
-      {children}
-      <Icon className="h-3.5 w-3.5" aria-hidden="true" />
-    </>
-  );
-  return external ? (
-    <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
-      {content}
-    </a>
-  ) : (
-    <Link to={href} className={className}>
-      {content}
-    </Link>
+    </AppLink>
   );
 }

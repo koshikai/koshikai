@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { AppLink } from "@/components/ui";
 import { capabilities } from "@/lib/engineering";
 
 /**
@@ -28,13 +28,13 @@ export function CapabilityTable() {
             <dd className="col-span-12 flex flex-wrap gap-x-3 gap-y-1 text-[13px] leading-6 md:col-span-4">
               <span className="sr-only">使用例:</span>
               {capability.evidence.map((evidence) => (
-                <Link
+                <AppLink
                   key={evidence.label}
-                  to={evidence.href}
+                  href={evidence.href}
                   className="focus-ring text-muted underline decoration-border underline-offset-4 transition-colors hover:text-accent hover:decoration-accent"
                 >
                   {evidence.label}
-                </Link>
+                </AppLink>
               ))}
             </dd>
           </div>

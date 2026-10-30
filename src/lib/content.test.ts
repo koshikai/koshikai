@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { caseItems, getCaseBySlug } from "./cases";
 import { capabilities } from "./engineering";
@@ -56,6 +58,16 @@ describe("content data", () => {
     expect(featuredResearch).toHaveLength(2);
     for (const topic of featuredResearch) {
       expect(topic.problem && topic.method && topic.result, topic.slug).toBeTruthy();
+    }
+  });
+
+  it("lists all main routes and case studies in public/sitemap.xml", () => {
+    const sitemap = readFileSync(resolve(process.cwd(), "public/sitemap.xml"), "utf-8");
+    for (const path of ["", "/works", "/engineering", "/research", "/about", "/cases", "/llm-benchmarks"]) {
+      expect(sitemap, path || "/").toContain(`<loc>https://koshikai.dev${path}</loc>`);
+    }
+    for (const item of caseItems) {
+      expect(sitemap, item.slug).toContain(`<loc>https://koshikai.dev/cases/${item.slug}</loc>`);
     }
   });
 });

@@ -27,7 +27,7 @@ const DEPLOY: Evidence = { label: "デプロイ自動化", href: "/cases/deploy-
 export const capabilities: Capability[] = [
   {
     area: "Frontend",
-    tools: ["TypeScript", "React", "Next.js", "PWA"],
+    tools: ["TypeScript", "React", "TanStack Start", "Next.js", "PWA"],
     evidence: [SMOKE_IT, KARIGALLERY, THIS_SITE],
   },
   {
@@ -93,7 +93,7 @@ export const homelabLayers = [
 /** このサイトのデプロイ経路。.github/workflows/deploy.yml と一致させる */
 export const pipelineSteps = [
   { label: "git push", detail: "main" },
-  { label: "GitHub Actions", detail: "lint · test · audit" },
+  { label: "GitHub Actions", detail: "typecheck · lint · test · audit" },
   { label: "Docker build", detail: "multi-stage" },
   { label: "GHCR", detail: "image registry" },
   { label: "self-hosted runner", detail: "自宅 Proxmox" },

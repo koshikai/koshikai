@@ -1,5 +1,3 @@
-"use client";
-
 import { useCallback, useEffect, useSyncExternalStore } from "react";
 import { Moon, Sun } from "lucide-react";
 

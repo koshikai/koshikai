@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { pipelineSteps } from "@/lib/engineering";
 
