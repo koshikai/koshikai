@@ -1,4 +1,3 @@
-import { getImageProps } from "next/image";
 import { Tilt } from "@/components/Tilt";
 import { ArrowLink, Tags } from "@/components/ui";
 import { STATUS_LABELS, type Work } from "@/lib/works";
@@ -26,42 +25,19 @@ export function WorkThumb({ work, sizes }: { work: Work; sizes: string }) {
   if (work.image) {
     const { alt, desktop, mobile } = work.image;
 
-    // 画面幅で別の絵を出す (art direction)。1 枚を横長の枠に contain すると
-    // 縦長スクショの左右が大きく空き、枠幅の 1/4 しか使えない。
-    // 通常の <Image> は 1 枚しか出せないので、getImageProps で最適化 URL を
-    // 保ったまま srcSet を組み、<picture> で切り替える。
-    const {
-      props: { srcSet: desktopSrcSet },
-    } = getImageProps({
-      alt,
-      sizes,
-      src: desktop.src,
-      width: desktop.width,
-      height: desktop.height,
-      // スクリーンショットは文字が細かい。既定の 75 だと再圧縮で甘くなる
-      quality: 90,
-    });
-    const {
-      props: { srcSet: mobileSrcSet, ...mobileProps },
-    } = getImageProps({
-      alt,
-      sizes,
-      src: mobile.src,
-      width: mobile.width,
-      height: mobile.height,
-      quality: 90,
-    });
-
     return (
       <Tilt>
         <div className="card-thumb relative aspect-[390/844] overflow-hidden rounded border border-border bg-surface sm:aspect-[1424/900]">
           <picture>
-            <source media="(min-width: 40rem)" srcSet={desktopSrcSet} />
-            {/* getImageProps が最適化 URL を生成しているため next/image は使わない */}
+            <source media="(min-width: 40rem)" srcSet={desktop.src} />
             <img
-              {...mobileProps}
-              srcSet={mobileSrcSet}
+              src={mobile.src}
+              width={mobile.width}
+              height={mobile.height}
               alt={alt}
+              sizes={sizes}
+              loading="lazy"
+              decoding="async"
               className="absolute inset-0 h-full w-full object-cover object-top"
             />
           </picture>

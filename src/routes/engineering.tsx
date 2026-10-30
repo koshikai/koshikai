@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { createFileRoute } from "@tanstack/react-router";
 import { CapabilityTable } from "@/components/CapabilityTable";
 import { CaseList } from "@/components/CaseList";
 import { DeployPipeline } from "@/components/DeployPipeline";
@@ -6,16 +6,20 @@ import { HomelabStack } from "@/components/HomelabStack";
 import { Container, PageHeader, SectionHeader } from "@/components/ui";
 import { getCasesByAxis } from "@/lib/cases";
 import { operationFacts } from "@/lib/engineering";
-import { pageMetadata } from "@/lib/metadata";
+import { pageHead } from "@/lib/metadata";
 
-export const metadata: Metadata = pageMetadata({
-  title: "Engineering",
-  description:
-    "自宅の Proxmox でデプロイ・構成・復旧まで自分で回しています。実際に使って運用している技術だけを載せています。",
-  path: "/engineering",
+export const Route = createFileRoute("/engineering")({
+  head: () =>
+    pageHead({
+      title: "Engineering",
+      description:
+        "自宅の Proxmox でデプロイ・構成・復旧まで自分で回しています。実際に使って運用している技術だけを載せています。",
+      path: "/engineering",
+    }),
+  component: EngineeringPage,
 });
 
-export default function EngineeringPage() {
+function EngineeringPage() {
   return (
     <main id="main-content">
       <Container>

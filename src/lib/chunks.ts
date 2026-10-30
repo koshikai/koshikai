@@ -10,16 +10,13 @@
  * - 1 文字のひらがな（助詞・助動詞）は前の語に繋げる（「自分 / で」→「自分で」）
  * - 1 文字の漢字は次の語と繋げる（「動 / かし」→「動かし」。前へ付けると
  *   「自分で動」のように語が壊れる）
- *
- * 分割はサーバー側で行い、結果を SplitHeading に渡す。クライアントでも
- * 同じ計算をするとハイドレーション時に食い違う余地が残るため。
  */
 const PUNCTUATION = /^[、。，．！？!?]+$/;
 const SINGLE_HIRAGANA = /^\p{Script=Hiragana}$/u;
 const SINGLE_KANJI = /^\p{Script=Han}$/u;
+const segmenter = new Intl.Segmenter("ja", { granularity: "word" });
 
 export function splitIntoChunks(text: string): string[] {
-  const segmenter = new Intl.Segmenter("ja", { granularity: "word" });
   const chunks: string[] = [];
   /** 次の語と繋げるために保留している 1 文字（漢字） */
   let pending = "";

@@ -1,17 +1,20 @@
-import type { Metadata } from "next";
-import Image from "next/image";
+import { createFileRoute } from "@tanstack/react-router";
 import { CaseList } from "@/components/CaseList";
 import { ResearchCard } from "@/components/ResearchCard";
 import { ArrowLink, Container, PageHeader, SectionHeader } from "@/components/ui";
 import { getCasesByAxis } from "@/lib/cases";
-import { pageMetadata } from "@/lib/metadata";
+import { pageHead } from "@/lib/metadata";
 import { publications, researchCode, researchNotes, researchTopics } from "@/lib/research";
 
-export const metadata: Metadata = pageMetadata({
-  title: "Research",
-  description:
-    "強化学習によるネットワーク制御と、データ分析の取り組み。問題設定・手法・検証結果を分けてまとめています。",
-  path: "/research",
+export const Route = createFileRoute("/research")({
+  head: () =>
+    pageHead({
+      title: "Research",
+      description:
+        "強化学習によるネットワーク制御と、データ分析の取り組み。問題設定・手法・検証結果を分けてまとめています。",
+      path: "/research",
+    }),
+  component: ResearchPage,
 });
 
 const figureAlt =
@@ -19,7 +22,7 @@ const figureAlt =
 
 const PUBLICATION_STATUS = { presented: "発表済み", accepted: "採択" } as const;
 
-export default function ResearchPage() {
+function ResearchPage() {
   return (
     <main id="main-content">
       <Container>
@@ -38,20 +41,20 @@ export default function ResearchPage() {
 
         <figure className="mt-16 grid grid-cols-12 gap-x-6 gap-y-4">
           <div className="relative col-span-12 aspect-[2081/1535] w-full overflow-hidden rounded border border-border bg-background lg:col-span-8">
-            <Image
+            <img
               src="/images/research/trajectory-recovery-light.webp"
               alt={figureAlt}
-              fill
-              sizes="(min-width: 1024px) 720px, 100vw"
-              className="object-contain dark:hidden"
+              loading="lazy"
+              decoding="async"
+              className="h-full w-full object-contain dark:hidden"
             />
-            <Image
+            <img
               src="/images/research/trajectory-recovery-dark.webp"
               alt=""
               aria-hidden="true"
-              fill
-              sizes="(min-width: 1024px) 720px, 100vw"
-              className="hidden object-contain dark:block"
+              loading="lazy"
+              decoding="async"
+              className="hidden h-full w-full object-contain dark:block"
             />
           </div>
           <figcaption className="col-span-12 self-end lg:col-span-4">

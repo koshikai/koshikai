@@ -1,4 +1,4 @@
-import { getImageProps } from "next/image";
+import { createFileRoute } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { CapabilityTable } from "@/components/CapabilityTable";
 import { DeployPipeline } from "@/components/DeployPipeline";
@@ -13,7 +13,18 @@ import { operationFacts } from "@/lib/engineering";
 import { marqueeStack, marqueeWork } from "@/lib/motion";
 import { profile } from "@/lib/profile";
 import { featuredResearch } from "@/lib/research";
+import { getSiteConfig } from "@/lib/site-config";
 import { featuredWorks, works, STATUS_LABELS, type Work } from "@/lib/works";
+
+export const Route = createFileRoute("/")({
+  head: () => {
+    const site = getSiteConfig();
+    return {
+      links: [{ rel: "canonical", href: site.baseUrl }],
+    };
+  },
+  component: Home,
+});
 
 /**
  * 30 秒で「Web/AI/ゲームのプロダクトを作れる」「インフラまで運用できる」
@@ -46,7 +57,7 @@ const axes = [
 
 const heroProof = axes[1].proof;
 
-export default function Home() {
+function Home() {
   // ファーストビューに出す実物。文字だけでは「何を作れる人か」が伝わらないので、
   // 公開中のプロダクトの画面をデータから引いて置く。
   const heroWork = works.find((work) => work.slug === "smoke-it");
@@ -271,44 +282,28 @@ export default function Home() {
 
 /**
  * ヒーローに置く実物の画面。スマホは縦長の実機比、PC は横長を出す。
- * 1 枚を横長の枠に contain すると縦長スクショの左右が空くため、
- * getImageProps で最適化 URL を保ったまま srcSet を組み <picture> で切り替える。
  */
 function HeroShot({ image }: { image: NonNullable<Work["image"]> }) {
   const { alt, desktop, mobile } = image;
-  const {
-    props: { srcSet: desktopSrcSet },
-  } = getImageProps({
-    alt,
-    sizes: "(min-width: 1024px) 440px, (min-width: 640px) 60vw, 260px",
-    src: desktop.src,
-    width: desktop.width,
-    height: desktop.height,
-    quality: 90,
-    priority: true,
-  });
-  const {
-    props: { srcSet: mobileSrcSet, ...mobileProps },
-  } = getImageProps({
-    alt,
-    sizes: "(min-width: 1024px) 440px, (min-width: 640px) 60vw, 260px",
-    src: mobile.src,
-    width: mobile.width,
-    height: mobile.height,
-    quality: 90,
-    priority: true,
-  });
 
   return (
     <picture>
-      <source media="(min-width: 40rem)" srcSet={desktopSrcSet} />
-      {/* getImageProps が最適化 URL を生成しているため next/image は使わない。
-          スマホは縦長の実機比、PC は横長のスクショをそのまま出す */}
+      <source
+        media="(min-width: 40rem)"
+        srcSet={desktop.src}
+        width={desktop.width}
+        height={desktop.height}
+      />
       <img
-        {...mobileProps}
-        srcSet={mobileSrcSet}
+        src={mobile.src}
+        width={mobile.width}
+        height={mobile.height}
         alt={alt}
+        sizes="(min-width: 1024px) 440px, (min-width: 640px) 60vw, 260px"
         className="block h-auto w-full"
+        loading="eager"
+        fetchPriority="high"
+        decoding="async"
       />
     </picture>
   );

@@ -1,35 +1,27 @@
-import type { Metadata } from "next";
-import Link from "next/link";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, Info } from "lucide-react";
+import { BenchmarkView } from "@/components/BenchmarkView";
 import { SplitHeading } from "@/components/SplitHeading";
-import { getSiteConfig } from "@/lib/site-config";
 import { BENCHMARK_DATASET_VERIFIED_AT } from "@/lib/benchmarks-data";
 import { splitIntoChunks } from "@/lib/chunks";
-import { BenchmarkView } from "./BenchmarkView";
-
-const site = getSiteConfig();
+import { pageHead } from "@/lib/metadata";
 
 const title = "LLM Benchmarks Comparison (Oct 2026 Snapshot)";
 const description =
   "2026年最新世代フロンティアモデル（Claude Opus 5.5 / Fable 5.1 / Sonnet 5.5, GPT-6 Astra / GPT-6.1 Sol, Gemini 4 Argon / 3.8 Flash, Grok 4.7, GLM-5.3, Muse Spark 1.3, Qwen3.8 Max, Kimi K3, DeepSeek V4.1 Flash等）の定量的ベンチマーク比較グラフ。掲載は一次情報または明示した第三者リーダーボードに実在する値のみです。";
 
-export const metadata: Metadata = {
-  title,
-  description,
-  alternates: {
-    canonical: "/llm-benchmarks",
-  },
-  openGraph: {
-    title,
-    description,
-    url: `${site.baseUrl}/llm-benchmarks`,
-    siteName: site.name,
-    locale: site.locale,
-    type: "article",
-  },
-};
+export const Route = createFileRoute("/llm-benchmarks")({
+  head: () =>
+    pageHead({
+      title,
+      description,
+      path: "/llm-benchmarks",
+      type: "article",
+    }),
+  component: LlmBenchmarksPage,
+});
 
-export default function LlmBenchmarksPage() {
+function LlmBenchmarksPage() {
   return (
     <div className="bg-background text-foreground">
       <main
@@ -38,7 +30,7 @@ export default function LlmBenchmarksPage() {
       >
         <div className="mb-12">
           <Link
-            href="/research"
+            to="/research"
             className="focus-ring group inline-flex min-h-11 items-center gap-2 text-sm text-muted transition-colors hover:text-foreground"
           >
             <ArrowLeft

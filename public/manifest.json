@@ -1,0 +1,16 @@
+{
+  "name": "koshikai",
+  "short_name": "koshikai",
+  "description": "ソフトウェアエンジニア koshikai のポートフォリオ。Web・AI のプロダクトを自分で作り、自宅のインフラで運用し、研究とデータ分析で検証しています。",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fafaf7",
+  "theme_color": "#fafaf7",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

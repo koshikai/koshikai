@@ -1,19 +1,22 @@
-import type { Metadata } from "next";
+import { createFileRoute } from "@tanstack/react-router";
 import { CaseList } from "@/components/CaseList";
 import { Container, PageHeader, SectionHeader } from "@/components/ui";
 import { AXES, getCasesByAxis, type Axis } from "@/lib/cases";
-import { pageMetadata } from "@/lib/metadata";
+import { pageHead } from "@/lib/metadata";
 
-export const metadata: Metadata = pageMetadata({
-  title: "Case Studies",
-  description: "課題の切り分けから実装・運用・検証までをまとめた事例の一覧。",
-  path: "/cases",
+export const Route = createFileRoute("/cases/")({
+  head: () =>
+    pageHead({
+      title: "Case Studies",
+      description: "課題の切り分けから実装・運用・検証までをまとめた事例の一覧。",
+      path: "/cases",
+    }),
+  component: CasesPage,
 });
 
 const ORDER: Axis[] = ["build", "operate", "research"];
 
-/** ナビには置かず、フッターと各軸のページから入る全事例の索引 */
-export default function CasesPage() {
+function CasesPage() {
   return (
     <main id="main-content">
       <Container>

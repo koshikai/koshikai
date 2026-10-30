@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { GET } from "./route";
+import { handleHealthz } from "./healthz";
 
 describe("GET /healthz", () => {
   it("returns ok", async () => {
-    const response = await GET();
+    const response = await handleHealthz();
     const data = await response.json();
 
     expect(response.status).toBe(200);

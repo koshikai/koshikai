@@ -1,15 +1,19 @@
-import type { Metadata } from "next";
+import { createFileRoute } from "@tanstack/react-router";
 import { AvailabilityNote } from "@/components/AvailabilityNote";
 import { Reveal } from "@/components/Reveal";
 import { ArrowLink, Container, PageHeader, SectionHeader } from "@/components/ui";
-import { pageMetadata } from "@/lib/metadata";
+import { pageHead } from "@/lib/metadata";
 import { profile } from "@/lib/profile";
 import { courses, publications } from "@/lib/research";
 
-export const metadata: Metadata = pageMetadata({
-  title: "About",
-  description: "koshikai の経歴・大切にしていること・連絡先。",
-  path: "/about",
+export const Route = createFileRoute("/about")({
+  head: () =>
+    pageHead({
+      title: "About",
+      description: "koshikai の経歴・大切にしていること・連絡先。",
+      path: "/about",
+    }),
+  component: AboutPage,
 });
 
 const principles = [
@@ -27,7 +31,7 @@ const principles = [
   },
 ];
 
-export default function AboutPage() {
+function AboutPage() {
   // 受賞と講座の修了を1本の年表にまとめ、新しい順に並べる（日付は "YYYY.MM"）
   const timeline = [
     ...publications

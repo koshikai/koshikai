@@ -1,5 +1,3 @@
-import type { ComponentType } from "react";
-
 export type Axis = "build" | "operate" | "research";
 
 export interface CaseItem {
@@ -155,14 +153,6 @@ export const caseItems: CaseItem[] = [
   },
 ];
 
-const caseMdxModules: Record<string, () => Promise<{ default: ComponentType }>> =
-  Object.fromEntries(
-    caseItems.map((item) => [
-      item.slug,
-      () => import(`@/content/cases/${item.slug}.mdx`),
-    ]),
-  );
-
 export function getCaseBySlug(slug: string) {
   return caseItems.find((item) => item.slug === slug);
 }
@@ -178,9 +168,3 @@ export const AXES: Record<Axis, { label: string; section: string; href: string }
   research: { label: "Research", section: "Research", href: "/research" },
 };
 
-export async function getCaseContentComponent(slug: string) {
-  const loader = caseMdxModules[slug];
-  if (!loader) return null;
-  const mdxModule = await loader();
-  return mdxModule.default;
-}

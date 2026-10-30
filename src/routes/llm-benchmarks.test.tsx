@@ -1,6 +1,20 @@
+import { vi } from "vitest";
+
+import type { ComponentProps } from "react";
+
+vi.mock("@tanstack/react-router", () => ({
+  Link: ({ children, to, href, ...props }: ComponentProps<"a"> & { to?: string }) => (
+    <a href={to ?? href} {...props}>
+      {children}
+    </a>
+  ),
+  createFileRoute: () => (options: Record<string, unknown>) => ({ options }),
+}));
 import { render, screen, fireEvent, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import LlmBenchmarksPage from "./page";
+import { Route } from "./llm-benchmarks";
+
+const LlmBenchmarksPage = Route.options.component!;
 import {
   BENCHMARK_DATASET_VERIFIED_AT,
   BENCHMARK_METRICS,

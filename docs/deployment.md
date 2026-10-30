@@ -12,11 +12,18 @@
 
 `.github/workflows/deploy.yml` が `main` ブランチへの push 時に実行されます。
 
+#### Lint and Test Job（`ubuntu-latest`）
+
+1. `bun run typecheck`（TypeScript 型チェック）
+2. `bun run lint`（ESLint）
+3. `bun run test -- --run`（Vitest）
+4. `bun audit --audit-level=high`（脆弱性監査）
+
 #### Build Job（`ubuntu-latest`）
 
 1. アプリ用 Docker イメージのビルド・プッシュ
-   - `ghcr.io/koshikai/koshikai:latest`
-   - `ghcr.io/koshikai/koshikai:sha-{commit}`
+   - `ghcr.io/koshikai/koshikai-app:latest`
+   - `ghcr.io/koshikai/koshikai-app:sha-{commit}`
 
 #### Deploy Job（`self-hosted` on Proxmox）
 
@@ -38,7 +45,7 @@
 |------|-----|
 | サービス名 | `app` |
 | コンテナ名 | `koshikai-app` |
-| イメージ | `ghcr.io/koshikai/koshikai:latest` |
+| イメージ | `ghcr.io/koshikai/koshikai-app:latest` |
 | ポート | `3002:3000` |
 | 環境変数 | `.env.prod` |
 | 固定環境変数 | `NODE_ENV=production`, `SITE_URL=https://koshikai.dev` |
@@ -48,14 +55,13 @@
 
 マルチステージビルド：
 
-1. **deps ステージ**: `oven/bun:1` で依存関係をインストール
-2. **builder ステージ**: `node:22-slim` + Bun でビルド
-   - `DOCKER_BUILD=true` で `output: "standalone"` を有効化
+1. **deps ステージ**: `oven/bun:1` で依存関係をインストール（`bun install --frozen-lockfile`）
+2. **builder ステージ**: `node:22-slim` + Bun でビルド（`bun run build`）
    - メモリ制限: `--max-old-space-size=2048`
-3. **runner ステージ**: `node:22-slim` で実行
-   - 非 root ユーザー (`nextjs:nodejs`) で実行
-   - `.next/standalone` を利用して軽量化
-   - MCP 用の onnxruntime 等は含めない（ポートフォリオのみの最小構成）
+   - `dist/server/server.js`（自己完結 SSR バンドル）と `dist/client/` を生成
+3. **runner ステージ**: `node:22-slim` で実行（`node server.mjs`）
+   - 非 root ユーザー (`appuser:nodejs`) で実行
+   - `dist/`、`public/`、`server.mjs` のみをコピーした最小構成
 
 ## サーバー前提条件
 

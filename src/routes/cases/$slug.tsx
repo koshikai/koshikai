@@ -1,55 +1,45 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { notFound } from "next/navigation";
+import type { ComponentType } from "react";
+import type { MDXComponents } from "mdx/types";
+import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { Container, Tags } from "@/components/ui";
 import { SplitHeading } from "@/components/SplitHeading";
-import { AXES, getCaseBySlug, getCaseContentComponent, caseItems } from "@/lib/cases";
+import { AXES, getCaseBySlug } from "@/lib/cases";
 import { splitIntoChunks } from "@/lib/chunks";
-import { getSiteConfig } from "@/lib/site-config";
+import { pageHead } from "@/lib/metadata";
+import { useMDXComponents } from "../../../mdx-components";
 
-interface CaseDetailPageProps {
-  params: Promise<{ slug: string }>;
-}
+const mdxModules = import.meta.glob<{
+  default: ComponentType<{ components?: MDXComponents }>;
+}>("../../content/cases/*.mdx", { eager: true });
 
-export async function generateStaticParams() {
-  return caseItems.map((item) => ({ slug: item.slug }));
-}
+const mdxComponents = useMDXComponents({});
 
-export async function generateMetadata({
-  params,
-}: CaseDetailPageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const item = getCaseBySlug(slug);
-  if (!item) return {};
-
-  const site = getSiteConfig();
-
-  return {
-    title: `${item.title} | Case Studies`,
-    description: item.summary,
-    alternates: {
-      canonical: `/cases/${item.slug}`,
-    },
-    openGraph: {
-      title: `${item.title} | Case Studies`,
+export const Route = createFileRoute("/cases/$slug")({
+  loader: ({ params }) => {
+    const item = getCaseBySlug(params.slug);
+    if (!item) {
+      throw notFound();
+    }
+    return { item };
+  },
+  head: ({ loaderData }) => {
+    if (!loaderData?.item) return {};
+    const { item } = loaderData;
+    return pageHead({
+      title: item.title,
       description: item.summary,
-      url: `${site.baseUrl}/cases/${item.slug}`,
-      siteName: site.name,
-      locale: site.locale,
+      path: `/cases/${item.slug}`,
       type: "article",
-    },
-  };
-}
+    });
+  },
+  component: CaseDetailPage,
+});
 
-export default async function CaseDetailPage({ params }: CaseDetailPageProps) {
-  const { slug } = await params;
-  const item = getCaseBySlug(slug);
-  const Content = await getCaseContentComponent(slug);
-
-  if (!item || !Content) {
-    notFound();
-  }
+function CaseDetailPage() {
+  const { slug } = Route.useParams();
+  const { item } = Route.useLoaderData();
+  const Content = mdxModules[`../../content/cases/${slug}.mdx`]?.default;
 
   const axis = AXES[item.axis];
   const summary = [
@@ -64,7 +54,7 @@ export default async function CaseDetailPage({ params }: CaseDetailPageProps) {
       <Container size="narrow">
         <nav aria-label="パンくずリスト" className="pt-10 sm:pt-14">
           <Link
-            href={axis.href}
+            to={axis.href}
             className="focus-ring group inline-flex min-h-11 items-center gap-2 text-sm text-muted transition-colors hover:text-foreground"
           >
             <ArrowLeft
@@ -100,7 +90,7 @@ export default async function CaseDetailPage({ params }: CaseDetailPageProps) {
           )}
 
           <div className="case-article-content mt-12">
-            <Content />
+            {Content ? <Content components={mdxComponents} /> : null}
           </div>
         </article>
       </Container>

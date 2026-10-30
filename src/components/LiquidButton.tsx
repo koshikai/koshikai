@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { AppLink, isExternalHref } from "@/components/ui";
 
 /**
  * LiquidButton — hover でアクセント色が染み広がる CTA。
@@ -7,9 +7,6 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
  * 一点のドットが拡大してボタンを満たし、ラベルが上下スライドで入れ替わる
  * (例:「Works を見る」→「View Works」)。ラベルは幅の広い方に合わせて
  * 枠が決まるため、入れ替わり時に切れない。
- *
- * ButtonLink (ui.tsx) と寸法・角丸をそろえ、Hero など主要な導線だけ
- * これに差し替える。
  */
 type LiquidButtonProps = {
   href: string;
@@ -32,7 +29,7 @@ export function LiquidButton({
   external = false,
 }: LiquidButtonProps) {
   const isOutline = variant === "outline";
-  const isExternal = external || /^https?:\/\//.test(href);
+  const isExternal = external || isExternalHref(href);
   const Icon = isExternal ? ArrowUpRight : ArrowRight;
 
   const className_ = [
@@ -45,8 +42,8 @@ export function LiquidButton({
     .filter(Boolean)
     .join(" ");
 
-  const content = (
-    <>
+  return (
+    <AppLink href={href} external={isExternal} className={className_}>
       <span className="lb-dot" aria-hidden="true" />
       <span className="lb-txt">
         <span className="lb-line lb-cur">{label}</span>
@@ -55,16 +52,6 @@ export function LiquidButton({
           <Icon className="lb-arw h-3.5 w-3.5 shrink-0" aria-hidden="true" />
         </span>
       </span>
-    </>
-  );
-
-  return isExternal ? (
-    <a href={href} target="_blank" rel="noopener noreferrer" className={className_}>
-      {content}
-    </a>
-  ) : (
-    <Link href={href} className={className_}>
-      {content}
-    </Link>
+    </AppLink>
   );
 }

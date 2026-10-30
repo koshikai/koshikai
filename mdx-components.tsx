@@ -70,7 +70,6 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       <hr className="my-8 border-border" {...props} />
     ),
     img: ({ alt = "", ...props }: React.ImgHTMLAttributes<HTMLImageElement>) => (
-      // eslint-disable-next-line @next/next/no-img-element
       <img className="my-6 h-auto max-w-full border border-border" alt={alt} {...props} />
     ),
     table: (props) => (
