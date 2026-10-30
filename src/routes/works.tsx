@@ -3,23 +3,17 @@ import { CaseList } from "@/components/CaseList";
 import { ArrowLink, Container, PageHeader, SectionHeader, Tags } from "@/components/ui";
 import { StatusBadge, WorkThumb } from "@/components/WorkCard";
 import { getCasesByAxis } from "@/lib/cases";
+import { pageHead } from "@/lib/metadata";
 import { works } from "@/lib/works";
 
 export const Route = createFileRoute("/works")({
-  head: () => ({
-    meta: [
-      { title: "Works | koshikai" },
-      {
-        name: "description",
-        content: "koshikai が企画から実装・公開まで単独で手がけた Web アプリ・AI プロダクト・ゲーム。",
-      },
-      { property: "og:title", content: "Works | koshikai" },
-      {
-        property: "og:description",
-        content: "koshikai が企画から実装・公開まで単独で手がけた Web アプリ・AI プロダクト・ゲーム。",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: "Works",
+      description:
+        "koshikai が企画から実装・公開まで単独で手がけた Web アプリ・AI プロダクト・ゲーム。",
+      path: "/works",
+    }),
   component: WorksPage,
 });
 

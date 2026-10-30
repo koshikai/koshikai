@@ -2,18 +2,17 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AvailabilityNote } from "@/components/AvailabilityNote";
 import { Reveal } from "@/components/Reveal";
 import { ArrowLink, Container, PageHeader, SectionHeader } from "@/components/ui";
+import { pageHead } from "@/lib/metadata";
 import { profile } from "@/lib/profile";
 import { courses, publications } from "@/lib/research";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({
-    meta: [
-      { title: "About | koshikai" },
-      { name: "description", content: "koshikai の経歴・大切にしていること・連絡先。" },
-      { property: "og:title", content: "About | koshikai" },
-      { property: "og:description", content: "koshikai の経歴・大切にしていること・連絡先。" },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: "About",
+      description: "koshikai の経歴・大切にしていること・連絡先。",
+      path: "/about",
+    }),
   component: AboutPage,
 });
 

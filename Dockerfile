@@ -8,7 +8,7 @@ RUN --mount=type=cache,target=/root/.bun/install/cache bun install --frozen-lock
 COPY . .
 RUN bun run build
 
-# Runner stage with Node.js
+# Runner stage with Node.js (dist/server is self-contained via ssr.noExternal)
 FROM node:22-slim AS runner
 WORKDIR /app
 
@@ -22,7 +22,6 @@ RUN groupadd --system --gid 1001 nodejs && \
 COPY package.json ./
 COPY server.mjs ./
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/public ./public
 
 USER appuser
 

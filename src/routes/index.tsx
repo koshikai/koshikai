@@ -13,9 +13,16 @@ import { operationFacts } from "@/lib/engineering";
 import { marqueeStack, marqueeWork } from "@/lib/motion";
 import { profile } from "@/lib/profile";
 import { featuredResearch } from "@/lib/research";
+import { getSiteConfig } from "@/lib/site-config";
 import { featuredWorks, works, STATUS_LABELS, type Work } from "@/lib/works";
 
 export const Route = createFileRoute("/")({
+  head: () => {
+    const site = getSiteConfig();
+    return {
+      links: [{ rel: "canonical", href: site.baseUrl }],
+    };
+  },
   component: Home,
 });
 
@@ -281,7 +288,12 @@ function HeroShot({ image }: { image: NonNullable<Work["image"]> }) {
 
   return (
     <picture>
-      <source media="(min-width: 40rem)" srcSet={desktop.src} />
+      <source
+        media="(min-width: 40rem)"
+        srcSet={desktop.src}
+        width={desktop.width}
+        height={desktop.height}
+      />
       <img
         src={mobile.src}
         width={mobile.width}
@@ -290,6 +302,7 @@ function HeroShot({ image }: { image: NonNullable<Work["image"]> }) {
         sizes="(min-width: 1024px) 440px, (min-width: 640px) 60vw, 260px"
         className="block h-auto w-full"
         loading="eager"
+        fetchPriority="high"
         decoding="async"
       />
     </picture>

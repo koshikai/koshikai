@@ -52,6 +52,9 @@ jobs:
       - name: Run lint
         run: bun run lint
 
+      - name: Run typecheck
+        run: bun run typecheck
+
       - name: Run tests
         run: bun run test --run
 
@@ -66,9 +69,7 @@ jobs:
 
       - name: Run security audit
         if: steps.lockfile-changes.outputs.lockfile == 'true' || github.event_name == 'workflow_dispatch'
-        # braces 3.0.3 は eslint-config-next 経由の推移的依存で、npm に修正版が未 publish のため除外。
-        # ビルド時の lint ツール用で本番イメージには含まれない。修正版が出たら --ignore を外す。
-        run: bun audit --ignore=GHSA-vfj7-8cjw-p6xm
+        run: bun audit
 
   # アプリ用イメージ (常にビルド)
   build-app:

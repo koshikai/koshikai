@@ -2,22 +2,15 @@ import { createFileRoute } from "@tanstack/react-router";
 import { CaseList } from "@/components/CaseList";
 import { Container, PageHeader, SectionHeader } from "@/components/ui";
 import { AXES, getCasesByAxis, type Axis } from "@/lib/cases";
+import { pageHead } from "@/lib/metadata";
 
 export const Route = createFileRoute("/cases/")({
-  head: () => ({
-    meta: [
-      { title: "Case Studies | koshikai" },
-      {
-        name: "description",
-        content: "課題の切り分けから実装・運用・検証までをまとめた事例の一覧。",
-      },
-      { property: "og:title", content: "Case Studies | koshikai" },
-      {
-        property: "og:description",
-        content: "課題の切り分けから実装・運用・検証までをまとめた事例の一覧。",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: "Case Studies",
+      description: "課題の切り分けから実装・運用・検証までをまとめた事例の一覧。",
+      path: "/cases",
+    }),
   component: CasesPage,
 });
 

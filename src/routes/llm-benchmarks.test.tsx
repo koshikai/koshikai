@@ -8,11 +8,13 @@ vi.mock("@tanstack/react-router", () => ({
       {children}
     </a>
   ),
-  createFileRoute: () => () => ({}),
+  createFileRoute: () => (options: Record<string, unknown>) => ({ options }),
 }));
 import { render, screen, fireEvent, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { LlmBenchmarksPage } from "./llm-benchmarks";
+import { Route } from "./llm-benchmarks";
+
+const LlmBenchmarksPage = Route.options.component!;
 import {
   BENCHMARK_DATASET_VERIFIED_AT,
   BENCHMARK_METRICS,

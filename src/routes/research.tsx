@@ -3,25 +3,17 @@ import { CaseList } from "@/components/CaseList";
 import { ResearchCard } from "@/components/ResearchCard";
 import { ArrowLink, Container, PageHeader, SectionHeader } from "@/components/ui";
 import { getCasesByAxis } from "@/lib/cases";
+import { pageHead } from "@/lib/metadata";
 import { publications, researchCode, researchNotes, researchTopics } from "@/lib/research";
 
 export const Route = createFileRoute("/research")({
-  head: () => ({
-    meta: [
-      { title: "Research | koshikai" },
-      {
-        name: "description",
-        content:
-          "強化学習によるネットワーク制御と、データ分析の取り組み。問題設定・手法・検証結果を分けてまとめています。",
-      },
-      { property: "og:title", content: "Research | koshikai" },
-      {
-        property: "og:description",
-        content:
-          "強化学習によるネットワーク制御と、データ分析の取り組み。問題設定・手法・検証結果を分けてまとめています。",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: "Research",
+      description:
+        "強化学習によるネットワーク制御と、データ分析の取り組み。問題設定・手法・検証結果を分けてまとめています。",
+      path: "/research",
+    }),
   component: ResearchPage,
 });
 

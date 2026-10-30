@@ -1,13 +1,22 @@
-import * as React from "react";
+import type { ComponentType } from "react";
+import type { MDXComponents } from "mdx/types";
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { Container, Tags } from "@/components/ui";
 import { SplitHeading } from "@/components/SplitHeading";
-import { AXES, getCaseBySlug, getCaseContentComponent } from "@/lib/cases";
+import { AXES, getCaseBySlug } from "@/lib/cases";
 import { splitIntoChunks } from "@/lib/chunks";
+import { pageHead } from "@/lib/metadata";
+import { useMDXComponents } from "../../../mdx-components";
+
+const mdxModules = import.meta.glob<{
+  default: ComponentType<{ components?: MDXComponents }>;
+}>("../../content/cases/*.mdx", { eager: true });
+
+const mdxComponents = useMDXComponents({});
 
 export const Route = createFileRoute("/cases/$slug")({
-  loader: async ({ params }) => {
+  loader: ({ params }) => {
     const item = getCaseBySlug(params.slug);
     if (!item) {
       throw notFound();
@@ -17,44 +26,20 @@ export const Route = createFileRoute("/cases/$slug")({
   head: ({ loaderData }) => {
     if (!loaderData?.item) return {};
     const { item } = loaderData;
-    return {
-      meta: [
-        { title: `${item.title} | Case Studies` },
-        { name: "description", content: item.summary },
-        { property: "og:title", content: `${item.title} | Case Studies` },
-        { property: "og:description", content: item.summary },
-        { property: "og:type", content: "article" },
-      ],
-    };
+    return pageHead({
+      title: item.title,
+      description: item.summary,
+      path: `/cases/${item.slug}`,
+      type: "article",
+    });
   },
   component: CaseDetailPage,
 });
 
-function CaseContentBody({ slug }: { slug: string }) {
-  const [Component, setComponent] = React.useState<React.ComponentType | null>(null);
-
-  React.useEffect(() => {
-    let mounted = true;
-    getCaseContentComponent(slug).then((comp) => {
-      if (mounted) {
-        setComponent(() => comp);
-      }
-    });
-    return () => {
-      mounted = false;
-    };
-  }, [slug]);
-
-  if (!Component) {
-    return <div className="py-8 text-sm text-muted">読み込み中...</div>;
-  }
-
-  return <Component />;
-}
-
 function CaseDetailPage() {
   const { slug } = Route.useParams();
   const { item } = Route.useLoaderData();
+  const Content = mdxModules[`../../content/cases/${slug}.mdx`]?.default;
 
   const axis = AXES[item.axis];
   const summary = [
@@ -105,7 +90,7 @@ function CaseDetailPage() {
           )}
 
           <div className="case-article-content mt-12">
-            <CaseContentBody slug={slug} />
+            {Content ? <Content components={mdxComponents} /> : null}
           </div>
         </article>
       </Container>

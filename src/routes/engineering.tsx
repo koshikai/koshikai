@@ -6,24 +6,16 @@ import { HomelabStack } from "@/components/HomelabStack";
 import { Container, PageHeader, SectionHeader } from "@/components/ui";
 import { getCasesByAxis } from "@/lib/cases";
 import { operationFacts } from "@/lib/engineering";
+import { pageHead } from "@/lib/metadata";
 
 export const Route = createFileRoute("/engineering")({
-  head: () => ({
-    meta: [
-      { title: "Engineering | koshikai" },
-      {
-        name: "description",
-        content:
-          "自宅の Proxmox でデプロイ・構成・復旧まで自分で回しています。実際に使って運用している技術だけを載せています。",
-      },
-      { property: "og:title", content: "Engineering | koshikai" },
-      {
-        property: "og:description",
-        content:
-          "自宅の Proxmox でデプロイ・構成・復旧まで自分で回しています。実際に使って運用している技術だけを載せています。",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: "Engineering",
+      description:
+        "自宅の Proxmox でデプロイ・構成・復旧まで自分で回しています。実際に使って運用している技術だけを載せています。",
+      path: "/engineering",
+    }),
   component: EngineeringPage,
 });
 
