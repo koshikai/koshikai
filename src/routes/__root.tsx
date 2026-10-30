@@ -53,6 +53,8 @@ export const Route = createRootRoute({
       ],
       links: [
         { rel: "icon", href: "/favicon.ico" },
+        { rel: "apple-touch-icon", href: "/apple-icon.png" },
+        { rel: "manifest", href: "/manifest.json" },
         { rel: "canonical", href: site.baseUrl },
       ],
     };

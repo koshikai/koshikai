@@ -4,23 +4,24 @@
 
 ## 技術スタック
 
-- **フレームワーク**: Next.js 16 (App Router)
+- **フレームワーク**: TanStack Start (Vite + SSR + TanStack Router)
 - **言語**: TypeScript
 - **ランタイム**: Bun >= 1.0.0（ローカル開発）
-- **Node.js**: 22（Docker ビルド時）
+- **Node.js**: 22（Docker ビルド・本番実行時）
 - **スタイリング**: Tailwind CSS v4
 - **テスト**: Vitest + @testing-library/react + happy-dom
-- **Lint**: ESLint (eslint-config-next)
-- **MDX**: @next/mdx（コンテンツ管理用）
+- **Lint**: ESLint (@eslint/js + typescript-eslint)
+- **MDX**: @mdx-js/rollup（コンテンツ管理用）
 
 ## 重要なファイル・ディレクトリ
 
 | パス | 用途 |
 |------|------|
-| `src/app/` | Next.js App Router ページ（`/works` `/engineering` `/research` `/about` など） |
+| `src/routes/` | TanStack Router ページ（`/works` `/engineering` `/research` `/about` など） |
 | `src/components/` | React コンポーネント |
 | `src/lib/` | 表示データ（`profile` / `works` / `engineering` / `research` / `cases`）。内容はここを編集する |
 | `src/content/cases/` | MDX ケーススタディコンテンツ |
+| `server.mjs` | 本番用 SSR 配信サーバー（Node.js / Bun 両対応） |
 | `scripts/` | 運用スクリプト |
 | `docker-compose.prod.yaml` | 本番 Docker Compose 構成 |
 | `Dockerfile` | アプリ用 Docker イメージ |
@@ -44,7 +45,7 @@ bun run build
 
 - TypeScript の `strict` モード有効
 - React 19 + React Compiler 有効
-- コンポーネントはデフォルトエクスポート（Next.js ページ要件）
+- ルートファイルは `src/routes/` 配下に配置（TanStack Router ファイルベースルーティング）
 - テストファイルは対象ファイルと同じディレクトリに配置（`*.test.ts` / `*.test.tsx`）
 - MDX コンポーネントは `mdx-components.tsx` で拡張
 
@@ -96,13 +97,3 @@ SITE_URL=https://koshikai.dev  # canonical / metadata 用 URL
 - `README.md`: プロジェクト概要・クイックスタート
 - `docs/deployment.md`: デプロイ構成の詳細
 - `docs/architecture.md`: アーキテクチャ概要
-
-<!-- BEGIN:nextjs-agent-rules -->
-
-## This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
-
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
-
-<!-- END:nextjs-agent-rules -->

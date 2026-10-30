@@ -26,7 +26,7 @@ export const Route = createFileRoute("/llm-benchmarks")({
   component: LlmBenchmarksPage,
 });
 
-function LlmBenchmarksPage() {
+export function LlmBenchmarksPage() {
   return (
     <div className="bg-background text-foreground">
       <main
