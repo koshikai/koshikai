@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { CapabilityTable } from "@/components/CapabilityTable";
 import { DeployPipeline } from "@/components/DeployPipeline";
+import { HeroField } from "@/components/HeroField";
 import { LiquidButton } from "@/components/LiquidButton";
 import { Marquee } from "@/components/Marquee";
 import { ResearchCard } from "@/components/ResearchCard";
@@ -60,7 +61,8 @@ function Home() {
     <main id="main-content">
       {/* --- Hero + 3軸サマリ --- */}
       <Container>
-        <section aria-labelledby="hero-heading" className="pb-12 pt-16 sm:pb-16 sm:pt-24">
+        <section aria-labelledby="hero-heading" className="relative isolate pb-12 pt-16 sm:pb-16 sm:pt-24">
+          <HeroField />
           <SplitHeading
             as="h1"
             id="hero-heading"
