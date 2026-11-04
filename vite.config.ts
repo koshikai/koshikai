@@ -4,12 +4,12 @@ import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import mdx from "@mdx-js/rollup";
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   resolve: {
     tsconfigPaths: true,
   },
   ssr: {
-    noExternal: true,
+    noExternal: command === "build" ? true : undefined,
   },
   plugins: [
     tanstackStart(),
@@ -17,4 +17,4 @@ export default defineConfig({
     tailwindcss(),
     mdx(),
   ],
-});
+}));
