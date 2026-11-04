@@ -84,7 +84,7 @@ export const operationFacts = [
 export const homelabLayers = [
   { layer: "公開経路", items: ["Cloudflare Tunnel"] },
   { layer: "プロキシ / DNS", items: ["Nginx Proxy Manager", "AdGuard Home"] },
-  { layer: "アプリ", items: ["koshikai.dev", "Smoke it.", "KariGallery"] },
+  { layer: "アプリ", items: ["koshikai.dev", "Smoke it.", "KariGallery", "Nextcloud"] },
   { layer: "データ", items: ["PostgreSQL", "Immich（写真・動画）"] },
   { layer: "オフロード", items: ["機械学習処理 → GPU マシン"] },
   { layer: "基盤", items: ["Proxmox VE", "LXC", "Docker"] },

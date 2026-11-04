@@ -12,9 +12,10 @@
 
 Immich のマイクロサービス構成に着目し、WebUI やデータベース（PostgreSQL）といった基本機能は 24時間動く Proxmox 側に置き、重い機械学習処理（`immich-machine-learning`）だけを LAN 越しの Windows PC へオフロードする分散構成を取りました。
 
-- **処理の分離:** Proxmox 側の `docker-compose.yml` から機械学習コンテナを外し、リモートエンドポイントとして Windows PC の IP とポートを指定
-- **GPU の開放:** Windows 側の WSL2 / Docker 環境に NVIDIA Container Toolkit を導入し、RTX シリーズの GPU をコンテナへパススルー
+- **処理の分離:** Proxmox 側から機械学習コンテナを外し、`IMMICH_MACHINE_LEARNING_URL` に Windows PC の IP とポート（3003）を指定
+- **GPU の開放:** Windows 側の WSL（Ubuntu）で機械学習コンテナを動かし、RTX の GPU をそのまま推論に使う。WSL のネットワークはミラーモードにして、LAN 上のサーバーから端末の IP へ直接届くようにした
 - **ネットワーク経由の推論:** 写真の取り込みや再スキャン時、Proxmox から Windows 側のエンドポイントへ推論リクエストを投げる構成に整理
+- **再起動後の復帰:** WSL 側のコンテナは自動再起動の仕組みを持たないため、ログオン時に起動するスクリプトをスタートアップに置いて復帰させる
 
 ## 数日かかっていたスキャンが数時間に縮んだ
 
