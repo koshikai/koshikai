@@ -63,7 +63,7 @@ describe("content data", () => {
 
   it("lists all main routes and case studies in public/sitemap.xml", () => {
     const sitemap = readFileSync(resolve(process.cwd(), "public/sitemap.xml"), "utf-8");
-    for (const path of ["", "/works", "/engineering", "/research", "/about", "/cases", "/llm-benchmarks"]) {
+    for (const path of ["", "/works", "/engineering", "/research", "/about", "/cases"]) {
       expect(sitemap, path || "/").toContain(`<loc>https://koshikai.dev${path}</loc>`);
     }
     for (const item of caseItems) {

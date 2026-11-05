@@ -13,7 +13,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as EngineeringRouteImport } from './routes/engineering'
 import { Route as HealthzRouteImport } from './routes/healthz'
-import { Route as LlmBenchmarksRouteImport } from './routes/llm-benchmarks'
 import { Route as ResearchRouteImport } from './routes/research'
 import { Route as WorksRouteImport } from './routes/works'
 import { Route as CasesIndexRouteImport } from './routes/cases/index'
@@ -37,11 +36,6 @@ const EngineeringRoute = EngineeringRouteImport.update({
 const HealthzRoute = HealthzRouteImport.update({
   id: '/healthz',
   path: '/healthz',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LlmBenchmarksRoute = LlmBenchmarksRouteImport.update({
-  id: '/llm-benchmarks',
-  path: '/llm-benchmarks',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResearchRoute = ResearchRouteImport.update({
@@ -70,7 +64,6 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/engineering': typeof EngineeringRoute
   '/healthz': typeof HealthzRoute
-  '/llm-benchmarks': typeof LlmBenchmarksRoute
   '/research': typeof ResearchRoute
   '/works': typeof WorksRoute
   '/cases/$slug': typeof CasesSlugRoute
@@ -81,7 +74,6 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/engineering': typeof EngineeringRoute
   '/healthz': typeof HealthzRoute
-  '/llm-benchmarks': typeof LlmBenchmarksRoute
   '/research': typeof ResearchRoute
   '/works': typeof WorksRoute
   '/cases/$slug': typeof CasesSlugRoute
@@ -93,7 +85,6 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/engineering': typeof EngineeringRoute
   '/healthz': typeof HealthzRoute
-  '/llm-benchmarks': typeof LlmBenchmarksRoute
   '/research': typeof ResearchRoute
   '/works': typeof WorksRoute
   '/cases/$slug': typeof CasesSlugRoute
@@ -106,7 +97,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/engineering'
     | '/healthz'
-    | '/llm-benchmarks'
     | '/research'
     | '/works'
     | '/cases/$slug'
@@ -117,7 +107,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/engineering'
     | '/healthz'
-    | '/llm-benchmarks'
     | '/research'
     | '/works'
     | '/cases/$slug'
@@ -128,7 +117,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/engineering'
     | '/healthz'
-    | '/llm-benchmarks'
     | '/research'
     | '/works'
     | '/cases/$slug'
@@ -140,7 +128,6 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   EngineeringRoute: typeof EngineeringRoute
   HealthzRoute: typeof HealthzRoute
-  LlmBenchmarksRoute: typeof LlmBenchmarksRoute
   ResearchRoute: typeof ResearchRoute
   WorksRoute: typeof WorksRoute
   CasesSlugRoute: typeof CasesSlugRoute
@@ -175,13 +162,6 @@ declare module '@tanstack/react-router' {
       path: '/healthz'
       fullPath: '/healthz'
       preLoaderRoute: typeof HealthzRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/llm-benchmarks': {
-      id: '/llm-benchmarks'
-      path: '/llm-benchmarks'
-      fullPath: '/llm-benchmarks'
-      preLoaderRoute: typeof LlmBenchmarksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/research': {
@@ -220,7 +200,6 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   EngineeringRoute: EngineeringRoute,
   HealthzRoute: HealthzRoute,
-  LlmBenchmarksRoute: LlmBenchmarksRoute,
   ResearchRoute: ResearchRoute,
   WorksRoute: WorksRoute,
   CasesSlugRoute: CasesSlugRoute,

@@ -52,7 +52,6 @@
 | `/about` | 経歴・受賞・講座・連絡先・募集状況（任意） |
 | `/cases` | 全事例の索引（フッターから） |
 | `/cases/$slug` | 事例詳細（MDX）。`axis` で所属する軸が決まる |
-| `/llm-benchmarks` | Research 配下の独立ページ |
 | `/healthz` | ヘルスチェック |
 | `/manifest.json` | Web App Manifest（`public/manifest.json`） |
 

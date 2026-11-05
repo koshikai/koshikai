@@ -51,11 +51,6 @@ export function Footer() {
                 All case studies
               </Link>
             </li>
-            <li>
-              <Link to="/llm-benchmarks" className={linkClass}>
-                LLM Benchmarks
-              </Link>
-            </li>
           </Column>
           <Column title="Contact">
             {email && (

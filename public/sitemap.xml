@@ -31,11 +31,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://koshikai.dev/llm-benchmarks</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://koshikai.dev/cases/immich-distributed</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
