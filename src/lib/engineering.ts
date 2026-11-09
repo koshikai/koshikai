@@ -20,6 +20,7 @@ export interface Capability {
 const SMOKE_IT: Evidence = { label: "Smoke it.", href: "/cases/smoke-it" };
 const KARIGALLERY: Evidence = { label: "KariGallery", href: "/cases/karigallery" };
 const RESEARCH_AGENT: Evidence = { label: "研究エージェント", href: "/cases/ai-research-agent" };
+const AGENT_OPS: Evidence = { label: "常駐エージェント運用", href: "/cases/agent-operations" };
 const THIS_SITE: Evidence = { label: "このサイト", href: "/engineering#pipeline" };
 const HOMELAB: Evidence = { label: "分散インフラ基盤", href: "/cases/immich-distributed" };
 const DEPLOY: Evidence = { label: "デプロイ自動化", href: "/cases/deploy-automation" };
@@ -53,7 +54,7 @@ export const capabilities: Capability[] = [
   {
     area: "AI",
     tools: ["LLM", "AI エージェント", "MCP"],
-    evidence: [SMOKE_IT, RESEARCH_AGENT, HOMELAB],
+    evidence: [SMOKE_IT, RESEARCH_AGENT, AGENT_OPS, HOMELAB],
   },
 ];
 
@@ -74,6 +75,10 @@ export const operationFacts = [
   {
     title: "バックアップと復旧手順の整備",
     body: "写真・動画データの定期バックアップと世代保持方針を定め、障害時の復元手順を文書化しています。",
+  },
+  {
+    title: "常駐エージェントへの定型作業の委譲",
+    body: "自宅サーバー上で AI エージェントを常駐させ、差分と履歴の確認・検証コマンドの実行・デプロイ監視を SSH 越しに委譲しています。会話履歴と作業手順は用途別のプロファイルに分けて保存しています。",
   },
 ];
 
