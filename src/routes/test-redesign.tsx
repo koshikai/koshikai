@@ -1,0 +1,600 @@
+import { useEffect, useRef, useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowDown, ArrowUpRight, Moon, Sun } from "lucide-react";
+import "../styles/test-redesign.css";
+
+import { capabilities, homelabLayers, operationFacts, pipelineSteps } from "@/lib/engineering";
+import { pageHead } from "@/lib/metadata";
+import { profile } from "@/lib/profile";
+import { featuredResearch } from "@/lib/research";
+import { featuredWorks, STATUS_LABELS, works, type Work } from "@/lib/works";
+
+/**
+ * トップページの刷新案（検証用）。
+ *
+ * 現行の `/` には手を入れず、別ルートとして置いている。見た目は既存の
+ * コンポーネントや Tailwind のトークンを使わず、`styles/test-redesign.css` の
+ * `.rdx` 配下だけで組む。表示する事実（作品・運用・研究）は現行と同じ
+ * `src/lib/` のデータを読むので、内容が現行ページと食い違うことはない。
+ *
+ * 検索結果には出さない（noindex。sitemap.xml にも載せない）。
+ */
+export const Route = createFileRoute("/test-redesign")({
+  head: () => {
+    const head = pageHead({
+      title: "トップページ刷新案（検証用）",
+      description: "koshikai.dev トップページのデザイン刷新案。検証用のページです。",
+      path: "/test-redesign",
+    });
+    return {
+      ...head,
+      meta: [...head.meta, { name: "robots", content: "noindex, nofollow" }],
+    };
+  },
+  component: TestRedesign,
+});
+
+const nav = [
+  { label: "Works", to: "/works" },
+  { label: "Engineering", to: "/engineering" },
+  { label: "Research", to: "/research" },
+  { label: "About", to: "/about" },
+] as const;
+
+const axes = [
+  {
+    key: "build",
+    href: "#works",
+    summary: "Web・AI・ゲームの個人開発",
+    value: String(works.length),
+    proof: "つの個人プロダクトを単独で開発",
+  },
+  {
+    key: "operate",
+    href: "#operate",
+    summary: "自宅サーバーと CI/CD によるインフラ運用",
+    value: "10+",
+    proof: "のサービスを Proxmox 上で運用",
+  },
+  {
+    key: "research",
+    href: "#research",
+    summary: "強化学習と統計モデルによる検証",
+    value: "96/96",
+    proof: "の初期状態で安定化（Wnt5a）",
+  },
+];
+
+const pad = (n: number) => String(n).padStart(2, "0");
+
+/** 画面に入った要素へ一度だけ .is-in を付ける */
+function useReveal() {
+  const ref = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const root = ref.current;
+    if (!root) return;
+    const targets = root.querySelectorAll<HTMLElement>("[data-rv]");
+    if (typeof IntersectionObserver === "undefined") {
+      targets.forEach((el) => el.classList.add("is-in"));
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.classList.add("is-in");
+          observer.unobserve(entry.target);
+        }
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.05 },
+    );
+    targets.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
+  return ref;
+}
+
+/** 保存先と dark クラスの扱いは、サイト共通の切り替えと同じ約束に合わせる */
+function toggleTheme() {
+  const next = !document.documentElement.classList.contains("dark");
+  document.documentElement.classList.toggle("dark", next);
+  try {
+    if (next) localStorage.setItem("theme", "dark");
+    else localStorage.removeItem("theme");
+  } catch {
+    // 保存できない環境では、その場の見た目だけ切り替える
+  }
+}
+
+function Nav() {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  return (
+    <>
+      <header className="rdx-nav">
+        <a href="#main-content" className="rdx-nav-brand">
+          koshikai
+        </a>
+        <nav aria-label="メインナビゲーション" className="rdx-nav-links">
+          {nav.map((item) => (
+            <Link key={item.to} to={item.to}>
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+        <button
+          type="button"
+          className="rdx-icon-btn rdx-theme"
+          onClick={toggleTheme}
+          aria-label="ライト／ダークを切り替える"
+        >
+          <Moon className="rdx-moon" aria-hidden="true" />
+          <Sun className="rdx-sun" aria-hidden="true" />
+        </button>
+        <button
+          type="button"
+          className="rdx-icon-btn rdx-menu-btn"
+          onClick={() => setOpen((value) => !value)}
+          aria-expanded={open}
+          aria-controls="rdx-menu"
+          aria-label={open ? "メニューを閉じる" : "メニューを開く"}
+        >
+          <span className="rdx-burger" aria-hidden="true" />
+        </button>
+      </header>
+
+      {open && (
+        <nav id="rdx-menu" aria-label="メニュー" className="rdx-menu">
+          {nav.map((item, i) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              onClick={() => setOpen(false)}
+              style={{ "--i": i } as React.CSSProperties}
+            >
+              <span className="rdx-mono">{pad(i + 1)}</span>
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+      )}
+    </>
+  );
+}
+
+function SectionHead({
+  id,
+  label,
+  title,
+  description,
+}: {
+  id: string;
+  label: string;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="rdx-head" data-rv>
+      <p className="rdx-label rdx-mono">{label}</p>
+      <h2 id={id} className="rdx-h2">
+        {title}
+      </h2>
+      <p className="rdx-head-desc">{description}</p>
+    </div>
+  );
+}
+
+function WorkItem({ work }: { work: Work }) {
+  const external = work.links.live ?? work.links.download;
+  const image = work.image && (
+    <img
+      src={work.image.desktop.src}
+      width={work.image.desktop.width}
+      height={work.image.desktop.height}
+      alt={work.image.alt}
+      loading="lazy"
+      decoding="async"
+    />
+  );
+
+  return (
+    <article className="rdx-work" data-rv>
+      {image &&
+        (external ? (
+          <a
+            className="rdx-work-media"
+            href={external}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${work.name} を開く（新しいタブ）`}
+          >
+            {image}
+          </a>
+        ) : (
+          <div className="rdx-work-media">{image}</div>
+        ))}
+
+      <div>
+        <p className="rdx-work-meta rdx-mono">
+          <span>{work.since}</span>
+          <span className="rdx-pill" data-status={work.status}>
+            {STATUS_LABELS[work.status]}
+          </span>
+        </p>
+        <h3 className="rdx-work-name">{work.name}</h3>
+        <p className="rdx-work-tagline">{work.tagline}</p>
+        <p className="rdx-work-summary">{work.summary}</p>
+
+        <dl className="rdx-facts">
+          <div>
+            <dt className="rdx-mono">担当</dt>
+            <dd>{work.scope}</dd>
+          </div>
+          {work.operation && (
+            <div>
+              <dt className="rdx-mono">運用</dt>
+              <dd>{work.operation}</dd>
+            </div>
+          )}
+          {work.statusNote && (
+            <div>
+              <dt className="rdx-mono">公開</dt>
+              <dd>{work.statusNote}</dd>
+            </div>
+          )}
+          <div>
+            <dt className="rdx-mono">技術</dt>
+            <dd>
+              <ul className="rdx-chips rdx-mono">
+                {work.stack.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </dd>
+          </div>
+        </dl>
+
+        <div className="rdx-work-links">
+          {work.links.caseSlug && (
+            <Link to="/cases/$slug" params={{ slug: work.links.caseSlug }} className="rdx-more">
+              設計と判断を読む
+              <ArrowUpRight aria-hidden="true" />
+            </Link>
+          )}
+          {work.links.live && (
+            <a href={work.links.live} target="_blank" rel="noopener noreferrer" className="rdx-more">
+              サイトを開く
+              <ArrowUpRight aria-hidden="true" />
+            </a>
+          )}
+          {work.links.download && (
+            <a
+              href={work.links.download}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rdx-more"
+            >
+              ダウンロード
+              <ArrowUpRight aria-hidden="true" />
+            </a>
+          )}
+          {work.links.repo && (
+            <a href={work.links.repo} target="_blank" rel="noopener noreferrer" className="rdx-more">
+              ソースコード
+              <ArrowUpRight aria-hidden="true" />
+            </a>
+          )}
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function TestRedesign() {
+  const ref = useReveal();
+  const { email, links } = profile.contact;
+
+  return (
+    <main id="main-content" className="rdx" ref={ref}>
+      <Nav />
+
+      {/* --- Hero --- */}
+      <section className="rdx-wrap rdx-hero" aria-labelledby="rdx-hero-heading">
+        <p className="rdx-eyebrow rdx-mono">
+          <span className="rdx-dot" aria-hidden="true" />
+          <b>{profile.name}</b>
+          <span>build / operate / research</span>
+        </p>
+        <h1 id="rdx-hero-heading" className="rdx-h1">
+          {["作って、", "動かして、", "確かめる。"].map((line, i) => (
+            <span key={line} style={{ "--i": i } as React.CSSProperties}>
+              {line}
+            </span>
+          ))}
+        </h1>
+
+        <div className="rdx-hero-sub">
+          <p className="rdx-lead">{profile.lead}</p>
+          <div className="rdx-cta">
+            <Link to="/works" className="rdx-btn">
+              作品を見る
+              <ArrowUpRight aria-hidden="true" />
+            </Link>
+            <a
+              href="https://github.com/koshikai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rdx-btn rdx-btn--ghost"
+            >
+              GitHub
+              <ArrowUpRight aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+
+        <nav aria-label="3つの軸">
+          <ul className="rdx-axes">
+            {axes.map((axis, i) => (
+              <li key={axis.key} data-rv style={{ "--rv-delay": `${i * 80}ms` } as React.CSSProperties}>
+                <a href={axis.href} className="rdx-axis">
+                  <span className="rdx-axis-no rdx-mono">{pad(i + 1)}</span>
+                  <span className="rdx-axis-key">{axis.key}</span>
+                  <span className="rdx-axis-sum">{axis.summary}</span>
+                  <span className="rdx-axis-proof">
+                    <b className="rdx-mono">{axis.value}</b>
+                    {axis.proof}
+                  </span>
+                  <ArrowDown className="rdx-axis-arrow" aria-hidden="true" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </section>
+
+      {/* --- build --- */}
+      <section id="works" className="rdx-wrap rdx-section" aria-labelledby="rdx-works-heading">
+        <SectionHead
+          id="rdx-works-heading"
+          label="01 — build"
+          title="企画から公開まで、ひとりで作る。"
+          description="企画・設計・実装・公開までを単独で進めたプロダクトです。"
+        />
+        <div className="rdx-works">
+          {featuredWorks.map((work) => (
+            <WorkItem key={work.slug} work={work} />
+          ))}
+        </div>
+        <div className="rdx-foot" data-rv>
+          <span>
+            全 {works.length} 作品のうち {featuredWorks.length} 作品を掲載
+          </span>
+          <Link to="/works" className="rdx-more">
+            すべての作品
+            <ArrowUpRight aria-hidden="true" />
+          </Link>
+        </div>
+      </section>
+
+      {/* --- operate --- */}
+      <div className="rdx-band-outer">
+        <section id="operate" className="rdx-band" aria-labelledby="rdx-operate-heading">
+          <div className="rdx-wrap">
+            <SectionHead
+              id="rdx-operate-heading"
+              label="02 — operate"
+              title="main に push すると、自宅のサーバーまで届く。"
+              description="自宅の Proxmox 基盤で、デプロイ自動化・構成管理・バックアップを運用しています。"
+            />
+
+            <div className="rdx-pipe" data-rv>
+              <p className="rdx-pipe-title rdx-mono">
+                <span>deploy pipeline</span>
+                <span>このサイトの配信経路</span>
+              </p>
+              <ol className="rdx-pipe-steps">
+                {pipelineSteps.map((step, i) => (
+                  <li
+                    key={step.label}
+                    className="rdx-pipe-step"
+                    style={{ "--i": i } as React.CSSProperties}
+                  >
+                    <span className="rdx-pipe-node" aria-hidden="true" />
+                    <span className="rdx-pipe-name rdx-mono">{step.label}</span>
+                    <span className="rdx-pipe-detail rdx-mono"> {step.detail}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            <div className="rdx-ops">
+              <ol className="rdx-ops-facts" data-rv>
+                {operationFacts.slice(0, 4).map((fact, i) => (
+                  <li key={fact.title}>
+                    <span className="rdx-mono" aria-hidden="true">
+                      {pad(i + 1)}
+                    </span>
+                    <h3>{fact.title}</h3>
+                    <p>{fact.body}</p>
+                  </li>
+                ))}
+              </ol>
+
+              <div data-rv>
+                <p className="rdx-layers-title rdx-mono">homelab — 層ごとの構成</p>
+                <dl className="rdx-layers">
+                  {homelabLayers.map((layer) => (
+                    <div key={layer.layer} className="rdx-layer">
+                      <dt className="rdx-mono">{layer.layer}</dt>
+                      <dd>{layer.items.join(" · ")}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            </div>
+
+            <div className="rdx-foot" data-rv>
+              <span>構成図・バックアップ方針・技術の詳細</span>
+              <Link to="/engineering" className="rdx-more">
+                Engineering
+                <ArrowUpRight aria-hidden="true" />
+              </Link>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {/* --- research --- */}
+      <section id="research" className="rdx-wrap rdx-section" aria-labelledby="rdx-research-heading">
+        <SectionHead
+          id="rdx-research-heading"
+          label="03 — research"
+          title="結果は、数字で確かめる。"
+          description="強化学習によるネットワーク制御と、実データを用いた統計分析。"
+        />
+        <ul className="rdx-research">
+          {featuredResearch.map((topic, i) => (
+            <li
+              key={topic.slug}
+              className="rdx-paper"
+              data-rv
+              style={{ "--rv-delay": `${i * 100}ms` } as React.CSSProperties}
+            >
+              {topic.metric && (
+                <>
+                  <p className="rdx-metric">{topic.metric.value}</p>
+                  <p className="rdx-metric-label rdx-mono">{topic.metric.label}</p>
+                </>
+              )}
+              <h3>{topic.title}</h3>
+              <p className="rdx-paper-context">{topic.context}</p>
+              <dl className="rdx-pmr">
+                <div>
+                  <dt className="rdx-mono">Problem</dt>
+                  <dd>{topic.problem}</dd>
+                </div>
+                <div>
+                  <dt className="rdx-mono">Method</dt>
+                  <dd>{topic.method}</dd>
+                </div>
+                <div>
+                  <dt className="rdx-mono">Result</dt>
+                  <dd>{topic.result}</dd>
+                </div>
+              </dl>
+              {topic.caseSlug && (
+                <Link to="/cases/$slug" params={{ slug: topic.caseSlug }} className="rdx-more">
+                  進め方を読む
+                  <ArrowUpRight aria-hidden="true" />
+                </Link>
+              )}
+            </li>
+          ))}
+        </ul>
+        <div className="rdx-foot" data-rv>
+          <span>発表・進行中の研究・公開コード</span>
+          <Link to="/research" className="rdx-more">
+            Research
+            <ArrowUpRight aria-hidden="true" />
+          </Link>
+        </div>
+      </section>
+
+      {/* --- stack --- */}
+      <section className="rdx-wrap rdx-section" aria-labelledby="rdx-stack-heading">
+        <SectionHead
+          id="rdx-stack-heading"
+          label="stack"
+          title="使った技術と、その使用例。"
+          description="実際に使った技術だけを、使った作品・事例へのリンクと一緒に載せています。"
+        />
+        <ul className="rdx-stack" data-rv>
+          {capabilities.map((capability) => (
+            <li key={capability.area} className="rdx-stack-row">
+              <span className="rdx-stack-area rdx-mono">{capability.area}</span>
+              <span className="rdx-stack-tools">
+                {capability.tools.map((tool) => (
+                  <span key={tool}>{tool}</span>
+                ))}
+              </span>
+              <span className="rdx-stack-ev">
+                {capability.evidence.map((evidence) => (
+                  <a key={evidence.href} href={evidence.href}>
+                    {evidence.label}
+                  </a>
+                ))}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* --- contact --- */}
+      <section className="rdx-wrap rdx-contact" aria-labelledby="rdx-contact-heading">
+        <div data-rv>
+          <p className="rdx-label rdx-mono">contact</p>
+          <h2 id="rdx-contact-heading" className="rdx-sr">
+            Contact
+          </h2>
+          {email ? (
+            <a href={`mailto:${email}`} className="rdx-mail">
+              {email}
+            </a>
+          ) : (
+            <Link to="/about" hash="contact" className="rdx-mail">
+              Contact
+            </Link>
+          )}
+          <div className="rdx-contact-links">
+            {links.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rdx-more"
+              >
+                {link.label} {link.handle}
+                <ArrowUpRight aria-hidden="true" />
+              </a>
+            ))}
+            <Link to="/about" className="rdx-more">
+              経歴を見る
+              <ArrowUpRight aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <footer className="rdx-wrap">
+        <div className="rdx-footer">
+          <p>© {new Date().getFullYear()} koshikai</p>
+          <nav aria-label="フッターナビゲーション">
+            {nav.map((item) => (
+              <Link key={item.to} to={item.to}>
+                {item.label}
+              </Link>
+            ))}
+            <Link to="/cases">Cases</Link>
+          </nav>
+        </div>
+      </footer>
+
+      <p className="rdx-flag rdx-mono">
+        検証用の刷新案
+        <Link to="/">現行のトップへ</Link>
+      </p>
+    </main>
+  );
+}

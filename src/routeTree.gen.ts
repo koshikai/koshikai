@@ -14,6 +14,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as EngineeringRouteImport } from './routes/engineering'
 import { Route as HealthzRouteImport } from './routes/healthz'
 import { Route as ResearchRouteImport } from './routes/research'
+import { Route as TestRedesignRouteImport } from './routes/test-redesign'
 import { Route as WorksRouteImport } from './routes/works'
 import { Route as CasesIndexRouteImport } from './routes/cases/index'
 import { Route as CasesSlugRouteImport } from './routes/cases/$slug'
@@ -43,6 +44,11 @@ const ResearchRoute = ResearchRouteImport.update({
   path: '/research',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TestRedesignRoute = TestRedesignRouteImport.update({
+  id: '/test-redesign',
+  path: '/test-redesign',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WorksRoute = WorksRouteImport.update({
   id: '/works',
   path: '/works',
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/engineering': typeof EngineeringRoute
   '/healthz': typeof HealthzRoute
   '/research': typeof ResearchRoute
+  '/test-redesign': typeof TestRedesignRoute
   '/works': typeof WorksRoute
   '/cases/$slug': typeof CasesSlugRoute
   '/cases/': typeof CasesIndexRoute
@@ -75,6 +82,7 @@ export interface FileRoutesByTo {
   '/engineering': typeof EngineeringRoute
   '/healthz': typeof HealthzRoute
   '/research': typeof ResearchRoute
+  '/test-redesign': typeof TestRedesignRoute
   '/works': typeof WorksRoute
   '/cases/$slug': typeof CasesSlugRoute
   '/cases': typeof CasesIndexRoute
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   '/engineering': typeof EngineeringRoute
   '/healthz': typeof HealthzRoute
   '/research': typeof ResearchRoute
+  '/test-redesign': typeof TestRedesignRoute
   '/works': typeof WorksRoute
   '/cases/$slug': typeof CasesSlugRoute
   '/cases/': typeof CasesIndexRoute
@@ -98,6 +107,7 @@ export interface FileRouteTypes {
     | '/engineering'
     | '/healthz'
     | '/research'
+    | '/test-redesign'
     | '/works'
     | '/cases/$slug'
     | '/cases/'
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/engineering'
     | '/healthz'
     | '/research'
+    | '/test-redesign'
     | '/works'
     | '/cases/$slug'
     | '/cases'
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '/engineering'
     | '/healthz'
     | '/research'
+    | '/test-redesign'
     | '/works'
     | '/cases/$slug'
     | '/cases/'
@@ -129,6 +141,7 @@ export interface RootRouteChildren {
   EngineeringRoute: typeof EngineeringRoute
   HealthzRoute: typeof HealthzRoute
   ResearchRoute: typeof ResearchRoute
+  TestRedesignRoute: typeof TestRedesignRoute
   WorksRoute: typeof WorksRoute
   CasesSlugRoute: typeof CasesSlugRoute
   CasesIndexRoute: typeof CasesIndexRoute
@@ -171,6 +184,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResearchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/test-redesign': {
+      id: '/test-redesign'
+      path: '/test-redesign'
+      fullPath: '/test-redesign'
+      preLoaderRoute: typeof TestRedesignRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/works': {
       id: '/works'
       path: '/works'
@@ -201,6 +221,7 @@ const rootRouteChildren: RootRouteChildren = {
   EngineeringRoute: EngineeringRoute,
   HealthzRoute: HealthzRoute,
   ResearchRoute: ResearchRoute,
+  TestRedesignRoute: TestRedesignRoute,
   WorksRoute: WorksRoute,
   CasesSlugRoute: CasesSlugRoute,
   CasesIndexRoute: CasesIndexRoute,
