@@ -311,13 +311,8 @@ function TestRedesign() {
 
       {/* --- Hero --- */}
       <section className="rdx-wrap rdx-hero" aria-labelledby="rdx-hero-heading">
-        <p className="rdx-eyebrow rdx-mono">
-          <span className="rdx-dot" aria-hidden="true" />
-          <b>{profile.name}</b>
-          <span>build / operate / research</span>
-        </p>
         <h1 id="rdx-hero-heading" className="rdx-h1">
-          {["作って、", "動かして、", "確かめる。"].map((line, i) => (
+          {["作ったものを、", "自分のサーバーで", "動かしている。"].map((line, i) => (
             <span key={line} style={{ "--i": i } as React.CSSProperties}>
               {line}
             </span>
@@ -368,8 +363,8 @@ function TestRedesign() {
         <SectionHead
           id="rdx-works-heading"
           label="01 — build"
-          title="企画から公開まで、ひとりで作る。"
-          description="企画・設計・実装・公開までを単独で進めたプロダクトです。"
+          title="個人開発"
+          description="企画からデプロイまでひとりでやっています。"
         />
         <div className="rdx-works">
           {featuredWorks.map((work) => (
@@ -394,13 +389,12 @@ function TestRedesign() {
             <SectionHead
               id="rdx-operate-heading"
               label="02 — operate"
-              title="main に push すると、自宅のサーバーまで届く。"
-              description="自宅の Proxmox 基盤で、デプロイ自動化・構成管理・バックアップを運用しています。"
+              title="デプロイと自宅サーバーの運用"
+              description="main に push したものが、自宅の Proxmox 上でそのまま本番に上がります。バックアップも同じ場所で取っています。"
             />
 
             <div className="rdx-pipe" data-rv>
               <p className="rdx-pipe-title rdx-mono">
-                <span>deploy pipeline</span>
                 <span>このサイトの配信経路</span>
               </p>
               <ol className="rdx-pipe-steps">
@@ -432,7 +426,7 @@ function TestRedesign() {
               </ol>
 
               <div data-rv>
-                <p className="rdx-layers-title rdx-mono">homelab — 層ごとの構成</p>
+                <p className="rdx-layers-title rdx-mono">層ごとの構成</p>
                 <dl className="rdx-layers">
                   {homelabLayers.map((layer) => (
                     <div key={layer.layer} className="rdx-layer">
@@ -460,8 +454,8 @@ function TestRedesign() {
         <SectionHead
           id="rdx-research-heading"
           label="03 — research"
-          title="結果は、数字で確かめる。"
-          description="強化学習によるネットワーク制御と、実データを用いた統計分析。"
+          title="研究とデータ分析"
+          description="強化学習によるネットワーク制御と、実データを使った統計分析。"
         />
         <ul className="rdx-research">
           {featuredResearch.map((topic, i) => (
@@ -481,15 +475,15 @@ function TestRedesign() {
               <p className="rdx-paper-context">{topic.context}</p>
               <dl className="rdx-pmr">
                 <div>
-                  <dt className="rdx-mono">Problem</dt>
+                  <dt className="rdx-mono">課題</dt>
                   <dd>{topic.problem}</dd>
                 </div>
                 <div>
-                  <dt className="rdx-mono">Method</dt>
+                  <dt className="rdx-mono">手法</dt>
                   <dd>{topic.method}</dd>
                 </div>
                 <div>
-                  <dt className="rdx-mono">Result</dt>
+                  <dt className="rdx-mono">結果</dt>
                   <dd>{topic.result}</dd>
                 </div>
               </dl>
@@ -516,8 +510,8 @@ function TestRedesign() {
         <SectionHead
           id="rdx-stack-heading"
           label="stack"
-          title="使った技術と、その使用例。"
-          description="実際に使った技術だけを、使った作品・事例へのリンクと一緒に載せています。"
+          title="使用技術"
+          description="実際に使った技術だけを、使った場所へのリンク付きで並べています。"
         />
         <ul className="rdx-stack" data-rv>
           {capabilities.map((capability) => (
