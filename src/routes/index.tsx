@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CapabilityTable } from "@/components/CapabilityTable";
 import { DeployPipeline } from "@/components/DeployPipeline";
-import { HeroField } from "@/components/HeroField";
+import { ParticleType } from "@/components/ParticleType";
 import { LiquidButton } from "@/components/LiquidButton";
 import { Marquee } from "@/components/Marquee";
 import { ResearchCard } from "@/components/ResearchCard";
@@ -60,28 +60,39 @@ function Home() {
     <main id="main-content">
       {/* --- Hero + 3軸サマリ --- */}
       <Container>
-        <section aria-labelledby="hero-heading" className="relative isolate pb-12 pt-16 sm:pb-16 sm:pt-24">
-          <HeroField />
-          <SplitHeading
-            as="h1"
-            id="hero-heading"
-            text={profile.name}
-            skew
-            delayStart={160}
-            delayStep={70}
-            className="font-mono text-5xl font-medium tracking-tight text-foreground sm:text-6xl"
-          />
-          <Reveal delay={620}>
-            <p className="mt-6 max-w-2xl text-pretty text-lg leading-[1.8] text-foreground sm:text-xl sm:leading-[1.8]">
-              {profile.lead}
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2">
-              <LiquidButton href="/works" label="Works を見る" labelNext="View Works" />
-              <ArrowLink href="https://github.com/koshikai">GitHub</ArrowLink>
+        <section aria-labelledby="hero-heading" className="relative isolate pb-12 pt-12 sm:pb-16 sm:pt-16">
+          <div className="grid grid-cols-12 items-center gap-x-6 gap-y-10">
+            <div className="col-span-12 lg:col-span-6">
+              <SplitHeading
+                as="h1"
+                id="hero-heading"
+                text={profile.name}
+                skew
+                delayStart={160}
+                delayStep={70}
+                className="font-mono text-5xl font-medium tracking-tight text-foreground sm:text-6xl"
+              />
+              <Reveal delay={620}>
+                <p className="mt-6 max-w-2xl text-pretty text-lg leading-[1.8] text-foreground sm:text-xl sm:leading-[1.8]">
+                  {profile.lead}
+                </p>
+                <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2">
+                  <LiquidButton href="/works" label="Works を見る" labelNext="View Works" />
+                  <ArrowLink href="https://github.com/koshikai">GitHub</ArrowLink>
+                </div>
+              </Reveal>
             </div>
-          </Reveal>
 
-          <Reveal delay={760} className="mt-12 sm:mt-14">
+            <div className="col-span-12 lg:col-span-6">
+              <ParticleType
+                words={profile.keywords}
+                label="build / operate / research"
+                className="aspect-[3/2] sm:aspect-[16/9] lg:aspect-[3/2]"
+              />
+            </div>
+          </div>
+
+          <Reveal delay={860} className="mt-12 sm:mt-16">
             <nav aria-label="3つの軸">
               <ul
                 role="list"
