@@ -1,4 +1,3 @@
-import { Tilt } from "@/components/Tilt";
 import { ArrowLink, Tags } from "@/components/ui";
 import { STATUS_LABELS, type Work } from "@/lib/works";
 
@@ -26,41 +25,37 @@ export function WorkThumb({ work, sizes }: { work: Work; sizes: string }) {
     const { alt, desktop, mobile } = work.image;
 
     return (
-      <Tilt>
-        <div className="card-thumb relative aspect-[390/844] overflow-hidden rounded border border-border bg-surface sm:aspect-[1424/900]">
-          <picture>
-            <source media="(min-width: 40rem)" srcSet={desktop.src} />
-            <img
-              src={mobile.src}
-              width={mobile.width}
-              height={mobile.height}
-              alt={alt}
-              sizes={sizes}
-              loading="lazy"
-              decoding="async"
-              className="absolute inset-0 h-full w-full object-cover object-top"
-            />
-          </picture>
-        </div>
-      </Tilt>
+      <div className="card-thumb relative aspect-[390/844] overflow-hidden rounded border border-border bg-surface sm:aspect-[1424/900]">
+        <picture>
+          <source media="(min-width: 40rem)" srcSet={desktop.src} />
+          <img
+            src={mobile.src}
+            width={mobile.width}
+            height={mobile.height}
+            alt={alt}
+            sizes={sizes}
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 h-full w-full object-cover object-top"
+          />
+        </picture>
+      </div>
     );
   }
 
   return (
-    <Tilt>
-      <div className="card-thumb flex aspect-[390/844] flex-col justify-center rounded border border-border bg-surface px-5 py-4 sm:aspect-[1424/900]">
-        <ol role="list" className="list-none space-y-1.5">
-          {work.architecture?.map((step, i) => (
-            <li key={step} className="flex items-baseline gap-2 font-mono text-xs text-foreground">
-              <span className="text-accent" aria-hidden="true">
-                {i === 0 ? "›" : "↓"}
-              </span>
-              {step}
-            </li>
-          ))}
-        </ol>
-      </div>
-    </Tilt>
+    <div className="card-thumb flex aspect-[390/844] flex-col justify-center rounded border border-border bg-surface px-5 py-4 sm:aspect-[1424/900]">
+      <ol role="list" className="list-none space-y-1.5">
+        {work.architecture?.map((step, i) => (
+          <li key={step} className="flex items-baseline gap-2 font-mono text-xs text-foreground">
+            <span className="text-accent" aria-hidden="true">
+              {i === 0 ? "›" : "↓"}
+            </span>
+            {step}
+          </li>
+        ))}
+      </ol>
+    </div>
   );
 }
 

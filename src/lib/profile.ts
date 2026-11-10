@@ -31,7 +31,7 @@ export interface EducationItem {
 export const profile = {
   name: "koshikai",
   role: "Software Engineer / Graduate Student",
-  lead: "Web・AI のプロダクト開発、自宅サーバーでのインフラ運用、強化学習・統計モデルの研究に取り組んでいます。",
+  lead: "Web アプリを企画から作り、自宅のサーバーで動かしています。研究は強化学習によるネットワーク制御です。",
   keywords: ["build", "operate", "research"] as const,
 
   /**

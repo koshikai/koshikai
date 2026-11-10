@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
 import { CapabilityTable } from "@/components/CapabilityTable";
 import { DeployPipeline } from "@/components/DeployPipeline";
 import { HeroField } from "@/components/HeroField";
@@ -11,7 +10,7 @@ import { SplitHeading } from "@/components/SplitHeading";
 import { ArrowLink, Container, SectionHeader } from "@/components/ui";
 import { WorkCard } from "@/components/WorkCard";
 import { operationFacts } from "@/lib/engineering";
-import { marqueeStack, marqueeWork } from "@/lib/motion";
+import { marqueeStack } from "@/lib/motion";
 import { profile } from "@/lib/profile";
 import { featuredResearch } from "@/lib/research";
 import { getSiteConfig } from "@/lib/site-config";
@@ -52,7 +51,7 @@ const axes = [
     section: "Research",
     href: "#research",
     summary: "強化学習と統計モデルによる検証",
-    proof: "強化学習・統計分析による検証",
+    proof: "96/96 の初期状態で安定化（Wnt5a）",
   },
 ];
 
@@ -79,7 +78,6 @@ function Home() {
             <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2">
               <LiquidButton href="/works" label="Works を見る" labelNext="View Works" />
               <ArrowLink href="https://github.com/koshikai">GitHub</ArrowLink>
-              <ArrowLink href="/about#contact">Contact</ArrowLink>
             </div>
           </Reveal>
 
@@ -96,22 +94,14 @@ function Home() {
                   >
                     <a
                       href={axis.href}
-                      className="focus-ring group flex h-full flex-col bg-background px-5 py-4 transition-colors hover:bg-surface sm:p-6"
+                      className="focus-ring group flex h-full flex-col bg-background p-5 transition-colors hover:bg-surface sm:p-6"
                     >
-                      <span className="flex items-center justify-between">
-                        <span className="font-mono text-xs text-muted">{axis.keyword}</span>
-                        <ArrowRight
-                          className="h-4 w-4 text-muted transition-[transform,color] group-hover:translate-x-0.5 group-hover:text-accent motion-reduce:transition-none"
-                          aria-hidden="true"
-                        />
-                      </span>
-                      <span className="mt-2 text-lg font-semibold tracking-tight text-foreground sm:text-xl">
+                      <span className="font-mono text-xs text-muted">{axis.keyword}</span>
+                      <span className="mt-3 text-lg font-semibold tracking-tight text-foreground sm:text-xl">
                         {axis.section}
                       </span>
-                      <span className="mt-1 text-sm leading-[1.8] text-foreground sm:mt-2">
-                        {axis.summary}
-                      </span>
-                      <span className="mt-2 text-xs text-muted sm:mt-3">{axis.proof}</span>
+                      <span className="mt-2 text-sm leading-[1.8] text-foreground">{axis.summary}</span>
+                      <span className="mt-3 text-xs tabular-nums text-muted">{axis.proof}</span>
                     </a>
                   </li>
                 ))}
@@ -121,18 +111,12 @@ function Home() {
         </section>
       </Container>
 
-      {/* --- 使用技術と担当領域 --- */}
-      <div className="border-y border-border py-4 sm:py-6">
+      {/* --- 使用技術 --- */}
+      <div className="border-y border-border py-4 sm:py-5">
         <Marquee items={marqueeStack} duration={58} className="font-mono text-sm text-foreground" />
-        <Marquee
-          items={marqueeWork}
-          reverse
-          duration={46}
-          className="mt-3 text-xs tracking-[0.18em] text-muted"
-        />
       </div>
 
-      <Container className="mt-20 sm:mt-24">
+      <Container className="mt-16 sm:mt-20">
         {/* --- Works --- */}
         <Reveal>
           <section id="works" aria-labelledby="works-heading">
@@ -189,7 +173,7 @@ function Home() {
             <SectionHeader
               id="research-heading"
               title="研究とデータ分析"
-              description="強化学習によるネットワーク制御と、実データを用いた統計分析の取り組みです。"
+              description="強化学習によるネットワーク制御と、実データを用いた統計分析。"
               action={{ label: "研究の詳細", href: "/research" }}
             />
             <ul role="list" className="grid list-none grid-cols-1 gap-6 md:grid-cols-2">
@@ -206,7 +190,7 @@ function Home() {
         <Reveal className="mt-24">
           <section
             aria-labelledby="contact-heading"
-            className="grid grid-cols-12 gap-x-6 gap-y-6 rounded border border-border bg-surface/60 p-6 sm:p-8"
+            className="grid grid-cols-12 gap-x-6 gap-y-6 rounded border border-border bg-surface p-6 sm:p-8"
           >
             <div className="col-span-12 md:col-span-8">
               <h2

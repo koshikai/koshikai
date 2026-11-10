@@ -434,24 +434,6 @@ h3 {
     transition: border-color var(--t-fast) var(--e-out);
   }
 
-  .card-thumb img {
-    transition: transform var(--t-base) var(--e-out);
-  }
-
-  @media (hover: hover) {
-    .work-card:hover .card-thumb img {
-      transform: scale(1.03);
-    }
-  }
-
-  /* サムネイルが、ポインタの方へわずかに傾く。マウス操作の環境だけ */
-  @media (hover: hover) {
-    .tilt {
-      transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-      transition: transform var(--t-fast) var(--e-out);
-    }
-  }
-
   .compass-track {
     transition: transform var(--t-fast) var(--e-out);
   }
@@ -655,14 +637,8 @@ h3 {
   .row-hover,
   .row-hover::before,
   .card-thumb,
-  .card-thumb img,
   .work-title::after,
   .compass-track {
-    transition: none;
-  }
-
-  .tilt {
-    transform: none;
     transition: none;
   }
 
