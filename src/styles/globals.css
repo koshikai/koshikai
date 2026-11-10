@@ -583,6 +583,25 @@ h3 {
   z-index: 1;
 }
 
+/* 粒子の文字の背後に置く点格子。動かない基準面があると、手前を流れる粒子の
+   視差（奥行き）がはっきり読める。中央だけ見せて縁へ溶かし、枠を感じさせない。
+   色は前景トークンの薄め指定なので、ライト/ダークどちらでも同じ強さに見える。 */
+.particle-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--foreground) 22%, transparent) 0.8px,
+    transparent 1.2px
+  );
+  background-size: 22px 22px;
+  background-position: center;
+  mask-image: radial-gradient(ellipse 62% 58% at 50% 50%, #000 0%, transparent 78%);
+  opacity: 0.55;
+}
+
 /* 動きを減らす設定では、途中の状態を経由せず最終状態にする。
    レイヤーの外に置き、ユーティリティより確実に効かせる。 */
 @media (prefers-reduced-motion: reduce) {
