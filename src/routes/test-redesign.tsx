@@ -311,13 +311,16 @@ function TestRedesign() {
 
       {/* --- Hero --- */}
       <section className="rdx-wrap rdx-hero" aria-labelledby="rdx-hero-heading">
-        <h1 id="rdx-hero-heading" className="rdx-h1">
+        <h1 id="rdx-hero-heading" className="rdx-name rdx-mono">
+          {profile.name}
+        </h1>
+        <p className="rdx-statement">
           {["作ったものを、", "自分のサーバーで", "動かしている。"].map((line, i) => (
             <span key={line} style={{ "--i": i } as React.CSSProperties}>
               {line}
             </span>
           ))}
-        </h1>
+        </p>
 
         <div className="rdx-hero-sub">
           <p className="rdx-lead">{profile.lead}</p>
@@ -362,7 +365,7 @@ function TestRedesign() {
       <section id="works" className="rdx-wrap rdx-section" aria-labelledby="rdx-works-heading">
         <SectionHead
           id="rdx-works-heading"
-          label="01 — build"
+          label="01"
           title="個人開発"
           description="企画からデプロイまでひとりでやっています。"
         />
@@ -388,7 +391,7 @@ function TestRedesign() {
           <div className="rdx-wrap">
             <SectionHead
               id="rdx-operate-heading"
-              label="02 — operate"
+              label="02"
               title="デプロイと自宅サーバーの運用"
               description="main に push したものが、自宅の Proxmox 上でそのまま本番に上がります。バックアップも同じ場所で取っています。"
             />
@@ -453,7 +456,7 @@ function TestRedesign() {
       <section id="research" className="rdx-wrap rdx-section" aria-labelledby="rdx-research-heading">
         <SectionHead
           id="rdx-research-heading"
-          label="03 — research"
+          label="03"
           title="研究とデータ分析"
           description="強化学習によるネットワーク制御と、実データを使った統計分析。"
         />
@@ -509,7 +512,7 @@ function TestRedesign() {
       <section className="rdx-wrap rdx-section" aria-labelledby="rdx-stack-heading">
         <SectionHead
           id="rdx-stack-heading"
-          label="stack"
+          label="04"
           title="使用技術"
           description="実際に使った技術だけを、使った場所へのリンク付きで並べています。"
         />
@@ -537,7 +540,7 @@ function TestRedesign() {
       {/* --- contact --- */}
       <section className="rdx-wrap rdx-contact" aria-labelledby="rdx-contact-heading">
         <div data-rv>
-          <p className="rdx-label rdx-mono">contact</p>
+          <p className="rdx-label rdx-mono">05</p>
           <h2 id="rdx-contact-heading" className="rdx-sr">
             Contact
           </h2>

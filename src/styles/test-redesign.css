@@ -305,40 +305,28 @@ body:has(.rdx) > div > footer {
   padding-top: clamp(112px, 18vh, 176px);
 }
 
-.rdx-eyebrow {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 12px;
-  color: var(--soft);
-  font-size: 12px;
-  line-height: 1.5;
-}
-.rdx-eyebrow b {
-  color: var(--ink);
+.rdx-name {
+  margin-top: 20px !important;
+  font-size: clamp(2.5rem, 7.2vw, 5.5rem);
   font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  animation: rdx-rise 0.8s var(--ease) 0.1s both;
 }
-.rdx-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: var(--accent);
-}
-
-.rdx-h1 {
-  margin-top: 24px !important;
-  font-size: clamp(2.75rem, 9.6vw, 8.25rem);
+.rdx-statement {
+  margin-top: clamp(20px, 3vw, 32px);
+  font-size: clamp(1.6rem, 4.6vw, 3.25rem);
   font-weight: 700;
-  letter-spacing: -0.045em;
-  line-height: 1.08;
+  letter-spacing: -0.04em;
+  line-height: 1.18;
   word-break: keep-all;
 }
-.rdx-h1 span {
+.rdx-statement span {
   display: block;
   animation: rdx-h1 0.9s var(--ease) both;
-  animation-delay: calc(var(--i) * 90ms + 80ms);
+  animation-delay: calc(var(--i) * 90ms + 0.24s);
 }
-.rdx-h1 span:last-child {
+.rdx-statement span:last-child {
   color: var(--accent);
 }
 @keyframes rdx-h1 {
