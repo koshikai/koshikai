@@ -85,6 +85,8 @@ SITE_URL=https://koshikai.dev  # canonical / metadata 用 URL
 
 ## スキル
 
+- `.agents/skills/modern-web-guidance/` は **HTML/CSS/クライアント側JSの実装・改善** に適用する。
+  過剰なJSライブラリや古いワークアラウンド（自前のモーダル/ポップアップ実装やCSSハックなど）を避け、Baseline（主要ブラウザ標準）準拠のネイティブAPI（`<dialog>`, Popover API, CSS `light-dark()`, View Transitions, `@starting-style` など）やアクセシビリティ（a11y）、Core Web Vitals に準拠した実装を優先する
 - `.agents/skills/landing-page-design/` は **トップページ（`/`）と、新規に作る LP だけ** に使う。
   `/works` `/engineering` `/research` `/about` `/cases` など下層ページの修正・レビューには適用しない。
   日本語本文の行間（1.8）や、日本語見出しの構成などがスキルのルールと食い違うため

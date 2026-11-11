@@ -95,10 +95,14 @@ function useReveal() {
   return ref;
 }
 
-/** 保存先と dark クラスの扱いは、サイト共通の切り替えと同じ約束に合わせる */
+/** 保存先と dark クラス・color-scheme の扱いは、サイト共通の切り替えと同じ約束に合わせる */
 function toggleTheme() {
   const next = !document.documentElement.classList.contains("dark");
   document.documentElement.classList.toggle("dark", next);
+  const meta = document.querySelector<HTMLMetaElement>('meta[name="color-scheme"]');
+  if (meta) {
+    meta.content = next ? "dark" : "light";
+  }
   try {
     if (next) localStorage.setItem("theme", "dark");
     else localStorage.removeItem("theme");

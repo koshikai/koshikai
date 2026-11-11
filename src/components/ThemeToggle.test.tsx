@@ -20,10 +20,18 @@ function installMatchMedia() {
 }
 
 describe("ThemeToggle", () => {
+  let metaElement: HTMLMetaElement;
+
   beforeEach(() => {
     prefersDark = false;
     localStorage.clear();
     document.documentElement.classList.remove("dark");
+    metaElement = document.querySelector('meta[name="color-scheme"]') ?? document.createElement("meta");
+    metaElement.setAttribute("name", "color-scheme");
+    metaElement.setAttribute("content", "light");
+    if (!metaElement.parentElement) {
+      document.head.appendChild(metaElement);
+    }
     installMatchMedia();
   });
 
@@ -43,6 +51,7 @@ describe("ThemeToggle", () => {
     render(<ThemeToggle />);
 
     await waitFor(() => expect(document.documentElement).toHaveClass("dark"));
+    expect(metaElement.content).toBe("dark");
     expect(screen.getByRole("button")).toHaveAccessibleName("ライトモードに切り替える");
   });
 
@@ -52,10 +61,12 @@ describe("ThemeToggle", () => {
 
     fireEvent.click(button); // light -> dark
     await waitFor(() => expect(document.documentElement).toHaveClass("dark"));
+    expect(metaElement.content).toBe("dark");
     expect(localStorage.getItem("theme")).toBe("dark");
 
     fireEvent.click(button); // dark -> light
     await waitFor(() => expect(document.documentElement).not.toHaveClass("dark"));
+    expect(metaElement.content).toBe("light");
     expect(localStorage.getItem("theme")).toBeNull();
   });
 });

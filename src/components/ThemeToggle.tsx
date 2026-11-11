@@ -38,7 +38,12 @@ function getServerSnapshot(): Theme {
 }
 
 function applyTheme(theme: Theme) {
-  document.documentElement.classList.toggle("dark", theme === "dark");
+  const isDark = theme === "dark";
+  document.documentElement.classList.toggle("dark", isDark);
+  const meta = document.querySelector<HTMLMetaElement>('meta[name="color-scheme"]');
+  if (meta) {
+    meta.content = isDark ? "dark" : "light";
+  }
 }
 
 export function ThemeToggle() {

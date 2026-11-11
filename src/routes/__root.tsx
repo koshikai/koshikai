@@ -25,12 +25,14 @@ import { Footer } from "@/components/Footer";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SplitHeading } from "@/components/SplitHeading";
 
-// ライトが既定。明示的にダークを選んだ人だけ、描画前に dark クラスを付ける。
+// ライトが既定。明示的にダークを選んだ人だけ、描画前に dark クラスを付け、color-scheme meta を更新する。
 const themeInitScript = `
 document.documentElement.classList.add("js");
 try {
   if (localStorage.getItem("theme") === "dark") {
     document.documentElement.classList.add("dark");
+    var meta = document.querySelector('meta[name="color-scheme"]');
+    if (meta) meta.content = "dark";
   }
 } catch {}
 `;
@@ -42,6 +44,7 @@ export const Route = createRootRoute({
       meta: [
         { charSet: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
+        { name: "color-scheme", content: "light" },
         { name: "theme-color", content: "#fafaf7" },
         { title: site.title },
         { name: "description", content: site.description },

@@ -43,7 +43,8 @@
   --t-slow: 0.9s;
 }
 
-:root.dark {
+:root.dark,
+:root:has(> head > meta[name="color-scheme"][content="dark"]) {
   color-scheme: dark;
   --background: #131315;
   --surface: #1a1a1d;
