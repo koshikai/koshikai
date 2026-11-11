@@ -1,7 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
-import "../styles/home.css";
-
 import { ParticleType } from "@/components/ParticleType";
 import { Chars, CountUp, Layers, Pipeline, ResearchPapers, SectionHead, StackRows } from "@/components/rdx";
 import { WorkItem } from "@/components/WorkItem";
@@ -11,6 +9,7 @@ import { featuredResearch } from "@/lib/research";
 import { getSiteConfig } from "@/lib/site-config";
 import { useReveal } from "@/lib/use-reveal";
 import { featuredWorks, works } from "@/lib/works";
+import { pad2 } from "@/lib/format";
 
 /**
  * トップページ。
@@ -58,16 +57,12 @@ const axes = [
   },
 ];
 
-const pad = (n: number) => String(n).padStart(2, "0");
-
 function Home() {
   const ref = useReveal();
   const { email, links } = profile.contact;
 
   return (
     <main id="main-content" className="rdx" ref={ref}>
-      <div className="rdx-progress" aria-hidden="true" />
-
       {/* --- Hero --- */}
       <section className="rdx-wrap rdx-hero" aria-labelledby="rdx-hero-heading">
         <div className="rdx-hero-top">
@@ -119,7 +114,7 @@ function Home() {
             {axes.map((axis, i) => (
               <li key={axis.key} data-rv style={{ "--rv-delay": `${i * 80}ms` } as React.CSSProperties}>
                 <a href={axis.href} className="rdx-axis">
-                  <span className="rdx-axis-no rdx-mono">{pad(i + 1)}</span>
+                  <span className="rdx-axis-no rdx-mono">{pad2(i + 1)}</span>
                   <span className="rdx-axis-key">{axis.key}</span>
                   <span className="rdx-axis-sum">{axis.summary}</span>
                   <span className="rdx-axis-proof">
@@ -185,7 +180,7 @@ function Home() {
                 {operationFacts.slice(0, 4).map((fact, i) => (
                   <li key={fact.title}>
                     <span className="rdx-mono" aria-hidden="true">
-                      {pad(i + 1)}
+                      {pad2(i + 1)}
                     </span>
                     <h3>{fact.title}</h3>
                     <p>{fact.body}</p>

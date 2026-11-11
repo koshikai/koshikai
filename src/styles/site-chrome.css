@@ -217,3 +217,31 @@ body:has(.rdx) .site-footer {
   max-width: 1240px;
   padding-inline: clamp(20px, 5vw, 48px);
 }
+
+/* 読み進めた量を示す線。スクロール連動に対応したブラウザで、動きを減らす設定でないときだけ出す */
+.site-progress {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 60;
+  display: none;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+@keyframes site-progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    .site-progress {
+      display: block;
+      animation: site-progress linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+}

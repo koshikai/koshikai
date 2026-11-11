@@ -1,13 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
-import "../styles/home.css";
-
 import { AvailabilityNote } from "@/components/AvailabilityNote";
 import { Chars, SectionHead } from "@/components/rdx";
 import { pageHead } from "@/lib/metadata";
 import { profile } from "@/lib/profile";
 import { courses, publications } from "@/lib/research";
 import { useReveal } from "@/lib/use-reveal";
+import { pad2 } from "@/lib/format";
 
 export const Route = createFileRoute("/about")({
   head: () =>
@@ -34,8 +33,6 @@ const principles = [
   },
 ];
 
-const pad = (n: number) => String(n).padStart(2, "0");
-
 /**
  * 経歴・方針・連絡先。トップと同じ部品（`.rdx`）で組む。
  * 所属・受賞・講座名はトップには出さず、このページの経歴欄に置く。
@@ -58,8 +55,6 @@ function AboutPage() {
 
   return (
     <main id="main-content" className="rdx" ref={ref}>
-      <div className="rdx-progress" aria-hidden="true" />
-
       <div className="rdx-wrap rdx-page-hero">
         <SectionHead as="h1" label="About" title={profile.name} description={profile.role} />
         {profile.availability && (
@@ -97,7 +92,7 @@ function AboutPage() {
               {principles.map((item, i) => (
                 <li key={item.title}>
                   <span className="rdx-mono" aria-hidden="true">
-                    {pad(i + 1)}
+                    {pad2(i + 1)}
                   </span>
                   <h3>{item.title}</h3>
                   <p>{item.body}</p>

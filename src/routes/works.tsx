@@ -1,13 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
-import "../styles/home.css";
-
 import { CaseRows, SectionHead } from "@/components/rdx";
 import { WorkItem } from "@/components/WorkItem";
 import { caseItems, getCasesByAxis } from "@/lib/cases";
 import { pageHead } from "@/lib/metadata";
 import { useReveal } from "@/lib/use-reveal";
 import { STATUS_LABELS, works } from "@/lib/works";
+import { pad2 } from "@/lib/format";
 
 export const Route = createFileRoute("/works")({
   head: () =>
@@ -20,8 +19,6 @@ export const Route = createFileRoute("/works")({
   component: WorksPage,
 });
 
-const pad = (n: number) => String(n).padStart(2, "0");
-
 /**
  * 作品の一覧。トップと同じ部品（`.rdx`）で組む。
  * 冒頭の目次で全作品を見渡し、下で 1 件ずつ詳しく見せる。
@@ -33,8 +30,6 @@ function WorksPage() {
 
   return (
     <main id="main-content" className="rdx" ref={ref}>
-      <div className="rdx-progress" aria-hidden="true" />
-
       <div className="rdx-wrap rdx-page-hero">
         <SectionHead
           as="h1"
@@ -48,7 +43,7 @@ function WorksPage() {
             {works.map((work, i) => (
               <li key={work.slug}>
                 <a href={`#${work.slug}`} className="rdx-index-row">
-                  <span className="rdx-index-no rdx-mono">{pad(i + 1)}</span>
+                  <span className="rdx-index-no rdx-mono">{pad2(i + 1)}</span>
                   <span className="rdx-index-name">{work.name}</span>
                   <span className="rdx-index-desc">{work.tagline}</span>
                   <span className="rdx-index-meta rdx-mono">

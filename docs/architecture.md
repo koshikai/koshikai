@@ -69,7 +69,13 @@
 
 `src/lib/content.test.ts` が、事例へのリンク切れやトップに出す作品・研究の数、`public/sitemap.xml` の網羅性を検査する。
 
-主なコンポーネント: `SiteHeader` / `PrimaryNav`（`aria-current` 付き）、`WorkCard`、`DeployPipeline`、`HomelabStack`、`CapabilityTable`、`ResearchCard`、`CaseList`、`ThemeToggle`（ライト既定・ダークを選んだときだけ localStorage に保存）。
+主なコンポーネントとスタイル:
+
+- `SiteHeader` / `Footer`（`__root.tsx`）: 全ページ共通。ヘッダーは上端に浮かせたバーで、現在地に `aria-current` を付ける。見た目は `styles/site-chrome.css`
+- `components/rdx.tsx`: 全ページで使う部品（見出し `SectionHead`、事例の行 `CaseRows`、配信経路 `Pipeline`、層の構成 `Layers`、技術一覧 `StackRows`、研究カード `ResearchPapers` など）。見た目は `styles/rdx.css` の `.rdx` 配下で、各ページは `<main className="rdx">` の内側に組む
+- `WorkItem`: 作品 1 件。トップと `/works` で共有する
+- `ThemeToggle`: ライト既定。ダークを選んだときだけ localStorage に保存する
+- 事例の本文（MDX）は `.rdx` の外に置く。`.rdx` は見出しや段落の余白を消すので、中に入れると記事の組みが崩れる
 
 ## ビルド・出力
 

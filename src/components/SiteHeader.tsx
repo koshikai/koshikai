@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { isNavActive, primaryNav } from "@/lib/navigation";
+import { pad2 } from "@/lib/format";
 
 /**
  * 全ページ共通のヘッダー。上端から浮かせた小さなバーで、
@@ -82,7 +83,7 @@ export function SiteHeader() {
               onClick={() => setOpen(false)}
               style={{ "--i": i } as React.CSSProperties}
             >
-              <span>{String(i + 1).padStart(2, "0")}</span>
+              <span>{pad2(i + 1)}</span>
               {item.label}
             </Link>
           ))}

@@ -1,12 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
-import "../styles/home.css";
-
 import { CaseRows, Layers, Pipeline, SectionHead, StackRows } from "@/components/rdx";
 import { caseItems, getCasesByAxis } from "@/lib/cases";
 import { operationFacts } from "@/lib/engineering";
 import { pageHead } from "@/lib/metadata";
 import { useReveal } from "@/lib/use-reveal";
+import { pad2 } from "@/lib/format";
 
 export const Route = createFileRoute("/engineering")({
   head: () =>
@@ -19,8 +18,6 @@ export const Route = createFileRoute("/engineering")({
   component: EngineeringPage,
 });
 
-const pad = (n: number) => String(n).padStart(2, "0");
-
 /**
  * インフラと運用。トップと同じ部品（`.rdx`）で組む。
  * 配信経路の図は `#pipeline` で、技術一覧の「このサイト」から飛んでくる。
@@ -31,8 +28,6 @@ function EngineeringPage() {
 
   return (
     <main id="main-content" className="rdx" ref={ref}>
-      <div className="rdx-progress" aria-hidden="true" />
-
       <div className="rdx-wrap rdx-page-hero">
         <SectionHead
           as="h1"
@@ -44,7 +39,7 @@ function EngineeringPage() {
           {operationFacts.map((fact, i) => (
             <li key={fact.title}>
               <span className="rdx-mono" aria-hidden="true">
-                {pad(i + 1)}
+                {pad2(i + 1)}
               </span>
               <h2>{fact.title}</h2>
               <p>{fact.body}</p>

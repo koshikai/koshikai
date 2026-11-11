@@ -2,10 +2,8 @@ import type { ComponentType } from "react";
 import type { MDXComponents } from "mdx/types";
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
-import "../../styles/home.css";
-
 import { SectionHead } from "@/components/rdx";
-import { AXES, getCaseBySlug, type Axis } from "@/lib/cases";
+import { AXES, getCaseBySlug } from "@/lib/cases";
 import { pageHead } from "@/lib/metadata";
 import { useReveal } from "@/lib/use-reveal";
 import { useMDXComponents } from "../../../mdx-components";
@@ -37,12 +35,6 @@ export const Route = createFileRoute("/cases/$slug")({
   component: CaseDetailPage,
 });
 
-const TITLES: Record<Axis, string> = {
-  build: "開発の事例",
-  operate: "運用の事例",
-  research: "研究・分析の事例",
-};
-
 function CaseDetailPage() {
   const { slug } = Route.useParams();
   const { item } = Route.useLoaderData();
@@ -62,7 +54,6 @@ function CaseDetailPage() {
   return (
     <main id="main-content" ref={ref}>
       <div className="rdx">
-        <div className="rdx-progress" aria-hidden="true" />
         <div className="rdx-wrap rdx-page-hero">
           <nav aria-label="パンくずリスト" className="rdx-crumb">
             <Link to={axis.href} className="rdx-back">
@@ -106,7 +97,7 @@ function CaseDetailPage() {
       <div className="rdx">
         <div className="rdx-wrap">
           <div className="rdx-foot">
-            <span>{TITLES[item.axis]}</span>
+            <span>{AXES[item.axis].casesTitle}</span>
             <span className="rdx-foot-links">
               <Link to={axis.href} className="rdx-more">
                 {axis.section}

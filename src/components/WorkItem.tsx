@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import { STATUS_LABELS, type Work } from "@/lib/works";
+import { pad2 } from "@/lib/format";
 
 /**
  * 作品 1 件。トップと /works の両方で使う（見た目は `styles/home.css` の `.rdx-work`）。
@@ -84,7 +85,7 @@ export function WorkItem({
 
       <div className="rdx-work-body">
         <p className="rdx-work-meta rdx-mono">
-          {index !== undefined && <span>{String(index).padStart(2, "0")}</span>}
+          {index !== undefined && <span>{pad2(index)}</span>}
           <span>{work.since}</span>
           <span className="rdx-pill" data-status={work.status}>
             {STATUS_LABELS[work.status]}

@@ -178,9 +178,9 @@ export function getCasesByAxis(axis: Axis) {
   return caseItems.filter((item) => item.axis === axis);
 }
 
-/** 軸ごとの表示名と、その軸を扱うトップレベルページ */
-export const AXES: Record<Axis, { label: string; section: string; href: string }> = {
-  build: { label: "Build", section: "Works", href: "/works" },
-  operate: { label: "Operate", section: "Engineering", href: "/engineering" },
-  research: { label: "Research", section: "Research", href: "/research" },
+/** 軸ごとの表示名と、その軸を扱うトップレベルページ、事例一覧での見出し */
+export const AXES: Record<Axis, { label: string; section: string; href: string; casesTitle: string }> = {
+  build: { label: "Build", section: "Works", href: "/works", casesTitle: "開発の事例" },
+  operate: { label: "Operate", section: "Engineering", href: "/engineering", casesTitle: "運用の事例" },
+  research: { label: "Research", section: "Research", href: "/research", casesTitle: "研究・分析の事例" },
 };

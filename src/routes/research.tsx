@@ -1,7 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
-import "../styles/home.css";
-
 import { CaseRows, ResearchPapers, SectionHead } from "@/components/rdx";
 import { caseItems, getCasesByAxis } from "@/lib/cases";
 import { pageHead } from "@/lib/metadata";
@@ -34,8 +32,6 @@ function ResearchPage() {
 
   return (
     <main id="main-content" className="rdx" ref={ref}>
-      <div className="rdx-progress" aria-hidden="true" />
-
       <div className="rdx-wrap rdx-page-hero">
         <SectionHead
           as="h1"

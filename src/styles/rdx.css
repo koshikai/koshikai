@@ -1,5 +1,5 @@
 /* ==========================================================================
-   / と、同じ部品で組む下層ページ
+   全ページ共通の部品（.rdx）
 
    レイアウトと部品は .rdx の内側に閉じているので、この CSS が他ページと同じ
    バンドルに入っても既存ページの見た目は変わらない。
@@ -24,7 +24,7 @@
   --band-soft: #a5a59e;
   --band-line: #343437;
   --band-accent: #e4675b;
-  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease: var(--e-out);
   --gutter: clamp(20px, 5vw, 48px);
 
   flex: 1;
@@ -1416,6 +1416,20 @@ a.rdx-work-media:hover img {
   }
 }
 
+/* 404 / エラー */
+.rdx-error-detail {
+  overflow-x: auto;
+  margin: 0 0 24px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  font-size: 12px;
+}
+.rdx-error-actions {
+  margin-bottom: clamp(32px, 5vw, 56px);
+}
+
 /* ==========================================================================
    Stack — 技術と、それを使った事例
    ========================================================================== */
@@ -1501,24 +1515,6 @@ a.rdx-work-media:hover img {
   margin-top: 32px;
 }
 
-/* 読み進めた量を示す線。スクロール連動に対応したブラウザでだけ出す */
-.rdx-progress {
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  z-index: 60;
-  display: none;
-  height: 2px;
-  background: var(--accent);
-  transform: scaleX(0);
-  transform-origin: left;
-}
-@keyframes rdx-progress {
-  to {
-    transform: scaleX(1);
-  }
-}
 @keyframes rdx-drift {
   from {
     translate: 0 -2.5%;
@@ -1533,11 +1529,6 @@ a.rdx-work-media:hover img {
    ========================================================================== */
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: scroll()) {
-    .rdx-progress {
-      display: block;
-      animation: rdx-progress linear both;
-      animation-timeline: scroll(root);
-    }
     /* スクリーンショットが、枠の中でスクロールより少し遅れて動く */
     .rdx-work-media img {
       scale: 1.06;
