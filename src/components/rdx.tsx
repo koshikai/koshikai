@@ -1,7 +1,10 @@
+import { useEffect, useRef } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import type { CaseItem } from "@/lib/cases";
+import { countFrame } from "@/lib/count-up";
 import { capabilities, homelabLayers, pipelineSteps } from "@/lib/engineering";
+import type { ResearchTopic } from "@/lib/research";
 
 /**
  * トップと下層ページで共有する部品。見た目は `styles/home.css` の `.rdx` 配下。
@@ -110,6 +113,131 @@ export function StackRows() {
               </a>
             ))}
           </span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/**
+ * 画面に入ったとき、文字列の中の数値だけを 0 から数え上げる（"96/96" "43.2×" "10+"）。
+ * サーバーが出す値は最終値のままなので、JS が無くても正しい数字が読める。
+ */
+export function CountUp({ value }: { value: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let frame = 0;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        observer.disconnect();
+        const start = performance.now();
+        const tick = (now: number) => {
+          const t = Math.min(1, (now - start) / 1400);
+          const eased = 1 - Math.pow(1 - t, 4);
+          el.textContent = countFrame(value, eased);
+          if (t < 1) frame = requestAnimationFrame(tick);
+        };
+        frame = requestAnimationFrame(tick);
+      },
+      { threshold: 0.6 },
+    );
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+      el.textContent = value;
+    };
+  }, [value]);
+
+  return (
+    <>
+      <span className="rdx-sr">{value}</span>
+      <span ref={ref} aria-hidden="true">
+        {value}
+      </span>
+    </>
+  );
+}
+
+/**
+ * 研究を「課題・手法・結果」で見せるカードの並び。
+ * detailed は /research 用で、進行中の印・タグ・ページ内リンク用の id を足す。
+ * 所属や学会名はここには出さない。
+ */
+export function ResearchPapers({
+  topics,
+  heading: Heading = "h3",
+  detailed = false,
+}: {
+  topics: ResearchTopic[];
+  heading?: "h2" | "h3";
+  detailed?: boolean;
+}) {
+  return (
+    <ul className="rdx-research">
+      {topics.map((topic, i) => (
+        <li
+          key={topic.slug}
+          id={detailed ? topic.slug : undefined}
+          className="rdx-paper"
+          data-rv
+          style={{ "--rv-delay": `${(i % 2) * 100}ms` } as React.CSSProperties}
+        >
+          {topic.metric && (
+            <>
+              <p className="rdx-metric">
+                <CountUp value={topic.metric.value} />
+              </p>
+              <p className="rdx-metric-label rdx-mono">{topic.metric.label}</p>
+            </>
+          )}
+          {detailed && topic.status === "in-progress" && (
+            <p className="rdx-paper-status rdx-mono">
+              <span className="rdx-pill" data-status="demo">
+                進行中
+              </span>
+            </p>
+          )}
+          <Heading>{topic.title}</Heading>
+          <p className="rdx-paper-context">{topic.context}</p>
+          <dl className="rdx-pmr">
+            <div>
+              <dt className="rdx-mono">課題</dt>
+              <dd>{topic.problem}</dd>
+            </div>
+            <div>
+              <dt className="rdx-mono">手法</dt>
+              <dd>{topic.method}</dd>
+            </div>
+            <div>
+              <dt className="rdx-mono">結果</dt>
+              <dd>{topic.result}</dd>
+            </div>
+            {detailed && (
+              <div>
+                <dt className="rdx-mono">技術</dt>
+                <dd>
+                  <ul className="rdx-chips rdx-mono">
+                    {topic.tags.map((tag) => (
+                      <li key={tag}>{tag}</li>
+                    ))}
+                  </ul>
+                </dd>
+              </div>
+            )}
+          </dl>
+          {topic.caseSlug && (
+            <Link to="/cases/$slug" params={{ slug: topic.caseSlug }} className="rdx-more">
+              進め方を読む
+              <ArrowUpRight aria-hidden="true" />
+            </Link>
+          )}
         </li>
       ))}
     </ul>

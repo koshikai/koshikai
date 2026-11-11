@@ -1,12 +1,10 @@
-import { useEffect, useRef } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import "../styles/home.css";
 
 import { ParticleType } from "@/components/ParticleType";
-import { Layers, Pipeline, SectionHead, StackRows } from "@/components/rdx";
+import { CountUp, Layers, Pipeline, ResearchPapers, SectionHead, StackRows } from "@/components/rdx";
 import { WorkItem } from "@/components/WorkItem";
-import { countFrame } from "@/lib/count-up";
 import { operationFacts } from "@/lib/engineering";
 import { profile } from "@/lib/profile";
 import { featuredResearch } from "@/lib/research";
@@ -72,52 +70,6 @@ function Chars({ text }: { text: string }) {
         </span>
       ))}
     </span>
-  );
-}
-
-/**
- * 画面に入ったとき、文字列の中の数値だけを 0 から数え上げる（"96/96" "43.2×" "10+"）。
- * サーバーが出す値は最終値のままなので、JS が無くても正しい数字が読める。
- */
-function CountUp({ value }: { value: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || typeof IntersectionObserver === "undefined") return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    let frame = 0;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry?.isIntersecting) return;
-        observer.disconnect();
-        const start = performance.now();
-        const tick = (now: number) => {
-          const t = Math.min(1, (now - start) / 1400);
-          const eased = 1 - Math.pow(1 - t, 4);
-          el.textContent = countFrame(value, eased);
-          if (t < 1) frame = requestAnimationFrame(tick);
-        };
-        frame = requestAnimationFrame(tick);
-      },
-      { threshold: 0.6 },
-    );
-    observer.observe(el);
-    return () => {
-      observer.disconnect();
-      cancelAnimationFrame(frame);
-      el.textContent = value;
-    };
-  }, [value]);
-
-  return (
-    <>
-      <span className="rdx-sr">{value}</span>
-      <span ref={ref} aria-hidden="true">
-        {value}
-      </span>
-    </>
   );
 }
 
@@ -281,47 +233,7 @@ function Home() {
           title="研究とデータ分析"
           description="強化学習によるネットワーク制御と、実データを使った統計分析。"
         />
-        <ul className="rdx-research">
-          {featuredResearch.map((topic, i) => (
-            <li
-              key={topic.slug}
-              className="rdx-paper"
-              data-rv
-              style={{ "--rv-delay": `${i * 100}ms` } as React.CSSProperties}
-            >
-              {topic.metric && (
-                <>
-                  <p className="rdx-metric">
-                    <CountUp value={topic.metric.value} />
-                  </p>
-                  <p className="rdx-metric-label rdx-mono">{topic.metric.label}</p>
-                </>
-              )}
-              <h3>{topic.title}</h3>
-              <p className="rdx-paper-context">{topic.context}</p>
-              <dl className="rdx-pmr">
-                <div>
-                  <dt className="rdx-mono">課題</dt>
-                  <dd>{topic.problem}</dd>
-                </div>
-                <div>
-                  <dt className="rdx-mono">手法</dt>
-                  <dd>{topic.method}</dd>
-                </div>
-                <div>
-                  <dt className="rdx-mono">結果</dt>
-                  <dd>{topic.result}</dd>
-                </div>
-              </dl>
-              {topic.caseSlug && (
-                <Link to="/cases/$slug" params={{ slug: topic.caseSlug }} className="rdx-more">
-                  進め方を読む
-                  <ArrowUpRight aria-hidden="true" />
-                </Link>
-              )}
-            </li>
-          ))}
-        </ul>
+        <ResearchPapers topics={featuredResearch} />
         <div className="rdx-foot" data-rv>
           <span>発表・進行中の研究・公開コード</span>
           <Link to="/research" className="rdx-more">

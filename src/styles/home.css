@@ -1,5 +1,5 @@
 /* ==========================================================================
-   / と、同じ部品で組む下層ページ（/works /engineering）
+   / と、同じ部品で組む下層ページ（/works /engineering /research）
 
    レイアウトと部品は .rdx の内側に閉じているので、この CSS が他ページと同じ
    バンドルに入っても既存ページの見た目は変わらない。
@@ -1155,7 +1155,7 @@ a.rdx-work-media:hover img {
   font-size: 12px;
   line-height: 1.5;
 }
-.rdx-paper h3 {
+.rdx-paper > :is(h2, h3) {
   margin-top: clamp(32px, 5vw, 56px);
   font-size: clamp(1.25rem, 2.2vw, 1.625rem);
   font-weight: 700;
@@ -1197,6 +1197,129 @@ a.rdx-work-media:hover img {
 
 @media (min-width: 900px) {
   .rdx-research {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* /research: 数値の無いカード、図、発表の行、関連コンテンツ */
+.rdx-paper > :is(h2, h3):first-child {
+  margin-top: 0;
+}
+.rdx-paper-status + :is(h2, h3) {
+  margin-top: 20px;
+}
+.rdx-pmr dd {
+  max-width: 44em;
+}
+@media (min-width: 900px) {
+  .rdx-research > :last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+}
+
+.rdx-figure {
+  display: grid;
+  gap: 20px clamp(24px, 4vw, 56px);
+  margin: clamp(40px, 6vw, 72px) 0 0;
+}
+.rdx-figure-media {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--bg);
+}
+.rdx-figure-media img {
+  width: 100%;
+  height: auto;
+}
+.rdx-figure figcaption {
+  align-self: end;
+  color: var(--soft);
+  font-size: 14px;
+}
+.rdx-figure figcaption > span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.rdx-figure-mark {
+  color: var(--accent);
+}
+@media (min-width: 900px) {
+  .rdx-figure {
+    grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+  }
+}
+
+.rdx-pubs {
+  border-top: 1px solid var(--line);
+}
+.rdx-pubs > li {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  gap: 4px 16px;
+  padding-block: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.rdx-pub-date {
+  color: var(--soft);
+  font-size: 12px;
+  line-height: 28px;
+}
+.rdx-pubs h3 {
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+.rdx-pubs p {
+  margin-top: 4px;
+  color: var(--soft);
+  font-size: 14px;
+}
+.rdx-pubs b {
+  color: var(--ink);
+  font-weight: 500;
+}
+@media (min-width: 900px) {
+  .rdx-pubs > li {
+    grid-template-columns: 9rem minmax(0, 1fr);
+  }
+}
+
+.rdx-notes {
+  display: grid;
+  gap: 16px;
+}
+.rdx-note {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(24px, 3.5vw, 40px);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--panel);
+}
+.rdx-note h3 {
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.rdx-note p {
+  margin-block: 8px 16px;
+  color: var(--soft);
+  font-size: 14px;
+  text-wrap: pretty;
+}
+.rdx-note .rdx-more {
+  margin-top: auto;
+  align-self: flex-start;
+}
+@media (min-width: 900px) {
+  .rdx-notes {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

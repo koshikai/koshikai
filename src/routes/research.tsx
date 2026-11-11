@@ -1,10 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { CaseList } from "@/components/CaseList";
-import { ResearchCard } from "@/components/ResearchCard";
-import { ArrowLink, Container, PageHeader, SectionHeader } from "@/components/ui";
-import { getCasesByAxis } from "@/lib/cases";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowUpRight } from "lucide-react";
+import "../styles/home.css";
+
+import { CaseRows, ResearchPapers, SectionHead } from "@/components/rdx";
+import { caseItems, getCasesByAxis } from "@/lib/cases";
 import { pageHead } from "@/lib/metadata";
 import { publications, researchCode, researchNotes, researchTopics } from "@/lib/research";
+import { useReveal } from "@/lib/use-reveal";
 
 export const Route = createFileRoute("/research")({
   head: () =>
@@ -22,96 +24,121 @@ const figureAlt =
 
 const PUBLICATION_STATUS = { presented: "発表済み", accepted: "採択" } as const;
 
+/**
+ * 研究とデータ分析。トップと同じ部品（`.rdx`）で組む。
+ * 発表の見出しは `#publications-heading` で、About の経歴欄から飛んでくる。
+ */
 function ResearchPage() {
+  const ref = useReveal<HTMLElement>();
+  const researchCases = getCasesByAxis("research");
+
   return (
-    <main id="main-content">
-      <Container>
-        <PageHeader
+    <main id="main-content" className="rdx" ref={ref}>
+      <div className="rdx-progress" aria-hidden="true" />
+
+      <div className="rdx-wrap rdx-page-hero">
+        <SectionHead
+          as="h1"
+          label="Research"
           title="研究とデータ分析"
           description="ブーリアンネットワークの制御を中心に、強化学習と形式手法を組み合わせた研究をしています。データ分析の実務的なプロジェクトも含め、問題設定・手法・検証結果を分けてまとめています。"
         />
+        <ResearchPapers topics={researchTopics} heading="h2" detailed />
 
-        <ul role="list" className="grid list-none grid-cols-1 gap-6 md:grid-cols-2">
-          {researchTopics.map((topic) => (
-            <li key={topic.slug}>
-              <ResearchCard topic={topic} headingLevel="h2" />
-            </li>
-          ))}
-        </ul>
-
-        <figure className="mt-16 grid grid-cols-12 gap-x-6 gap-y-4">
-          <div className="relative col-span-12 aspect-[2081/1535] w-full overflow-hidden rounded border border-border bg-background lg:col-span-8">
+        <figure className="rdx-figure" data-rv>
+          <div className="rdx-figure-media">
             <img
               src="/images/research/trajectory-recovery-light.webp"
               alt={figureAlt}
+              width={2081}
+              height={1535}
               loading="lazy"
               decoding="async"
-              className="h-full w-full object-contain dark:hidden"
+              className="dark:hidden"
             />
             <img
               src="/images/research/trajectory-recovery-dark.webp"
               alt=""
               aria-hidden="true"
+              width={2081}
+              height={1535}
               loading="lazy"
               decoding="async"
-              className="hidden h-full w-full object-contain dark:block"
+              className="hidden dark:block"
             />
           </div>
-          <figcaption className="col-span-12 self-end lg:col-span-4">
-            <span className="block font-mono text-xs text-muted">Fig. Wnt5a / recovery constraint</span>
-            <p className="mt-2 text-sm leading-[1.8] text-muted">
-              学習した方策による制御の実行例。上段は目標集合へのハミング距離で、時刻 2 で 0 に到達し、到達期限を越えて以降も維持されています。下段は各時刻に除去したエッジで、
-              <span className="text-accent">朱色のマス</span>
+          <figcaption>
+            <span className="rdx-mono">Fig. Wnt5a / recovery constraint</span>
+            <p>
+              学習した方策による制御の実行例。上段は目標集合へのハミング距離で、時刻 2 で 0
+              に到達し、到達期限を越えて以降も維持されています。下段は各時刻に除去したエッジで、
+              <span className="rdx-figure-mark">朱色のマス</span>
               が介入です。96 個の初期状態すべてで安定化に成功しました。
             </p>
           </figcaption>
         </figure>
+      </div>
 
-        <section aria-labelledby="publications-heading" className="mt-20">
-          <SectionHeader id="publications-heading" title="発表" />
-          <ul role="list" className="list-none border-t border-border">
-            {publications.map((pub) => (
-              <li key={pub.title} className="grid grid-cols-12 gap-x-6 gap-y-2 border-b border-border py-5">
-                <p className="col-span-12 font-mono text-xs text-muted md:col-span-2 md:leading-6">{pub.date}</p>
-                <div className="col-span-12 md:col-span-10">
-                  <p className="text-[0.9375rem] font-medium leading-relaxed text-foreground">{pub.title}</p>
-                  <p className="mt-1.5 text-sm text-muted">
-                    {pub.venue} · {pub.format} · {PUBLICATION_STATUS[pub.status]}
-                    {pub.award && <span className="text-foreground"> · {pub.award}</span>}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section aria-labelledby="notes-heading" className="mt-20">
-          <SectionHeader id="notes-heading" title="関連コンテンツ" />
-          <ul role="list" className="grid list-none grid-cols-1 gap-6 md:grid-cols-2">
-            {researchNotes.map((note) => (
-              <li key={note.href} className="rounded border border-border p-5">
-                <p className="text-base font-semibold text-foreground">{note.title}</p>
-                <p className="mt-1.5 text-sm leading-[1.8] text-muted">{note.description}</p>
-                <ArrowLink href={note.href} className="mt-2">
-                  {note.title} を開く
-                </ArrowLink>
-              </li>
-            ))}
-            <li className="rounded border border-border p-5">
-              <p className="text-base font-semibold text-foreground">{researchCode.label}</p>
-              <p className="mt-1.5 text-sm leading-[1.8] text-muted">{researchCode.description}</p>
-              <ArrowLink href={researchCode.href} className="mt-2">
-                GitHub で見る
-              </ArrowLink>
+      <section className="rdx-wrap rdx-section" aria-labelledby="publications-heading">
+        <SectionHead id="publications-heading" label="Publications" title="発表" />
+        <ul className="rdx-pubs" data-rv="stagger">
+          {publications.map((pub) => (
+            <li key={pub.title}>
+              <span className="rdx-pub-date rdx-mono">{pub.date}</span>
+              <div>
+                <h3>{pub.title}</h3>
+                <p>
+                  {pub.venue} · {pub.format} · {PUBLICATION_STATUS[pub.status]}
+                  {pub.award && <b> · {pub.award}</b>}
+                </p>
+              </div>
             </li>
-          </ul>
-        </section>
+          ))}
+        </ul>
+      </section>
 
-        <section aria-labelledby="research-cases" className="mt-20">
-          <SectionHeader id="research-cases" title="研究・分析の事例" />
-          <CaseList items={getCasesByAxis("research")} />
-        </section>
-      </Container>
+      <section className="rdx-wrap rdx-section" aria-labelledby="notes-heading">
+        <SectionHead id="notes-heading" label="Related" title="関連コンテンツ" />
+        <ul className="rdx-notes">
+          {researchNotes.map((note) => (
+            <li key={note.href} className="rdx-note" data-rv>
+              <h3>{note.title}</h3>
+              <p>{note.description}</p>
+              <a href={note.href} className="rdx-more">
+                {note.title} を開く
+                <ArrowUpRight aria-hidden="true" />
+              </a>
+            </li>
+          ))}
+          <li className="rdx-note" data-rv style={{ "--rv-delay": "100ms" } as React.CSSProperties}>
+            <h3 className="rdx-mono">{researchCode.label}</h3>
+            <p>{researchCode.description}</p>
+            <a href={researchCode.href} target="_blank" rel="noopener noreferrer" className="rdx-more">
+              GitHub で見る
+              <ArrowUpRight aria-hidden="true" />
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <section className="rdx-wrap rdx-section" aria-labelledby="research-cases">
+        <SectionHead
+          id="research-cases"
+          label="Cases"
+          title="研究・分析の事例"
+          description="研究と分析の進め方をまとめた記事です。"
+        />
+        <CaseRows items={researchCases} />
+        <div className="rdx-foot" data-rv>
+          <span>
+            全 {caseItems.length} 件の事例のうち、研究・分析の {researchCases.length} 件を掲載
+          </span>
+          <Link to="/cases" className="rdx-more">
+            すべての事例
+            <ArrowUpRight aria-hidden="true" />
+          </Link>
+        </div>
+      </section>
     </main>
   );
 }
