@@ -18,15 +18,18 @@ export function SectionHead({
   title,
   description,
   as: Heading = "h2",
+  small = false,
 }: {
   id?: string;
   label: string;
   title: string;
   description?: string;
   as?: "h1" | "h2";
+  /** 題が長いとき（記事の題など）の小さい版 */
+  small?: boolean;
 }) {
   return (
-    <div className="rdx-head" data-rv>
+    <div className={small ? "rdx-head rdx-head--small" : "rdx-head"} data-rv>
       <p className="rdx-label rdx-mono">{label}</p>
       <Heading id={id} className="rdx-h2">
         <span>{title}</span>
@@ -241,5 +244,18 @@ export function ResearchPapers({
         </li>
       ))}
     </ul>
+  );
+}
+
+/** 1 文字ずつ下からせり上がる。読み上げには親の aria-label を使う */
+export function Chars({ text }: { text: string }) {
+  return (
+    <span className="rdx-chars" aria-hidden="true">
+      {Array.from(text).map((char, i) => (
+        <span key={i} style={{ "--i": i } as React.CSSProperties}>
+          {char}
+        </span>
+      ))}
+    </span>
   );
 }

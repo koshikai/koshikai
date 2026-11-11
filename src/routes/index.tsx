@@ -3,7 +3,7 @@ import { ArrowDown, ArrowUpRight } from "lucide-react";
 import "../styles/home.css";
 
 import { ParticleType } from "@/components/ParticleType";
-import { CountUp, Layers, Pipeline, ResearchPapers, SectionHead, StackRows } from "@/components/rdx";
+import { Chars, CountUp, Layers, Pipeline, ResearchPapers, SectionHead, StackRows } from "@/components/rdx";
 import { WorkItem } from "@/components/WorkItem";
 import { operationFacts } from "@/lib/engineering";
 import { profile } from "@/lib/profile";
@@ -59,19 +59,6 @@ const axes = [
 ];
 
 const pad = (n: number) => String(n).padStart(2, "0");
-
-/** 1 文字ずつ下からせり上がる。読み上げには親の aria-label を使う */
-function Chars({ text }: { text: string }) {
-  return (
-    <span className="rdx-chars" aria-hidden="true">
-      {Array.from(text).map((char, i) => (
-        <span key={i} style={{ "--i": i } as React.CSSProperties}>
-          {char}
-        </span>
-      ))}
-    </span>
-  );
-}
 
 function Home() {
   const ref = useReveal();

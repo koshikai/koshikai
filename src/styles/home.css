@@ -1,5 +1,5 @@
 /* ==========================================================================
-   / と、同じ部品で組む下層ページ（/works /engineering /research）
+   / と、同じ部品で組む下層ページ
 
    レイアウトと部品は .rdx の内側に閉じているので、この CSS が他ページと同じ
    バンドルに入っても既存ページの見た目は変わらない。
@@ -1321,6 +1321,98 @@ a.rdx-work-media:hover img {
 @media (min-width: 900px) {
   .rdx-notes {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* /about: 自己紹介と方針を 2 列に */
+.rdx-about {
+  display: grid;
+  gap: clamp(40px, 6vw, 72px);
+}
+.rdx-about-note {
+  margin-bottom: clamp(32px, 5vw, 56px);
+}
+.rdx-bio {
+  display: grid;
+  gap: 1.25em;
+  max-width: 40em;
+  font-size: 16px;
+  line-height: 1.95;
+  text-wrap: pretty;
+}
+@media (min-width: 1000px) {
+  .rdx-about {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+}
+
+/* /cases/…: 記事の題は長いので小さく組み、要約は本文の横に置く */
+.rdx-head--small .rdx-h2 {
+  max-width: 22em;
+  font-size: clamp(1.75rem, 3.6vw, 2.75rem);
+  letter-spacing: -0.03em;
+  line-height: 1.35;
+}
+.rdx-crumb {
+  margin-bottom: 16px;
+}
+.rdx-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  color: var(--soft);
+  font-size: 14px;
+  transition: color 0.3s var(--ease);
+}
+.rdx-back:hover {
+  color: var(--ink);
+}
+.rdx-back svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.5s var(--ease);
+}
+.rdx-back:hover svg {
+  transform: translateX(-3px);
+}
+.rdx-article-tags {
+  margin-top: calc(clamp(32px, 5vw, 56px) * -1 + 20px);
+  color: var(--soft);
+}
+
+.case-layout {
+  display: grid;
+  gap: 40px;
+  width: 100%;
+  max-width: 1240px;
+  margin-inline: auto;
+  margin-top: clamp(32px, 5vw, 56px);
+  padding-inline: clamp(20px, 5vw, 48px);
+}
+.case-layout > .case-article-content {
+  min-width: 0;
+  margin-inline: 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.case-brief {
+  flex: none;
+  min-width: 0;
+  overflow: visible;
+}
+.case-brief .rdx-pmr {
+  margin-block: 0 !important;
+}
+@media (min-width: 1000px) {
+  .case-layout {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: clamp(40px, 6vw, 96px);
+    align-items: start;
+  }
+  .case-brief {
+    position: sticky;
+    top: 88px;
   }
 }
 
