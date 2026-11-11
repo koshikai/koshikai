@@ -108,8 +108,93 @@ function toggleTheme() {
   }
 }
 
+/** 1 文字ずつ下からせり上がる。読み上げには親の aria-label を使う */
+function Chars({ text }: { text: string }) {
+  return (
+    <span className="rdx-chars" aria-hidden="true">
+      {Array.from(text).map((char, i) => (
+        <span key={i} style={{ "--i": i } as React.CSSProperties}>
+          {char}
+        </span>
+      ))}
+    </span>
+  );
+}
+
+/**
+ * 画面に入ったとき、文字列の中の数値だけを 0 から数え上げる（"96/96" "43.2×" "10+"）。
+ * サーバーが出す値は最終値のままなので、JS が無くても正しい数字が読める。
+ */
+function CountUp({ value }: { value: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const parts = value.split(/(\d+(?:\.\d+)?)/);
+    let frame = 0;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        observer.disconnect();
+        const start = performance.now();
+        const tick = (now: number) => {
+          const t = Math.min(1, (now - start) / 1400);
+          const eased = 1 - Math.pow(1 - t, 4);
+          el.textContent = parts
+            .map((part, i) =>
+              i % 2 ? (Number(part) * eased).toFixed(part.split(".")[1]?.length ?? 0) : part,
+            )
+            .join("");
+          if (t < 1) frame = requestAnimationFrame(tick);
+        };
+        frame = requestAnimationFrame(tick);
+      },
+      { threshold: 0.6 },
+    );
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+      el.textContent = value;
+    };
+  }, [value]);
+
+  return (
+    <>
+      <span className="rdx-sr">{value}</span>
+      <span ref={ref} aria-hidden="true">
+        {value}
+      </span>
+    </>
+  );
+}
+
 function Nav() {
   const [open, setOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
+
+  // 下へ読み進めている間はバーを引っ込め、少しでも戻ったら出す
+  useEffect(() => {
+    let last = window.scrollY;
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        if (Math.abs(y - last) > 8) {
+          setHidden(y > last && y > 160);
+          last = y;
+        }
+        ticking = false;
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -122,7 +207,7 @@ function Nav() {
 
   return (
     <>
-      <header className="rdx-nav">
+      <header className="rdx-nav" data-hidden={hidden && !open}>
         <a href="#main-content" className="rdx-nav-brand">
           koshikai
         </a>
@@ -188,7 +273,7 @@ function SectionHead({
     <div className="rdx-head" data-rv>
       <p className="rdx-label rdx-mono">{label}</p>
       <h2 id={id} className="rdx-h2">
-        {title}
+        <span>{title}</span>
       </h2>
       <p className="rdx-head-desc">{description}</p>
     </div>
@@ -225,7 +310,7 @@ function WorkItem({ work }: { work: Work }) {
           <div className="rdx-work-media">{image}</div>
         ))}
 
-      <div>
+      <div className="rdx-work-body">
         <p className="rdx-work-meta rdx-mono">
           <span>{work.since}</span>
           <span className="rdx-pill" data-status={work.status}>
@@ -307,17 +392,19 @@ function TestRedesign() {
 
   return (
     <main id="main-content" className="rdx" ref={ref}>
+      <div className="rdx-progress" aria-hidden="true" />
       <Nav />
 
       {/* --- Hero --- */}
       <section className="rdx-wrap rdx-hero" aria-labelledby="rdx-hero-heading">
-        <h1 id="rdx-hero-heading" className="rdx-name rdx-mono">
-          {profile.name}
+        <h1 id="rdx-hero-heading" className="rdx-name rdx-mono" aria-label={profile.name}>
+          <Chars text={profile.name} />
+          <span className="rdx-caret" aria-hidden="true" />
         </h1>
         <p className="rdx-statement">
           {["作ったものを、", "自分のサーバーで", "動かしている。"].map((line, i) => (
             <span key={line} style={{ "--i": i } as React.CSSProperties}>
-              {line}
+              <span>{line}</span>
             </span>
           ))}
         </p>
@@ -350,7 +437,9 @@ function TestRedesign() {
                   <span className="rdx-axis-key">{axis.key}</span>
                   <span className="rdx-axis-sum">{axis.summary}</span>
                   <span className="rdx-axis-proof">
-                    <b className="rdx-mono">{axis.value}</b>
+                    <b className="rdx-mono">
+                      <CountUp value={axis.value} />
+                    </b>
                     {axis.proof}
                   </span>
                   <ArrowDown className="rdx-axis-arrow" aria-hidden="true" />
@@ -416,7 +505,7 @@ function TestRedesign() {
             </div>
 
             <div className="rdx-ops">
-              <ol className="rdx-ops-facts" data-rv>
+              <ol className="rdx-ops-facts" data-rv="stagger">
                 {operationFacts.slice(0, 4).map((fact, i) => (
                   <li key={fact.title}>
                     <span className="rdx-mono" aria-hidden="true">
@@ -428,9 +517,11 @@ function TestRedesign() {
                 ))}
               </ol>
 
-              <div data-rv>
-                <p className="rdx-layers-title rdx-mono">層ごとの構成</p>
-                <dl className="rdx-layers">
+              <div>
+                <p className="rdx-layers-title rdx-mono" data-rv>
+                  層ごとの構成
+                </p>
+                <dl className="rdx-layers" data-rv="stagger">
                   {homelabLayers.map((layer) => (
                     <div key={layer.layer} className="rdx-layer">
                       <dt className="rdx-mono">{layer.layer}</dt>
@@ -470,7 +561,9 @@ function TestRedesign() {
             >
               {topic.metric && (
                 <>
-                  <p className="rdx-metric">{topic.metric.value}</p>
+                  <p className="rdx-metric">
+                    <CountUp value={topic.metric.value} />
+                  </p>
                   <p className="rdx-metric-label rdx-mono">{topic.metric.label}</p>
                 </>
               )}
@@ -516,7 +609,7 @@ function TestRedesign() {
           title="使用技術"
           description="実際に使った技術だけを、使った場所へのリンク付きで並べています。"
         />
-        <ul className="rdx-stack" data-rv>
+        <ul className="rdx-stack" data-rv="stagger">
           {capabilities.map((capability) => (
             <li key={capability.area} className="rdx-stack-row">
               <span className="rdx-stack-area rdx-mono">{capability.area}</span>
@@ -545,8 +638,8 @@ function TestRedesign() {
             Contact
           </h2>
           {email ? (
-            <a href={`mailto:${email}`} className="rdx-mail">
-              {email}
+            <a href={`mailto:${email}`} className="rdx-mail" aria-label={email}>
+              <Chars text={email} />
             </a>
           ) : (
             <Link to="/about" hash="contact" className="rdx-mail">

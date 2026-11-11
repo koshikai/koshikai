@@ -144,6 +144,10 @@ body:has(.rdx) > div > footer {
   backdrop-filter: blur(16px) saturate(1.4);
   -webkit-backdrop-filter: blur(16px) saturate(1.4);
   transform: translateX(-50%);
+  transition: transform 0.5s var(--ease);
+}
+.rdx-nav[data-hidden="true"] {
+  transform: translate(-50%, -200%);
 }
 
 .rdx-nav-brand {
@@ -311,7 +315,42 @@ body:has(.rdx) > div > footer {
   font-weight: 500;
   letter-spacing: -0.03em;
   line-height: 1;
-  animation: rdx-rise 0.8s var(--ease) 0.1s both;
+  display: flex;
+  align-items: baseline;
+}
+
+/* 1 文字ずつ、枠の下からせり上がる */
+.rdx-chars {
+  display: inline-flex;
+  flex-wrap: wrap;
+  overflow: clip;
+  margin-block: -0.1em;
+  padding-block: 0.1em;
+}
+.rdx-chars span {
+  display: inline-block;
+  animation: rdx-char 0.9s var(--ease) both;
+  animation-delay: calc(var(--i) * 45ms + 80ms);
+}
+@keyframes rdx-char {
+  from {
+    transform: translateY(125%);
+  }
+}
+
+/* ハンドルの後ろのカーソル。数回点滅して止まる */
+.rdx-caret {
+  align-self: center;
+  width: 0.5ch;
+  height: 0.8em;
+  margin-left: 0.12em;
+  background: var(--accent);
+  animation: rdx-caret 1s steps(1) 0.9s 5 both;
+}
+@keyframes rdx-caret {
+  50% {
+    opacity: 0;
+  }
 }
 .rdx-statement {
   margin-top: clamp(20px, 3vw, 32px);
@@ -321,12 +360,18 @@ body:has(.rdx) > div > footer {
   line-height: 1.18;
   word-break: keep-all;
 }
-.rdx-statement span {
+.rdx-statement > span {
   display: block;
-  animation: rdx-h1 0.9s var(--ease) both;
-  animation-delay: calc(var(--i) * 90ms + 0.24s);
+  overflow: clip;
+  margin-block: -0.08em;
+  padding-block: 0.08em;
 }
-.rdx-statement span:last-child {
+.rdx-statement > span > span {
+  display: block;
+  animation: rdx-char 1s var(--ease) both;
+  animation-delay: calc(var(--i) * 110ms + 0.42s);
+}
+.rdx-statement > span:last-child {
   color: var(--accent);
 }
 @keyframes rdx-h1 {
@@ -340,7 +385,7 @@ body:has(.rdx) > div > footer {
   display: grid;
   gap: 24px;
   margin-top: clamp(32px, 5vw, 56px);
-  animation: rdx-rise 0.8s var(--ease) 0.42s both;
+  animation: rdx-rise 0.9s var(--ease) 0.85s both;
 }
 .rdx-lead {
   max-width: 34em;
@@ -543,18 +588,41 @@ body:has(.rdx) > div > footer {
 }
 .rdx-h2 {
   max-width: 18em;
-  font-size: clamp(1.75rem, 4.4vw, 3.5rem);
+  overflow: clip;
+  margin-block: -0.1em;
+  padding-block: 0.1em;
+  font-size: clamp(2rem, 5.6vw, 4.5rem);
   font-weight: 700;
-  letter-spacing: -0.035em;
-  line-height: 1.25;
+  letter-spacing: -0.04em;
+  line-height: 1.2;
   word-break: auto-phrase;
   text-wrap: balance;
+}
+.rdx-h2 span {
+  display: block;
 }
 .rdx-head-desc {
   max-width: 36em;
   color: var(--soft);
   font-size: 15px;
   text-wrap: pretty;
+}
+.rdx-label::after {
+  transform-origin: left;
+}
+
+@media (min-width: 900px) {
+  .rdx-head {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    align-items: end;
+    column-gap: clamp(32px, 5vw, 72px);
+  }
+  .rdx-head .rdx-label {
+    grid-column: 1 / -1;
+  }
+  .rdx-head-desc {
+    padding-bottom: 0.6em;
+  }
 }
 
 .rdx-more {
@@ -614,10 +682,10 @@ body:has(.rdx) > div > footer {
   display: block;
   width: 100%;
   height: auto;
-  transition: transform 0.9s var(--ease);
+  transition: scale 0.9s var(--ease);
 }
 a.rdx-work-media:hover img {
-  transform: scale(1.03);
+  scale: 1.03;
 }
 .rdx-work-meta {
   display: flex;
@@ -776,7 +844,51 @@ a.rdx-work-media:hover img {
   width: 1px;
   background: var(--line);
 }
+/* 経路を進む線。ノードは 1 秒ごとに順に点灯するので、線も等速で進める */
+.rdx-pipe-steps::after {
+  content: "";
+  position: absolute;
+  top: 11px;
+  bottom: 34px;
+  left: 5px;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  transform-origin: top left;
+  animation: rdx-flow-y 8s linear infinite;
+}
+@keyframes rdx-flow-y {
+  0% {
+    opacity: 1;
+    transform: scaleY(0);
+  }
+  75%,
+  90% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleY(1);
+  }
+}
+@keyframes rdx-flow-x {
+  0% {
+    opacity: 1;
+    transform: scaleX(0);
+  }
+  75%,
+  90% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleX(1);
+  }
+}
 .rdx-pipe-node {
+  z-index: 1;
   position: relative;
   width: 12px;
   height: 12px;
@@ -792,7 +904,7 @@ a.rdx-work-media:hover img {
   border-radius: inherit;
   background: var(--accent);
   opacity: 0;
-  animation: rdx-node 7s var(--ease) infinite;
+  animation: rdx-node 8s var(--ease) infinite;
   animation-delay: calc(var(--i) * 1s);
 }
 @keyframes rdx-node {
@@ -850,6 +962,15 @@ a.rdx-work-media:hover img {
   .rdx-pipe-node {
     margin: 0 0 16px;
   }
+  .rdx-pipe-steps::after {
+    top: 5px;
+    bottom: auto;
+    left: 6px;
+    right: calc(100% / 7 - 6px);
+    width: auto;
+    height: 2px;
+    animation-name: rdx-flow-x;
+  }
 }
 
 .rdx-ops {
@@ -905,10 +1026,10 @@ a.rdx-work-media:hover img {
   background: var(--panel);
   font-size: 13px;
   line-height: 1.7;
-  transition: transform 0.5s var(--ease);
+  transition: translate 0.5s var(--ease);
 }
 .rdx-layer:hover {
-  transform: translateX(4px);
+  translate: 4px 0;
 }
 .rdx-layer dt {
   color: var(--soft);
@@ -1009,7 +1130,11 @@ a.rdx-work-media:hover img {
   padding-block: 16px;
   border-bottom: 1px solid var(--line);
 }
+.rdx-stack-row:hover .rdx-stack-area {
+  color: var(--accent);
+}
 .rdx-stack-area {
+  transition: color 0.3s var(--ease);
   color: var(--soft);
   font-size: 12px;
   line-height: 2.2;
@@ -1061,7 +1186,7 @@ a.rdx-work-media:hover img {
 .rdx-mail {
   display: inline-block;
   margin-top: 16px;
-  font-size: clamp(1.75rem, 7.4vw, 6.5rem);
+  font-size: clamp(1.5rem, 7vw, 6.5rem);
   font-weight: 700;
   letter-spacing: -0.05em;
   line-height: 1.15;
@@ -1128,6 +1253,141 @@ a.rdx-work-media:hover img {
   text-underline-offset: 3px;
 }
 
+/* 読み進めた量を示す線。スクロール連動に対応したブラウザでだけ出す */
+.rdx-progress {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 60;
+  display: none;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+@keyframes rdx-progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes rdx-drift {
+  from {
+    translate: 0 -2.5%;
+  }
+  to {
+    translate: 0 2.5%;
+  }
+}
+
+/* ==========================================================================
+   動きの追加分。動きを減らす設定の人には、ここは丸ごと適用しない
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    .rdx-progress {
+      display: block;
+      animation: rdx-progress linear both;
+      animation-timeline: scroll(root);
+    }
+    /* スクリーンショットが、枠の中でスクロールより少し遅れて動く */
+    .rdx-work-media img {
+      scale: 1.06;
+      animation: rdx-drift linear both;
+      animation-timeline: view();
+      animation-range: cover;
+    }
+    a.rdx-work-media:hover img {
+      scale: 1.1;
+    }
+  }
+
+  /* 自分は動かず、中身が順に現れる入れ物 */
+  .js .rdx .rdx-head[data-rv],
+  .js .rdx .rdx-work[data-rv],
+  .js .rdx [data-rv="stagger"] {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* 見出し: 罫線が左から引かれ、題字が枠の下からせり上がる */
+  .js .rdx .rdx-head[data-rv] .rdx-label::after {
+    transform: scaleX(0);
+    transition: transform 1.2s var(--ease) 0.1s;
+  }
+  .js .rdx .rdx-head[data-rv] .rdx-h2 span {
+    transform: translateY(120%);
+    transition: transform 1s var(--ease) 0.08s;
+  }
+  .js .rdx .rdx-head[data-rv] .rdx-head-desc {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 0.8s var(--ease) 0.3s,
+      transform 0.8s var(--ease) 0.3s;
+  }
+  .js .rdx .rdx-head.is-in .rdx-label::after,
+  .js .rdx .rdx-head.is-in .rdx-h2 span,
+  .js .rdx .rdx-head.is-in .rdx-head-desc {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* 作品: 画像は上から幕が開き、説明は 1 行ずつ追いかける */
+  .js .rdx .rdx-work[data-rv] .rdx-work-media {
+    clip-path: inset(0 0 100% 0 round 16px);
+    transition: clip-path 1.3s var(--ease);
+  }
+  .js .rdx .rdx-work.is-in .rdx-work-media {
+    clip-path: inset(0 0 0 0 round 16px);
+  }
+  .js .rdx .rdx-work[data-rv] .rdx-work-body > * {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 0.7s var(--ease) var(--sd, 0ms),
+      transform 0.7s var(--ease) var(--sd, 0ms);
+  }
+  .js .rdx .rdx-work.is-in .rdx-work-body > * {
+    opacity: 1;
+    transform: none;
+  }
+  .rdx-work-body > :nth-child(1) { --sd: 200ms; }
+  .rdx-work-body > :nth-child(2) { --sd: 260ms; }
+  .rdx-work-body > :nth-child(3) { --sd: 320ms; }
+  .rdx-work-body > :nth-child(4) { --sd: 380ms; }
+  .rdx-work-body > :nth-child(5) { --sd: 440ms; }
+  .rdx-work-body > :nth-child(6) { --sd: 500ms; }
+
+  /* 行の集まり: 上から順に */
+  .js .rdx [data-rv="stagger"] > * {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 0.7s var(--ease) var(--sd, 0ms),
+      transform 0.7s var(--ease) var(--sd, 0ms),
+      translate 0.5s var(--ease);
+  }
+  .js .rdx [data-rv="stagger"].is-in > * {
+    opacity: 1;
+    transform: none;
+  }
+  [data-rv="stagger"] > :nth-child(2) { --sd: 70ms; }
+  [data-rv="stagger"] > :nth-child(3) { --sd: 140ms; }
+  [data-rv="stagger"] > :nth-child(4) { --sd: 210ms; }
+  [data-rv="stagger"] > :nth-child(5) { --sd: 280ms; }
+  [data-rv="stagger"] > :nth-child(6) { --sd: 350ms; }
+  [data-rv="stagger"] > :nth-child(7) { --sd: 420ms; }
+  [data-rv="stagger"] > :nth-child(8) { --sd: 490ms; }
+
+  /* 画面に入るまで待つもの（連絡先の文字、配信経路の線とノード） */
+  .js .rdx [data-rv]:not(.is-in) .rdx-chars span,
+  .js .rdx [data-rv]:not(.is-in) .rdx-pipe-steps::after,
+  .js .rdx [data-rv]:not(.is-in) .rdx-pipe-node::after {
+    animation-play-state: paused;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .rdx *,
   .rdx *::before,
@@ -1142,7 +1402,9 @@ a.rdx-work-media:hover img {
     opacity: 1;
     transform: none;
   }
-  .rdx-pipe-node::after {
+  .rdx-pipe-node::after,
+  .rdx-pipe-steps::after {
     animation: none;
+    opacity: 0;
   }
 }
