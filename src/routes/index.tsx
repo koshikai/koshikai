@@ -71,16 +71,13 @@ function Home() {
               <Chars text={profile.name} />
               <span className="rdx-caret" aria-hidden="true" />
             </h1>
-            <p className="rdx-statement">
-              {["作ったものを、", "自分のサーバーで", "動かしている。"].map((line, i) => (
-                <span key={line} style={{ "--i": i } as React.CSSProperties}>
-                  <span>{line}</span>
-                </span>
-              ))}
-            </p>
-
             <div className="rdx-hero-sub">
-              <p className="rdx-lead">{profile.lead}</p>
+              {/* 文ごとに行を分け、文節の途中では折り返さない */}
+              <p className="rdx-lead">
+                {profile.lead.split(/(?<=。)/).map((sentence) => (
+                  <span key={sentence}>{sentence}</span>
+                ))}
+              </p>
               <div className="rdx-cta">
                 <Link to="/works" className="rdx-btn">
                   作品を見る
