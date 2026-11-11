@@ -211,3 +211,9 @@
     animation: none;
   }
 }
+
+/* トップと同じ部品（.rdx）で組んだページでは、フッターの幅と余白も本文にそろえる */
+body:has(.rdx) .site-footer {
+  max-width: 1240px;
+  padding-inline: clamp(20px, 5vw, 48px);
+}

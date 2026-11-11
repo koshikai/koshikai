@@ -4,12 +4,14 @@ import { ArrowDown, ArrowUpRight } from "lucide-react";
 import "../styles/home.css";
 
 import { ParticleType } from "@/components/ParticleType";
+import { WorkItem } from "@/components/WorkItem";
 import { countFrame } from "@/lib/count-up";
 import { capabilities, homelabLayers, operationFacts, pipelineSteps } from "@/lib/engineering";
 import { profile } from "@/lib/profile";
 import { featuredResearch } from "@/lib/research";
 import { getSiteConfig } from "@/lib/site-config";
-import { featuredWorks, STATUS_LABELS, works, type Work } from "@/lib/works";
+import { useReveal } from "@/lib/use-reveal";
+import { featuredWorks, works } from "@/lib/works";
 
 /**
  * トップページ。
@@ -58,35 +60,6 @@ const axes = [
 ];
 
 const pad = (n: number) => String(n).padStart(2, "0");
-
-/** 画面に入った要素へ一度だけ .is-in を付ける */
-function useReveal() {
-  const ref = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const root = ref.current;
-    if (!root) return;
-    const targets = root.querySelectorAll<HTMLElement>("[data-rv]");
-    if (typeof IntersectionObserver === "undefined") {
-      targets.forEach((el) => el.classList.add("is-in"));
-      return;
-    }
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          entry.target.classList.add("is-in");
-          observer.unobserve(entry.target);
-        }
-      },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.05 },
-    );
-    targets.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
-  return ref;
-}
 
 /** 1 文字ずつ下からせり上がる。読み上げには親の aria-label を使う */
 function Chars({ text }: { text: string }) {
@@ -166,124 +139,6 @@ function SectionHead({
       </h2>
       <p className="rdx-head-desc">{description}</p>
     </div>
-  );
-}
-
-/**
- * compact は 2 作品目以降の小さい版。概要文と運用の行を省き、1 画面に並べる。
- * 画像は現行と同じく、狭い画面では縦長の実機画面に差し替える。
- */
-function WorkItem({ work, compact = false }: { work: Work; compact?: boolean }) {
-  const external = work.links.live ?? work.links.download;
-  const image = work.image && (
-    <picture>
-      <source
-        media="(min-width: 40rem)"
-        srcSet={work.image.desktop.src}
-        width={work.image.desktop.width}
-        height={work.image.desktop.height}
-      />
-      <img
-        src={work.image.mobile.src}
-        width={work.image.mobile.width}
-        height={work.image.mobile.height}
-        alt={work.image.alt}
-        loading="lazy"
-        decoding="async"
-      />
-    </picture>
-  );
-
-  return (
-    <article className={compact ? "rdx-work rdx-work--compact" : "rdx-work"} data-rv>
-      {image &&
-        (external ? (
-          <a
-            className="rdx-work-media"
-            href={external}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`${work.name} を開く（新しいタブ）`}
-          >
-            {image}
-          </a>
-        ) : (
-          <div className="rdx-work-media">{image}</div>
-        ))}
-
-      <div className="rdx-work-body">
-        <p className="rdx-work-meta rdx-mono">
-          <span>{work.since}</span>
-          <span className="rdx-pill" data-status={work.status}>
-            {STATUS_LABELS[work.status]}
-          </span>
-        </p>
-        <h3 className="rdx-work-name">{work.name}</h3>
-        <p className="rdx-work-tagline">{work.tagline}</p>
-        {!compact && <p className="rdx-work-summary">{work.summary}</p>}
-
-        <dl className="rdx-facts">
-          <div>
-            <dt className="rdx-mono">担当</dt>
-            <dd>{work.scope}</dd>
-          </div>
-          {!compact && work.operation && (
-            <div>
-              <dt className="rdx-mono">運用</dt>
-              <dd>{work.operation}</dd>
-            </div>
-          )}
-          {work.statusNote && (
-            <div>
-              <dt className="rdx-mono">公開</dt>
-              <dd>{work.statusNote}</dd>
-            </div>
-          )}
-          <div>
-            <dt className="rdx-mono">技術</dt>
-            <dd>
-              <ul className="rdx-chips rdx-mono">
-                {work.stack.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </dd>
-          </div>
-        </dl>
-
-        <div className="rdx-work-links">
-          {work.links.caseSlug && (
-            <Link to="/cases/$slug" params={{ slug: work.links.caseSlug }} className="rdx-more">
-              設計と判断を読む
-              <ArrowUpRight aria-hidden="true" />
-            </Link>
-          )}
-          {work.links.live && (
-            <a href={work.links.live} target="_blank" rel="noopener noreferrer" className="rdx-more">
-              サイトを開く
-              <ArrowUpRight aria-hidden="true" />
-            </a>
-          )}
-          {work.links.download && (
-            <a
-              href={work.links.download}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rdx-more"
-            >
-              ダウンロード
-              <ArrowUpRight aria-hidden="true" />
-            </a>
-          )}
-          {work.links.repo && (
-            <a href={work.links.repo} target="_blank" rel="noopener noreferrer" className="rdx-more">
-              ソースコード
-              <ArrowUpRight aria-hidden="true" />
-            </a>
-          )}
-        </div>
-      </div>
-    </article>
   );
 }
 

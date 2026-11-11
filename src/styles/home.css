@@ -1,5 +1,5 @@
 /* ==========================================================================
-   / — トップページ
+   / と、同じ部品で組む下層ページ（/works）
 
    レイアウトと部品は .rdx の内側に閉じているので、この CSS が他ページと同じ
    バンドルに入っても既存ページの見た目は変わらない。
@@ -651,6 +651,187 @@ a.rdx-work-media:hover img {
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
     align-items: center;
     gap: clamp(32px, 5vw, 72px);
+  }
+}
+
+@media (min-width: 900px) {
+  .rdx-work--flip:not(.rdx-work--compact) {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  }
+  .rdx-work--flip:not(.rdx-work--compact) .rdx-work-media {
+    order: 2;
+  }
+}
+
+/* 画像の無い作品は、同じ枠に構成の要約を出す */
+.rdx-work-arch {
+  display: grid;
+  align-content: center;
+  gap: 16px;
+  padding: clamp(24px, 5vw, 56px);
+  aspect-ratio: auto;
+}
+@media (min-width: 40rem) {
+  .rdx-work-arch {
+    aspect-ratio: 1424 / 900;
+  }
+}
+.rdx-work-arch p {
+  color: var(--soft);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.rdx-work-arch ol {
+  counter-reset: arch;
+  border-bottom: 1px solid var(--line);
+}
+.rdx-work-arch li {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding-block: 12px;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  line-height: 1.6;
+  counter-increment: arch;
+}
+.rdx-work-arch li::before {
+  content: counter(arch, decimal-leading-zero);
+  color: var(--accent);
+  font-size: 12px;
+}
+
+/* ==========================================================================
+   下層ページの冒頭と、行で並べる一覧（/works）
+   ========================================================================== */
+.rdx-page-hero {
+  padding-top: clamp(40px, 8vw, 96px);
+}
+.rdx-page-hero .rdx-head {
+  margin-bottom: clamp(32px, 5vw, 56px);
+}
+
+.rdx-index {
+  border-top: 1px solid var(--line);
+}
+.rdx-index-row {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: 4px 12px;
+  padding-block: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.rdx-index-no {
+  color: var(--soft);
+  font-size: 12px;
+  line-height: 28px;
+}
+.rdx-index-name {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 28px;
+  transition: color 0.3s var(--ease);
+}
+.rdx-index-row:hover .rdx-index-name {
+  color: var(--accent);
+}
+.rdx-index-desc {
+  grid-column: 2;
+  color: var(--soft);
+  font-size: 14px;
+  line-height: 1.7;
+  text-wrap: pretty;
+}
+.rdx-index-meta {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+  color: var(--soft);
+  font-size: 12px;
+}
+
+.rdx-cases {
+  border-top: 1px solid var(--line);
+}
+.rdx-case {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px 24px;
+  padding-block: 24px;
+  border-bottom: 1px solid var(--line);
+}
+.rdx-case h3 {
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.5;
+  text-wrap: pretty;
+  transition: color 0.3s var(--ease);
+}
+.rdx-case:hover h3 {
+  color: var(--accent);
+}
+.rdx-case-sum {
+  max-width: 40em;
+  margin-top: 8px;
+  color: var(--soft);
+  font-size: 14px;
+  text-wrap: pretty;
+}
+.rdx-case-tags {
+  grid-column: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 12px;
+  color: var(--soft);
+  font-size: 12px;
+  line-height: 2;
+}
+.rdx-case-arrow {
+  grid-column: 2;
+  grid-row: 1;
+  width: 20px;
+  height: 20px;
+  margin-top: 6px;
+  color: var(--soft);
+  transition:
+    transform 0.5s var(--ease),
+    color 0.3s var(--ease);
+}
+.rdx-case:hover .rdx-case-arrow {
+  color: var(--accent);
+  transform: translate(3px, -3px);
+}
+
+@media (min-width: 900px) {
+  .rdx-index-row {
+    grid-template-columns: 3rem minmax(0, 4fr) minmax(0, 6fr) 11rem;
+    align-items: baseline;
+    gap: 24px;
+    padding-block: 20px;
+  }
+  .rdx-index-desc,
+  .rdx-index-meta {
+    grid-column: auto;
+  }
+  .rdx-index-meta {
+    justify-content: flex-end;
+    margin-top: 0;
+  }
+  .rdx-case {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr) auto;
+  }
+  .rdx-case-tags {
+    grid-column: 2;
+    grid-row: 1;
+    align-content: start;
+    padding-top: 6px;
+  }
+  .rdx-case-arrow {
+    grid-column: 3;
   }
 }
 

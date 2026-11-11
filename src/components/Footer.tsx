@@ -16,10 +16,8 @@ export function Footer() {
 
   return (
     <footer
-      className={`mx-auto w-full ${
-        // 幅と左右の余白は、それぞれのページの本文に合わせる
-        isHome ? "max-w-[1240px] px-[clamp(20px,5vw,48px)]" : "mt-24 max-w-6xl px-5 sm:px-8"
-      }`}
+      // 幅と左右の余白は本文に合わせる（.rdx のページは site-chrome.css で広げる）
+      className={`site-footer mx-auto w-full max-w-6xl px-5 sm:px-8 ${isHome ? "" : "mt-24"}`}
     >
       {profile.availability && (
         <div className="border-t border-border py-6">
