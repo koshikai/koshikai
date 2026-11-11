@@ -1,0 +1,213 @@
+/* ==========================================================================
+   全ページ共通のヘッダー — 上端から浮かせた小さなバー
+
+   トップと下層ページで同じ部品を使う。色とイージングは globals.css の
+   トークンを読む。バーは fixed なので、本文側は .site-body で高さ分を空ける。
+   ========================================================================== */
+.site-body {
+  padding-top: 72px;
+}
+
+.site-nav {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  max-width: calc(100vw - 24px);
+  padding: 4px 4px 4px 16px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--background) 78%, transparent);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  transform: translateX(-50%);
+  transition: transform 0.5s var(--e-out);
+}
+.site-nav[data-hidden="true"] {
+  transform: translate(-50%, -200%);
+}
+/* キーボードで中に入ったら、引っ込めていても必ず出す */
+.site-nav:focus-within {
+  transform: translateX(-50%);
+}
+
+.site-nav-brand {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  margin-right: 12px;
+  color: var(--foreground);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.site-nav-links {
+  display: none;
+  align-items: center;
+}
+
+.site-nav-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding-inline: 12px;
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+  transition:
+    color 0.3s var(--e-out),
+    background-color 0.3s var(--e-out);
+}
+.site-nav-links a:hover {
+  background: var(--surface);
+  color: var(--foreground);
+}
+/* 現在地 */
+.site-nav-links a[aria-current="page"] {
+  background: var(--surface);
+  color: var(--foreground);
+}
+
+.site-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition:
+    color 0.3s var(--e-out),
+    background-color 0.3s var(--e-out),
+    transform 0.3s var(--e-out);
+}
+.site-nav-btn:hover {
+  background: var(--surface);
+  color: var(--foreground);
+}
+.site-nav-btn:active {
+  transform: scale(0.94);
+}
+.site-nav-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.site-nav :focus-visible,
+.site-menu :focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 999px;
+}
+
+/* メニューボタンの2本線が × に変形する */
+.site-nav-burger {
+  position: relative;
+  width: 16px;
+  height: 10px;
+}
+.site-nav-burger::before,
+.site-nav-burger::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform 0.5s var(--e-out);
+}
+.site-nav-burger::before {
+  top: 0;
+}
+.site-nav-burger::after {
+  bottom: 0;
+}
+[aria-expanded="true"] > .site-nav-burger::before {
+  transform: translateY(4.25px) rotate(45deg);
+}
+[aria-expanded="true"] > .site-nav-burger::after {
+  transform: translateY(-4.25px) rotate(-45deg);
+}
+
+.site-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 96px clamp(20px, 5vw, 48px) 48px;
+  background: color-mix(in srgb, var(--background) 92%, transparent);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  animation: site-menu-fade 0.3s var(--e-out) both;
+}
+.site-menu a {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding-block: 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--foreground);
+  font-size: 36px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  animation: site-menu-rise 0.5s var(--e-out) both;
+  animation-delay: calc(var(--i) * 60ms);
+}
+.site-menu a[aria-current="page"] {
+  color: var(--accent);
+}
+.site-menu a span {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+@keyframes site-menu-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes site-menu-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+@media (min-width: 768px) {
+  .site-nav-links {
+    display: flex;
+  }
+  .site-nav-menu-btn,
+  .site-menu {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-nav,
+  .site-nav-btn,
+  .site-nav-burger::before,
+  .site-nav-burger::after {
+    transition: none;
+  }
+  .site-menu,
+  .site-menu a {
+    animation: none;
+  }
+}

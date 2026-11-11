@@ -46,7 +46,11 @@ function applyTheme(theme: Theme) {
   }
 }
 
-export function ThemeToggle() {
+export function ThemeToggle({
+  className = "focus-ring -mr-2 flex h-11 w-11 items-center justify-center rounded text-muted transition-colors hover:text-foreground",
+}: {
+  className?: string;
+}) {
   const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   // 別タブでの変更を含め、設定が変わったら見た目へ反映する。
@@ -110,7 +114,7 @@ export function ThemeToggle() {
       onClick={toggle}
       aria-label={label}
       title={label}
-      className="focus-ring -mr-2 flex h-11 w-11 items-center justify-center rounded text-muted transition-colors hover:text-foreground"
+      className={className}
     >
       <Icon className="h-4 w-4" aria-hidden="true" />
     </button>

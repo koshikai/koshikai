@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowDown, ArrowUpRight, Moon, Sun } from "lucide-react";
+import { ArrowDown, ArrowUpRight } from "lucide-react";
 import "../styles/home.css";
 
 import { ParticleType } from "@/components/ParticleType";
@@ -18,8 +18,8 @@ import { featuredWorks, STATUS_LABELS, works, type Work } from "@/lib/works";
  * 「研究・データ分析」の 3 軸が伝わる構成。
  * 所属・学会名・受賞はトップに出さない（About と Research に置く）。
  *
- * レイアウトは `styles/home.css` の `.rdx` 配下だけで組み、共通のヘッダーと
- * フッターはこのページでだけ隠して、専用のナビとフッターを出す。
+ * レイアウトは `styles/home.css` の `.rdx` 配下だけで組む。ヘッダーとフッターは
+ * 全ページ共通のもの（`__root.tsx`）を使う。
  * 色は下層ページと同じトークンを読む。表示する事実（作品・運用・研究）は
  * `src/lib/` のデータから出す。
  */
@@ -32,13 +32,6 @@ export const Route = createFileRoute("/")({
   },
   component: Home,
 });
-
-const nav = [
-  { label: "Works", to: "/works" },
-  { label: "Engineering", to: "/engineering" },
-  { label: "Research", to: "/research" },
-  { label: "About", to: "/about" },
-] as const;
 
 const axes = [
   {
@@ -93,22 +86,6 @@ function useReveal() {
   }, []);
 
   return ref;
-}
-
-/** 保存先と dark クラス・color-scheme の扱いは、サイト共通の切り替えと同じ約束に合わせる */
-function toggleTheme() {
-  const next = !document.documentElement.classList.contains("dark");
-  document.documentElement.classList.toggle("dark", next);
-  const meta = document.querySelector<HTMLMetaElement>('meta[name="color-scheme"]');
-  if (meta) {
-    meta.content = next ? "dark" : "light";
-  }
-  try {
-    if (next) localStorage.setItem("theme", "dark");
-    else localStorage.removeItem("theme");
-  } catch {
-    // 保存できない環境では、その場の見た目だけ切り替える
-  }
 }
 
 /** 1 文字ずつ下からせり上がる。読み上げには親の aria-label を使う */
@@ -166,92 +143,6 @@ function CountUp({ value }: { value: string }) {
       <span ref={ref} aria-hidden="true">
         {value}
       </span>
-    </>
-  );
-}
-
-function Nav() {
-  const [open, setOpen] = useState(false);
-  const [hidden, setHidden] = useState(false);
-
-  // 下へ読み進めている間はバーを引っ込め、少しでも戻ったら出す
-  useEffect(() => {
-    let last = window.scrollY;
-    let ticking = false;
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const y = window.scrollY;
-        if (Math.abs(y - last) > 8) {
-          setHidden(y > last && y > 160);
-          last = y;
-        }
-        ticking = false;
-      });
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
-
-  return (
-    <>
-      <header className="rdx-nav" data-hidden={hidden && !open}>
-        <a href="#main-content" className="rdx-nav-brand">
-          koshikai
-        </a>
-        <nav aria-label="メインナビゲーション" className="rdx-nav-links">
-          {nav.map((item) => (
-            <Link key={item.to} to={item.to}>
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-        <button
-          type="button"
-          className="rdx-icon-btn rdx-theme"
-          onClick={toggleTheme}
-          aria-label="ライト／ダークを切り替える"
-        >
-          <Moon className="rdx-moon" aria-hidden="true" />
-          <Sun className="rdx-sun" aria-hidden="true" />
-        </button>
-        <button
-          type="button"
-          className="rdx-icon-btn rdx-menu-btn"
-          onClick={() => setOpen((value) => !value)}
-          aria-expanded={open}
-          aria-controls="rdx-menu"
-          aria-label={open ? "メニューを閉じる" : "メニューを開く"}
-        >
-          <span className="rdx-burger" aria-hidden="true" />
-        </button>
-      </header>
-
-      {open && (
-        <nav id="rdx-menu" aria-label="メニュー" className="rdx-menu">
-          {nav.map((item, i) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              onClick={() => setOpen(false)}
-              style={{ "--i": i } as React.CSSProperties}
-            >
-              <span className="rdx-mono">{pad(i + 1)}</span>
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-      )}
     </>
   );
 }
@@ -403,7 +294,6 @@ function Home() {
   return (
     <main id="main-content" className="rdx" ref={ref}>
       <div className="rdx-progress" aria-hidden="true" />
-      <Nav />
 
       {/* --- Hero --- */}
       <section className="rdx-wrap rdx-hero" aria-labelledby="rdx-hero-heading">
@@ -697,19 +587,6 @@ function Home() {
         </div>
       </section>
 
-      <footer className="rdx-wrap">
-        <div className="rdx-footer">
-          <p>© {new Date().getFullYear()} koshikai</p>
-          <nav aria-label="フッターナビゲーション">
-            {nav.map((item) => (
-              <Link key={item.to} to={item.to}>
-                {item.label}
-              </Link>
-            ))}
-            <Link to="/cases">Cases</Link>
-          </nav>
-        </div>
-      </footer>
     </main>
   );
 }

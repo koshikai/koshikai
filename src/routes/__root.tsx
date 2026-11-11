@@ -17,6 +17,7 @@ import "@fontsource/noto-sans-jp/700.css";
 import "@fontsource/geist-mono/400.css";
 import "@fontsource/geist-mono/500.css";
 import "../styles/globals.css";
+import "../styles/site-chrome.css";
 
 import { getSiteConfig } from "@/lib/site-config";
 import { splitIntoChunks } from "@/lib/chunks";
@@ -236,13 +237,13 @@ function RootDocument({ children }: { children: ReactNode }) {
         />
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded focus:border focus:border-border focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-foreground focus:outline-2 focus:outline-accent"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[70]focus:rounded focus:border focus:border-border focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-foreground focus:outline-2 focus:outline-accent"
         >
           メインコンテンツへスキップ
         </a>
         <div className="flex min-h-dvh flex-col">
           <SiteHeader />
-          <div className="flex flex-1 flex-col">{children}</div>
+          <div className="site-body flex flex-1 flex-col">{children}</div>
           <Footer />
         </div>
         <Scripts />
