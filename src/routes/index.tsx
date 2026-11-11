@@ -4,9 +4,10 @@ import { ArrowDown, ArrowUpRight } from "lucide-react";
 import "../styles/home.css";
 
 import { ParticleType } from "@/components/ParticleType";
+import { Layers, Pipeline, SectionHead, StackRows } from "@/components/rdx";
 import { WorkItem } from "@/components/WorkItem";
 import { countFrame } from "@/lib/count-up";
-import { capabilities, homelabLayers, operationFacts, pipelineSteps } from "@/lib/engineering";
+import { operationFacts } from "@/lib/engineering";
 import { profile } from "@/lib/profile";
 import { featuredResearch } from "@/lib/research";
 import { getSiteConfig } from "@/lib/site-config";
@@ -117,28 +118,6 @@ function CountUp({ value }: { value: string }) {
         {value}
       </span>
     </>
-  );
-}
-
-function SectionHead({
-  id,
-  label,
-  title,
-  description,
-}: {
-  id: string;
-  label: string;
-  title: string;
-  description: string;
-}) {
-  return (
-    <div className="rdx-head" data-rv>
-      <p className="rdx-label rdx-mono">{label}</p>
-      <h2 id={id} className="rdx-h2">
-        <span>{title}</span>
-      </h2>
-      <p className="rdx-head-desc">{description}</p>
-    </div>
   );
 }
 
@@ -260,24 +239,7 @@ function Home() {
               description="main に push したものが、自宅の Proxmox 上でそのまま本番に上がります。バックアップも同じ場所で取っています。"
             />
 
-            <div className="rdx-pipe" data-rv>
-              <p className="rdx-pipe-title rdx-mono">
-                <span>このサイトの配信経路</span>
-              </p>
-              <ol className="rdx-pipe-steps">
-                {pipelineSteps.map((step, i) => (
-                  <li
-                    key={step.label}
-                    className="rdx-pipe-step"
-                    style={{ "--i": i } as React.CSSProperties}
-                  >
-                    <span className="rdx-pipe-node" aria-hidden="true" />
-                    <span className="rdx-pipe-name rdx-mono">{step.label}</span>
-                    <span className="rdx-pipe-detail rdx-mono"> {step.detail}</span>
-                  </li>
-                ))}
-              </ol>
-            </div>
+            <Pipeline />
 
             <div className="rdx-ops">
               <ol className="rdx-ops-facts" data-rv="stagger">
@@ -296,14 +258,7 @@ function Home() {
                 <p className="rdx-layers-title rdx-mono" data-rv>
                   層ごとの構成
                 </p>
-                <dl className="rdx-layers" data-rv="stagger">
-                  {homelabLayers.map((layer) => (
-                    <div key={layer.layer} className="rdx-layer">
-                      <dt className="rdx-mono">{layer.layer}</dt>
-                      <dd>{layer.items.join(" · ")}</dd>
-                    </div>
-                  ))}
-                </dl>
+                <Layers />
               </div>
             </div>
 
@@ -384,25 +339,7 @@ function Home() {
           title="使用技術"
           description="実際に使った技術だけを、使った場所へのリンク付きで並べています。"
         />
-        <ul className="rdx-stack" data-rv="stagger">
-          {capabilities.map((capability) => (
-            <li key={capability.area} className="rdx-stack-row">
-              <span className="rdx-stack-area rdx-mono">{capability.area}</span>
-              <span className="rdx-stack-tools">
-                {capability.tools.map((tool) => (
-                  <span key={tool}>{tool}</span>
-                ))}
-              </span>
-              <span className="rdx-stack-ev">
-                {capability.evidence.map((evidence) => (
-                  <a key={evidence.href} href={evidence.href}>
-                    {evidence.label}
-                  </a>
-                ))}
-              </span>
-            </li>
-          ))}
-        </ul>
+        <StackRows />
       </section>
 
       {/* --- contact --- */}

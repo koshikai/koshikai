@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import "../styles/home.css";
 
+import { CaseRows, SectionHead } from "@/components/rdx";
 import { WorkItem } from "@/components/WorkItem";
 import { caseItems, getCasesByAxis } from "@/lib/cases";
 import { pageHead } from "@/lib/metadata";
@@ -35,16 +36,12 @@ function WorksPage() {
       <div className="rdx-progress" aria-hidden="true" />
 
       <div className="rdx-wrap rdx-page-hero">
-        <div className="rdx-head" data-rv>
-          <p className="rdx-label rdx-mono">Works</p>
-          <h1 className="rdx-h2">
-            <span>開発プロダクト</span>
-          </h1>
-          <p className="rdx-head-desc">
-            企画・設計・実装・公開まで単独で開発したプロダクトです。公開中の Web
-            アプリは自宅サーバーで運用し、配布物は GitHub Releases で公開しています。
-          </p>
-        </div>
+        <SectionHead
+          as="h1"
+          label="Works"
+          title="開発プロダクト"
+          description="企画・設計・実装・公開まで単独で開発したプロダクトです。公開中の Web アプリは自宅サーバーで運用し、配布物は GitHub Releases で公開しています。"
+        />
 
         <nav aria-label="作品の目次">
           <ol className="rdx-index" data-rv="stagger">
@@ -83,31 +80,13 @@ function WorksPage() {
       </div>
 
       <section className="rdx-wrap rdx-section" aria-labelledby="build-cases">
-        <div className="rdx-head" data-rv>
-          <p className="rdx-label rdx-mono">Cases</p>
-          <h2 id="build-cases" className="rdx-h2">
-            <span>開発の事例</span>
-          </h2>
-          <p className="rdx-head-desc">作品ごとに、設計と判断をまとめた記事です。</p>
-        </div>
-        <ul className="rdx-cases" data-rv="stagger">
-          {buildCases.map((item) => (
-            <li key={item.slug}>
-              <Link to="/cases/$slug" params={{ slug: item.slug }} className="rdx-case">
-                <div className="rdx-case-main">
-                  <h3>{item.title}</h3>
-                  <p className="rdx-case-sum">{item.summary}</p>
-                </div>
-                <div className="rdx-case-tags rdx-mono">
-                  {item.tags.slice(0, 3).map((tag) => (
-                    <span key={tag}>{tag}</span>
-                  ))}
-                </div>
-                <ArrowUpRight className="rdx-case-arrow" aria-hidden="true" />
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <SectionHead
+          id="build-cases"
+          label="Cases"
+          title="開発の事例"
+          description="作品ごとに、設計と判断をまとめた記事です。"
+        />
+        <CaseRows items={buildCases} />
         <div className="rdx-foot" data-rv>
           <span>
             全 {caseItems.length} 件の事例のうち、開発の {buildCases.length} 件を掲載

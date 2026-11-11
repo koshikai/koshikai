@@ -1,5 +1,5 @@
 /* ==========================================================================
-   / と、同じ部品で組む下層ページ（/works）
+   / と、同じ部品で組む下層ページ（/works /engineering）
 
    レイアウトと部品は .rdx の内側に閉じているので、この CSS が他ページと同じ
    バンドルに入っても既存ページの見た目は変わらない。
@@ -1049,7 +1049,7 @@ a.rdx-work-media:hover img {
   font-size: 12px;
   line-height: 2.2;
 }
-.rdx-ops-facts h3 {
+.rdx-ops-facts :is(h2, h3) {
   font-size: 17px;
   font-weight: 600;
   line-height: 1.6;
@@ -1096,6 +1096,34 @@ a.rdx-work-media:hover img {
   .rdx-ops {
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
     gap: 72px;
+  }
+}
+
+/* /engineering: 概要を広い行で並べ、層の構成は 2 列に分ける */
+.rdx-layers-block {
+  margin-top: clamp(40px, 6vw, 72px);
+}
+.rdx-foot-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 24px;
+}
+#pipeline {
+  scroll-margin-top: 96px;
+}
+@media (min-width: 900px) {
+  .rdx-ops-facts--wide li {
+    grid-template-columns: 3rem minmax(0, 4fr) minmax(0, 6fr);
+    gap: 24px;
+  }
+  .rdx-ops-facts--wide p {
+    grid-column: auto;
+  }
+  .rdx-layers--wide {
+    grid-template-rows: repeat(3, auto);
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 4px 16px;
   }
 }
 
