@@ -1,38 +1,36 @@
 /* ==========================================================================
    /test-redesign — トップページ刷新案（検証用）
 
-   既存のデザインシステム（globals.css のトークン・Tailwind ユーティリティ・
-   共通コンポーネント）には依存しない。すべて .rdx の内側に閉じているので、
-   この CSS が他ページと同じバンドルに入っても既存ページの見た目は変わらない。
+   レイアウトと部品は .rdx の内側に閉じているので、この CSS が他ページと同じ
+   バンドルに入っても既存ページの見た目は変わらない。
+   色だけは globals.css のトークン（紙色の背景・墨・赤のアクセント）を読む。
+   ナビから下層ページへ移ったときに別のサイトに見えないようにするためで、
+   Hero の粒子（ParticleType）も同じトークンから色を拾う。
+   --accent は :root の値をそのまま継承する（ここで定義し直すと循環する）。
    ========================================================================== */
 
 /* 共通レイアウトのヘッダー・フッターは、このページでだけ隠す
    （__root.tsx を触らずに、ページ側から切り替える）。 */
-body:has(.rdx) {
-  background: #fbfbfa;
-}
-:root.dark body:has(.rdx) {
-  background: #0b0c0e;
-}
 body:has(.rdx) > div > header,
 body:has(.rdx) > div > footer {
   display: none;
 }
 
 .rdx {
-  --bg: #fbfbfa;
-  --panel: #f0f1f2;
-  --ink: #0c0d10;
-  --soft: #5b5f68;
-  --line: #dfe1e4;
-  --accent: #2743f5;
+  --bg: var(--background, #fafaf7);
+  --panel: var(--surface, #f3f2ec);
+  --ink: var(--foreground, #17171a);
+  --soft: var(--muted, #62626a);
+  --line: var(--border, #e4e3dc);
   --accent-ink: #ffffff;
-  --band: #0c0d10;
-  --band-panel: #17191e;
-  --band-ink: #f2f3f5;
-  --band-soft: #a1a6b0;
-  --band-line: #2a2d34;
-  --band-accent: #93a4ff;
+  --live: #059669;
+  --demo: #d97706;
+  --band: #17171a;
+  --band-panel: #222225;
+  --band-ink: #ecebe7;
+  --band-soft: #a5a59e;
+  --band-line: #343437;
+  --band-accent: #e4675b;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --gutter: clamp(20px, 5vw, 48px);
 
@@ -47,15 +45,11 @@ body:has(.rdx) > div > footer {
 }
 
 :root.dark .rdx {
-  --bg: #0b0c0e;
-  --panel: #15171b;
-  --ink: #f2f3f5;
-  --soft: #a1a6b0;
-  --line: #262930;
-  --accent: #93a4ff;
-  --accent-ink: #0b0c0e;
-  --band: #121418;
-  --band-panel: #1b1e24;
+  --accent-ink: #131315;
+  --live: #34d399;
+  --demo: #f59e0b;
+  --band: #1a1a1d;
+  --band-panel: #232326;
 }
 
 .rdx *,
@@ -374,13 +368,6 @@ body:has(.rdx) > div > footer {
 .rdx-statement > span:last-child {
   color: var(--accent);
 }
-@keyframes rdx-h1 {
-  from {
-    opacity: 0;
-    transform: translateY(0.35em);
-  }
-}
-
 .rdx-hero-sub {
   display: grid;
   gap: 24px;
@@ -400,11 +387,21 @@ body:has(.rdx) > div > footer {
   gap: 12px;
 }
 
-@media (min-width: 900px) {
-  .rdx-hero-sub {
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: end;
-    gap: 48px;
+/* 左に名前と文、右に粒子。狭い画面では粒子を文の下へ回す */
+.rdx-hero-top {
+  display: grid;
+  gap: clamp(24px, 5vw, 40px);
+}
+.rdx-hero-art {
+  min-width: 0;
+  animation: rdx-fade 1.2s var(--ease) 0.5s both;
+}
+
+@media (min-width: 1000px) {
+  .rdx-hero-top {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+    align-items: center;
+    gap: clamp(32px, 4vw, 64px);
   }
 }
 
@@ -678,11 +675,24 @@ body:has(.rdx) > div > footer {
   border-radius: 16px;
   background: var(--panel);
 }
+/* 狭い画面では縦長の実機画面の上側を、広い画面では横長の画面を枠いっぱいに見せる */
+.rdx-work-media {
+  aspect-ratio: 4 / 5;
+}
 .rdx-work-media img {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
   transition: scale 0.9s var(--ease);
+}
+@media (min-width: 40rem) {
+  .rdx-work-media {
+    aspect-ratio: 1424 / 900;
+  }
 }
 a.rdx-work-media:hover img {
   scale: 1.03;
@@ -707,12 +717,30 @@ a.rdx-work-media:hover img {
   font-size: 12px;
   line-height: 1.6;
 }
-.rdx-pill[data-status="live"]::before {
+/* 公開状態は現行と同じ色分け: 公開中は緑、デモは橙、非公開は中抜き */
+.rdx-pill::before {
   content: "";
   width: 6px;
   height: 6px;
+  border: 1px solid var(--soft);
   border-radius: 999px;
-  background: var(--accent);
+}
+.rdx-pill[data-status="live"]::before {
+  border-color: var(--live);
+  background: var(--live);
+}
+.rdx-pill[data-status="demo"]::before {
+  border-color: var(--demo);
+  background: var(--demo);
+}
+@keyframes rdx-live {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--live) 55%, transparent);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 6px transparent;
+  }
 }
 .rdx-work-name {
   margin-top: 12px !important;
@@ -769,14 +797,32 @@ a.rdx-work-media:hover img {
   margin-top: 16px;
 }
 
+/* 2 作品目以降は小さく並べ、作品全体が 2 画面ほどで見渡せるようにする */
+.rdx-works-rest {
+  display: grid;
+  gap: clamp(48px, 6vw, 72px) clamp(24px, 3vw, 40px);
+}
+.rdx-work--compact {
+  align-content: start;
+}
+.rdx-work--compact .rdx-work-name {
+  font-size: clamp(1.5rem, 2.8vw, 2rem);
+}
+.rdx-work--compact .rdx-work-tagline {
+  font-size: 15px;
+}
+
+@media (min-width: 700px) {
+  .rdx-works-rest {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (min-width: 900px) {
-  .rdx-work {
+  .rdx-work:not(.rdx-work--compact) {
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
     align-items: center;
     gap: clamp(32px, 5vw, 72px);
-  }
-  .rdx-work:nth-child(even) .rdx-work-media {
-    order: 2;
   }
 }
 
@@ -1300,6 +1346,10 @@ a.rdx-work-media:hover img {
     a.rdx-work-media:hover img {
       scale: 1.1;
     }
+  }
+
+  .rdx-pill[data-status="live"]::before {
+    animation: rdx-live 2.8s var(--ease) infinite;
   }
 
   /* 自分は動かず、中身が順に現れる入れ物 */

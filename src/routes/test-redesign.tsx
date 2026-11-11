@@ -3,6 +3,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowDown, ArrowUpRight, Moon, Sun } from "lucide-react";
 import "../styles/test-redesign.css";
 
+import { ParticleType } from "@/components/ParticleType";
+import { countFrame } from "@/lib/count-up";
 import { capabilities, homelabLayers, operationFacts, pipelineSteps } from "@/lib/engineering";
 import { pageHead } from "@/lib/metadata";
 import { profile } from "@/lib/profile";
@@ -12,9 +14,10 @@ import { featuredWorks, STATUS_LABELS, works, type Work } from "@/lib/works";
 /**
  * トップページの刷新案（検証用）。
  *
- * 現行の `/` には手を入れず、別ルートとして置いている。見た目は既存の
- * コンポーネントや Tailwind のトークンを使わず、`styles/test-redesign.css` の
- * `.rdx` 配下だけで組む。表示する事実（作品・運用・研究）は現行と同じ
+ * 現行の `/` には手を入れず、別ルートとして置いている。レイアウトは
+ * `styles/test-redesign.css` の `.rdx` 配下だけで組む。現行から引き継いでいるのは
+ * 色のトークン（下層ページと地続きにするため）と Hero の粒子表現（ParticleType）、
+ * 作品画像の出し分け、公開状態の色分け。表示する事実（作品・運用・研究）は現行と同じ
  * `src/lib/` のデータを読むので、内容が現行ページと食い違うことはない。
  *
  * 検索結果には出さない（noindex。sitemap.xml にも載せない）。
@@ -133,7 +136,6 @@ function CountUp({ value }: { value: string }) {
     if (!el || typeof IntersectionObserver === "undefined") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const parts = value.split(/(\d+(?:\.\d+)?)/);
     let frame = 0;
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -143,11 +145,7 @@ function CountUp({ value }: { value: string }) {
         const tick = (now: number) => {
           const t = Math.min(1, (now - start) / 1400);
           const eased = 1 - Math.pow(1 - t, 4);
-          el.textContent = parts
-            .map((part, i) =>
-              i % 2 ? (Number(part) * eased).toFixed(part.split(".")[1]?.length ?? 0) : part,
-            )
-            .join("");
+          el.textContent = countFrame(value, eased);
           if (t < 1) frame = requestAnimationFrame(tick);
         };
         frame = requestAnimationFrame(tick);
@@ -280,21 +278,33 @@ function SectionHead({
   );
 }
 
-function WorkItem({ work }: { work: Work }) {
+/**
+ * compact は 2 作品目以降の小さい版。概要文と運用の行を省き、1 画面に並べる。
+ * 画像は現行と同じく、狭い画面では縦長の実機画面に差し替える。
+ */
+function WorkItem({ work, compact = false }: { work: Work; compact?: boolean }) {
   const external = work.links.live ?? work.links.download;
   const image = work.image && (
-    <img
-      src={work.image.desktop.src}
-      width={work.image.desktop.width}
-      height={work.image.desktop.height}
-      alt={work.image.alt}
-      loading="lazy"
-      decoding="async"
-    />
+    <picture>
+      <source
+        media="(min-width: 40rem)"
+        srcSet={work.image.desktop.src}
+        width={work.image.desktop.width}
+        height={work.image.desktop.height}
+      />
+      <img
+        src={work.image.mobile.src}
+        width={work.image.mobile.width}
+        height={work.image.mobile.height}
+        alt={work.image.alt}
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
   );
 
   return (
-    <article className="rdx-work" data-rv>
+    <article className={compact ? "rdx-work rdx-work--compact" : "rdx-work"} data-rv>
       {image &&
         (external ? (
           <a
@@ -319,14 +329,14 @@ function WorkItem({ work }: { work: Work }) {
         </p>
         <h3 className="rdx-work-name">{work.name}</h3>
         <p className="rdx-work-tagline">{work.tagline}</p>
-        <p className="rdx-work-summary">{work.summary}</p>
+        {!compact && <p className="rdx-work-summary">{work.summary}</p>}
 
         <dl className="rdx-facts">
           <div>
             <dt className="rdx-mono">担当</dt>
             <dd>{work.scope}</dd>
           </div>
-          {work.operation && (
+          {!compact && work.operation && (
             <div>
               <dt className="rdx-mono">運用</dt>
               <dd>{work.operation}</dd>
@@ -397,34 +407,47 @@ function TestRedesign() {
 
       {/* --- Hero --- */}
       <section className="rdx-wrap rdx-hero" aria-labelledby="rdx-hero-heading">
-        <h1 id="rdx-hero-heading" className="rdx-name rdx-mono" aria-label={profile.name}>
-          <Chars text={profile.name} />
-          <span className="rdx-caret" aria-hidden="true" />
-        </h1>
-        <p className="rdx-statement">
-          {["作ったものを、", "自分のサーバーで", "動かしている。"].map((line, i) => (
-            <span key={line} style={{ "--i": i } as React.CSSProperties}>
-              <span>{line}</span>
-            </span>
-          ))}
-        </p>
+        <div className="rdx-hero-top">
+          <div>
+            <h1 id="rdx-hero-heading" className="rdx-name rdx-mono" aria-label={profile.name}>
+              <Chars text={profile.name} />
+              <span className="rdx-caret" aria-hidden="true" />
+            </h1>
+            <p className="rdx-statement">
+              {["作ったものを、", "自分のサーバーで", "動かしている。"].map((line, i) => (
+                <span key={line} style={{ "--i": i } as React.CSSProperties}>
+                  <span>{line}</span>
+                </span>
+              ))}
+            </p>
 
-        <div className="rdx-hero-sub">
-          <p className="rdx-lead">{profile.lead}</p>
-          <div className="rdx-cta">
-            <Link to="/works" className="rdx-btn">
-              作品を見る
-              <ArrowUpRight aria-hidden="true" />
-            </Link>
-            <a
-              href="https://github.com/koshikai"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rdx-btn rdx-btn--ghost"
-            >
-              GitHub
-              <ArrowUpRight aria-hidden="true" />
-            </a>
+            <div className="rdx-hero-sub">
+              <p className="rdx-lead">{profile.lead}</p>
+              <div className="rdx-cta">
+                <Link to="/works" className="rdx-btn">
+                  作品を見る
+                  <ArrowUpRight aria-hidden="true" />
+                </Link>
+                <a
+                  href="https://github.com/koshikai"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rdx-btn rdx-btn--ghost"
+                >
+                  GitHub
+                  <ArrowUpRight aria-hidden="true" />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* 現行トップの粒子表現。3 軸の語を組み替える */}
+          <div className="rdx-hero-art">
+            <ParticleType
+              words={profile.keywords}
+              label="build / operate / research"
+              className="aspect-[3/2] sm:aspect-[16/9] lg:aspect-[3/2]"
+            />
           </div>
         </div>
 
@@ -459,9 +482,16 @@ function TestRedesign() {
           description="企画からデプロイまでひとりでやっています。"
         />
         <div className="rdx-works">
-          {featuredWorks.map((work) => (
+          {featuredWorks.slice(0, 1).map((work) => (
             <WorkItem key={work.slug} work={work} />
           ))}
+          {featuredWorks.length > 1 && (
+            <div className="rdx-works-rest">
+              {featuredWorks.slice(1).map((work) => (
+                <WorkItem key={work.slug} work={work} compact />
+              ))}
+            </div>
+          )}
         </div>
         <div className="rdx-foot" data-rv>
           <span>
