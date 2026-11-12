@@ -52,8 +52,8 @@ const axes = [
     key: "research",
     href: "#research",
     summary: "強化学習によるネットワーク制御",
-    value: "96/96",
-    proof: "の初期状態で到達・維持（Wnt5a）",
+    value: "128/128",
+    proof: "の初期状態すべてで到達・維持（Wnt5a）",
   },
 ];
 
