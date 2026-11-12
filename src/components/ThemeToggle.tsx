@@ -40,9 +40,13 @@ function getServerSnapshot(): Theme {
 function applyTheme(theme: Theme) {
   const isDark = theme === "dark";
   document.documentElement.classList.toggle("dark", isDark);
-  const meta = document.querySelector<HTMLMetaElement>('meta[name="color-scheme"]');
-  if (meta) {
-    meta.content = isDark ? "dark" : "light";
+  const colorSchemeMeta = document.querySelector<HTMLMetaElement>('meta[name="color-scheme"]');
+  if (colorSchemeMeta) {
+    colorSchemeMeta.content = isDark ? "dark" : "light";
+  }
+  const themeColorMeta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+  if (themeColorMeta) {
+    themeColorMeta.content = isDark ? "#131315" : "#fafaf7";
   }
 }
 

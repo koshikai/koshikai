@@ -18,7 +18,7 @@ import { pad2 } from "@/lib/format";
  * 「研究・データ分析」の 3 軸が伝わる構成。
  * 所属・学会名・受賞はトップに出さない（About と Research に置く）。
  *
- * レイアウトは `styles/home.css` の `.rdx` 配下だけで組む。ヘッダーとフッターは
+ * レイアウトは `styles/rdx.css` の `.rdx` 配下だけで組む。ヘッダーとフッターは
  * 全ページ共通のもの（`__root.tsx`）を使う。
  * 色は下層ページと同じトークンを読む。表示する事実（作品・運用・研究）は
  * `src/lib/` のデータから出す。
@@ -174,7 +174,7 @@ function Home() {
 
             <div className="rdx-ops">
               <ol className="rdx-ops-facts" data-rv="stagger">
-                {operationFacts.slice(0, 4).map((fact, i) => (
+                {operationFacts.map((fact, i) => (
                   <li key={fact.title}>
                     <span className="rdx-mono" aria-hidden="true">
                       {pad2(i + 1)}
@@ -210,7 +210,7 @@ function Home() {
           id="rdx-research-heading"
           label="03"
           title="研究とデータ分析"
-          description="遺伝子ネットワークの離散モデルで、休薬期間のような時間制約を守りながら系を目標状態へ導く。信号時相論理で制約を書き、その進行を状態に持たせた Q 学習で、どのエッジをいつ遮断するかを学ぶ。"
+          description="時間制約つきのネットワーク制御を強化学習で解く研究を中心に、問題設定・手法・検証結果をまとめています。"
         />
         <ResearchPapers topics={featuredResearch} />
         <div className="rdx-foot" data-rv>

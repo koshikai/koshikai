@@ -52,7 +52,7 @@ function CaseDetailPage() {
   // 本文（MDX）は .rdx の外に置く。.rdx は見出しや段落の余白を消すので、
   // 中に入れると記事の組みが崩れる。
   return (
-    <main id="main-content" ref={ref}>
+    <main id="main-content" className="flex-1" ref={ref}>
       <div className="rdx">
         <div className="rdx-wrap rdx-page-hero">
           <nav aria-label="パンくずリスト" className="rdx-crumb">
@@ -96,7 +96,7 @@ function CaseDetailPage() {
 
       <div className="rdx">
         <div className="rdx-wrap">
-          <div className="rdx-foot">
+          <div className="rdx-foot" data-rv>
             <span>{AXES[item.axis].casesTitle}</span>
             <span className="rdx-foot-links">
               <Link to={axis.href} className="rdx-more">

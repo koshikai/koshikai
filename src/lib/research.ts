@@ -20,6 +20,12 @@ export interface ResearchTopic {
   featured: boolean;
 }
 
+export const researchCode = {
+  label: "bn-edge-removal-public",
+  href: "https://github.com/koshikai/bn-edge-removal-public",
+  description: "卒業研究（エッジ除去制御）の公開コード",
+};
+
 export const researchTopics: ResearchTopic[] = [
   {
     slug: "bn-edge-removal",
@@ -38,20 +44,6 @@ export const researchTopics: ResearchTopic[] = [
     featured: true,
   },
   {
-    slug: "input-spec-price",
-    title: "時間制約 × 到達可能性",
-    context: "学部ラインの続き",
-    problem:
-      "休薬期間や除去本数の上限のような時間的な入力仕様を課すと、到達できる初期状態と最小の除去回数がどれだけ変わるかを知りたい。",
-    method:
-      "学習を使わず、状態空間をすべて列挙して最短の除去列を厳密に数える。計算が終わる規模を少しずつ上げながら、条件ごとの差を集計している。",
-    result:
-      "条件を足すほど到達できる初期状態は減り、必要な除去回数も変わる。いまは条件ごとの集計表を作っている段階で、数値はまだ出していない。",
-    status: "in-progress",
-    tags: ["Boolean Network", "Exhaustive Search", "Python"],
-    featured: false,
-  },
-  {
     slug: "winter-rail-risk",
     title: "データ分析 × 鉄道の冬期リスク",
     context: "大学院 PBL（4 人チームの技術リーダー）",
@@ -68,6 +60,20 @@ export const researchTopics: ResearchTopic[] = [
     featured: false,
   },
   {
+    slug: "input-spec-price",
+    title: "時間制約 × 到達可能性",
+    context: "学部ラインの続き",
+    problem:
+      "休薬期間や除去本数の上限のような時間的な入力仕様を課すと、到達できる初期状態と最小の除去回数がどれだけ変わるかを知りたい。",
+    method:
+      "学習を使わず、状態空間をすべて列挙して最短の除去列を厳密に数える。計算が終わる規模を少しずつ上げながら、条件ごとの差を集計している。",
+    result:
+      "条件を足すほど到達できる初期状態は減り、必要な除去回数も変わる。いまは条件ごとの集計表を作っている段階で、数値はまだ出していない。",
+    status: "in-progress",
+    tags: ["Boolean Network", "Exhaustive Search", "Python"],
+    featured: false,
+  },
+  {
     slug: "c2d-transfer",
     title: "強化学習 × モデル間の知識転移",
     context: "修士研究",
@@ -79,6 +85,7 @@ export const researchTopics: ResearchTopic[] = [
       "方策をそのまま移す方法は、粗から細・細から粗のどちらでも成立しなかった。ノードの対応付けを明示すると到達成功率が上がり、グラフニューラルネットワークによる蒸留でさらに上がった。ただし到達後の維持は弱く、別のモデルへの一般化は示せていない。この線はいま保留している（2026-10-26 に判断、11-07 に継続を確認、再開条件は未定）。関連して、エッジ除去制御の転移で集約と照合項の寄与を分ける確認的評価を行い、交互作用は検出できなかった（2026-11-12 に完了・凍結）。",
     status: "paused",
     tags: ["Transfer Learning", "GNN", "PyTorch"],
+    caseSlug: "transfer-line",
     featured: false,
   },
 ];
@@ -142,19 +149,3 @@ export const courses: Course[] = [
   { name: "LLM 大規模言語モデル講座 基礎編", org: "東京大学 松尾・岩澤研究室", completedAt: "2025.12" },
   { name: "Deep Learning 基礎講座", org: "東京大学 松尾・岩澤研究室", completedAt: "2026.01" },
 ];
-
-/** Research 配下の独立コンテンツ */
-export const researchNotes = [
-  {
-    title: "AI 研究アシスタント",
-    description:
-      "研究用に設定した AI エージェント。実験の再現実行、記録値との突き合わせ、選定規則の再計算、実装の read-only 監査を担当し、結果を見る前に条件を固定してハッシュを記録します。",
-    href: "/cases/ai-research-agent",
-  },
-];
-
-export const researchCode = {
-  label: "bn-edge-removal-public",
-  href: "https://github.com/koshikai/bn-edge-removal-public",
-  description: "卒業研究（エッジ除去制御）の公開コード",
-};

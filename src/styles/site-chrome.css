@@ -150,6 +150,7 @@
   background: color-mix(in srgb, var(--background) 92%, transparent);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
+  overflow-y: auto;
   animation: site-menu-fade 0.3s var(--e-out) both;
 }
 .site-menu a {
@@ -163,8 +164,8 @@
   font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1.2;
-  animation: site-menu-rise 0.5s var(--e-out) both;
-  animation-delay: calc(var(--i) * 60ms);
+  animation: site-menu-rise 0.4s var(--e-out) both;
+  animation-delay: calc(var(--i) * 50ms);
 }
 .site-menu a[aria-current="page"] {
   color: var(--accent);
@@ -201,10 +202,12 @@
 
 @media (prefers-reduced-motion: reduce) {
   .site-nav,
-  .site-nav-btn,
   .site-nav-burger::before,
   .site-nav-burger::after {
     transition: none;
+  }
+  .site-nav-btn {
+    transform: none !important;
   }
   .site-menu,
   .site-menu a {

@@ -78,20 +78,9 @@ h3 {
     border-radius: 2px;
   }
 
-  .case-article-shell {
-    border-top: 1px solid var(--border);
-    padding-block: calc(var(--spacing) * 10);
-  }
-
   .case-article-content {
     margin-inline: auto;
     max-width: 68ch;
-  }
-
-  @media (min-width: 40rem) {
-    .case-article-shell {
-      padding-block: calc(var(--spacing) * 14);
-    }
   }
 
   /* SVG diagrams loaded via <img> resolve light-dark() against the embedding
@@ -101,7 +90,8 @@ h3 {
     color-scheme: light;
   }
 
-  :root.dark .case-article-content img {
+  :root.dark .case-article-content img,
+  :root:has(> head > meta[name="color-scheme"][content="dark"]) .case-article-content img {
     color-scheme: dark;
   }
 }

@@ -4,7 +4,7 @@ import { STATUS_LABELS, type Work } from "@/lib/works";
 import { pad2 } from "@/lib/format";
 
 /**
- * 作品 1 件。トップと /works の両方で使う（見た目は `styles/home.css` の `.rdx-work`）。
+ * 作品 1 件。トップと /works の両方で使う（見た目は `styles/rdx.css` の `.rdx-work`）。
  *
  * - compact: 小さい版。概要文と運用の行を省き、1 画面に並べる
  * - heading: 置く場所の見出し階層に合わせる

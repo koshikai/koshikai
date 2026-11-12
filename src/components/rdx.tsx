@@ -7,7 +7,7 @@ import { capabilities, homelabLayers, pipelineSteps } from "@/lib/engineering";
 import type { ResearchTopic } from "@/lib/research";
 
 /**
- * トップと下層ページで共有する部品。見た目は `styles/home.css` の `.rdx` 配下。
+ * トップと下層ページで共有する部品。見た目は `styles/rdx.css` の `.rdx` 配下。
  * どれも `<main className="rdx">` の内側で使う。
  */
 
@@ -110,11 +110,14 @@ export function StackRows() {
             ))}
           </span>
           <span className="rdx-stack-ev">
-            {capability.evidence.map((evidence) => (
-              <a key={evidence.href} href={evidence.href}>
-                {evidence.label}
-              </a>
-            ))}
+            {capability.evidence.map((evidence) => {
+              const [path, hash] = evidence.href.split("#");
+              return (
+                <Link key={evidence.href} to={path} hash={hash}>
+                  {evidence.label}
+                </Link>
+              );
+            })}
           </span>
         </li>
       ))}
@@ -192,55 +195,61 @@ export function ResearchPapers({
           data-rv
           style={{ "--rv-delay": `${(i % 2) * 100}ms` } as React.CSSProperties}
         >
-          {topic.metric && (
-            <>
-              <p className="rdx-metric">
-                <CountUp value={topic.metric.value} />
+          <div className="rdx-paper-head">
+            {topic.metric && (
+              <>
+                <p className="rdx-metric">
+                  <CountUp value={topic.metric.value} />
+                </p>
+                <p className="rdx-metric-label rdx-mono">{topic.metric.label}</p>
+              </>
+            )}
+            {detailed && topic.status !== "completed" && (
+              <p className="rdx-paper-status rdx-mono">
+                <span className="rdx-pill" data-status={topic.status === "paused" ? "paused" : "demo"}>
+                  {topic.status === "paused" ? "保留" : "進行中"}
+                </span>
               </p>
-              <p className="rdx-metric-label rdx-mono">{topic.metric.label}</p>
-            </>
-          )}
-          {detailed && topic.status !== "completed" && (
-            <p className="rdx-paper-status rdx-mono">
-              <span className="rdx-pill" data-status={topic.status === "paused" ? "paused" : "demo"}>
-                {topic.status === "paused" ? "保留" : "進行中"}
-              </span>
-            </p>
-          )}
-          <Heading>{topic.title}</Heading>
-          <p className="rdx-paper-context">{topic.context}</p>
-          <dl className="rdx-pmr">
-            <div>
-              <dt className="rdx-mono">課題</dt>
-              <dd>{topic.problem}</dd>
-            </div>
-            <div>
-              <dt className="rdx-mono">手法</dt>
-              <dd>{topic.method}</dd>
-            </div>
-            <div>
-              <dt className="rdx-mono">結果</dt>
-              <dd>{topic.result}</dd>
-            </div>
-            {detailed && (
+            )}
+            <Heading>{topic.title}</Heading>
+            <p className="rdx-paper-context">{topic.context}</p>
+          </div>
+          <div className="rdx-paper-body">
+            <dl className="rdx-pmr">
               <div>
-                <dt className="rdx-mono">技術</dt>
-                <dd>
-                  <ul className="rdx-chips rdx-mono">
-                    {topic.tags.map((tag) => (
-                      <li key={tag}>{tag}</li>
-                    ))}
-                  </ul>
-                </dd>
+                <dt className="rdx-mono">課題</dt>
+                <dd>{topic.problem}</dd>
+              </div>
+              <div>
+                <dt className="rdx-mono">手法</dt>
+                <dd>{topic.method}</dd>
+              </div>
+              <div>
+                <dt className="rdx-mono">結果</dt>
+                <dd>{topic.result}</dd>
+              </div>
+              {detailed && (
+                <div>
+                  <dt className="rdx-mono">技術</dt>
+                  <dd>
+                    <ul className="rdx-chips rdx-mono">
+                      {topic.tags.map((tag) => (
+                        <li key={tag}>{tag}</li>
+                      ))}
+                    </ul>
+                  </dd>
+                </div>
+              )}
+            </dl>
+            {topic.caseSlug && (
+              <div className="rdx-paper-links">
+                <Link to="/cases/$slug" params={{ slug: topic.caseSlug }} className="rdx-more">
+                  進め方を読む
+                  <ArrowUpRight aria-hidden="true" />
+                </Link>
               </div>
             )}
-          </dl>
-          {topic.caseSlug && (
-            <Link to="/cases/$slug" params={{ slug: topic.caseSlug }} className="rdx-more">
-              進め方を読む
-              <ArrowUpRight aria-hidden="true" />
-            </Link>
-          )}
+          </div>
         </li>
       ))}
     </ul>

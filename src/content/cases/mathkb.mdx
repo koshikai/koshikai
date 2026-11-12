@@ -8,7 +8,7 @@
 
 クライアントは Claude Code、Codex、Hermes の 3 つ。いずれも AI エージェントです。どれも同じ HTTPS のエンドポイントに繋ぎ、リバースプロキシ越しに MCP サーバーへ届きます。サーバーは自宅の Proxmox 上のコンテナで動いていて、`main` に push すると CI がイメージをビルドし、自宅側の self-hosted runner が入れ替えます。
 
-<svg viewBox="0 0 360 244" role="img" aria-label="3つのクライアントからリバースプロキシ越しにMCPサーバーへ入り、PostgreSQLの2スキーマを引く。埋め込み推論はMCPサーバーから別サービスとして呼ぶ" className="my-8 block w-full text-foreground">
+<svg viewBox="0 0 360 210" role="img" aria-label="3つのクライアントからリバースプロキシ越しにMCPサーバーへ入り、PostgreSQLの2スキーマを引く。埋め込み推論はMCPサーバーから別サービスとして呼ぶ" className="my-8 block w-full text-foreground">
   <defs>
     <marker id="kb-flow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
       <path d="M0 0 L8 4 L0 8 z" fill="currentColor" fillOpacity="0.6" />
@@ -61,23 +61,23 @@
 
 <svg viewBox="0 0 360 176" role="img" aria-label="Recall@8 の推移。ベクトル単独0.60、キーワードを足して0.64、文書要約を足して0.72、英語訳を添えて0.96" className="my-8 block w-full text-foreground">
   <g fill="none" stroke="currentColor" strokeOpacity="0.25">
-    <path d="M76 20 H340" /><path d="M76 60 H340" /><path d="M76 100 H340" /><path d="M76 140 H340" />
+    <path d="M50 20 H340" /><path d="M50 60 H340" /><path d="M50 100 H340" /><path d="M50 140 H340" />
   </g>
   <g fill="currentColor" fontFamily="ui-monospace, monospace">
     <g fillOpacity="0.6" fontSize="9" textAnchor="end">
-      <text x="70" y="24">1.0</text><text x="70" y="64">0.75</text><text x="70" y="104">0.5</text><text x="70" y="144">0.25</text>
+      <text x="44" y="24">1.0</text><text x="44" y="64">0.75</text><text x="44" y="104">0.5</text><text x="44" y="144">0.25</text>
     </g>
     <g fontSize="10" textAnchor="middle" fillOpacity="0.8">
-      <text x="110" y="164">ベクトル</text><text x="180" y="164">＋キーワード</text><text x="252" y="164">＋文書要約</text><text x="322" y="164">＋英語訳</text>
+      <text x="95" y="164">ベクトル</text><text x="175" y="164">＋キーワード</text><text x="255" y="164">＋文書要約</text><text x="325" y="164">＋英語訳</text>
     </g>
     <g stroke="currentColor" strokeWidth="1.6" fill="none">
-      <path d="M110 146 L180 132 L252 108 L322 20" />
+      <path d="M95 84 L175 78 L255 65 L325 26" />
     </g>
     <g fill="currentColor">
-      <circle cx="110" cy="146" r="2.5" /><circle cx="180" cy="132" r="2.5" /><circle cx="252" cy="108" r="2.5" /><circle cx="322" cy="20" r="2.5" />
+      <circle cx="95" cy="84" r="2.5" /><circle cx="175" cy="78" r="2.5" /><circle cx="255" cy="65" r="2.5" /><circle cx="325" cy="26" r="2.5" />
     </g>
     <g fontSize="10" textAnchor="middle">
-      <text x="110" y="136">0.60</text><text x="180" y="122">0.64</text><text x="252" y="98">0.72</text><text x="322" y="12">0.96</text>
+      <text x="95" y="74">0.60</text><text x="175" y="68">0.64</text><text x="255" y="55">0.72</text><text x="325" y="16">0.96</text>
     </g>
   </g>
 </svg>

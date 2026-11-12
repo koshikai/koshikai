@@ -36,6 +36,8 @@ try {
     document.documentElement.classList.add("dark");
     var meta = document.querySelector('meta[name="color-scheme"]');
     if (meta) meta.content = "dark";
+    var themeColor = document.querySelector('meta[name="theme-color"]');
+    if (themeColor) themeColor.content = "#131315";
   }
 } catch {}
 `;
@@ -196,7 +198,7 @@ function RootDocument({ children }: { children: ReactNode }) {
         />
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[70]focus:rounded focus:border focus:border-border focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-foreground focus:outline-2 focus:outline-accent"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[70] focus:rounded focus:border focus:border-border focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-foreground focus:outline-2 focus:outline-accent"
         >
           メインコンテンツへスキップ
         </a>

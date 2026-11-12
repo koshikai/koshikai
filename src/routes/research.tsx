@@ -3,7 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { CaseRows, ResearchPapers, SectionHead } from "@/components/rdx";
 import { caseItems, getCasesByAxis } from "@/lib/cases";
 import { pageHead } from "@/lib/metadata";
-import { publications, researchCode, researchNotes, researchTopics } from "@/lib/research";
+import { publications, researchCode, researchTopics } from "@/lib/research";
 import { useReveal } from "@/lib/use-reveal";
 
 export const Route = createFileRoute("/research")({
@@ -91,30 +91,13 @@ function ResearchPage() {
             </li>
           ))}
         </ul>
-      </section>
-
-      <section className="rdx-wrap rdx-section" aria-labelledby="notes-heading">
-        <SectionHead id="notes-heading" label="Related" title="関連コンテンツ" />
-        <ul className="rdx-notes">
-          {researchNotes.map((note) => (
-            <li key={note.href} className="rdx-note" data-rv>
-              <h3>{note.title}</h3>
-              <p>{note.description}</p>
-              <a href={note.href} className="rdx-more">
-                {note.title} を開く
-                <ArrowUpRight aria-hidden="true" />
-              </a>
-            </li>
-          ))}
-          <li className="rdx-note" data-rv style={{ "--rv-delay": "100ms" } as React.CSSProperties}>
-            <h3 className="rdx-mono">{researchCode.label}</h3>
-            <p>{researchCode.description}</p>
-            <a href={researchCode.href} target="_blank" rel="noopener noreferrer" className="rdx-more">
-              GitHub で見る
-              <ArrowUpRight aria-hidden="true" />
-            </a>
-          </li>
-        </ul>
+        <div className="rdx-foot" data-rv>
+          <span>{researchCode.description}</span>
+          <a href={researchCode.href} target="_blank" rel="noopener noreferrer" className="rdx-more rdx-mono">
+            {researchCode.label}
+            <ArrowUpRight aria-hidden="true" />
+          </a>
+        </div>
       </section>
 
       <section className="rdx-wrap rdx-section" aria-labelledby="research-cases">

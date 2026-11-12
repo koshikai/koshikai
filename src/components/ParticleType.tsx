@@ -1399,8 +1399,12 @@ export function ParticleType({ words = [], label, className = "" }: ParticleType
 
     const themeObserver = new MutationObserver(() => {
       readTheme();
-      // 静止画は次のフレームが来ないので、ここで描き直さないと旧テーマの色が残る
-      if (reduceQuery.matches) drawStill();
+      // テーマ切り替え時（View Transition スナップショット取得前を含む）に直ちに再描画
+      if (reduceQuery.matches) {
+        drawStill();
+      } else if (frame !== 0) {
+        render(0, false);
+      }
     });
     themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
 
