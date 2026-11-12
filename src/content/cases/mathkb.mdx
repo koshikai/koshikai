@@ -8,31 +8,32 @@
 
 クライアントは Claude Code、Codex、Hermes の 3 つ。いずれも AI エージェントです。どれも同じ HTTPS のエンドポイントに繋ぎ、リバースプロキシ越しに MCP サーバーへ届きます。サーバーは自宅の Proxmox 上のコンテナで動いていて、`main` に push すると CI がイメージをビルドし、自宅側の self-hosted runner が入れ替えます。
 
-<svg viewBox="0 0 360 232" role="img" aria-label="3つのクライアントからリバースプロキシ越しにMCPサーバーへ入り、PostgreSQLの2スキーマを引く。埋め込みと翻訳は別サービス" className="my-8 block w-full text-foreground">
+<svg viewBox="0 0 360 244" role="img" aria-label="3つのクライアントからリバースプロキシ越しにMCPサーバーへ入り、PostgreSQLの2スキーマを引く。埋め込み推論はMCPサーバーから別サービスとして呼ぶ" className="my-8 block w-full text-foreground">
   <defs>
     <marker id="kb-flow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
       <path d="M0 0 L8 4 L0 8 z" fill="currentColor" fillOpacity="0.6" />
     </marker>
   </defs>
   <g fill="none" stroke="currentColor" strokeOpacity="0.5">
-    <rect x="0.5" y="0.5" width="359" height="36" />
-    <rect x="0.5" y="52.5" width="359" height="36" />
-    <rect x="0.5" y="104.5" width="359" height="44" />
-    <rect x="0.5" y="164.5" width="359" height="30" />
-    <rect x="0.5" y="200.5" width="359" height="30" />
-    <path d="M180 36 V52" markerEnd="url(#kb-flow)" />
-    <path d="M180 88 V104" markerEnd="url(#kb-flow)" />
-    <path d="M180 148 V164" markerEnd="url(#kb-flow)" />
-    <path d="M180 194 V200" markerEnd="url(#kb-flow)" />
-    <path d="M318 126 H344 V40" strokeDasharray="3 3" />
+    <rect x="0.5" y="0.5" width="359" height="34" />
+    <rect x="0.5" y="46.5" width="359" height="30" />
+    <rect x="0.5" y="88.5" width="212" height="46" />
+    <rect x="224.5" y="88.5" width="135" height="46" strokeDasharray="4 3" />
+    <rect x="0.5" y="152.5" width="359" height="30" />
+    <path d="M180 34 V46" markerEnd="url(#kb-flow)" />
+    <path d="M106 76 V88" markerEnd="url(#kb-flow)" />
+    <path d="M106 134 V152" markerEnd="url(#kb-flow)" />
+    <path d="M212 111 H224" strokeDasharray="4 3" markerEnd="url(#kb-flow)" />
   </g>
   <g fill="currentColor" fontSize="11" fontFamily="ui-monospace, monospace" textAnchor="middle">
-    <text x="180" y="23">Claude Code / Codex / Hermes</text>
-    <text x="180" y="75">リバースプロキシ（HTTPS）</text>
-    <text x="180" y="124">MCP サーバー　11 ツール</text>
-    <text x="180" y="139" fontSize="10" fillOpacity="0.75">stateless / 60 req per min per IP</text>
-    <text x="180" y="183">PostgreSQL　ノート / 研究文書の 2 スキーマ</text>
-    <text x="180" y="219">埋め込み推論サービス（別プロセス）</text>
+    <text x="180" y="22">Claude Code / Codex / Hermes</text>
+    <text x="180" y="65">リバースプロキシ（HTTPS）</text>
+    <text x="106" y="107">MCP サーバー　11 ツール</text>
+    <text x="106" y="123" fontSize="10" fillOpacity="0.75">stateless / 60 req per min per IP</text>
+    <text x="292" y="107">埋め込み推論</text>
+    <text x="292" y="123" fontSize="10" fillOpacity="0.75">bge-m3 / 別プロセス</text>
+    <text x="180" y="171">PostgreSQL　ノート / 研究文書の 2 スキーマ</text>
+    <text x="180" y="200" fontSize="10" fillOpacity="0.75">翻訳は MCP サーバーの隣で動く（図では省略）</text>
   </g>
 </svg>
 
