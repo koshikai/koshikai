@@ -51,9 +51,9 @@ const axes = [
   {
     key: "research",
     href: "#research",
-    summary: "強化学習と統計モデルによる検証",
+    summary: "強化学習によるネットワーク制御",
     value: "96/96",
-    proof: "の初期集合すべてで安定化（Wnt5a）",
+    proof: "の初期状態で到達・維持（Wnt5a）",
   },
 ];
 
@@ -210,7 +210,7 @@ function Home() {
           id="rdx-research-heading"
           label="03"
           title="研究とデータ分析"
-          description="強化学習によるネットワーク制御と、実データを使った統計分析。"
+          description="遺伝子ネットワークの離散モデルで、休薬期間のような時間制約を守りながら系を目標状態へ導く。信号時相論理で制約を書き、その進行を状態に持たせた Q 学習で、どのエッジをいつ遮断するかを学ぶ。"
         />
         <ResearchPapers topics={featuredResearch} />
         <div className="rdx-foot" data-rv>

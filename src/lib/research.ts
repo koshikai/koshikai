@@ -14,7 +14,7 @@ export interface ResearchTopic {
   result: string;
   /** Result の中で強調する数値。無ければ出さない */
   metric?: { value: string; label: string };
-  status: "completed" | "in-progress";
+  status: "completed" | "in-progress" | "paused";
   tags: string[];
   caseSlug?: string;
   featured: boolean;
@@ -30,12 +30,26 @@ export const researchTopics: ResearchTopic[] = [
     method:
       "信号時相論理（STL）で制約を書き、その進行状況をフラグとして状態に持たせてマルコフ決定過程（MDP）にする。表形式の Q 学習で、各時刻にどのエッジを遮断するかを学ぶ。",
     result:
-      "Wnt5a 経路モデルでは、休薬 2 ステップの制約下で選んだ 96 状態すべて（96/96）が目標集合に到達し、到達後も維持した。皮質形成モデルでも 32 状態すべて（32/32）で到達と維持を確認した。いずれも発表時の設定で、Wnt5a は seed 11 の 1 run。",
-    metric: { value: "96/96", label: "Wnt5a の初期集合（96 状態）すべてで安定化" },
+      "Wnt5a 経路モデルでは、休薬 2 ステップの制約下で評価した 96 状態すべて（96/96）が目標集合に到達し、到達後も維持した。皮質形成モデルでも 32 状態すべて（32/32）で到達と維持を確認した。いずれも発表時の設定で、Wnt5a は seed 11 の 1 run。",
+    metric: { value: "96/96", label: "Wnt5a・休薬 2 ステップ制約下の 96 状態" },
     status: "completed",
     tags: ["Reinforcement Learning", "Boolean Network", "STL"],
     caseSlug: "research-workflow",
     featured: true,
+  },
+  {
+    slug: "input-spec-price",
+    title: "時間制約 × 到達可能性",
+    context: "学部ラインの続き",
+    problem:
+      "休薬期間や除去本数の上限のような時間的な入力仕様を課すと、到達できる初期状態と最小の除去回数がどれだけ変わるかを知りたい。",
+    method:
+      "学習を使わず、状態空間をすべて列挙して最短の除去列を厳密に数える。計算が終わる規模を少しずつ上げながら、条件ごとの差を集計している。",
+    result:
+      "条件を足すほど到達できる初期状態は減り、必要な除去回数も変わる。いまは条件ごとの集計表を作っている段階で、数値はまだ出していない。",
+    status: "in-progress",
+    tags: ["Boolean Network", "Exhaustive Search", "Python"],
+    featured: false,
   },
   {
     slug: "winter-rail-risk",
@@ -51,7 +65,7 @@ export const researchTopics: ResearchTopic[] = [
     status: "completed",
     tags: ["Python", "Logistic Regression", "Data Quality"],
     caseSlug: "jr-hokkaido-pbl",
-    featured: true,
+    featured: false,
   },
   {
     slug: "c2d-transfer",
@@ -62,8 +76,8 @@ export const researchTopics: ResearchTopic[] = [
     method:
       "粗いモデルの方策をそのまま移す方法を評価し、次にノードの対応付けを明示して候補を絞る方法と、グラフニューラルネットワーク（GNN）で方策を蒸留する方法を試した。",
     result:
-      "方策をそのまま移す方法は、粗から細・細から粗のどちらでも成立しなかった。ノード対応付けを明示すると到達成功率が上がり、GNN の蒸留でさらに上がった。到達後の維持は弱く、別のモデルへの一般化はまだ示せていない。現在は題材をエッジ除去制御の転移に移し、GNN の隣接集約と照合項の寄与を分ける実験を設計している（実験は未実施）。",
-    status: "in-progress",
+      "方策をそのまま移す方法は、粗から細・細から粗のどちらでも成立しなかった。ノードの対応付けを明示すると到達成功率が上がり、グラフニューラルネットワークによる蒸留でさらに上がった。ただし到達後の維持は弱く、別のモデルへの一般化は示せていない。この線はいま保留している（2026-10-26 に判断、11-07 に継続を確認、再開条件は未定）。関連して、エッジ除去制御の転移で集約と照合項の寄与を分ける確認的評価を行い、交互作用は検出できなかった（2026-11-12 に完了・凍結）。",
+    status: "paused",
     tags: ["Transfer Learning", "GNN", "PyTorch"],
     featured: false,
   },

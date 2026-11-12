@@ -54,8 +54,8 @@ describe("content data", () => {
     expect(hero).not.toMatch(/大学|研究室|学会|賞|松尾|SCI/);
   });
 
-  it("shows two research topics on the home page, each with Problem / Method / Result", () => {
-    expect(featuredResearch).toHaveLength(2);
+  it("features one research topic on the home page, with Problem / Method / Result", () => {
+    expect(featuredResearch).toHaveLength(1);
     for (const topic of featuredResearch) {
       expect(topic.problem && topic.method && topic.result, topic.slug).toBeTruthy();
     }

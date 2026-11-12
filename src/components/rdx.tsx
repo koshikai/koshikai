@@ -200,10 +200,10 @@ export function ResearchPapers({
               <p className="rdx-metric-label rdx-mono">{topic.metric.label}</p>
             </>
           )}
-          {detailed && topic.status === "in-progress" && (
+          {detailed && topic.status !== "completed" && (
             <p className="rdx-paper-status rdx-mono">
-              <span className="rdx-pill" data-status="demo">
-                進行中
+              <span className="rdx-pill" data-status={topic.status === "paused" ? "paused" : "demo"}>
+                {topic.status === "paused" ? "保留" : "進行中"}
               </span>
             </p>
           )}

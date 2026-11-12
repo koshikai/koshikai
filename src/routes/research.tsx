@@ -37,7 +37,7 @@ function ResearchPage() {
           as="h1"
           label="Research"
           title="研究とデータ分析"
-          description="ブーリアンネットワークの制御を中心に、強化学習と信号時相論理（STL）を組み合わせた研究をしています。データ分析のプロジェクトも含め、問題設定・手法・検証結果を分けてまとめています。"
+          description="ブーリアンネットワークの制御を中心に、強化学習と信号時相論理（STL）を組み合わせた研究をしています。データ分析のプロジェクトも含め、問題設定・手法・検証結果を分けてまとめています。進行中と保留のラインも、状態を添えて載せています。"
         />
         <ResearchPapers topics={researchTopics} heading="h2" detailed />
 
