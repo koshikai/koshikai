@@ -24,6 +24,7 @@ const AGENT_OPS: Evidence = { label: "常駐エージェント運用", href: "/c
 const THIS_SITE: Evidence = { label: "このサイト", href: "/engineering#pipeline" };
 const HOMELAB: Evidence = { label: "分散インフラ基盤", href: "/cases/immich-distributed" };
 const DEPLOY: Evidence = { label: "デプロイ自動化", href: "/cases/deploy-automation" };
+const MATHKB: Evidence = { label: "MathKB", href: "/cases/mathkb" };
 
 export const capabilities: Capability[] = [
   {
@@ -38,8 +39,8 @@ export const capabilities: Capability[] = [
   },
   {
     area: "Database",
-    tools: ["PostgreSQL", "Prisma"],
-    evidence: [SMOKE_IT, KARIGALLERY],
+    tools: ["PostgreSQL", "Prisma", "pgvector"],
+    evidence: [SMOKE_IT, KARIGALLERY, MATHKB],
   },
   {
     area: "Infrastructure",
@@ -54,7 +55,7 @@ export const capabilities: Capability[] = [
   {
     area: "AI",
     tools: ["LLM", "AI エージェント", "MCP"],
-    evidence: [SMOKE_IT, RESEARCH_AGENT, AGENT_OPS, HOMELAB],
+    evidence: [SMOKE_IT, RESEARCH_AGENT, AGENT_OPS, HOMELAB, MATHKB],
   },
 ];
 
