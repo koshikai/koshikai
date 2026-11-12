@@ -18,7 +18,7 @@ export const Route = createFileRoute("/research")({
 });
 
 const figureAlt =
-  "Wnt5a モデルの制御結果。上段は目標集合へのハミング距離が時刻 2 で 0 に到達し以後維持される様子、下段は各時刻に除去したエッジを示すヒートマップ。";
+  "Wnt5a モデルの制御結果。上段は目標集合へのハミング距離が時刻 2 で 0 になり、10 ステップ目まで維持される様子、下段は各時刻に遮断したエッジを示すヒートマップ。";
 
 const PUBLICATION_STATUS = { presented: "発表済み", accepted: "採択" } as const;
 
@@ -37,7 +37,7 @@ function ResearchPage() {
           as="h1"
           label="Research"
           title="研究とデータ分析"
-          description="ブーリアンネットワークの制御を中心に、強化学習と形式手法を組み合わせた研究をしています。データ分析の実務的なプロジェクトも含め、問題設定・手法・検証結果を分けてまとめています。"
+          description="ブーリアンネットワークの制御を中心に、強化学習と信号時相論理（STL）を組み合わせた研究をしています。データ分析のプロジェクトも含め、問題設定・手法・検証結果を分けてまとめています。"
         />
         <ResearchPapers topics={researchTopics} heading="h2" detailed />
 
@@ -66,10 +66,10 @@ function ResearchPage() {
           <figcaption>
             <span className="rdx-mono">Fig. Wnt5a / recovery constraint</span>
             <p>
-              学習した方策による制御の実行例。上段は目標集合へのハミング距離で、時刻 2 で 0
-              に到達し、到達期限を越えて以降も維持されています。下段は各時刻に除去したエッジで、
-              <span className="rdx-figure-mark">朱色のマス</span>
-              が介入です。96 個の初期状態すべてで安定化に成功しました。
+              学習した方策による制御の実行例。上段は目標集合（2 つのアトラクタ状態）へのハミング距離で、
+              時刻 2 に 0 へ到達し、到達期限の 7 ステップを超えて 10 ステップ目まで維持されている。
+              下段は各時刻に遮断したエッジで、<span className="rdx-figure-mark">朱色のマス</span>が介入を表す。
+              休薬 2 ステップの制約下で、96 状態の初期集合すべて（96/96、seed 11）を目標集合へ導いた。
             </p>
           </figcaption>
         </figure>

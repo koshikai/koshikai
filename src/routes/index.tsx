@@ -53,7 +53,7 @@ const axes = [
     href: "#research",
     summary: "強化学習と統計モデルによる検証",
     value: "96/96",
-    proof: "の初期状態で安定化（Wnt5a）",
+    proof: "の初期集合すべてで安定化（Wnt5a）",
   },
 ];
 
