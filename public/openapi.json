@@ -1,0 +1,80 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "koshikai.dev API",
+    "version": "1.0.0",
+    "description": "koshikai.dev ポートフォリオサイトの公開 HTTP API および Model Context Protocol (MCP) エンドポイント仕様書。作品 (Works)、技術・運用 (Engineering)、研究 (Research)、ケーススタディ (Cases) の構造化データをエージェント向けに提供します。"
+  },
+  "servers": [
+    {
+      "url": "https://koshikai.dev",
+      "description": "Production server"
+    }
+  ],
+  "paths": {
+    "/healthz": {
+      "get": {
+        "operationId": "getHealth",
+        "summary": "Health check",
+        "responses": {
+          "200": {
+            "description": "Service is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": { "type": "boolean" }
+                  },
+                  "required": ["ok"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mcp": {
+      "get": {
+        "operationId": "getMcpServerCard",
+        "summary": "Retrieve the MCP Server Card metadata",
+        "responses": {
+          "200": {
+            "description": "MCP Server Card JSON"
+          }
+        }
+      },
+      "post": {
+        "operationId": "mcpEndpoint",
+        "summary": "Model Context Protocol (MCP) Streamable HTTP JSON-RPC 2.0 endpoint",
+        "responses": {
+          "200": {
+            "description": "JSON-RPC 2.0 response"
+          }
+        }
+      }
+    },
+    "/llms.txt": {
+      "get": {
+        "operationId": "getLlmsTxt",
+        "summary": "Retrieve LLM-friendly overview of koshikai.dev in Markdown",
+        "responses": {
+          "200": {
+            "description": "Markdown summary"
+          }
+        }
+      }
+    },
+    "/llms-full.txt": {
+      "get": {
+        "operationId": "getLlmsFullTxt",
+        "summary": "Retrieve comprehensive LLM guide for koshikai.dev in Markdown",
+        "responses": {
+          "200": {
+            "description": "Expanded Markdown documentation"
+          }
+        }
+      }
+    }
+  }
+}

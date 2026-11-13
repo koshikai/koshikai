@@ -1,0 +1,5 @@
+public/.well-known/** text eol=lf
+public/*.md text eol=lf
+public/*.txt text eol=lf
+public/*.xml text eol=lf
+public/*.json text eol=lf

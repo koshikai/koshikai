@@ -1,0 +1,26 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "koshikai-portfolio",
+      "type": "skill-md",
+      "description": "Retrieve portfolio works, engineering capabilities, and research topics from koshikai.dev via Markdown negotiation or MCP.",
+      "url": "/.well-known/agent-skills/koshikai-portfolio/SKILL.md",
+      "digest": "sha256:b2aea4286ab4475be62a179bfd35e1eeef194684e8a29e600ac9f20d15d79056"
+    },
+    {
+      "name": "koshikai-cases",
+      "type": "skill-md",
+      "description": "Browse and read technical case studies across Build, Operate, and Research on koshikai.dev.",
+      "url": "/.well-known/agent-skills/koshikai-cases/SKILL.md",
+      "digest": "sha256:ea1d86eb5dfb6d79160e2753eb5242dd986b816530efd18401f090187117e7b4"
+    },
+    {
+      "name": "koshikai-auth",
+      "type": "skill-md",
+      "description": "Discover OAuth 2.0 / OIDC metadata and register AI agent identities with koshikai.dev via Auth.md.",
+      "url": "/.well-known/agent-skills/koshikai-auth/SKILL.md",
+      "digest": "sha256:4e970224bc72b4cdb92603eeb3c0fc686bf51897715aa989c6fd7a32476bf085"
+    }
+  ]
+}

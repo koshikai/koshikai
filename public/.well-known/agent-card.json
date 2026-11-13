@@ -1,0 +1,40 @@
+{
+  "name": "koshikai.dev Agent",
+  "version": "1.0.0",
+  "description": "koshikai のポートフォリオサイト (koshikai.dev) の AI エージェントインターフェース。開発作品、自宅サーバー運用、強化学習・ブーリアンネットワーク研究、ケーススタディの情報を提供します。",
+  "url": "https://koshikai.dev",
+  "supportedInterfaces": [
+    {
+      "url": "https://koshikai.dev/mcp",
+      "protocol": "mcp",
+      "transport": "streamable-http"
+    }
+  ],
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": false
+  },
+  "defaultInputModes": [
+    "text/plain",
+    "application/json"
+  ],
+  "defaultOutputModes": [
+    "text/markdown",
+    "application/json"
+  ],
+  "skills": [
+    {
+      "id": "koshikai-portfolio",
+      "name": "Portfolio Works, Engineering & Research Lookup",
+      "description": "個人開発作品、技術スタック・自宅サーバー運用実績、および強化学習によるブーリアンネットワーク制御などの研究トピックを取得します。",
+      "tags": ["portfolio", "works", "engineering", "research"]
+    },
+    {
+      "id": "koshikai-cases",
+      "name": "Technical Case Studies Lookup",
+      "description": "Build・Operate・Research の 3 軸で整理された 11 件の技術ケーススタディを参照します。",
+      "tags": ["cases", "architecture", "homelab", "reinforcement-learning"]
+    }
+  ]
+}

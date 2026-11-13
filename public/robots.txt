@@ -1,4 +1,27 @@
+# koshikai.dev - https://koshikai.dev
+
 User-agent: *
+Content-Signal: search=yes,ai-train=no,ai-input=yes
+Allow: /
+
+# Search and assistant agents allowed on public pages
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
 Allow: /
 
 Sitemap: https://koshikai.dev/sitemap.xml
+Agentmap: https://koshikai.dev/.well-known/ai-catalog.json

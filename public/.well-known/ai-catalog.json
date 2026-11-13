@@ -1,0 +1,53 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "koshikai.dev",
+    "identifier": "did:web:koshikai.dev"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:koshikai.dev:server:mcp",
+      "displayName": "koshikai.dev MCP Server",
+      "type": "application/mcp-server-card+json",
+      "url": "https://koshikai.dev/.well-known/mcp/server-card.json",
+      "representativeQueries": [
+        "koshikai の個人開発プロダクトと技術スタックを教えて",
+        "自宅 Proxmox サーバーの運用事例や MCP 基盤について知りたい",
+        "ブーリアンネットワークの強化学習制御の研究内容を確認したい"
+      ]
+    },
+    {
+      "identifier": "urn:air:koshikai.dev:api:openapi",
+      "displayName": "koshikai.dev HTTP API",
+      "type": "application/vnd.oai.openapi+json",
+      "url": "https://koshikai.dev/openapi.json",
+      "representativeQueries": [
+        "koshikai.dev の公開 API エンドポイントとヘルスチェックを確認する",
+        "llms.txt と llms-full.txt からポートフォリオ全体の要約を取得する",
+        "MCP JSON-RPC エンドポイントの仕様を参照する"
+      ]
+    },
+    {
+      "identifier": "urn:air:koshikai.dev:agent:a2a",
+      "displayName": "koshikai.dev A2A Agent",
+      "type": "application/a2a-agent-card+json",
+      "url": "https://koshikai.dev/.well-known/agent-card.json",
+      "representativeQueries": [
+        "koshikai の Build・Operate・Research の実績をエージェント経由で照会する",
+        "開発・インフラ運用・研究のケーススタディ一覧を取得する",
+        "Smoke it. や KariGallery、MathKB の設計背景を調べる"
+      ]
+    },
+    {
+      "identifier": "urn:air:koshikai.dev:skill:portfolio",
+      "displayName": "koshikai.dev Portfolio & Case Studies Skill",
+      "type": "text/markdown",
+      "url": "https://koshikai.dev/.well-known/agent-skills/koshikai-portfolio/SKILL.md",
+      "representativeQueries": [
+        "koshikai.dev の各ページを Markdown 形式で取得する手順",
+        "ポートフォリオの作品・研究・ケーススタディを効率よく参照する方法",
+        "koshikai.dev のエージェントスキル仕様を確認する"
+      ]
+    }
+  ]
+}

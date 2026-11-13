@@ -1,0 +1,50 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://koshikai.dev/mcp",
+      "service-desc": [
+        {
+          "href": "https://koshikai.dev/.well-known/mcp/server-card.json",
+          "type": "application/json"
+        },
+        {
+          "href": "https://koshikai.dev/openapi.json",
+          "type": "application/json"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://koshikai.dev/llms.txt",
+          "type": "text/markdown"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://koshikai.dev/healthz",
+          "type": "application/json"
+        }
+      ]
+    },
+    {
+      "anchor": "https://koshikai.dev/healthz",
+      "service-desc": [
+        {
+          "href": "https://koshikai.dev/openapi.json",
+          "type": "application/json"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://koshikai.dev/llms.txt",
+          "type": "text/markdown"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://koshikai.dev/healthz",
+          "type": "application/json"
+        }
+      ]
+    }
+  ]
+}

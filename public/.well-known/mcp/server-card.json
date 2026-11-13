@@ -1,0 +1,58 @@
+{
+  "serverInfo": {
+    "name": "koshikai.dev MCP Server",
+    "version": "1.0.0"
+  },
+  "description": "koshikai.dev ポートフォリオサイトの MCP サーバー。個人開発プロダクト (Works)、技術領域・自宅サーバー運用 (Engineering)、研究トピック (Research)、およびケーススタディ (Cases) の参照ツールを提供します。",
+  "url": "https://koshikai.dev/mcp",
+  "endpoint": "/mcp",
+  "transport": {
+    "type": "streamable-http",
+    "endpoint": "/mcp"
+  },
+  "capabilities": {
+    "tools": true,
+    "resources": true,
+    "prompts": false
+  },
+  "tools": [
+    {
+      "name": "get_portfolio_overview",
+      "description": "koshikai.dev のプロフィール、主要作品、技術領域、研究テーマの概要を取得します。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "list_works",
+      "description": "個人開発作品 (Smoke it., KariGallery, ひだまりマップ, Turbo Circuit) の一覧と技術スタックを取得します。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "list_research_topics",
+      "description": "研究トピック（強化学習によるブーリアンネットワーク制御、冬期鉄道リスク分析、知識転移）と学会発表一覧を取得します。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "list_case_studies",
+      "description": "開発 (build)・運用 (operate)・研究 (research) のケーススタディ一覧を取得します。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "axis": {
+            "type": "string",
+            "enum": ["build", "operate", "research"],
+            "description": "絞り込む軸（省略時は全件）"
+          }
+        }
+      }
+    }
+  ]
+}

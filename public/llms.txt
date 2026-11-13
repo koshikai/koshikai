@@ -1,0 +1,31 @@
+# koshikai.dev
+
+> koshikai のポートフォリオサイト（`https://koshikai.dev`）。Web アプリを企画から作り、自宅の Proxmox サーバーで運用しています。研究は強化学習によるブーリアンネットワークの制御です。
+
+## 3 つの軸 (Build · Operate · Research)
+
+- **Build (`/works`)**: 企画・設計・実装・デプロイまで単独で手がけた Web アプリ（Smoke it.、KariGallery、ひだまりマップ）と 3D カートレーシングゲーム（Turbo Circuit）。
+- **Operate (`/engineering`)**: 自宅の Proxmox VE + LXC + Docker 上で 10 以上のサービスを運用。GitHub Actions と self-hosted runner による自動デプロイ、GPU オフロード、世代バックアップ、常駐 AI エージェント運用、MCP 検索基盤（MathKB）。
+- **Research (`/research`)**: 強化学習を用いたブーリアンネットワークのエッジ除去制御（STL 仕様下の集合安定化）、モデル間の制御知識転移、および JR 北海道との冬期ポイント不転換リスク分析 PBL。
+
+## 公開ページ
+
+- [トップ](https://koshikai.dev/): 概要・主要作品・運用構成・研究トピック
+- [Works](https://koshikai.dev/works): 個人開発作品一覧（Smoke it.、KariGallery、ひだまりマップ、Turbo Circuit）
+- [Engineering](https://koshikai.dev/engineering): 技術スタック・自宅サーバー運用・デプロイパイプライン
+- [Research](https://koshikai.dev/research): 研究テーマ・学会発表・修了講座
+- [About](https://koshikai.dev/about): プロフィール・経歴・連絡先
+- [Cases](https://koshikai.dev/cases): 開発・運用・研究のケーススタディ一覧
+- [Agent Auth ガイド (/auth.md)](https://koshikai.dev/auth.md): AI エージェント向け認証・登録手順
+
+## エージェント・API ディスカバリ
+
+- [詳細ガイド (llms-full.txt)](https://koshikai.dev/llms-full.txt)
+- [API カタログ (RFC 9727)](https://koshikai.dev/.well-known/api-catalog)
+- [OpenAPI 仕様書](https://koshikai.dev/openapi.json)
+- [MCP Server Card (SEP-1649)](https://koshikai.dev/.well-known/mcp/server-card.json)
+- [A2A Agent Card](https://koshikai.dev/.well-known/agent-card.json)
+- [Agent Skills Index](https://koshikai.dev/.well-known/agent-skills/index.json)
+- [ARD AI カタログ](https://koshikai.dev/.well-known/ai-catalog.json)
+- [OAuth Authorization Server Metadata (RFC 8414)](https://koshikai.dev/.well-known/oauth-authorization-server)
+- [OAuth Protected Resource Metadata (RFC 9728)](https://koshikai.dev/.well-known/oauth-protected-resource)

@@ -1,0 +1,18 @@
+{
+  "serverInfo": {
+    "name": "koshikai.dev MCP Server",
+    "version": "1.0.0"
+  },
+  "description": "koshikai.dev ポートフォリオサイトの MCP サーバー。個人開発プロダクト (Works)、技術領域・自宅サーバー運用 (Engineering)、研究トピック (Research)、およびケーススタディ (Cases) の参照ツールを提供します。",
+  "url": "https://koshikai.dev/mcp",
+  "endpoint": "/mcp",
+  "transport": {
+    "type": "streamable-http",
+    "endpoint": "/mcp"
+  },
+  "capabilities": {
+    "tools": true,
+    "resources": true,
+    "prompts": false
+  }
+}

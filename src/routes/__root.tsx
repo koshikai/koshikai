@@ -29,6 +29,7 @@ import { SectionHead } from "@/components/rdx";
 import { SiteHeader } from "@/components/SiteHeader";
 
 // ライトが既定。明示的にダークを選んだ人だけ、描画前に dark クラスを付け、color-scheme meta を更新する。
+// あわせてブラウザ内 AI エージェント向けに WebMCP (document.modelContext / navigator.modelContext) ツールを登録する。
 const themeInitScript = `
 document.documentElement.classList.add("js");
 try {
@@ -38,6 +39,84 @@ try {
     if (meta) meta.content = "dark";
     var themeColor = document.querySelector('meta[name="theme-color"]');
     if (themeColor) themeColor.content = "#131315";
+  }
+
+  var modelCtx =
+    (typeof document !== "undefined" ? document.modelContext : undefined) ||
+    (typeof navigator !== "undefined" ? navigator.modelContext : undefined);
+  if (modelCtx && typeof modelCtx.registerTool === "function") {
+    var abortCtrl = typeof AbortController !== "undefined" ? new AbortController() : null;
+    var regOpts = abortCtrl ? { signal: abortCtrl.signal } : undefined;
+    var tools = [
+      {
+        name: "get_portfolio_overview",
+        description: "Get an overview of koshikai.dev portfolio (featured works, engineering stack, research topics, and agent discovery endpoints).",
+        inputSchema: {
+          type: "object",
+          properties: {},
+        },
+        annotations: { readOnlyHint: true },
+        execute: async function () {
+          return {
+            name: "koshikai.dev",
+            url: window.location.origin,
+            description: "Web アプリを企画から作り、自宅のサーバーで動かしています。研究は強化学習によるネットワーク制御です。",
+            axes: ["Build (/works)", "Operate (/engineering)", "Research (/research)"],
+            featuredWorks: ["Smoke it.", "KariGallery", "Turbo Circuit"],
+            discovery: {
+              apiCatalog: "/.well-known/api-catalog",
+              mcpServerCard: "/.well-known/mcp/server-card.json",
+              agentSkills: "/.well-known/agent-skills/index.json",
+              aiCatalog: "/.well-known/ai-catalog.json",
+              authMd: "/auth.md",
+            },
+          };
+        },
+      },
+      {
+        name: "navigate_to_page",
+        description: "Navigate to a main page or case study on koshikai.dev (/, /works, /engineering, /research, /about, /cases).",
+        inputSchema: {
+          type: "object",
+          properties: {
+            path: {
+              type: "string",
+              enum: ["/", "/works", "/engineering", "/research", "/about", "/cases"],
+              description: "Target route path on koshikai.dev",
+            },
+          },
+          required: ["path"],
+        },
+        execute: async function (params) {
+          var target = params && typeof params.path === "string" ? params.path : "/";
+          window.location.assign(target);
+          return { navigated: true, path: target };
+        },
+      },
+      {
+        name: "get_health_status",
+        description: "Check the health status of koshikai.dev (/healthz).",
+        inputSchema: {
+          type: "object",
+          properties: {},
+        },
+        annotations: { readOnlyHint: true },
+        execute: async function () {
+          var res = await fetch("/healthz", { headers: { Accept: "application/json" } });
+          return await res.json();
+        },
+      },
+    ];
+    for (var i = 0; i < tools.length; i++) {
+      try {
+        Promise.resolve(
+          regOpts ? modelCtx.registerTool(tools[i], regOpts) : modelCtx.registerTool(tools[i])
+        ).catch(function () {});
+      } catch (_) {}
+    }
+    window.addEventListener("pagehide", function () {
+      if (abortCtrl) abortCtrl.abort();
+    }, { once: true });
   }
 } catch {}
 `;
@@ -69,6 +148,10 @@ export const Route = createRootRoute({
         { rel: "icon", href: "/favicon.ico" },
         { rel: "apple-touch-icon", href: "/apple-icon.png" },
         { rel: "manifest", href: "/manifest.json" },
+        { rel: "api-catalog", href: "/.well-known/api-catalog" },
+        { rel: "ai-catalog", href: "/.well-known/ai-catalog.json" },
+        { rel: "service-desc", href: "/.well-known/mcp/server-card.json" },
+        { rel: "describedby", href: "/.well-known/agent-skills/index.json" },
       ],
     };
   },

@@ -1,0 +1,84 @@
+# koshikai.dev — 完全ガイド (llms-full.txt)
+
+> koshikai（Software Engineer / Graduate Student）のポートフォリオサイト（`https://koshikai.dev`）。開発（Build）・運用（Operate）・研究（Research）の 3 つの軸で、個人開発プロダクト、自宅サーバーインフラ、研究・データ分析の実績とケーススタディを公開しています。
+
+## 1. プロフィール
+
+- **ハンドル**: koshikai
+- **役割**: Software Engineer / Graduate Student
+- **所属**: 北海道大学 大学院情報科学院 修士課程 1年（ブーリアンネットワークの制御と、モデル間の制御知識の転移を研究）
+- **連絡先**: `contact@koshikai.dev`
+- **リンク**:
+  - GitHub: `https://github.com/koshikai`
+  - X: `https://x.com/siywyk`
+
+## 2. Works（個人開発プロダクト）
+
+1. **Smoke it.** (`https://smoke-it.koshikai.dev`)
+   - **概要**: 喫煙習慣を記録し、改善を支援する AI コーチ付き PWA（2025.12〜、公開中）
+   - **技術**: TanStack Start, PWA, PostgreSQL / Prisma, OpenRouter
+   - **事例**: `https://koshikai.dev/cases/smoke-it`
+2. **KariGallery** (`https://gallery.koshikai.dev`)
+   - **概要**: イラスト作品の展示・管理ギャラリー（2025.10〜、決済機能を無効化したデモとして公開）
+   - **技術**: TanStack Start, Auth.js, Stripe, Prisma
+   - **事例**: `https://koshikai.dev/cases/karigallery`
+3. **ひだまりマップ**
+   - **概要**: 部屋の窓に日が当たる時間帯を 3D 都市モデル上で確かめる Web アプリ（2026.05〜、Private）
+   - **技術**: Next.js, CesiumJS, PLATEAU 3D Tiles, SunCalc
+4. **Turbo Circuit** (`https://github.com/koshikai/TurboCircuit`)
+   - **概要**: ドリフトとアイテムで競う 3D カートレーシングゲーム（2026.10〜、Windows 64-bit 版を GitHub Releases で配布）
+   - **技術**: Unity, C#, URP, Unity Relay
+
+## 3. Engineering（技術領域とインフラ運用）
+
+- **Frontend**: TypeScript, React, TanStack Start, Next.js, PWA
+- **Backend**: Node.js, Python, FastAPI, Auth.js
+- **Database**: PostgreSQL, Prisma, pgvector
+- **Infrastructure**: Linux, Docker, Proxmox, Nginx, self-hosting
+- **CI/CD**: Git, GitHub Actions, GHCR, self-hosted runner
+- **AI**: LLM, AI エージェント, MCP
+
+## 4. Research（研究・データ分析）
+
+1. **強化学習 × 遺伝子ネットワーク制御（卒業研究）**
+   - 信号時相論理（STL）で休薬期間などの時間制約を記述し、表形式 Q 学習でブーリアンネットワークのエッジ除去制御を学習。Wnt5a 経路モデル（128/128 状態）および皮質形成モデル（32/32 状態）で目標集合への到達と維持を確認。
+   - 公開コード: `https://github.com/koshikai/bn-edge-removal-public`
+2. **データ分析 × 鉄道の冬期リスク（大学院 PBL）**
+   - JR 北海道の冬期ポイント不転換リスクをロジスティック回帰で定量化（6 時間累積降水 5mm 以上かつ気温 -8℃ 以下で Precision 32.0%、Lift 19.9 倍）。
+3. **時間制約 × 到達可能性**
+   - 状態空間の全列挙による入力仕様下の到達可能初期状態と最小除去回数の厳密集計。
+4. **強化学習 × モデル間の知識転移（修士研究）**
+   - 粗視化モデルから詳細モデルへの制御知識転移と GNN 蒸留の評価。
+
+### 学会発表
+
+- **SICE FES 2026** (2026.09, ポスター発表): *A Reinforcement Learning Approach to Set Stabilization of Boolean Networks by Edge Removal Control*
+- **ITC-CSCC 2026** (2026.07, 口頭発表): *Edge Removal Control of Boolean Networks with STL Specifications Using Reinforcement Learning*
+- **第70回システム制御情報学会研究発表講演会 (SCI'26)** (2026.05, 口頭発表, 学生発表賞): *ブーリアンネットワークのモデルフリーエッジ除去制御*
+
+## 5. ケーススタディ一覧 (`/cases`)
+
+- `/cases/smoke-it` — Smoke it.: 喫煙習慣を記録し、改善を支援する AI コーチ付き PWA
+- `/cases/karigallery` — KariGallery: 決済フローまで実装したイラストギャラリー
+- `/cases/immich-distributed` — 分散インフラ基盤の構築と運用
+- `/cases/home-backup` — 自宅バックアップ基盤の構築
+- `/cases/deploy-automation` — デプロイ作業の自動化
+- `/cases/agent-operations` — AI エージェント運用基盤の構築
+- `/cases/mathkb` — MathKB × MCP サーバー
+- `/cases/research-workflow` — 再現性 × 実験環境
+- `/cases/jr-hokkaido-pbl` — データ分析 × 鉄道の冬期リスク
+- `/cases/ai-research-agent` — AI エージェント × 研究検証
+- `/cases/transfer-line` — 転移 × 打ち切り
+
+## 6. エージェント・API エンドポイント
+
+- `GET /healthz`: ヘルスチェック (`{"ok":true}`)
+- `POST /mcp`: Streamable HTTP MCP エンドポイント (`initialize`, `tools/list`, `resources/list`, `tools/call`)
+- `GET /.well-known/api-catalog`: RFC 9727 API カタログ (`application/linkset+json`)
+- `GET /.well-known/mcp/server-card.json`: MCP Server Card (SEP-1649)
+- `GET /.well-known/agent-card.json`: A2A Agent Card
+- `GET /.well-known/agent-skills/index.json`: Agent Skills Discovery Index (v0.2.0)
+- `GET /.well-known/ai-catalog.json`: ARD Capability Manifest
+- `GET /.well-known/oauth-protected-resource`: RFC 9728 OAuth Protected Resource Metadata
+- `GET /.well-known/oauth-authorization-server`: RFC 8414 OAuth Authorization Server Metadata
+- `GET /auth.md`: Auth.md エージェント登録・認証ガイド

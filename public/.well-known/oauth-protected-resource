@@ -1,0 +1,17 @@
+{
+  "resource": "https://koshikai.dev",
+  "resource_name": "koshikai.dev",
+  "resource_logo_uri": "https://koshikai.dev/icon.png",
+  "authorization_servers": [
+    "https://koshikai.dev"
+  ],
+  "scopes_supported": [
+    "openid",
+    "profile",
+    "portfolio:read",
+    "mcp:tools"
+  ],
+  "bearer_methods_supported": [
+    "header"
+  ]
+}
