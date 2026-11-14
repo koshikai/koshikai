@@ -22,7 +22,7 @@ const KARIGALLERY: Evidence = { label: "KariGallery", href: "/cases/karigallery"
 const RESEARCH_AGENT: Evidence = { label: "研究エージェント", href: "/cases/ai-research-agent" };
 const AGENT_OPS: Evidence = { label: "常駐エージェント運用", href: "/cases/agent-operations" };
 const THIS_SITE: Evidence = { label: "このサイト", href: "/engineering#pipeline" };
-const HOMELAB: Evidence = { label: "分散インフラ基盤", href: "/cases/immich-distributed" };
+const HOMELAB: Evidence = { label: "Immich の GPU オフロード", href: "/cases/immich-distributed" };
 const DEPLOY: Evidence = { label: "デプロイ自動化", href: "/cases/deploy-automation" };
 const MATHKB: Evidence = { label: "MathKB", href: "/cases/mathkb" };
 
@@ -85,7 +85,6 @@ export const operationFacts = [
 
 /**
  * 自宅基盤の構成を層ごとに要約したもの。IP アドレス・機種名・監視系は載せない。
- * 元になった詳細図は /cases/immich-distributed にある。
  */
 export const homelabLayers = [
   { layer: "公開経路", items: ["Cloudflare Tunnel"] },

@@ -1,33 +1,86 @@
+## 稼働中の構成
+
+Proxmox の LXC に Immich 3.4.1 を直接インストールして動かしています（Docker は使いません）。PostgreSQL と Redis も同じ LXC に置き、顔検出・画像検索（CLIP）・文字認識の 3 つだけを LAN 上の Windows PC の GPU に送ります。画像は約 1.8 万枚で、1 枚あたりの顔検出と CLIP の埋め込みは約 60 ミリ秒です。更新は本体と推論コンテナを同じバージョンに揃えて上げます。
+
+<svg viewBox="0 0 360 252" role="img" aria-label="スマホアプリとブラウザからリバースプロキシ越しに Immich 本体へ入る。本体は LXC 上の PostgreSQL と Redis を使い、機械学習の推論だけを LAN 越しに Windows PC の GPU コンテナへ送る。LXC 内のローカル ML は待機用" className="my-8 block w-full text-foreground">
+  <defs>
+    <marker id="im-flow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L8 4 L0 8 z" fill="currentColor" fillOpacity="0.6" />
+    </marker>
+  </defs>
+  <g fill="none" stroke="currentColor" strokeOpacity="0.5">
+    <rect x="0.5" y="0.5" width="359" height="34" />
+    <rect x="0.5" y="46.5" width="359" height="30" />
+    <rect x="0.5" y="88.5" width="212" height="62" />
+    <rect x="224.5" y="88.5" width="135" height="62" strokeDasharray="4 3" />
+    <rect x="0.5" y="176.5" width="359" height="74" />
+    <path d="M180 34 V46" markerEnd="url(#im-flow)" />
+    <path d="M106 76 V88" markerEnd="url(#im-flow)" />
+    <path d="M212 119 H224" strokeDasharray="4 3" markerEnd="url(#im-flow)" />
+    <path d="M106 150 V176" markerEnd="url(#im-flow)" />
+  </g>
+  <g fill="currentColor" fontSize="11" fontFamily="ui-monospace, monospace" textAnchor="middle">
+    <text x="180" y="22">スマホアプリ / ブラウザ</text>
+    <text x="180" y="65">リバースプロキシ（HTTPS・WebSocket）</text>
+    <text x="106" y="107">Immich 3.4.1　LXC</text>
+    <text x="106" y="123" fontSize="10" fillOpacity="0.75">API / ジョブ処理 / systemd</text>
+    <text x="106" y="138" fontSize="10" fillOpacity="0.75">PostgreSQL + Redis 同居</text>
+    <text x="292" y="107">ローカル ML</text>
+    <text x="292" y="123" fontSize="10" fillOpacity="0.75">待機用</text>
+    <text x="292" y="138" fontSize="10" fillOpacity="0.75">常用しない</text>
+    <text x="180" y="196">Windows PC　WSL コンテナ（CUDA）</text>
+    <text x="180" y="214" fontSize="10" fillOpacity="0.75">顔検出・認識　antelopev2</text>
+    <text x="180" y="228" fontSize="10" fillOpacity="0.75">画像検索　XLM-Roberta-Large-ViT-H-14</text>
+    <text x="180" y="242" fontSize="10" fillOpacity="0.75">文字認識　PP-OCRv5</text>
+  </g>
+  <text x="116" y="167" fill="currentColor" fillOpacity="0.75" fontSize="10" fontFamily="ui-monospace, monospace">推論リクエスト（3003）</text>
+</svg>
+
 ## 省電力サーバーの限界と、眠っている GPU
 
-自宅で Proxmox サーバーを動かし、写真管理や DNS、リバースプロキシなどを運用しています。常時稼働させるサーバーは電気代を抑えるため省電力な小型ノードを選びましたが、Google フォトの代替として写真管理ツール「Immich」を導入したことで壁に当たりました。
+自宅の Proxmox サーバーで、Google フォトの代替として写真管理ツール「Immich」を動かしています。常時稼働させるサーバーは電気代を抑えるため省電力な小型ノードを選びましたが、Immich の導入で壁に当たりました。
 
 数万枚の写真を取り込んで顔認識や CLIP による画像分類を走らせると、CPU 使用率が張り付き、数日経ってもスキャンが終わりません。一方で、普段使いの Windows PC には強力な NVIDIA GPU が積まれているものの、日中はゲームや作業をしていない限り遊んでいます。「24時間動く省電力サーバー」と「たまに動く高性能 GPU」をどう繋ぎ合わせるかが課題になりました。
 
-## 自宅インフラの全体像
+## 推論だけを切り離す
 
-![自宅ネットワーク構成図](/images/home-network-final.drawio.svg)
+Immich は WebUI やデータベースと、機械学習の推論（`immich-machine-learning`）が別プロセスに分かれています。前者は 24 時間動く LXC に置いたまま、推論の送り先だけを LAN 越しの Windows PC に向けました。
 
-## 常時稼働と機械学習処理を切り離す
+送り先は環境変数 `IMMICH_MACHINE_LEARNING_URL` で Windows PC のポート 3003 に指定します。LXC 側のローカル ML は待機用に残してあり、常用は GPU 側です。
 
-Immich のマイクロサービス構成に着目し、WebUI やデータベース（PostgreSQL）といった基本機能は 24時間動く Proxmox 側に置き、重い機械学習処理（`immich-machine-learning`）だけを LAN 越しの Windows PC へオフロードする分散構成を取りました。
+Windows 側では WSL コンテナ（wslc）で CUDA 版の機械学習イメージを動かし、RTX の GPU をそのまま推論に使います。WSL のネットワークはミラーモードにして、LAN 上のサーバーから端末へ直接届くようにしました。wslc のコンテナは自動再起動の仕組みを持たないため、ログオン時に起動するスクリプトをスタートアップに置き、コンテナが無ければ pull して作り直します。
 
-- **処理の分離:** Proxmox 側から機械学習コンテナを外し、`IMMICH_MACHINE_LEARNING_URL` に Windows PC の IP とポート（3003）を指定
-- **GPU の開放:** Windows 側の WSL（Ubuntu）で機械学習コンテナを動かし、RTX の GPU をそのまま推論に使う。WSL のネットワークはミラーモードにして、LAN 上のサーバーから端末の IP へ直接届くようにした
-- **ネットワーク経由の推論:** 写真の取り込みや再スキャン時、Proxmox から Windows 側のエンドポイントへ推論リクエストを投げる構成に整理
-- **再起動後の復帰:** WSL 側のコンテナは自動再起動の仕組みを持たないため、ログオン時に起動するスクリプトをスタートアップに置いて復帰させる
+使うモデルは次の 3 つです。画像検索の CLIP は多言語の `XLM-Roberta-Large-ViT-H-14` にしました。Immich 公式のベンチマークで日本語クエリの再現率が 83.95% と候補の中で最も高く、SigLIP2 系は英語では上回っても日本語では 65% 前後に落ちます。顔は `antelopev2`、文字認識は `PP-OCRv5` で、どちらも公式が示す最大クラスのモデルです。
 
 ## 数日かかっていたスキャンが数時間に縮んだ
 
-この構成に切り替えたところ、CPU だけでは何日もかかっていた数万枚の初期スキャンが数時間で完了しました。
+この構成に切り替えたところ、CPU だけでは何日もかかっていた初期スキャンが数時間で完了しました。GPU 側の実測では、1 枚の画像の顔検出と CLIP の埋め込みが約 60 ミリ秒、検索語 1 つの埋め込みが約 15 ミリ秒です。連続で投げると GPU の使用率は 70〜100% まで上がり、待機中は 10% 前後に戻ります。
 
-常時稼働させるサーバーの消費電力を低く抑えつつ、重いバッチ処理のときだけ手元のゲーミング PC の資源を借りる。単一のハードウェアにすべてを詰め込むのではなく、ネットワーク越しに役割を分担させることで、電気代と処理性能の両方を妥協せずに済みました。
+常時稼働のサーバーは消費電力を低く保ち、重いバッチ処理のときだけ手元のゲーミング PC の GPU を借ります。役割をネットワーク越しに分けたので、電気代と処理性能の両方を確保できました。
 
-## 10 以上のコンテナを抱えて気づいた運用の芯
+## 本体と推論コンテナのバージョン固定
 
-写真管理以外にも、リバースプロキシ（Nginx Proxy Manager）や広告ブロック（AdGuard Home）など、運用するコンテナが 10 を超えると「どの設定をどう弄ったか」が散らかり始めます。
+Immich 本体と ML コンテナは同じバージョンで動かします。食い違うと動作が不安定になると公式も注意していて、v3 系ではリクエストの形式自体がマイナーバージョンで変わるためです。ML 側は起動スクリプトのイメージタグ（`v3.4.1-cuda` など）で固定しているので、更新は次の順に進めます。
 
-そこで、設定のバックアップやコンテナの起動手順をスクリプト化し、手順を固定化しました。自動化の恩恵は処理が速くなること以上に、「いつ触っても同じ状態に戻せる」という再現性の担保にあります。
+1. 本体の LXC で `pg_dump` を取る
+2. 新しいイメージを Windows 側へ先に pull する（旧コンテナは動かしたまま）
+3. 本体を更新する。ビルドに 6 GB のメモリが要るので LXC の割り当てを一時的に上げ、15〜25 分かかる
+4. コンテナを新しいタグで作り直し、起動スクリプトのタグを書き換える
+5. `/ping` の応答、`CUDAExecutionProvider` の有効化、本体ログの `became healthy`、実写を使った推論の順に確かめる
+
+## GPU 側に届かなかったとき
+
+ある夜、写真を取り込んだ直後に顔検出・画像検索・文字認識の 3 ジョブが `fetch failed` で失敗しました。送り先を GPU 側の 1 つに絞っているので、ローカル ML には自動で切り替わらず、ジョブは失敗として残ります。
+
+写真の取り込みと閲覧は止まらないため、GPU 側の復旧後に管理画面の Jobs から「Missing」を選び、未処理の分だけ再実行します。
+
+## 運用で踏んだ細かい点
+
+リバースプロキシで WebSocket を許可していないと、Web 画面の `socket.io` 接続が 400 で失敗し、ジョブの進捗は 2 秒ごとの再取得に落ちます。許可すると 101 で接続できました。
+
+`web.log` は 5.5 GB まで膨らんでいたので logrotate を入れ、100 MB を超えたら世代交代して 7 世代まで残します。
+
+wslc は pull したイメージとボリュームがセッションごとに別物です。SSH のセッションで pull したイメージはコンソール側から見えず、別のセッションでコンテナを作るとモデルの cache も空から始まります。
 
 ## 今後の手入れ
 
