@@ -6,7 +6,7 @@
 
 - **Build (`/works`)**: 企画・設計・実装・デプロイまで単独で手がけた Web アプリ（Smoke it.、KariGallery、ひだまりマップ）と 3D カートレーシングゲーム（Turbo Circuit）。
 - **Operate (`/engineering`)**: 自宅の Proxmox VE + LXC + Docker 上で 10 以上のサービスを運用。GitHub Actions と self-hosted runner による自動デプロイ、GPU オフロード、世代バックアップ、常駐 AI エージェント運用、MCP 検索基盤（MathKB）。
-- **Research (`/research`)**: 強化学習を用いたブーリアンネットワークのエッジ除去制御（STL 仕様下の集合安定化）、モデル間の制御知識転移、および JR 北海道との冬期ポイント不転換リスク分析 PBL。
+- **Research (`/research`)**: 強化学習を用いたブーリアンネットワークのエッジ除去制御（STL 仕様下の集合安定化）、モデル間の制御知識転移、および鉄道事業者との冬期ポイント不転換リスク分析 PBL。
 
 ## 公開ページ
 
