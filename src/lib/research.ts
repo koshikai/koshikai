@@ -36,8 +36,8 @@ export const researchTopics: ResearchTopic[] = [
     method:
       "信号時相論理（STL）で制約を書き、その進行状況をフラグとして状態に持たせてマルコフ決定過程（MDP）にする。表形式の Q 学習で、各時刻にどのエッジを遮断するかを学ぶ。",
     result:
-      "Wnt5a 経路モデルでは、休薬 2 ステップの制約下で全 128 初期状態（128/128）が目標集合に到達し、到達後も維持した。皮質形成モデルでも 32 状態すべて（32/32）で到達と維持を確認した。いずれも発表時の設定で、Wnt5a は seed 11 の 1 run。",
-    metric: { value: "128/128", label: "Wnt5a・休薬 2 ステップ制約下の全 128 状態" },
+      "Wnt5a 経路モデルでは、休薬 2 ステップの制約下で全 128 初期状態（128/128）が目標集合に到達し、到達後も維持した。これは未発表の最新結果で、学会発表（制御可能な 96 状態、96/96）とは評価対象の設定が異なる。皮質形成モデルでも 32 状態すべて（32/32）で到達と維持を確認した。いずれも発表時の設定で、Wnt5a は seed 11 の 1 run。",
+    metric: { value: "128/128", label: "Wnt5a・休薬 2 ステップ制約下の全 128 状態（未発表）" },
     status: "completed",
     tags: ["Reinforcement Learning", "Boolean Network", "STL"],
     caseSlug: "research-workflow",
