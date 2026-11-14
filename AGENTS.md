@@ -93,6 +93,8 @@ SITE_URL=https://koshikai.dev  # canonical / metadata 用 URL
 - スキルの値は「一部だけ採用」している。フォントは Geist / Geist Mono + Noto Sans JP（和文の代替）、
   アイコンは lucide、ダークの背景色はスキルの 6 色に限らない。
   推薦文・顧客名など実在しないものをスキルの「content realism」に従って作ることはしない
+- `.agents/skills/yomiyasu/` は **AIが生成した日本語文章の推敲** に適用する。
+  意味や条件を変えずに、不自然な比喩、曖昧な主述関係、不要な装飾や過剰なコピー調を整える。ユーザーから指定されたとき、または日本語文章の推敲を明確に求められたときに使う
 
 ## ドキュメント
 
